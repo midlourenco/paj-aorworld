@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import pt.uc.dei.proj5.dao.UserDao;
 import pt.uc.dei.proj5.dto.UserDTO;
+import pt.uc.dei.proj5.dto.UserDTORegister;
 import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.entity.User;
 
@@ -451,9 +452,9 @@ public class UserBean implements Serializable {
 	 * @param newUser Utilizador que se pretende criar
 	 * @return
 	 */
-	public boolean createUser(UserDTO newUser) {
-		if (getUserEntitybyEmail(newUser.getEmail()) == null) {
-			User userToPersist = UserDao.convertDTOtoEntity(newUser);
+	public boolean createUser(UserDTORegister newUser) {
+		if (getUserEntitybyEmail(newUser.getEmail()) == null) { //se não houver mais ninguém com este email registado continua o registo
+			User userToPersist = UserDao.convertDTORegisterToEntity(newUser);
 			userDao.persist(userToPersist);
 			//dashboardService.updateGeneralDashboard();
 			return true;
@@ -477,7 +478,6 @@ public class UserBean implements Serializable {
 			uTmp.setFirstName(changedUser.getFirstName());
 			uTmp.setLastName(changedUser.getLastName());
 			uTmp.setEmail(changedUser.getEmail());
-			uTmp.setPassword(changedUser.getPassword());
 			uTmp.setImage(changedUser.getImage());
 			//uTmp.setPrivileges(changedUser.getPrivileges());
 

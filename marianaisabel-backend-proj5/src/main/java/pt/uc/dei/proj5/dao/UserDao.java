@@ -17,8 +17,10 @@ import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
 import pt.uc.dei.proj5.dto.UserDTO;
+import pt.uc.dei.proj5.dto.UserDTORegister;
 import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.entity.User;
+import pt.uc.dei.proj5.entity.User.UserPriv;
 
 
 
@@ -34,29 +36,51 @@ public class UserDao extends AbstractDao<User> {
 	/////////////////////////////////////////////////////////
 	//METODOS ESTATICOS DE CONVERSAO ENTRE ENTIDADE E DTOs
 	////////////////////////////////////////////////////////
-	
+	// REGISTER
 	/**
 	 *Função para converter um DTO para uma Entidade de utilizador
 	 * @return
 	 */
-	public static User convertDTOtoEntity(UserDTO userDTO) {
-		
-		System.out.println("Entrei em converter user dto para entidade");
-		
+	public static User convertDTORegisterToEntity(UserDTORegister userDTOReg) {
+		System.out.println("Entrei em converter user dto registo para entidade");
 		User userEntity = new User();
+		userEntity.setEmail(userDTOReg.getEmail());
+		userEntity.setPassword(userDTOReg.getPassword());
+		userEntity.setFirstName(userDTOReg.getFirstName());
+		userEntity.setLastName(userDTOReg.getLastName());
+		userEntity.setImage(userDTOReg.getImage());
+		userEntity.setBiography(userDTOReg.getBiography());
 		
+		userEntity.setPrivileges(UserPriv.VIEWER);
+		userEntity.setDeleted(false);
+		//a data de criação fica preenchida pela base de dados no moemnto de criação
+		return userEntity;
+	}
+	
+	//UPDATE
+	/**
+	 *Função para converter um user DTO para uma Entidade (pre-existente) de utilizador
+	 * @return
+	 */
+	public static User convertDTOtoEntity(UserDTO userDTO, User userEntity) {
+		System.out.println("Entrei em converter user dto para entidade");
+
 		userEntity.setEmail(userDTO.getEmail());
 		userEntity.setFirstName(userDTO.getFirstName());
 		userEntity.setLastName(userDTO.getLastName());
 		userEntity.setImage(userDTO.getImage());
-		userEntity.setPassword(userDTO.getPassword());
-		return userEntity;
+		userEntity.setBiography(userDTO.getBiography());
+		userEntity.setPrivileges(userDTO.getPrivileges());
 		
+
+		return userEntity;
 	}
+	
 	
 	/**
 	 *Função para converter uma Entidade para um DTO de utilizador
 	 * @return
+	 * @deprecated
 	 */
 	public static UserDTO convertEntitytoDTO(User userEntity) {
 		
@@ -66,7 +90,7 @@ public class UserDao extends AbstractDao<User> {
 		userDTO.setFirstName(userEntity.getFirstName());
 		userDTO.setLastName(userEntity.getLastName());
 		userDTO.setImage(userEntity.getImage());
-		userDTO.setPassword(userEntity.getPassword());
+
 
 		return userDTO;
 	}
@@ -118,7 +142,11 @@ public class UserDao extends AbstractDao<User> {
 			
 			return em.createQuery(criteriaQuery).getSingleResult();
 		}catch(EJBException e) {
-			e.printStackTrace();
+			System.out.println("não há nenhum utilizador na BD com este email: " + email);
+			//e.printStackTrace();
+			return null;
+		}catch (Exception e) {
+			System.out.println("não há nenhum utilizador na BD com este email: "+ email);
 			return null;
 		}
 	}

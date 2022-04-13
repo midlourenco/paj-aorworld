@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 import pt.uc.dei.proj5.bean.InitialDataBean;
 import pt.uc.dei.proj5.bean.UserBean;
 import pt.uc.dei.proj5.dto.UserDTO;
+import pt.uc.dei.proj5.dto.UserDTORegister;
 import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.entity.User.UserPriv;
 import pt.uc.dei.proj5.other.GestaoErros;
@@ -118,7 +119,7 @@ public class UserController {
 	@POST
 	@Path("register")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addUser(@Valid UserDTO newUser) {
+	public Response addUser(@Valid UserDTORegister newUser) {
 		System.out.println("entrei no addUser : " );
 
 		Response a_resposta = null;
