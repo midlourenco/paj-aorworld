@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedQueries;
@@ -20,7 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * The persistent class for the Activity database table.
+ * The persistent class for the News database table.
  * 
  */
 @Entity // classe que vai ter uma ligaçao a um data source
@@ -44,20 +45,11 @@ public class News implements Serializable {
 	@Column(name = "checked", nullable = false)
 	private boolean checked;
 
-	@Column(name = "start_date", nullable = false)
-	private Timestamp startDate;
-
-	@Column(name = "end_date", nullable = true)
-	private Timestamp endDate;
-
-	@Column(name = "reminder_date", nullable = true)
-	private Timestamp reminderDate;
-
 	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 
 	@Column(name = "createDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp createDate;
+	private Timestamp createdDate;
 
 
 //	@Column(name = "Category", nullable = false)
@@ -66,6 +58,21 @@ public class News implements Serializable {
 //	@JoinColumn(name = "Category_Activity")
 //	private Category category;
 
+	
+	@ManyToOne (optional=false)  //presença obrigatória na relação
+	@JoinColumn(name="CreatedBy_News")
+	private User createdBy;
+	
+	@ManyToOne (optional=false)  //presença obrigatória na relação
+	@JoinColumn(name="UpdatedBy_News")
+	private User lastModifBy;
+
+	@ManyToMany(cascade = CascadeType.REMOVE)
+	private List<Project> projects;
+	
+	@ManyToMany(cascade = CascadeType.REMOVE)
+	private List<Keyword> keywords;
+	
 	@OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE) // cada news tem uma muitas notificaçoes associados. por isso tem uma lista de produtos
 	private List<Notification> notifications;
 
@@ -104,30 +111,6 @@ public class News implements Serializable {
 		this.id = id;
 	}
 
-	public Timestamp getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Timestamp startDate) {
-		this.startDate = startDate;
-	}
-
-	public Timestamp getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Timestamp endDate) {
-		this.endDate = endDate;
-	}
-
-	public Timestamp getReminderDate() {
-		return reminderDate;
-	}
-
-	public void setReminderDate(Timestamp reminderDate) {
-		this.reminderDate = reminderDate;
-	}
-
 	public boolean isDeleted() {
 		return deleted;
 	}
@@ -136,12 +119,63 @@ public class News implements Serializable {
 		this.deleted = deleted;
 	}
 
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
 
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public User getLastModifBy() {
+		return lastModifBy;
+	}
+
+	public void setLastModifBy(User lastModifBy) {
+		this.lastModifBy = lastModifBy;
+	}
+
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
+	public List<Keyword> getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(List<Keyword> keywords) {
+		this.keywords = keywords;
+	}
+
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
 
 	@Override
 	public String toString() {
-		return "News [nesws=" + id + ", title=" + title + ", description=" + description + ", checked="
-				+ checked + "]";
+		return "News [id=" + id + ", title=" + title + ", description=" + description + ", checked=" + checked
+				+ ", deleted=" + deleted + ", createdDate=" + createdDate + ", createdBy=" + createdBy
+				+ ", lastModifBy=" + lastModifBy + ", projects=" + projects + ", keywords=" + keywords
+				+ ", notifications=" + notifications + "]";
 	}
+
+
+
 
 }

@@ -17,9 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
-* The persistent class for the Notifications database table.
-* 
-*/
+ * The persistent class for the ProjectSharing database table.
+ * 
+ */
 @Entity// classe que vai ter uma ligaçao a um data source
 @Table(name="ProjectSharing") //nome da tabela java é no singular, tabela é no plural
 public class ProjectSharing implements Serializable{
@@ -46,11 +46,12 @@ public class ProjectSharing implements Serializable{
 
 	
 	@Column(name="createDate", nullable=false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp createDate;
+	private Timestamp createdDate;
 	
 	public ProjectSharing() {
 		
 	}
+	
 	public int getId() {
 		return id;
 	}
@@ -81,6 +82,29 @@ public class ProjectSharing implements Serializable{
 
 	public void setNotifications(List<Notification> notifications) {
 		this.notifications = notifications;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public News getProject() {
+		return project;
+	}
+	public void setProject(News project) {
+		this.project = project;
+	}
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
+	}
+	@Override
+	public String toString() {
+		return "ProjectSharing [id=" + id + ", accepted=" + accepted + ", user=" + user + ", project=" + project
+				+ ", notifications=" + notifications + ", createdDate=" + createdDate + "]";
 	}
 
 

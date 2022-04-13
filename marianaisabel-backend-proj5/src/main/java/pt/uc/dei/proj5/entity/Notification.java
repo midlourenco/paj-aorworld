@@ -44,7 +44,7 @@ public class Notification implements Serializable {
 	private boolean alreadyRead;
 	
 	@Column(name = "createDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp createDate;
+	private Timestamp createdDate;
 
 	@Column(name = "finalDate")
 	private Timestamp finalDate;
@@ -75,14 +75,6 @@ public class Notification implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
 	}
 
 	public NotificationType getNotificationType() {
@@ -133,8 +125,36 @@ public class Notification implements Serializable {
 		this.finalDate = finalDate;
 	}
 
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
 
-	
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public News getNews() {
+		return news;
+	}
+
+	public void setNews(News news) {
+		this.news = news;
+	}
+
+	public ProjectSharing getProjectSharing() {
+		return projectSharing;
+	}
+
+	public void setProjectSharing(ProjectSharing projectSharing) {
+		this.projectSharing = projectSharing;
+	}
+
+	@Override
+	public String toString() {
+		return "Notification [id=" + id + ", title=" + title + ", description=" + description + ", alreadyRead="
+				+ alreadyRead + ", createdDate=" + createdDate + ", finalDate=" + finalDate + ", notificationType="
+				+ notificationType + ", user=" + user + ", news=" + news + ", projectSharing=" + projectSharing + "]";
+	}
 	
 
 }

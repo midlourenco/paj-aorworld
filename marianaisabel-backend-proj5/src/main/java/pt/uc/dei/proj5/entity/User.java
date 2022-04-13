@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -19,60 +21,67 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
- * The persistent class for the Product_Types database table.
+ * The persistent class for the User database table.
  * 
  */
 @Entity
 @Table(name = "Users")
-//@NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
-//		@NamedQuery(name = "User.findUserByToken", query = "SELECT u FROM User u WHERE  u.token = :token"),
-//		@NamedQuery(name = "User.deleteDefinitelyUserByUsername", query = "DELETE FROM User WHERE username = :username"),
-//// @NamedQuery(name = "User.updateToNullUserToken", query="UPDATE FROM User set
-//// token = null, WHERE u.token = :token" )
-//})
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private int id;
+	
 	@Column(name = "firstName", nullable = false)
 	private String firstName;
 
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 
-//	@Id
-//	@Column(name = "username", nullable = false)
-//	private String username;
-
 	@Column(name = "password", nullable = false)
 	private String password;
-
-	@Id
+	
 	@Column(name = "email", nullable = false)
 	private String email;
 
 	@Column(name = "image", nullable = false)
 	private String image;
+	
+	@Column(name = "biography", nullable = true)
+	private String biography;
 
 	@Column(name = "token", nullable = true) // só tem token se houver login
 	private String token;
 
-	// UUID.randomUUID().toString();
-	@Column(name = "deleted", nullable = false)
+	@Column(name = "deleted", nullable = true, columnDefinition ="BOOLEAN DEFAULT FALSE")
 	private boolean deleted;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name = "notificationType", nullable = false, columnDefinition = "ENUM('PUBLIC','MEMBER','ADMIN')")
+	@Column(name = "UserPriv", nullable = true, columnDefinition = "ENUM('VIEWER','MEMBER','ADMIN') DEFAULT 'VIEWER'")
 	private UserPriv privileges;
 
 	@Column(name = "createDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp createDate;
+	private Timestamp createdDate;
 
+//fetch => FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ign
+	
+	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
+	private List<News> createdNews;
+	@OneToMany(mappedBy = "lastModifBy", cascade = CascadeType.REMOVE)
+	private List<News> updatedNews;
+	
+	
+	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
+	private List<Project> createdProjects;
+	
+	@OneToMany(mappedBy = "lastModifBy", cascade = CascadeType.REMOVE)
+	private List<Project> updatedProjects;
 
-//	// bi-directional many-to-one association to Product
-//	@OneToMany(mappedBy = "user",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ignorada ao fazer get do user faz com que as																																																							
-//	private List<News> news;
-
+	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Notification> notifications;
 
@@ -80,7 +89,9 @@ public class User implements Serializable {
 	private List<ProjectSharing> projectSharing;
 
 	
-	public enum UserPriv {PUBLIC,MEMBER,ADMIN};
+	
+	//OUTRAS IDEIAS: em vez de member- editor/publisher ...
+	public enum UserPriv {VIEWER,MEMBER,ADMIN};
 	
 //	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE) // este fetch faz com que as categorias não sejam ignoradas, por causa do erro do get all users
 //	private List<Category> categories;	
@@ -93,6 +104,20 @@ public class User implements Serializable {
 	public User() {
 		// nothing to do here;
 	}
+
+	
+	
+	public int getId() {
+		return id;
+	}
+
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 
 	public String getFirstName() {
 		return firstName;
@@ -152,15 +177,6 @@ public class User implements Serializable {
 	}
 
 
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-
 	public List<Notification> getNotifications() {
 		return notifications;
 	}
@@ -169,8 +185,91 @@ public class User implements Serializable {
 		this.notifications = notifications;
 	}
 
+	public UserPriv getPrivileges() {
+		return privileges;
+	}
+
+	public void setPrivileges(UserPriv privileges) {
+		this.privileges = privileges;
+	}
+
+	public Timestamp getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Timestamp createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public List<News> getCreatedNews() {
+		return createdNews;
+	}
+
+	public void setCreatedNews(List<News> createdNews) {
+		this.createdNews = createdNews;
+	}
+
+	public List<News> getUpdatedNews() {
+		return updatedNews;
+	}
+
+	public void setUpdatedNews(List<News> updatedNews) {
+		this.updatedNews = updatedNews;
+	}
+
+	public List<Project> getCreatedProjects() {
+		return createdProjects;
+	}
+
+	public void setCreatedProjects(List<Project> createdProjects) {
+		this.createdProjects = createdProjects;
+	}
+
+	public List<Project> getUpdatedProjects() {
+		return updatedProjects;
+	}
+
+	public void setUpdatedProjects(List<Project> updatedProjects) {
+		this.updatedProjects = updatedProjects;
+	}
+
+	public List<ProjectSharing> getProjectSharing() {
+		return projectSharing;
+	}
+
+	public void setProjectSharing(List<ProjectSharing> projectSharing) {
+		this.projectSharing = projectSharing;
+	}
+
+	public String getBiography() {
+		return biography;
+	}
 
 
+
+	public void setBiography(String biography) {
+		this.biography = biography;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "User [firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", email=" + email
+				+ ", image=" + image + ", token=" + token + ", deleted=" + deleted + ", privileges=" + privileges
+				+ ", createdDate=" + createdDate + ", createdNews=" + createdNews + ", updatedNews=" + updatedNews
+				+ ", createdProjects=" + createdProjects + ", updatedProjects=" + updatedProjects + ", notifications="
+				+ notifications + ", projectSharing=" + projectSharing + "]";
+	}
+
+
+
+	//@NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+//			@NamedQuery(name = "User.findUserByToken", query = "SELECT u FROM User u WHERE  u.token = :token"),
+//			@NamedQuery(name = "User.deleteDefinitelyUserByUsername", query = "DELETE FROM User WHERE username = :username"),
+	//// @NamedQuery(name = "User.updateToNullUserToken", query="UPDATE FROM User set
+	//// token = null, WHERE u.token = :token" )
+	//})
 
 
 }
