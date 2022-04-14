@@ -22,7 +22,9 @@ public class UserDTOResp implements Serializable{
 	@NotBlank 
 	private String image;
 	@NotBlank 
-	private User.UserPriv privilegies;
+	private User.UserPriv privileges;
+	@NotBlank 
+	private int id;
 	private String biography;
 	
 	//o código que serializa e desserializa usa o construtor vazio e depois chama os setters e getters. -> usado por exemplo em R3
@@ -39,19 +41,22 @@ public class UserDTOResp implements Serializable{
 	 * @param lastName Último nome do utilizador
 	 * @param email Email do utilizador
 	 * @param image URL da fotografia do utilizador
-	 * @param privilegies Privilégios do utilizador
+	  * @param id
+	 * @param privileges Privilégios do utilizador
 	 */
 	public UserDTOResp(@NotBlank String firstName, @NotBlank String lastName,
 			@NotBlank @Email(message = "Email deve introduzir um email válido") String email, @NotBlank String image,
-			@NotBlank User.UserPriv privilegies) {
+			@NotBlank User.UserPriv privileges, @NotBlank int id, String biography) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.image = image;
-		this.privilegies = privilegies;
+		this.privileges = privileges;
+		this.id = id;
+		this.biography = biography;
 	}
-
+	
 
 	public String getFirstName() {
 		return firstName;
@@ -78,13 +83,21 @@ public class UserDTOResp implements Serializable{
 	public void setImage(String image) {
 		this.image = image;
 	}
-	public User.UserPriv getPrivilegies() {
-		return privilegies;
+	public User.UserPriv getPrivileges() {
+		return privileges;
 	}
 
 
-	public void setPrivilegies(User.UserPriv privilegies) {
-		this.privilegies = privilegies;
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setPrivileges(User.UserPriv privileges) {
+		this.privileges = privileges;
 	}
 
 
@@ -99,7 +112,7 @@ public class UserDTOResp implements Serializable{
 	@Override
 	public String toString() {
 		return "UserDTOResp [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", image="
-				+ image + ", privilegies=" + privilegies + "]";
+				+ image + ", privilegies=" + privileges + "]";
 	}
 
 

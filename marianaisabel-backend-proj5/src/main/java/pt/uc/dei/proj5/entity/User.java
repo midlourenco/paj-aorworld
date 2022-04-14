@@ -4,7 +4,7 @@ package pt.uc.dei.proj5.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.UUID;
+//import java.util.HexFormat;  //apenas para java 17
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,11 +15,20 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.DatatypeConverter;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+
 
 
 /**
@@ -42,6 +51,11 @@ public class User implements Serializable {
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 
+	//	@ColumnTransformer(
+//    forColumn = "password",
+//    write = "HEX(AES_ENCRYPT(?, 'password'))",
+//    read = "AES_DECRYPT(UNHEX(password),'password')"
+//)
 	@Column(name = "password", nullable = false)
 	private String password;
 	
@@ -56,35 +70,41 @@ public class User implements Serializable {
 
 	@Column(name = "token", nullable = true) // só tem token se houver login
 	private String token;
-
-	@Column(name = "deleted", nullable = true, columnDefinition ="BOOLEAN DEFAULT FALSE")
+//boolean default true
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
-	
+	//columnDefinition = "ENUM('VIEWER','MEMBER','ADMIN') DEFAULT VIEWER")
 	@Enumerated(EnumType.STRING)
-	@Column(name = "UserPriv", nullable = true, columnDefinition = "ENUM('VIEWER','MEMBER','ADMIN') DEFAULT 'VIEWER'")
+	@Column(name = "UserPriv", nullable = false, columnDefinition = "ENUM('VIEWER','MEMBER','ADMIN')")
 	private UserPriv privileges;
 
 	@Column(name = "createDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp createdDate;
 
-//fetch => FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ign
+	@Column(name = "lastModifDate", nullable = true )
+	private Timestamp lastModifDate;
+
 	
+//fetch => FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ign
+	//fetch = FetchType.EAGER,
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
 	private List<News> createdNews;
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "lastModifBy", cascade = CascadeType.REMOVE)
 	private List<News> updatedNews;
 	
-	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
 	private List<Project> createdProjects;
-	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "lastModifBy", cascade = CascadeType.REMOVE)
 	private List<Project> updatedProjects;
 
-	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Notification> notifications;
-
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<ProjectSharing> projectSharing;
 
@@ -150,14 +170,20 @@ public class User implements Serializable {
 	public void setImage(String image) {
 		this.image = image;
 	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+//	/**
+//	 * @deprecated
+//	 * @return
+//	 */
+////	public String getPassword() {
+////		return password;
+////	}
+////	/**
+//	 * @deprecated
+//	 * @return
+//	 */
+////	public void setPassword(String password) {
+////		this.password = password;
+////	}
 
 
 	public String getToken() {
@@ -245,24 +271,142 @@ public class User implements Serializable {
 		return biography;
 	}
 
-
-
 	public void setBiography(String biography) {
 		this.biography = biography;
 	}
+
+	
+
+
+    public Timestamp getLastModifDate() {
+		return lastModifDate;
+	}
+
+
+
+	public void setLastModifDate(Timestamp lastModifDate) {
+		this.lastModifDate = lastModifDate;
+	}
+
+
+	
+	//HASHING PASSWORD -> criado para o trabalho de IPJ e adapatado para este novo projecto
+	
+	/**
+     * Método que implementa o algoritmo PBKDF2 que permite obter uma hash da password em vez da própria password.
+     *
+     * @param password a password da qual se pretende criar uma hash
+     * @return salted password PBKDF2 hash de uma password
+     */
+    //ref. https://www.baeldung.com/java-password-hashing
+    public String hashingPasswordRegisto(String password){
+        int keyLenght=128;
+        int iteration = 65536;//indicates how many iterations that this algorithm run for, increasing the time it takes to produce the hash.
+        int salt_size=16; //it could also be 32,24,..
+
+        try {
+            //algoritmo seleccionado para fazer o hashing da password é o PBKDF2, apesar de mais lento é mais seguro
+            SecureRandom random = new SecureRandom();
+            //salt é um valor random que é adicionado no final, e que permite melhorar a segurança, ao permitir ter hashes diferentes se houver passwords iguais. esse valor random tem de ser guardado junto da hash
+            byte[] salt = new byte[salt_size];
+            random.nextBytes(salt);
+            //O metodo PBEKeySpec tem 4 parametros:  password, salt, iterations, keyLength
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iteration, keyLenght);
+            //o valor da string passada à instaÂncia do skf é o seguinte
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = skf.generateSecret(spec).getEncoded();
+
+            String hashPass=iteration+":"+DatatypeConverter.printHexBinary(hash)+":"+DatatypeConverter.printHexBinary(salt)+":"+keyLenght;
+            return hashPass;
+        } catch ( NoSuchAlgorithmException | InvalidKeySpecException e ) {
+            //e.printStackTrace();
+            System.out.println("houve um problema com o hashing da password");
+           // throw new RuntimeException( e );
+
+        }
+        return null;
+    }
+
+    /**
+     *  Método que usa a implementação do PBKDF2 para obter uma hash de uma nova password, hash essa comparável com a da passowrd com a qual se pretende comparar a nova.
+     *
+     * @param password a nova password que se pretende comparar com uma password de um Utilizador específico.
+     * @param saltTouse valor do número do salt usado na codificação da password com a qual se pretende comparar a nova.
+     * @param iteration valor do número de iterações usado na codificação da password com a qual se pretende comparar a nova.
+     * @param keyLenght valor do keyLenght  usado na codificação da password com a qual se pretende comparar a nova.
+     * @return salted password PBKDF2 hash da nova password
+     */
+    public String hashingPasswordLogin(String password,String saltTouse, int iteration, int keyLenght){
+
+        try {
+            //algoritmo seleccionado para fazer o hashing da password é o PBKDF2, apesar de mais lento é mais seguro
+            SecureRandom random = new SecureRandom();
+            //salt é um valor random que é adicionado no final, e que permite melhorar a segurança, ao permitir ter hashes diferentes se houver passwords iguais. esse valor random tem de ser guardado junto da hash
+            byte[] salt = DatatypeConverter.parseHexBinary(saltTouse);
+            //O metodo PBEKeySpec tem 4 parametros:  password, salt, iterations, keyLength
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, iteration, keyLenght);
+            //o valor da string passada à instaÂncia do skf é o seguinte
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = skf.generateSecret(spec).getEncoded();
+
+            String hashPass=iteration+":"+ DatatypeConverter.printHexBinary(hash)+":"+DatatypeConverter.printHexBinary(salt)+":"+keyLenght;
+            return hashPass;
+        } catch ( NoSuchAlgorithmException | InvalidKeySpecException e ) {
+           // e.printStackTrace();
+            System.out.println("houve um problema com o hashing da password");
+           //throw new RuntimeException( e );
+
+
+        }
+        return null;
+    }
+	
+	
+	
+	
+    /**
+     * Método que redefine o valor da hash da password do Utilizador
+     *
+     * @param password a nova password do Utilizador
+     */
+    public void setPassword(String password) {
+        if(hashingPasswordRegisto(password)!=null) {
+            this.password = hashingPasswordRegisto(password);
+        }else{
+            System.out.println("houve um problema com o hashing da password");
+        }
+    }
+
+//    /**
+//     * Método que redefine o valor da hash da password directamente a partir da própria hash da password do Utilizador
+//     *
+//     * @param hashedpassword salted password PBKDF2 hash
+//     */
+//    public void setHashedPasswordAdmin(String hashedpassword) {this.password =hashedpassword;}
+
+
+    /**
+     * Método que devolve o valor da hash da password do Utilizador
+     * @return hash da password do Utilizador
+     */
+    public String getHashPassword() {return this.password;}
 
 
 
 	@Override
 	public String toString() {
-		return "User [firstName=" + firstName + ", lastName=" + lastName + ", password=" + password + ", email=" + email
-				+ ", image=" + image + ", token=" + token + ", deleted=" + deleted + ", privileges=" + privileges
-				+ ", createdDate=" + createdDate + ", createdNews=" + createdNews + ", updatedNews=" + updatedNews
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password
+				+ ", email=" + email + ", image=" + image + ", biography=" + biography + ", token=" + token
+				+ ", deleted=" + deleted + ", privileges=" + privileges + ", createdDate=" + createdDate
+				+ ", lastModifDate=" + lastModifDate + ", createdNews=" + createdNews + ", updatedNews=" + updatedNews
 				+ ", createdProjects=" + createdProjects + ", updatedProjects=" + updatedProjects + ", notifications="
 				+ notifications + ", projectSharing=" + projectSharing + "]";
 	}
 
+	
 
+	
+	
 
 	//@NamedQueries({ @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
 //			@NamedQuery(name = "User.findUserByToken", query = "SELECT u FROM User u WHERE  u.token = :token"),

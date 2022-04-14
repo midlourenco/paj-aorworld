@@ -94,6 +94,7 @@ public class UserBean implements Serializable {
 	/**
 	 * Devolve um utilizador a partir da sua PK ( id ) que não esteja marcado para eliminar
 	 * @param userID
+	 * @deprecated
 	 * @return
 	 */
 	public UserDTO getNonDeletedUserDTOById(int userID) {
@@ -111,18 +112,34 @@ public class UserBean implements Serializable {
 	
 	
 
-	
+	/**
+	 * Devolve um utilizador a partir da sua PK ( id ) que não esteja marcado para eliminar
+	 * @param userID
+	 * @return
+	 */
+	public UserDTOResp getNonDeletedUserDTORespById(int userID) {
+		// System.out.println("entrei no get user by token");
+		try {
+			User user = userDao.findEntityIfNonDelete(userID);
+			return UserDao.convertEntitytoDTOResp(user);
+
+		} catch (Exception e) {
+			System.out.println("o user não existe ou está marcado para apagar");
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 * devolve um utilizador DTO a partir do seu id quer ele esteja marcado para apagar ou não
 	 * @param userID
 	 * @return
 	 */
-	public UserDTO getUserDTOById(int userID) {
+	public UserDTOResp getUserDTORespById(int userID) {
 		
 		try {
-			UserDTO userDto = UserDao.convertEntitytoDTO(userDao.find(userID));
-			System.out.println("dentro do user do serviço " + userID + " e o user respectivo " + userDto);
-			return userDto;
+			UserDTOResp userDtoResp = UserDao.convertEntitytoDTOResp(userDao.find(userID));
+			System.out.println("dentro do user do serviço " + userID + " e o user respectivo " + userDtoResp);
+			return userDtoResp;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -293,24 +310,35 @@ public class UserBean implements Serializable {
 	
 			if (user != null) {
 				if(user.getPrivileges()!=User.UserPriv.VIEWER) { //alguém que se registou mas o seu registo ainda não foi apreciado or um admin
-					if (user.getPassword().equals(password)) {
-						if(user.getToken()!=null) {
-							//as credenciais estão ok  e já tinha token (mantemos-lhe o token) e assim pode ter várias sessões ao mesmo tempo
-							System.out.println("credencais ok, token anterior mantido: " + user.getToken());
-							return true; 
-						}else {
-							//as credenciais estão ok e não tinha nenhum token, geramos um token novo
-							user.setToken(UUID.randomUUID().toString()); 
-							userDao.merge(user);
-							System.out.println("credencais ok, novo token gerado: " + user.getToken());
-							return true; 
-						}
-					} else {
-						// as credenciais não estão correctas
-						System.out.println("as credenciais estao erradas ");
-						return false;
-					}
-					
+				        String[] astr = (user.getHashPassword().split(":"));
+
+				        try {
+				            String hashedPassLogin = user.hashingPasswordLogin(password, astr[2], Integer.parseInt(astr[0]), Integer.parseInt(astr[3]));
+				            if (hashedPassLogin.equals(user.getHashPassword())) {
+
+								if(user.getToken()!=null) {
+									//as credenciais estão ok  e já tinha token (mantemos-lhe o token) e assim pode ter várias sessões ao mesmo tempo
+									System.out.println("credencais ok, token anterior mantido: " + user.getToken());
+									return true; 
+								}else {
+									//as credenciais estão ok e não tinha nenhum token, geramos um token novo
+									user.setToken(UUID.randomUUID().toString()); 
+									userDao.merge(user);
+									System.out.println("credencais ok, novo token gerado: " + user.getToken());
+									return true; 
+								}
+				            	
+				            } else {
+								// as credenciais não estão correctas
+								System.out.println("as credenciais estao erradas ");
+								return false;
+							}
+				            
+				        } catch (RuntimeException e) {
+				            System.out.println("houve um problema com o hashing da password - runtime exception");
+				        	return false;
+				        }
+				        
 				}else {
 					// o email é de um registo que ainda está para ser aprovado por um admin
 					System.out.println("ainda não tem registo aprovado por admin ");
@@ -318,7 +346,7 @@ public class UserBean implements Serializable {
 				}
 				
 			} else {
-				// nao existe username
+				// nao existe id
 				System.out.println("o id do user não existe ");
 				return false;
 			}
@@ -364,8 +392,10 @@ public class UserBean implements Serializable {
 	 * @return
 	 */
 	public boolean hasLoggedUserAdminPriv(String authString) {
+		System.out.println("dentro do hasLoggedUserAdminPriv");
 		User user = userDao.findUserByToken(authString);
 		if(user.getPrivileges()==User.UserPriv.ADMIN) {
+			System.out.println("privilegios do user logado: " + user.getPrivileges());
 			return true;
 		}
 		return false;
@@ -470,19 +500,15 @@ public class UserBean implements Serializable {
 	 * Guarda novos detalhes de um utilizador na Base de dados
 	 * @return
 	 */
-	public boolean updateUser(int userId, UserDTO changedUser) {
+	public boolean updateUser(int userId, UserDTO changedUser, boolean hasAdminPriv) {
 
-		User uTmp = getNonDeletedUserEntityById(userId);
+		User user = getNonDeletedUserEntityById(userId);
 
 		 try {
-			uTmp.setFirstName(changedUser.getFirstName());
-			uTmp.setLastName(changedUser.getLastName());
-			uTmp.setEmail(changedUser.getEmail());
-			uTmp.setImage(changedUser.getImage());
-			//uTmp.setPrivileges(changedUser.getPrivileges());
+			user= UserDao.convertDTOtoEntity(changedUser, user,hasAdminPriv,null);
 
-			System.out.println("changedUser info2: " + uTmp);
-			userDao.merge(uTmp); // guarda na BD
+			System.out.println("changedUser info: " + user);
+			userDao.merge(user); // guarda na BD
 			return true;
 		
 		} catch (Exception e) {
@@ -492,6 +518,28 @@ public class UserBean implements Serializable {
 		}
 	}
 
+	
+	/**
+	 * Guarda nova password de um utilizador na Base de dados
+	 * @return
+	 */
+	public boolean updateUserPassword(int userId, String password, boolean hasAdminPriv) {
+
+		User user = getNonDeletedUserEntityById(userId);
+
+		 try {
+			user= UserDao.convertDTOtoEntity(null, user,hasAdminPriv, password);
+
+			System.out.println("changedUser info: " + user);
+			userDao.merge(user); // guarda na BD
+			return true;
+		
+		} catch (Exception e) {
+			System.out.println("não foi possível atulalizar info do user "+ userId);
+			e.printStackTrace();
+			return false;
+		}
+	}
 	/**
 	 * Método que no caso em que o utilizador não esteja marcado para eliminar, marca-o para eliminar, caso contrário elimina-o da Base de dados
 	 * @return

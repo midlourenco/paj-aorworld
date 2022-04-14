@@ -241,12 +241,11 @@ public class UserController {
 		
 		// Consultar lista de todos os viewers com registo para aprovar- apenas pode ser vista por admins
 		@GET
-		@Path("membersList")
+		@Path("viwersList")
 		@Produces(MediaType.APPLICATION_JSON)
 		public Response listAllViwersToAprove(@HeaderParam("Authorization") String authString) {
 			System.out.println("get admins");
-			
-
+	
 			try {
 				if (authString.equals("") || authString.isEmpty() || authString == null) {
 					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
@@ -257,10 +256,9 @@ public class UserController {
 				if (!userService.hasLoggedUserAdminPriv(authString)) { // está logado e não é admin - não pode ver os users todos
 						return Response.status(403).entity("Não pode ver lista user porque não tem privilégios de admin").build();
 				} 
-				ArrayList<UserDTOResp> listaUsers = userService.getAllNonDeletedMembers();
+				ArrayList<UserDTOResp> listaUsers = userService.getAllNonDeletedViewers();
 				return Response.ok(listaUsers).build();
 		
-				
 			} catch (NullPointerException e) { // caso não tenha Authorization no header
 				e.printStackTrace();
 				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
@@ -301,6 +299,7 @@ public class UserController {
 
 	}
 
+	//não vamos mandar a password junto com o perfil
 	// Get user profile
 	@GET
 	@Path("{userId}")
@@ -308,8 +307,8 @@ public class UserController {
 	public Response getUser(@PathParam("userId") int userId, @HeaderParam("Authorization") String authString) {
 		try {
 			System.out.println("dentro do getUser no controller: " + userId + " " + authString);
-			UserDTO userDTO = userService.getNonDeletedUserDTOById(userId);
-			System.out.println("userDTO : " + userDTO);
+			UserDTOResp userDTOResp = userService.getNonDeletedUserDTORespById(userId);
+			System.out.println("userDTO : " + userDTOResp);
 
 			if (authString.equals("") || authString.isEmpty() || authString == null
 					|| !userService.isValidToken(authString)) {// está logado mas o token não é válido
@@ -319,8 +318,8 @@ public class UserController {
 					&& !userService.hasLoggedUserAdminPriv(authString)) {//quem está a aceder ao perfil não é o mesmo  user que está logado nem tem privilégios de admin
 				return Response.status(403).entity(GestaoErros.getMsg(5)).build();
 			}
-			if (userDTO != null) {
-				return Response.ok(userDTO).build(); //TODO este user tem a pass. Um admin consegue ver a pass do user seleccionado. RESOLVER!!!!!!!! IDEIA - alterar pass num sitio difrente/metodo diferente
+			if (userDTOResp != null) {
+				return Response.ok(userDTOResp).build(); //[solved 13-4-2022] este user tem a pass. Um admin consegue ver a pass do user seleccionado. RESOLVER!!!!!!!! IDEIA - alterar pass num sitio difrente/metodo diferente
 			} else {
 				return Response.status(400).entity("User inválido").build();
 			}
@@ -332,87 +331,122 @@ public class UserController {
 		}
 	}
 
-	//  Change user profile POST /rest/users/{username}/
+	//  Change user profile POST /rest/users/{userId}/
 	@POST
 	@Path("{userId}/")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response changeUser(@PathParam("userId") int userId, @Valid UserDTO changeUser,
+	public Response updateUserInfo(@PathParam("userId") int userId, @Valid UserDTO changeUser,
 			@HeaderParam("Authorization") String authString) {
 
 		System.out.println("changedUser recebido: " + changeUser);
-
-		if (authString.equals("") || authString.isEmpty() || authString == null
-				|| !userService.isValidToken(authString)) { // token valido?
+		if (authString.equals("") || authString.isEmpty() || authString == null || !userService.isValidToken(authString)) { // token valido?
 			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-
 		}
 		
-		boolean isAdmin = userService.hasLoggedUserAdminPriv(authString);
-		boolean isUsernameOfloggedUser = userService.isUserAuthenticated(authString, userId);
+		boolean loggedUserHasAdminPriv = userService.hasLoggedUserAdminPriv(authString);
+		boolean isThisProfileFromLoggedUser = userService.isUserAuthenticated(authString, userId);
 		
-		//TODO rever esta validaçaõ:
-//		if ((!isUsernameOfloggedUser && !isAdmin) || // username nao é de quem está logado nem quem está logado tem priv de admin
-//				(!isAdmin && changeUser.isAdminPrivileges())) { // não é admin mas queria ter priv
-//			return Response.status(403).entity(GestaoErros.getMsg(5)).build();
-//		}
-//
-//		if (changeUser.get().equals("admin") && !changeUser.isAdminPrivileges()) { // username diferente de quem está logado ou user é admin e não tem priv)
-//			return Response.status(400).entity("Os privilégios do admin não podem ser alterados").build();
-//		
-//		} else if (!username.equals(changeUser.getUsername())) { // está a tentar alterar o username
-//			return Response.status(400).entity(GestaoErros.getMsg(18)).build();
-//		
-//		} else {
-//			try {
-//				boolean resultado = userService.updateUser(username, changeUser);
-//				UserDTO userDTO = userService.getUserDTObyUsername(username);
-//
-//				if (resultado == true) {
-//					return Response.ok(userDTO).build();
-//				}
-//			} catch (Exception e) {
-//				return Response.status(400).entity(GestaoErros.getMsg(0)).build();
-//			}
-//		}
+		if (!isThisProfileFromLoggedUser && !loggedUserHasAdminPriv) {// username nao é de quem está logado nem quem está logado tem priv de admin
+			return Response.status(403).entity(GestaoErros.getMsg(5)).build();
+		}
+		
+		try {
+			boolean resultado = userService.updateUser(userId, changeUser, loggedUserHasAdminPriv);
+			UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
+
+			if (resultado == true) {
+				return Response.ok(userDTOResp).build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(0)).build();
+		}
+		
 		return Response.status(400).entity(GestaoErros.getMsg(0)).build(); //
 	}
 
-//	
+	
+//  Change user profile POST /rest/users/{userId}/
+	@POST
+	@Path("{userId}/updatePassword")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateUserInfo(@PathParam("userId") int userId, String newPass,
+			@HeaderParam("Authorization") String authString) {
+
+		Response a_resposta;
+		JSONObject obj = new JSONObject(newPass);
+		String password = obj.getString("password");
+		
+		
+		if(password.equals("") ||password.isEmpty() || password==null) {
+			return Response.status(400).entity(GestaoErros.getMsg(0)).build(); 
+		}
+		
+		System.out.println("changedUserPass recebido: " + newPass);
+		
+		if (authString.equals("") || authString.isEmpty() || authString == null || !userService.isValidToken(authString)) { // token valido?
+			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+		}
+		
+		boolean loggedUserHasAdminPriv = userService.hasLoggedUserAdminPriv(authString);
+		boolean isThisProfileFromLoggedUser = userService.isUserAuthenticated(authString, userId);
+		
+		if (!isThisProfileFromLoggedUser && !loggedUserHasAdminPriv) {// username nao é de quem está logado nem quem está logado tem priv de admin
+			return Response.status(403).entity(GestaoErros.getMsg(5)).build();
+		}
+		
+		try {
+			boolean resultado = userService.updateUserPassword(userId, password, loggedUserHasAdminPriv);
+			UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
+
+			if (resultado == true) {
+				return Response.ok().build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(0)).build();
+		}
+		
+		return Response.status(400).entity(GestaoErros.getMsg(0)).build(); //
+	}
+
+
 
 	@DELETE
 	@Path("{userId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteUser(@PathParam("userId") int userId,
 			@HeaderParam("Authorization") String authString) {
-
-		if (userId!=1) {// não permitimos que se apage o user  admin id 1
-			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
-				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-			}
-
-			if (userService.getUserDTOById(userId) == null) { // o id do url não existir nao avança
+		try {
+			UserDTOResp user = userService.getUserDTORespById(userId);
+			if (user == null) { // o id do url não existir nao avança
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
-			if (!userService.hasLoggedUserAdminPriv(authString)) {// está logado não tem priv admin nao pode apagar ninguem
-				System.out.println("não tem permissões para apagar este utilizador");
-				return Response.status(403).entity(GestaoErros.getMsg(9)).build();
-			}
-
-			try {
+		//if (userId!=1) {// não permitimos que se apage o user  admin id 1
+			if(!user.getEmail().equals("admin@aor.pt")) {
+				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
+					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+				}
+	
+				if (!userService.hasLoggedUserAdminPriv(authString)) {// está logado não tem priv admin nao pode apagar ninguem
+					System.out.println("não tem permissões para apagar este utilizador");
+					return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+				}
+				
 				if (userService.deleteUser(userId)) {
 					return Response.ok().entity(GestaoErros.getMsg(11)).build();
 				} else {
 					return Response.status(400).entity("o user não foi apagado").build();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				return Response.status(400).entity("não foi possível apagar user").build();
+					
+			} else {
+				System.out.println("não tem permissões para apagar o ADMIN");
+				return Response.status(403).entity(GestaoErros.getMsg(9)).build();
 			}
-		} else {
-			System.out.println("não tem permissões para apagar ADMIN");
-			return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity("não foi possível apagar user").build();
 		}
+
 	}
 
 	@POST
@@ -420,34 +454,38 @@ public class UserController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response undeletedUser(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {
-
-		if (userId!=1) {// não permitimos que se apage o username admin
-			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
-				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-			}
-			if (userService.getUserDTOById(userId) == null) { // o id do url não existir nao avança
+		try {
+			UserDTOResp user = userService.getUserDTORespById(userId);
+			if (user == null) { // o id do url não existir nao avança
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
-			if (!userService.hasLoggedUserAdminPriv(authString)) {// está logado não tem priv admin nao pode apagar ninguem
-				System.out.println("não tem permissões para desmarcar para apagar este utilizador");
-				return Response.status(403).entity(GestaoErros.getMsg(9)).build();
-			}
-
-			try {
+			//if (userId!=1) {// não permitimos que se apage o user admin
+			if(!user.getEmail().equals("admin@aor.pt")) {
+				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
+					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+				}
+	
+				if (!userService.hasLoggedUserAdminPriv(authString)) {// está logado não tem priv admin nao pode apagar ninguem
+					System.out.println("não tem permissões para desmarcar para apagar este utilizador");
+					return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+				}
+	
+				
 				if (userService.undeletedUser(userId)) {
 					return Response.ok().entity(GestaoErros.getMsg(11)).build();
 				} else {
 					return Response.status(400).entity("o user não foi continuca com marca de apagar").build();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				return Response.status(400).entity("O user continua marcado para eliminar").build();
+				 
+			} else {
+				System.out.println("não tem permissões para apagar o ADMIN");
+				return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+	
 			}
-		} else {
-			System.out.println("não tem permissões para apagar ADMIN");
-			return Response.status(403).entity(GestaoErros.getMsg(9)).build();
-
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity("O user continua marcado para eliminar").build();
 		}
 	}
 

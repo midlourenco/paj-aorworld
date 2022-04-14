@@ -2,15 +2,10 @@ package pt.uc.dei.proj5.dao;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
@@ -45,6 +40,7 @@ public class UserDao extends AbstractDao<User> {
 		System.out.println("Entrei em converter user dto registo para entidade");
 		User userEntity = new User();
 		userEntity.setEmail(userDTOReg.getEmail());
+		//userEntity.setPassword(userDTOReg.getPassword());
 		userEntity.setPassword(userDTOReg.getPassword());
 		userEntity.setFirstName(userDTOReg.getFirstName());
 		userEntity.setLastName(userDTOReg.getLastName());
@@ -58,21 +54,29 @@ public class UserDao extends AbstractDao<User> {
 	}
 	
 	//UPDATE
+	//aqui não temos quando foi alterado pela ultima vez nem  por quem??
 	/**
 	 *Função para converter um user DTO para uma Entidade (pre-existente) de utilizador
 	 * @return
 	 */
-	public static User convertDTOtoEntity(UserDTO userDTO, User userEntity) {
+	public static User convertDTOtoEntity(UserDTO userDTO, User userEntity, boolean hasAdminPriv,String password) {
 		System.out.println("Entrei em converter user dto para entidade");
-
-		userEntity.setEmail(userDTO.getEmail());
-		userEntity.setFirstName(userDTO.getFirstName());
-		userEntity.setLastName(userDTO.getLastName());
-		userEntity.setImage(userDTO.getImage());
-		userEntity.setBiography(userDTO.getBiography());
-		userEntity.setPrivileges(userDTO.getPrivileges());
+		if(userDTO!=null) {
+			userEntity.setEmail(userDTO.getEmail());
+			userEntity.setFirstName(userDTO.getFirstName());
+			userEntity.setLastName(userDTO.getLastName());
+			userEntity.setImage(userDTO.getImage());
+			userEntity.setBiography(userDTO.getBiography());
+			if(hasAdminPriv) {
+				userEntity.setPrivileges(userDTO.getPrivileges());
+			}
+		}
+		if(password!=null) {
+			userEntity.setPassword(password);
+		}
 		
-
+		userEntity.setLastModifDate(new Timestamp(System.currentTimeMillis()));
+		System.out.println(userEntity.getLastModifDate());
 		return userEntity;
 	}
 	
@@ -102,11 +106,13 @@ public class UserDao extends AbstractDao<User> {
 	public static UserDTOResp convertEntitytoDTOResp(User userEntity) {
 		
 		UserDTOResp userDTOResp = new UserDTOResp();
-		
 		userDTOResp.setEmail(userEntity.getEmail());
 		userDTOResp.setFirstName(userEntity.getFirstName());
 		userDTOResp.setLastName(userEntity.getLastName());
 		userDTOResp.setImage(userEntity.getImage());
+		userDTOResp.setBiography(userEntity.getBiography());
+		userDTOResp.setPrivileges(userEntity.getPrivileges());
+		userDTOResp.setId(userEntity.getId());
 		return userDTOResp;
 	}
 	

@@ -29,8 +29,8 @@ public class UserDTO implements Serializable{
 	//@URL(protocol = "http")
 	@NotBlank 
 	private String image;
+	
 	private String biography;
-	@NotBlank 
 	private User.UserPriv privileges;
 	
 
