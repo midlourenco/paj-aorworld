@@ -24,7 +24,7 @@ import javax.persistence.Table;
  * 
  */
 @Entity // classe que vai ter uma ligaçao a um data source
-@Table(name = "Notification") // nome da tabela java é no singular, tabela é no plural
+@Table(name = "Notification") 
 @NamedQuery(name = "Notification.findAll", query = "SELECT n FROM Notification n")
 public class Notification implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -37,24 +37,20 @@ public class Notification implements Serializable {
 	@Column(name = "title", nullable = false)
 	private String title;
 	
-	@Column(name = "description", nullable = false)
-	private String description;
-	
 	@Column(name = "alreadyRead", nullable = false)
 	private boolean alreadyRead;
 	
 	@Column(name = "createDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp createdDate;
 
-	@Column(name = "finalDate")
-	private Timestamp finalDate;
-
 	@Enumerated(EnumType.STRING)
-	@Column(name = "notificationType", nullable = true, columnDefinition = "ENUM('ACTIVITY_REMINDER', 'ACTIVITY_END', 'CATEGORY_SHARING', 'CATEGORY_ACCEPTED','CATEGORY_REJECTED')")
+	@Column(name = "notificationType", nullable = true, columnDefinition = "ENUM('PROJECT_ASSOC','NEWS_ASSOC','NEWS_ABOUT_PROJECT')")
 	private NotificationType notificationType;
 
+	
+	//PROJECT_REJECT, PROJECT_DESASSOC,NEWS_REJECT, NEWS_DESASSOC
 	public enum NotificationType {
-		ACTIVITY_REMINDER, ACTIVITY_END, CATEGORY_SHARING, CATEGORY_ACCEPTED, CATEGORY_REJECTED
+		PROJECT_ASSOC,  NEWS_ASSOC,NEWS_ABOUT_PROJECT
 	}
 
 	@ManyToOne(optional = false) // 1 notificação tem obrigatoriamente 1 user
@@ -68,6 +64,11 @@ public class Notification implements Serializable {
 	@ManyToOne // 1 notificação pode ter 1 noticia ou 1 partilha de projecto
 	@JoinColumn(name = "ProjectSharing_Notification", nullable = true)
 	private ProjectSharing projectSharing;
+	
+	@ManyToOne 
+	@JoinColumn(name = "NewsSharing_Notification", nullable = true)
+	private NewsSharing newsSharing;
+
 
 	public String getTitle() {
 		return title;
@@ -93,14 +94,6 @@ public class Notification implements Serializable {
 		this.id = id;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public boolean isAlreadyRead() {
 		return alreadyRead;
 	}
@@ -115,14 +108,6 @@ public class Notification implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public Timestamp getFinalDate() {
-		return finalDate;
-	}
-
-	public void setFinalDate(Timestamp finalDate) {
-		this.finalDate = finalDate;
 	}
 
 	public Timestamp getCreatedDate() {
@@ -151,10 +136,11 @@ public class Notification implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Notification [id=" + id + ", title=" + title + ", description=" + description + ", alreadyRead="
-				+ alreadyRead + ", createdDate=" + createdDate + ", finalDate=" + finalDate + ", notificationType="
-				+ notificationType + ", user=" + user + ", news=" + news + ", projectSharing=" + projectSharing + "]";
+		return "Notification [id=" + id + ", title=" + title + ", alreadyRead=" + alreadyRead + ", createdDate="
+				+ createdDate + ", notificationType=" + notificationType + ", user=" + user + ", news=" + news
+				+ ", projectSharing=" + projectSharing + ", newsSharing=" + newsSharing + "]";
 	}
+
 	
 
 }

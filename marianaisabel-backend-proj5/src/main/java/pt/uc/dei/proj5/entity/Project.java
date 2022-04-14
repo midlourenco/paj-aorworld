@@ -30,33 +30,42 @@ import javax.persistence.Table;
 public class Project implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false, unique = true)
 	private int id;
-	
-	@Column(name = "categoryName", nullable = false)
-	private String categoryName;
+
+	@Column(name = "title", nullable = false)
+	private String title;
+
+	@Column(name = "description", nullable = false)
+	private String description;
+
+	@Column(name = "image", nullable = true)
+	private String image;
 	
 	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 	
-	@Column(name="createDate", nullable=false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Timestamp createdDate;
-	
-	
-	@Column(name = "start_date", nullable = true)
-	private Timestamp startDate;
+	@Column(name = "visibility", nullable = false)
+	private boolean visibility;
 
-	@Column(name = "end_date", nullable = true)
-	private Timestamp endDate;
+	@Column(name = "createdDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Timestamp createdDate;
+
+	@Column(name = "lastModifDate", nullable = true )
+	private Timestamp lastModifDate;
+
 	
 	
-	//@Column(name = "Activities", nullable = true)
-	//bi-directional many-to-one association to A
-//	@OneToMany(mappedBy="project",cascade = CascadeType.REMOVE)
-//	private List<News> news;
-	
+	//TODO se houver tempo pode-se adicionar uma linha temporal para os projectos:
+//	@Column(name = "start_date", nullable = true)
+//	private Timestamp startDate;
+//
+//	@Column(name = "end_date", nullable = true)
+//	private Timestamp endDate;
+//	
+//	
 	
 
 	@ManyToOne (optional=false)  //presença obrigatória na relação
@@ -103,14 +112,6 @@ public class Project implements Serializable{
 		this.deleted = deleted;
 	}
 
-	public String getCategoryName() {
-		return categoryName;
-	}
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
 	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
@@ -119,21 +120,21 @@ public class Project implements Serializable{
 		this.createdDate = createdDate;
 	}
 
-	public Timestamp getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Timestamp startDate) {
-		this.startDate = startDate;
-	}
-
-	public Timestamp getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Timestamp endDate) {
-		this.endDate = endDate;
-	}
+//	public Timestamp getStartDate() {
+//		return startDate;
+//	}
+//
+//	public void setStartDate(Timestamp startDate) {
+//		this.startDate = startDate;
+//	}
+//
+//	public Timestamp getEndDate() {
+//		return endDate;
+//	}
+//
+//	public void setEndDate(Timestamp endDate) {
+//		this.endDate = endDate;
+//	}
 
 	public User getCreatedBy() {
 		return createdBy;
@@ -174,15 +175,24 @@ public class Project implements Serializable{
 	public void setKeywords(List<Keyword> keywords) {
 		this.keywords = keywords;
 	}
+	
+	public Timestamp getLastModifDate() {
+		return lastModifDate;
+	}
+
+	public void setLastModifDate(Timestamp lastModifDate) {
+		this.lastModifDate = lastModifDate;
+	}
 
 	@Override
 	public String toString() {
-		return "Project [id=" + id + ", categoryName=" + categoryName + ", deleted=" + deleted + ", createdDate="
-				+ createdDate + ", startDate=" + startDate + ", endDate=" + endDate + ", createdBy=" + createdBy
-				+ ", lastModifBy=" + lastModifBy + ", projectSharing=" + projectSharing + ", news=" + news
-				+ ", keywords=" + keywords + "]";
+		return "Project [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image
+				+ ", deleted=" + deleted + ", visibility=" + visibility + ", createdDate=" + createdDate
+				+ ", lastModifDate=" + lastModifDate + ", createdBy=" + createdBy + ", lastModifBy=" + lastModifBy
+				+ ", projectSharing=" + projectSharing + ", news=" + news + ", keywords=" + keywords + "]";
 	}
 
+	
 	
 
 	

@@ -21,8 +21,8 @@ import javax.persistence.Table;
  * 
  */
 @Entity// classe que vai ter uma ligaçao a um data source
-@Table(name="ProjectSharing") //nome da tabela java é no singular, tabela é no plural
-public class ProjectSharing implements Serializable{
+@Table(name="NewsSharing") //nome da tabela java é no singular, tabela é no plural
+public class NewsSharing implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -34,24 +34,25 @@ public class ProjectSharing implements Serializable{
 	private boolean accepted;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "User_ProjectSharing")
+	@JoinColumn(name = "User_NewsSharing")
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "Project_ProjectSharing")
-	private News project;
+	@JoinColumn(name = "News_NewsSharing")
+	private News news;
 
-	@OneToMany(mappedBy = "projectSharing", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	private List<Notification> notifications;
+	@OneToMany(mappedBy = "newsSharing", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	private List<Notification> newsSharing;
 
 	
 	@Column(name="createdDate", nullable=false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp createdDate;
 	
-	public ProjectSharing() {
+	
+	public NewsSharing() {
 		
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -68,44 +69,44 @@ public class ProjectSharing implements Serializable{
 		this.accepted = accepted;
 	}
 
-	public User getUserJoinSharing() {
-		return user;
-	}
-
-	public void setUserJoinSharing(User user) {
-		this.user = user;
-	}
-
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
-	}
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public News getProject() {
-		return project;
+
+	public News getNews() {
+		return news;
 	}
-	public void setProject(News project) {
-		this.project = project;
+
+	public void setNews(News news) {
+		this.news = news;
 	}
+
+	public List<Notification> getNewsSharing() {
+		return newsSharing;
+	}
+
+	public void setNewsSharing(List<Notification> newsSharing) {
+		this.newsSharing = newsSharing;
+	}
+
 	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
+
 	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
+
 	@Override
 	public String toString() {
-		return "ProjectSharing [id=" + id + ", accepted=" + accepted + ", user=" + user + ", project=" + project
-				+ ", notifications=" + notifications + ", createdDate=" + createdDate + "]";
+		return "NewsSharing [id=" + id + ", accepted=" + accepted + ", user=" + user + ", news=" + news
+				+ ", newsSharing=" + newsSharing + ", createdDate=" + createdDate + "]";
 	}
+	
 
 
 

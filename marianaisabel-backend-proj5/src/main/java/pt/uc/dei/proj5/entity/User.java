@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +41,7 @@ public class User implements Serializable {
 
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(name = "id", nullable = false, unique = true, updatable = false, insertable = false)
 	private int id;
 	
 	@Column(name = "firstName", nullable = false)
@@ -59,7 +58,7 @@ public class User implements Serializable {
 	@Column(name = "password", nullable = false)
 	private String password;
 	
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
 	@Column(name = "image", nullable = false)
@@ -78,7 +77,7 @@ public class User implements Serializable {
 	@Column(name = "UserPriv", nullable = false, columnDefinition = "ENUM('VIEWER','MEMBER','ADMIN')")
 	private UserPriv privileges;
 
-	@Column(name = "createDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name = "createdDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp createdDate;
 
 	@Column(name = "lastModifDate", nullable = true )
@@ -104,18 +103,20 @@ public class User implements Serializable {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Notification> notifications;
+	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<ProjectSharing> projectSharing;
 
-	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	private List<NewsSharing> newsSharing;
+
 	
 	//OUTRAS IDEIAS: em vez de member- editor/publisher ...
 	public enum UserPriv {VIEWER,MEMBER,ADMIN};
-	
-//	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE) // este fetch faz com que as categorias não sejam ignoradas, por causa do erro do get all users
-//	private List<Category> categories;	
 
+	
 	// o código que serializa e desserializa usa o construtor vazio e depois chama
 	// os setters e getters. -> usado por exemplo em R3
 	/**

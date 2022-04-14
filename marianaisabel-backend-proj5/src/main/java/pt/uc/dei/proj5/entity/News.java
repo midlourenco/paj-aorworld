@@ -25,12 +25,10 @@ import javax.persistence.Table;
  * 
  */
 @Entity // classe que vai ter uma ligaçao a um data source
-@Table(name = "News") // nome da tabela java é no singular, tabela é no plural	
+@Table(name = "News") 	
 public class News implements Serializable {
-
 	private static final long serialVersionUID = 1L;
-//	private String activityId = UUID.randomUUID().toString();
-	// @GeneratedValue
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false, unique = true)
@@ -39,25 +37,23 @@ public class News implements Serializable {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "description", nullable = true)
+	@Column(name = "description", nullable = false)
 	private String description;
 
-	@Column(name = "checked", nullable = false)
-	private boolean checked;
-
+	@Column(name = "image", nullable = true)
+	private String image;
+	
 	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
+	
+	@Column(name = "visibility", nullable = false)
+	private boolean visibility;
 
-	@Column(name = "createDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name = "createdDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Timestamp createdDate;
 
-
-//	@Column(name = "Category", nullable = false)
-	// bi-directional many-to-one association to Product_Type
-//	@ManyToOne(optional = false)
-//	@JoinColumn(name = "Category_Activity")
-//	private Category category;
-
+	@Column(name = "lastModifDate", nullable = true )
+	private Timestamp lastModifDate;
 	
 	@ManyToOne (optional=false)  //presença obrigatória na relação
 	@JoinColumn(name="CreatedBy_News")
@@ -70,12 +66,17 @@ public class News implements Serializable {
 	@ManyToMany(cascade = CascadeType.REMOVE)
 	private List<Project> projects;
 	
+	//alternativa	private String keywords;
 	@ManyToMany(cascade = CascadeType.REMOVE)
 	private List<Keyword> keywords;
 	
 	@OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE) // cada news tem uma muitas notificaçoes associados. por isso tem uma lista de produtos
 	private List<Notification> notifications;
 
+	@OneToMany(mappedBy="news",cascade = CascadeType.REMOVE)
+	private List<NewsSharing> projectSharing;
+	
+	
 	public News() {
 	}
 
@@ -93,14 +94,6 @@ public class News implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public boolean isChecked() {
-		return checked;
-	}
-
-	public void setChecked(boolean checked) {
-		this.checked = checked;
 	}
 
 	public int getId() {
@@ -166,13 +159,37 @@ public class News implements Serializable {
 	public void setNotifications(List<Notification> notifications) {
 		this.notifications = notifications;
 	}
+	
+	public Timestamp getLastModifDate() {
+		return lastModifDate;
+	}
+
+	public void setLastModifDate(Timestamp lastModifDate) {
+		this.lastModifDate = lastModifDate;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public boolean isVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(boolean visibility) {
+		this.visibility = visibility;
+	}
 
 	@Override
 	public String toString() {
-		return "News [id=" + id + ", title=" + title + ", description=" + description + ", checked=" + checked
-				+ ", deleted=" + deleted + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ ", lastModifBy=" + lastModifBy + ", projects=" + projects + ", keywords=" + keywords
-				+ ", notifications=" + notifications + "]";
+		return "News [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image
+				+ ", deleted=" + deleted + ", visibility=" + visibility + ", createdDate=" + createdDate
+				+ ", lastModifDate=" + lastModifDate + ", createdBy=" + createdBy + ", lastModifBy=" + lastModifBy
+				+ ", projects=" + projects + ", keywords=" + keywords + ", notifications=" + notifications + "]";
 	}
 
 
