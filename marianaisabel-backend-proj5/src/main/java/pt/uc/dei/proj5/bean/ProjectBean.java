@@ -7,6 +7,7 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import pt.uc.dei.proj5.entity.Keyword;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.dao.KeywordDao;
@@ -138,20 +139,26 @@ public class ProjectBean implements Serializable {
 		ProjectDTOResp projectDTOResp=null;
 		System.out.println("Entrei em addProject ProjectBean"); 
 		
-		if(!projectDao.alreadyExistProjectTitleByThisCreatedUser(projectDTO.getTitle(), createdBy) && !projectDTO.getTitle().equals("")) {
+		//if(!projectDao.alreadyExistProjectTitleByThisCreatedUser(projectDTO.getTitle(), createdBy) && !projectDTO.getTitle().equals("")) {
 			
 			Project project = ProjectDao.convertDTOToEntity(projectDTO, createdBy, null);
 			projectDao.persist(project);
 			
 			ArrayList<String> keywords = projectDTO.getKeywords();
 			for (String keyword : keywords) {
-				keywordDao.associateKeywordToProjectOrNews(keyword, project, null);
+				System.out.println("entrei no for das keywords");
+				Keyword keywordEntity =	keywordDao.associateProjectorNewsToKeyword(keyword, project, null);
+				//Project projectEnytity= getProjectEntitybyId(project.getId());
+				System.out.println("criei entity keyword" + keywordEntity + "vou adicionar a projecto "+ project);
+				projectDao.associateKeywordToProject(keywordEntity, project);
+				System.out.println("associei ao proj. fim do ciclo for");
 			}
-			
+			projectDao.merge(project);
+	
 			projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
-		}else {
-			System.out.println("Já existe um projecto com este título criado por este utilizador");
-		}
+//		}else {
+//			System.out.println("Já existe um projecto com este título criado por este utilizador");
+//		}
 		
 		
 		return projectDTOResp;

@@ -403,9 +403,7 @@ public class User implements Serializable {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", password=" + password
 				+ ", email=" + email + ", image=" + image + ", biography=" + biography + ", token=" + token
 				+ ", deleted=" + deleted + ", privileges=" + privileges + ", createdDate=" + createdDate
-				+ ", lastModifDate=" + lastModifDate + ", createdNews=" + createdNews + ", updatedNews=" + updatedNews
-				+ ", createdProjects=" + createdProjects + ", updatedProjects=" + updatedProjects + ", notifications="
-				+ notifications + ", projectSharing=" + projectSharing + "]";
+				 + "]";
 	}
 
 	

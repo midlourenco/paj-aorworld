@@ -12,6 +12,7 @@ import javax.persistence.criteria.Root;
 
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.dto.ProjectDTO;
+import pt.uc.dei.proj5.entity.Keyword;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 
@@ -44,22 +45,16 @@ public class ProjectDao extends AbstractDao<Project> {
 		}
 		
 		//TODO complete here
+		//news
+		//users associated
 		
 		
 		return projectEntity;
 
 	}
 
-//	public static ProjectDTO convertEntityToDTO(Project projectEntity) {
-//		ProjectDTO projectDTO = new ProjectDTO();
-//		//TODO complete here
-//		
-//		
-//		
-//		return projectDTO;
-//	}
-
 	public static ProjectDTOResp convertEntityToDTOResp(Project projectEntity) {
+		System.out.println("Entrei em convertEntityToDTOResp Project");
 		ProjectDTOResp projectDTOResp = new ProjectDTOResp();
 		projectDTOResp.setId(projectEntity.getId());
 		projectDTOResp.setTitle(projectEntity.getTitle());
@@ -69,9 +64,7 @@ public class ProjectDao extends AbstractDao<Project> {
 		projectDTOResp.setVisibility(projectEntity.isVisibility());
 		projectDTOResp.setId(projectEntity.getId());
 		projectDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(projectEntity.getCreatedBy()));
-	//	projectDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(projectEntity.getLastModifBy()));
-
-		
+		projectDTOResp.setKeywords(KeywordDao.convertEntityListToArrayString(projectEntity.getKeywords()));
 		
 		if (projectEntity.getCreatedDate() != null) {
 			projectDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getCreatedDate()));
@@ -90,11 +83,10 @@ public class ProjectDao extends AbstractDao<Project> {
 	
 
 		//TODO complete here
-		
+//	projectDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(projectEntity.getLastModifBy()));		
 //		private ArrayList<UserDTOResp> associatedUsersOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 //		private ArrayList<ProjectDTOResp> associatedNewsOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-//		private ArrayList<String> keywordsOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-//		
+
 		
 		return projectDTOResp;
 	}
@@ -251,7 +243,13 @@ public class ProjectDao extends AbstractDao<Project> {
 	/////////////////////////////////////////////////////////
 	//METODOS verificam condições 
 	////////////////////////////////////////////////////////
-	
+	/**
+	 * metodo para fazer a validaçao se um projecto com determinado titulo já existe em determinado user
+	 * @deprecated
+	 * @param projectTitle
+	 * @param user
+	 * @return
+	 */
 	public boolean alreadyExistProjectTitleByThisCreatedUser(String projectTitle, User user) {
 final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		
@@ -277,7 +275,11 @@ final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery
 	}
 	
 	
-
-	
+	public void associateKeywordToProject(Keyword keyword, Project project) {
+		project.addKeywords(keyword);
+		System.out.println("adicionei keyword ao project em associateKeywordToProject ");
+		//System.out.println("lista" + project.getKeywords());
+		//merge(project);
+	}
 
 }

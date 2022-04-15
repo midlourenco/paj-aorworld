@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.entity.User;
+import pt.uc.dei.proj5.entity.User.UserPriv;
 import pt.uc.dei.proj5.other.GestaoErros;
 import pt.uc.dei.proj5.bean.ProjectBean;
 import pt.uc.dei.proj5.bean.UserBean;
@@ -31,7 +32,7 @@ public class ProjectController {
 	private ProjectBean projectService;
 
 	
-	// Add project to user
+	// Add project to user - so o user logado pode criar  conteúdos no seu nome
 	@POST
 	@Path("{userId}/projects")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -46,17 +47,15 @@ public class ProjectController {
 
 		try {
 			User user = userService.getNonDeletedUserEntityById(userId); // utilizador onde estou a criar o projecto
-			boolean userPrivAdmin = userService.hasLoggedUserAdminPriv(authString);// verifica se quem está logado é um admin
 			boolean userAuthenticated = userService.isUserAuthenticated(authString, userId);// verifica se utilizador ao qual se está adicionar projecto é o user logado
-			System.out.println("o utilizador logado tem privilégios de admin: " + userPrivAdmin);
 			System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + userAuthenticated);
 			
-			if (!userAuthenticated && !userPrivAdmin) {// quem está logado não é o utilizador do userid nem é admin - não pode criar projectos noutro utilizador
+			if (!userAuthenticated) {// quem está logado não é o utilizador do userid - não pode criar projectos noutro utilizador -> //&& !userPrivAdmin - o admin poderia criar noutro utilizador -RETIRADO
 				System.out.println("não tem permissões para criar projectos neste utilizador");
 				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
 			}
 
-			try {
+			if(user.getPrivileges()!=UserPriv.VIEWER){ //o user logado é membro ou admin:
 				ProjectDTOResp resultado = projectService.addProject(user, newProject);
 				if (resultado != null) {
 					return Response.ok(resultado).build();
@@ -64,13 +63,11 @@ public class ProjectController {
 					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
 				}
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				return Response.status(400).entity(GestaoErros.getMsg(17)).build();
 			}
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
 
 		} catch (Exception e) {
-			return Response.status(400).entity(GestaoErros.getMsg(3)).build();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
 		}
 
 	}
@@ -163,11 +160,17 @@ public class ProjectController {
 		}
 
 	}
+
+	
 	
 	//para editar é que se tem de validar o seguinte
 //	if ((!userAuthenticated && !userPrivAdmin) || (!userAuthorizedToGetProject && !userPrivAdmin)){// quem está logado não é o utilizador do userid nem é admin - não pode criar projectos noutro utilizador
 //		System.out.println("não tem permissões para ver projectos deste utilizador");
 //		return Response.status(403).entity(GestaoErros.getMsg(13)).build();
 //	}
+	
+	
+	
+	
 
 }

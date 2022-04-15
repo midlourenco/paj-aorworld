@@ -17,9 +17,9 @@ public class ProjectDTOResp {
 	
 	
 	
-	private ArrayList<UserDTOResp> associatedUsersOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-	private ArrayList<NewsDTOResp> associatedNewsOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-	private ArrayList<String> keywordsOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
+	private ArrayList<UserDTOResp> users= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
+	private ArrayList<NewsDTOResp> news = new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
+	private ArrayList<String> keywords= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 	
 	
 	
@@ -91,25 +91,32 @@ public class ProjectDTOResp {
 	public void setLastModifBy(UserDTOResp lastModifBy) {
 		this.lastModifBy = lastModifBy;
 	}
-		
-	public ArrayList<UserDTOResp> getAssociatedUsersOfThisProject() {
-		return associatedUsersOfThisProject;
+
+	
+	public ArrayList<UserDTOResp> getAssociatedUsers() {
+		return users;
 	}
-	public void setAssociatedUsersOfThisProject(ArrayList<UserDTOResp> associatedUsersOfThisProject) {
-		this.associatedUsersOfThisProject = associatedUsersOfThisProject;
+
+	public void setAssociatedUsers(ArrayList<UserDTOResp> associatedUsers) {
+		this.users = associatedUsers;
 	}
-	public ArrayList<NewsDTOResp> getAssociatedNewsOfThisProject() {
-		return associatedNewsOfThisProject;
+
+	public ArrayList<NewsDTOResp> getAssociatedNews() {
+		return news;
 	}
-	public void setAssociatedNewsOfThisProject(ArrayList<NewsDTOResp> associatedNewsOfThisProject) {
-		this.associatedNewsOfThisProject = associatedNewsOfThisProject;
+
+	public void setAssociatedNews(ArrayList<NewsDTOResp> associatedNews) {
+		this.news = associatedNews;
 	}
-	public ArrayList<String> getKeywordsOfThisProject() {
-		return keywordsOfThisProject;
+
+	public ArrayList<String> getKeywords() {
+		return keywords;
 	}
-	public void setKeywordsOfThisProject(ArrayList<String> keywordsOfThisProject) {
-		this.keywordsOfThisProject = keywordsOfThisProject;
+
+	public void setKeywords(ArrayList<String> keywords) {
+		this.keywords = keywords;
 	}
+
 	@Override
 	public String toString() {
 		return "ProjectDTOResp [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image

@@ -2,6 +2,8 @@ package pt.uc.dei.proj5.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,12 +15,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 
 
@@ -78,17 +84,19 @@ public class Project implements Serializable{
 	private User lastModifBy;
 
 	
-	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="project",cascade = CascadeType.REMOVE)
 	private List<ProjectSharing> projectSharing;
 	
-
-	@ManyToMany(mappedBy="projects",cascade = CascadeType.REMOVE)
-	private List<News> news;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(mappedBy="projects")
+	private Set<News> news=new HashSet<>();
 	
-	
-	@ManyToMany(cascade = CascadeType.REMOVE)
-	private Set<Keyword> keywords;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade = CascadeType.MERGE)
+//	@JoinTable(name="Project_Keyword", joinColumns={@JoinColumn(name="projects_id", referencedColumnName="id")},
+//	inverseJoinColumns={@JoinColumn(name="keywords_keyword", referencedColumnName="keyword")})
+	private Set<Keyword> keywords=new HashSet<>();;
 
 
 	
@@ -193,11 +201,11 @@ public class Project implements Serializable{
 		this.projectSharing = projectSharing;
 	}
 
-	public List<News> getNews() {
+	public Set<News> getNews() {
 		return news;
 	}
 
-	public void setNews(List<News> news) {
+	public void setNews(Set<News> news) {
 		this.news = news;
 	}
 
@@ -207,6 +215,10 @@ public class Project implements Serializable{
 
 	public void setKeywords(Set<Keyword> keywords) {
 		this.keywords = keywords;
+	}
+
+	public void addKeywords(Keyword keyword) {
+		this.keywords.add(keyword);
 	}
 	
 	public Timestamp getLastModifDate() {
@@ -221,8 +233,7 @@ public class Project implements Serializable{
 	public String toString() {
 		return "Project [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image
 				+ ", deleted=" + deleted + ", visibility=" + visibility + ", createdDate=" + createdDate
-				+ ", lastModifDate=" + lastModifDate + ", createdBy=" + createdBy + ", lastModifBy=" + lastModifBy
-				+ ", projectSharing=" + projectSharing + ", news=" + news + ", keywords=" + keywords + "]";
+				+ ", lastModifDate=" + lastModifDate + ", createdBy=" + createdBy +  "]";
 	}
 
 	
