@@ -1,6 +1,7 @@
 package pt.uc.dei.proj5.rest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.entity.User.UserPriv;
 import pt.uc.dei.proj5.other.GestaoErros;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 @Path("users")
@@ -159,9 +161,9 @@ public class UserController {
 
 		try {
 //			authString.equals("") || authString.isEmpty() || authString == nul
-			if (!authString.equals("") && !userService.isValidToken(authString)) {// está logado mas o token não é válido
-				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-			} 
+//			if (!authString.equals("") && !userService.isValidToken(authString)) {// está logado mas o token não é válido
+//				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+//			} 
 			
 //			if(!userService.hasLoggedUserAdminPriv(authString)) { // está logado e não é admin - não pode ver os users todos
 //				return Response.status(403).entity(GestaoErros.getMsg(9)).build();
@@ -191,9 +193,9 @@ public class UserController {
 //			if (authString.equals("") || authString.isEmpty() || authString == null) {
 //				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 //			}
-			if (!authString.equals("") && !userService.isValidToken(authString)) {// está logado mas o token não é válido
-					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-			}  
+//			if (!authString.equals("") && !userService.isValidToken(authString)) {// está logado mas o token não é válido
+//					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+//			}  
 //			if (!userService.hasLoggedUserAdminPriv(authString)) { // está logado e não é admin - não pode ver os users todos
 //					return Response.status(403).entity("Não pode ver lista user porque não tem privilégios de admin")
 //							.build();
@@ -221,9 +223,9 @@ public class UserController {
 //				if (authString.equals("") || authString.isEmpty() || authString == null) {
 //					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 //				}
-				if (!authString.equals("") && !userService.isValidToken(authString)) {// está logado mas o token não é válido
-						return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-				}  
+//				if (!authString.equals("") && !userService.isValidToken(authString)) {// está logado mas o token não é válido
+//						return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+//				}  
 //				if (!userService.hasLoggedUserAdminPriv(authString)) { // está logado e não é admin - não pode ver os users todos
 //						return Response.status(403).entity("Não pode ver lista  user porque não tem privilégios de admin")
 //								.build();
@@ -489,7 +491,43 @@ public class UserController {
 		}
 	}
 
-	
+	 
+		@POST
+		@Path("populateUserTable")
+		@Consumes(MediaType.APPLICATION_JSON)
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response populateUserTable(String users) {
+			
+//			System.out.println("entrei em populateUserTable");
+//			JSONObject objList = new JSONObject(users);
+//			
+//			
+//
+//			try {
+//			//JSONObject obj = new JSONObject(users);
+//			for (JSONObject obj : objList) {
+//			String email = obj.getString("email");
+//			String password = obj.getString("password");
+//			String biography = obj.getString("biography");
+//		//	String createdDate = obj.getString("createdDate");
+//			String deleted = obj.getString("deleted");
+//			String firstName = obj.getString("firstName");
+//			String lastName = obj.getString("lastName");
+//			String image = obj.getString("image");
+//			String UserPriv = obj.getString("UserPriv");
+//			String token = obj.getString("token");
+//			String lastModifDate = obj.getString("lastModifDate");
+//			
+//			userService.populateUserTable(email, password,biography,deleted, firstName,lastName,UserPriv, image, token,lastModifDate);
+	//		}
+			return Response.ok().build();
+//			}catch(Exception e) {
+//		
+//			return  Response.status(400).build();;
+//			}
+
+		}
+
 	
 	
 	

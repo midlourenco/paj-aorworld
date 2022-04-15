@@ -1,5 +1,36 @@
 package pt.uc.dei.proj5.dao;
 
-public class NewsSharingDao {
+import javax.ejb.Stateless;
+
+import pt.uc.dei.proj5.entity.Keyword;
+import pt.uc.dei.proj5.entity.NewsSharing;
+@Stateless
+public class NewsSharingDao extends AbstractDao<NewsSharing> {
+	private static final long serialVersionUID = 1L;
+
+	public NewsSharingDao() {
+		super(NewsSharing.class);
+	}
+	
+	
+	/////////////////////////////////////////////////////////
+	//METODOS ESTATICOS DE CONVERSAO ENTRE ENTIDADE E DTOs
+	////////////////////////////////////////////////////////
+	
+
+	
+
+
+	/////////////////////////////////////////////////////////
+	//METODOS devolvem Listas
+	////////////////////////////////////////////////////////
+
+	
+	
+	/////////////////////////////////////////////////////////
+	//METODOS Queries sobre diversas condiçoes
+	////////////////////////////////////////////////////////
+
+
 
 }

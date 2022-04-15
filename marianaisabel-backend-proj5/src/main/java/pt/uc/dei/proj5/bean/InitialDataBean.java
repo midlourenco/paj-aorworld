@@ -1,5 +1,7 @@
 package pt.uc.dei.proj5.bean;
 
+import java.io.Serializable;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -15,8 +17,10 @@ import pt.uc.dei.proj5.entity.User.UserPriv;
 //@ApplicationScoped
 @Startup
 @Singleton
-public class InitialDataBean {
-	@Inject
+public class InitialDataBean implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Inject 
 	UserDao userDao;
 	
 	@PostConstruct

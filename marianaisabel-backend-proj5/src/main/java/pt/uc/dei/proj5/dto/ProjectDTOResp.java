@@ -12,13 +12,13 @@ public class ProjectDTOResp {
 	private boolean visibility;
 	private String createdDate;
 	private String lastModifDate;
-	private String createdBy;
-	private String lastModifBy;
+	private UserDTOResp createdBy;
+	private UserDTOResp lastModifBy;
 	
 	
 	
 	private ArrayList<UserDTOResp> associatedUsersOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-	private ArrayList<ProjectDTOResp> associatedNewsOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
+	private ArrayList<NewsDTOResp> associatedNewsOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 	private ArrayList<String> keywordsOfThisProject= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 	
 	
@@ -79,16 +79,16 @@ public class ProjectDTOResp {
 	public void setLastModifDate(String lastModifDate) {
 		this.lastModifDate = lastModifDate;
 	}
-	public String getCreatedBy() {
+	public UserDTOResp getCreatedBy() {
 		return createdBy;
 	}
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(UserDTOResp createdBy) {
 		this.createdBy = createdBy;
 	}
-	public String getLastModifBy() {
+	public UserDTOResp getLastModifBy() {
 		return lastModifBy;
 	}
-	public void setLastModifBy(String lastModifBy) {
+	public void setLastModifBy(UserDTOResp lastModifBy) {
 		this.lastModifBy = lastModifBy;
 	}
 		
@@ -98,10 +98,10 @@ public class ProjectDTOResp {
 	public void setAssociatedUsersOfThisProject(ArrayList<UserDTOResp> associatedUsersOfThisProject) {
 		this.associatedUsersOfThisProject = associatedUsersOfThisProject;
 	}
-	public ArrayList<ProjectDTOResp> getAssociatedNewsOfThisProject() {
+	public ArrayList<NewsDTOResp> getAssociatedNewsOfThisProject() {
 		return associatedNewsOfThisProject;
 	}
-	public void setAssociatedNewsOfThisProject(ArrayList<ProjectDTOResp> associatedNewsOfThisProject) {
+	public void setAssociatedNewsOfThisProject(ArrayList<NewsDTOResp> associatedNewsOfThisProject) {
 		this.associatedNewsOfThisProject = associatedNewsOfThisProject;
 	}
 	public ArrayList<String> getKeywordsOfThisProject() {

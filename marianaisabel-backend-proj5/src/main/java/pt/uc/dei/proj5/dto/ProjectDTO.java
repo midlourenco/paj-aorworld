@@ -1,10 +1,13 @@
 package pt.uc.dei.proj5.dto;
 
+import java.util.ArrayList;
 
 public class ProjectDTO {
 	private String title;
 	private String description;
 	private String image;
+	private ArrayList<String> keywords;
+	private boolean visibility;
 	
 	
 	
@@ -44,7 +47,23 @@ public class ProjectDTO {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}	
+	public ArrayList<String> getKeywords() {
+		return keywords;
 	}
+	public void setKeywords(ArrayList<String> keywords) {
+		this.keywords = keywords;
+	}
+	
+
+	public boolean isVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(boolean visibility) {
+		this.visibility = visibility;
+	}
+
 	@Override
 	public String toString() {
 		return "ProjectDTO [title=" + title + ", description=" + description + ", image=" + image + "]";

@@ -3,6 +3,7 @@ package pt.uc.dei.proj5.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,7 +69,7 @@ public class News implements Serializable {
 	
 	//alternativa	private String keywords;
 	@ManyToMany(cascade = CascadeType.REMOVE)
-	private List<Keyword> keywords;
+	private Set<Keyword> keywords;
 	
 	@OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE) // cada news tem uma muitas notificaçoes associados. por isso tem uma lista de produtos
 	private List<Notification> notifications;
@@ -144,11 +145,11 @@ public class News implements Serializable {
 		this.projects = projects;
 	}
 
-	public List<Keyword> getKeywords() {
+	public Set<Keyword> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(List<Keyword> keywords) {
+	public void setKeywords(Set<Keyword> keywords) {
 		this.keywords = keywords;
 	}
 

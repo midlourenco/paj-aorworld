@@ -2,6 +2,7 @@ package pt.uc.dei.proj5.entity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,13 +20,13 @@ public class Keyword implements Serializable{
 	
 	@Id 
 	@Column(name = "keyword", nullable = false)
-	private int keyword;
+	private String keyword;
 	
 	@ManyToMany(mappedBy="keywords",cascade = CascadeType.REMOVE)
-	private List<Project> projects;
+	private Set<Project> projects;
 	
 	@ManyToMany(mappedBy="keywords",cascade = CascadeType.REMOVE)
-	private List<News> news;
+	private Set<News> news;
 
 	
 	
@@ -36,27 +37,27 @@ public class Keyword implements Serializable{
 	
 	}
 
-	public int getKeyword() {
+	public String getKeyword() {
 		return keyword;
 	}
 
-	public void setKeyword(int keyword) {
+	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
 
-	public List<Project> getProjects() {
+	public Set<Project> getProjects() {
 		return projects;
 	}
 
-	public void setProjects(List<Project> projects) {
+	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
 	}
 
-	public List<News> getNews() {
+	public Set<News> getNews() {
 		return news;
 	}
 
-	public void setNews(List<News> news) {
+	public void setNews(Set<News> news) {
 		this.news = news;
 	}
 

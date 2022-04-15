@@ -3,6 +3,7 @@ package pt.uc.dei.proj5.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -47,7 +48,7 @@ public class Project implements Serializable{
 	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
 	
-	@Column(name = "visibility", nullable = false)
+	@Column(name = "visibility", nullable = false) //true if public, false if private
 	private boolean visibility;
 
 	@Column(name = "createdDate", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -72,7 +73,7 @@ public class Project implements Serializable{
 	@JoinColumn(name="CreatedBy_Project")
 	private User createdBy;
 	
-	@ManyToOne (optional=false)  //presença obrigatória na relação
+	@ManyToOne (optional=true)  //presença não é  obrigatória na relação
 	@JoinColumn(name="UpdatedBy_Project")
 	private User lastModifBy;
 
@@ -87,7 +88,7 @@ public class Project implements Serializable{
 	
 	
 	@ManyToMany(cascade = CascadeType.REMOVE)
-	private List<Keyword> keywords;
+	private Set<Keyword> keywords;
 
 
 	
@@ -136,6 +137,38 @@ public class Project implements Serializable{
 //		this.endDate = endDate;
 //	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public boolean isVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(boolean visibility) {
+		this.visibility = visibility;
+	}
+
 	public User getCreatedBy() {
 		return createdBy;
 	}
@@ -168,11 +201,11 @@ public class Project implements Serializable{
 		this.news = news;
 	}
 
-	public List<Keyword> getKeywords() {
+	public Set<Keyword> getKeywords() {
 		return keywords;
 	}
 
-	public void setKeywords(List<Keyword> keywords) {
+	public void setKeywords(Set<Keyword> keywords) {
 		this.keywords = keywords;
 	}
 	

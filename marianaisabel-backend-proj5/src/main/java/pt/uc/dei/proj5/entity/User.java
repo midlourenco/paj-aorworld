@@ -84,8 +84,12 @@ public class User implements Serializable {
 	private Timestamp lastModifDate;
 
 	
-//fetch => FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ign
-	//fetch = FetchType.EAGER,
+
+	//fetch => FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ign
+		//fetch = FetchType.EAGER,
+	//alternativa a ter mais do que 1 FetchType.EAGER de acordo com o link seguinte:
+	//https://stackoverflow.com/questions/4334970/hibernate-throws-multiplebagfetchexception-cannot-simultaneously-fetch-multipl
+	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
 	private List<News> createdNews;
