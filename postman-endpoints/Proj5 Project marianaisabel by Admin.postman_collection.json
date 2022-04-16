@@ -1,0 +1,308 @@
+{
+	"info": {
+		"_postman_id": "25516393-ed10-4a0a-bca5-276b4e0520c6",
+		"name": "Proj5 Project marianaisabel by Admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "F13 - create project",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\" : \"122221Investigação sobre como aprender a 333\",\n\t\"description\" : \"é 22uma investigação profunda desenvolvida ao longo de vários anos\",\n\t\"image\" : \"https://umaimagem2.pt\",\n\t\"keywords\": [\"coimbra\",\"comer\",\"adeus\"],\n    \"news\":[],\n    \"visibility\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/projects",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F14a - Get all projects",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/projects",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F14b - Get all deleted  projects",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/users/projects/deletedList",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"projects",
+						"deletedList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F14c - Get all projects from user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/projects?user=1",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F14d - Get all deleted projects from user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/projects/deletedList?user=1",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects",
+						"deletedList"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F15 - Get Project Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/projects/2",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F16 - Edit Project Detail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"projecto piloto\",\r\n\t\"description\" : \" investigação profunda \",\r\n\t\"image\" : \"https://umaimagem2.pt\",\r\n\t\"keywords\": [\"piloto\",\"fogo\",\"dormir\"],\r\n    \"news\":[],\r\n    \"visibility\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/projects/2",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F17 - Associated News to Project",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\": \"hello\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/users/2/updatePassword",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"2",
+						"updatePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F21 - Undelete Project Copy",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/projects/2",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F21 - Undelete Project",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/projects/2/undelete",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"projects",
+						"2",
+						"undelete"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

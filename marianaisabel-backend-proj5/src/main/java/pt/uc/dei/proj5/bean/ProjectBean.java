@@ -185,6 +185,7 @@ public class ProjectBean implements Serializable {
 	
 	
 	public ProjectDTOResp updateProject(User lastModifBy, int projectId, ProjectDTO projectDTO ) {
+		
 		Project project = getProjectEntityById(projectId);
 		project = ProjectDao.convertDTOToEntity(projectDTO,project);
 		project.setId(projectId);

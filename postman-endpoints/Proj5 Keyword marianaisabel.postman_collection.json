@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "55025864-a93c-4328-9f21-0d14469a66f9",
+		"name": "Proj5 Keyword marianaisabel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "F18 - Get all projects assoc keyword",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/keywords/coimbra/projects",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"keywords",
+						"coimbra",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F19 - Get all projects assoc news",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/keywords/coimbra/news",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"keywords",
+						"coimbra",
+						"news"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F20 - Get Project Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key2}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/keywords",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"keywords"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
