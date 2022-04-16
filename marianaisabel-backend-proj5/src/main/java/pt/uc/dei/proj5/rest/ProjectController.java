@@ -174,51 +174,52 @@ public class ProjectController {
 
 	}
 	
-	//TODO validar se o user no queryParam é um numero
-	//https://dennis-xlc.gitbooks.io/restful-java-with-jax-rs-2-0-2rd-edition/content/en/part1/chapter5/query_param.html
-	//GET /projects?user=xxxx
-	/**
-	 *  Get All projects from user
-	 * @param userId
-	 * @param authString
-	 * @return
-	 */
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllProjectFromUser (@QueryParam("user")  @Pattern(regexp = "[0-9]+", message = "The user id must be a valid number") int userId, @HeaderParam("Authorization") String authString) {
-		System.out.println("Entrei em getAllProject no controller com token? : " + authString);
-		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus projectos
-		
-		try {
-			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
-				ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);
-				if (resultado != null) {
-					return Response.ok(resultado).build();
-				} else {
-					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
-				}			
-			}
-			
-			ArrayList<ProjectDTOResp>  resultado = projectService.getAllNonDeletedProjectsFromUser(user);
-			if (resultado != null) {
-				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
-			}
-
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);
-			if (resultado != null) {
-				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
-			}
-		} catch (Exception e) {
-			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
-		}
-
-	}
+//	//TODO validar se o user no queryParam é um numero
+//	//https://dennis-xlc.gitbooks.io/restful-java-with-jax-rs-2-0-2rd-edition/content/en/part1/chapter5/query_param.html
+//	//GET /projects?user=xxxx
+//	/**
+//	 *  Get All projects from user
+//	 * @param userId
+//	 * @param authString
+//	 * @return
+//	 */
+//	@GET
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response getAllProjectFromUser (@QueryParam("user")  @Pattern(regexp = "[0-9]+", message = "The user id must be a valid number") int userId, @HeaderParam("Authorization") String authString) {
+//		System.out.println("Entrei em getAllProject por user no controller com token? : " + authString);
+//		System.out.println("vou querer os projectos do userid " + userId);
+//		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus projectos
+//		System.out.println(user);
+//		try {
+//			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+//				ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);
+//				if (resultado != null) {
+//					return Response.ok(resultado).build();
+//				} else {
+//					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+//				}			
+//			}
+//			
+//			ArrayList<ProjectDTOResp>  resultado = projectService.getAllNonDeletedProjectsFromUser(user);
+//			if (resultado != null) {
+//				return Response.ok(resultado).build();
+//			} else {
+//				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+//			}
+//
+//		} catch (NullPointerException e) {
+//			e.printStackTrace();
+//			ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);
+//			if (resultado != null) {
+//				return Response.ok(resultado).build();
+//			} else {
+//				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+//			}
+//		} catch (Exception e) {
+//			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+//		}
+//
+//	}
 
 	/**
 	 *  Get All projects from user marked as deleted
@@ -266,19 +267,29 @@ public class ProjectController {
 
 	
 	/**
-	 *  Get All projects
+	 *  Get All projects general or from one user (user- optional queryParam)
 	 * @param userId
 	 * @param authString
 	 * @return
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllProject (@HeaderParam("Authorization") String authString) {
-
+	public Response getAllProject (@QueryParam("user")  int userId, @HeaderParam("Authorization") String authString) {
+		System.out.println("Entrei em getAllProject por user no controller com token? : " + authString);
+		System.out.println("vou querer os projectos do userid " + userId);
+		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus projectos
+		System.out.println(user);
+		ArrayList<ProjectDTOResp> resultado=new ArrayList<>();
+		
 		System.out.println("Entrei em getAllProject no controller com token? : " + authString);
 		try {
 			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
-				ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
+				if(userId>0) {
+					resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);	
+				}else {
+					resultado = projectService.getOnlyPublicProjectsNonDeleted();
+				}
+				//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
 				if (resultado != null) {
 					return Response.ok(resultado).build();
 				} else {
@@ -286,7 +297,14 @@ public class ProjectController {
 				}			
 			}
 			
-			ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsNonDeleted();
+			
+			if(userId>0) {
+				resultado = projectService.getAllNonDeletedProjectsFromUser(user);	
+			}else {
+				resultado = projectService.getAllProjectsNonDeleted();
+
+			}
+			//ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsNonDeleted();
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {
@@ -295,7 +313,13 @@ public class ProjectController {
 
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
+			if(userId>0) {
+				resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);	
+			}else {
+				resultado = projectService.getOnlyPublicProjectsNonDeleted();
+			}
+	
+			//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {

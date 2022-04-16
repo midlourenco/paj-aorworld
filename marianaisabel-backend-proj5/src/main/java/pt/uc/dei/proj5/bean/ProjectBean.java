@@ -156,7 +156,7 @@ public class ProjectBean implements Serializable {
 		
 		//if(!projectDao.alreadyExistProjectTitleByThisCreatedUser(projectDTO.getTitle(), createdBy) && !projectDTO.getTitle().equals("")) { ---> RETIRADA VALIDAÇAO /RESTRIÇÂO De um user nao poder inserir mais do 1 proj com o mesmo titulo
 			
-			Project project = ProjectDao.convertDTOToEntity(projectDTO);
+			Project project = ProjectDao.convertDTOToEntity(projectDTO,null);
 			project.setCreatedBy(createdBy); //adiciono o titular do projecto À entidade
 			projectDao.persist(project);
 			
@@ -185,7 +185,8 @@ public class ProjectBean implements Serializable {
 	
 	
 	public ProjectDTOResp updateProject(User lastModifBy, int projectId, ProjectDTO projectDTO ) {
-		Project project = ProjectDao.convertDTOToEntity(projectDTO);
+		Project project = getProjectEntityById(projectId);
+		project = ProjectDao.convertDTOToEntity(projectDTO,project);
 		project.setId(projectId);
 		project.setLastModifByAndDate(lastModifBy);
 		Set<Keyword> keywords = new HashSet<>();

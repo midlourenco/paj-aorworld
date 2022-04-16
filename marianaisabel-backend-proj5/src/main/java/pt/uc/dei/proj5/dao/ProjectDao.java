@@ -28,14 +28,14 @@ public class ProjectDao extends AbstractDao<Project> {
 	//METODOS ESTATICOS DE CONVERSAO ENTRE ENTIDADE E DTOs
 	////////////////////////////////////////////////////////
 	
-	public static Project convertDTOToEntity(ProjectDTO projectDTO) {
+	public static Project convertDTOToEntity(ProjectDTO projectDTO, Project existentProject) {
 		System.out.println("Entrei em convertDTOToEntity Project");
 		Project projectEntity;
-		//if(existentProject==null) {
+		if(existentProject==null) {
 			projectEntity = new Project();
-//		}else {
-//			projectEntity=existentProject;
-//		}
+		}else {
+			projectEntity=existentProject;
+		}
 		
 		projectEntity.setTitle(projectDTO.getTitle());
 		projectEntity.setDescription(projectDTO.getDescription());
@@ -82,6 +82,7 @@ public class ProjectDao extends AbstractDao<Project> {
 		
 		if (projectEntity.getLastModifDate() != null) {
 			projectDTOResp.setLastModifDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getLastModifDate()));
+			projectDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(projectEntity.getLastModifBy()));		
 
 		} else {
 			projectDTOResp.setLastModifDate("");
