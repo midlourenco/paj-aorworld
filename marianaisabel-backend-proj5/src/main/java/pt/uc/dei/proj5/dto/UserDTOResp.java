@@ -26,6 +26,7 @@ public class UserDTOResp implements Serializable{
 	@NotBlank 
 	private int id;
 	private String biography;
+	private boolean deleted;
 	
 	//o código que serializa e desserializa usa o construtor vazio e depois chama os setters e getters. -> usado por exemplo em R3
 	/**
@@ -107,6 +108,14 @@ public class UserDTOResp implements Serializable{
 
 	public void setBiography(String biography) {
 		this.biography = biography;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	@Override

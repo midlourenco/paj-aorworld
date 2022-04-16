@@ -410,12 +410,17 @@ public class UserController {
 		return Response.status(400).entity(GestaoErros.getMsg(0)).build(); //
 	}
 
-
-
+	
+	/**
+	 * permite bloquear um user membro ou admin e/ou nao aprovar o seu registo
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
 	@DELETE
 	@Path("{userId: [0-9]+}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteUser(@PathParam("userId") int userId,
+	public Response blockUser(@PathParam("userId") int userId,
 			@HeaderParam("Authorization") String authString) {
 		try {
 			UserDTOResp user = userService.getUserDTORespById(userId);
@@ -451,6 +456,14 @@ public class UserController {
 
 	}
 
+	
+	
+	/**
+	 * permite recuperar um user nao aprovado ou bloqueado
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
 	@POST
 	@Path("{userId: [0-9]+}/undelete")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -477,7 +490,7 @@ public class UserController {
 				if (userService.undeletedUser(userId)) {
 					return Response.ok().entity(GestaoErros.getMsg(11)).build();
 				} else {
-					return Response.status(400).entity("o user não foi continuca com marca de apagar").build();
+					return Response.status(400).entity("o user não foi continua com marca de apagar").build();
 				}
 				 
 			} else {
@@ -491,6 +504,103 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * permite alterar priv de user para membro
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
+	@POST
+	@Path("{userId: [0-9]+}/updateToMember")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response changeUserPrivToMember(@PathParam("userId") int  userId,
+			@HeaderParam("Authorization") String authString) {
+		try {
+			UserDTOResp user = userService.getUserDTORespById(userId);
+			if (user == null) { // o id do url não existir nao avança
+				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
+			}
+
+			//if (userId!=1) {// não permitimos que se apage o user admin
+			if(!user.getEmail().equals("admin@aor.pt")) {
+				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
+					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+				}
+	
+				if (!userService.hasLoggedUserAdminPriv(authString)) {// está logado não tem priv admin nao pode apagar ninguem
+					System.out.println("não tem permissões para desmarcar para apagar este utilizador");
+					return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+				}
+	
+				
+				if (userService.changeUserPrivToMember(userId)) {
+					return Response.ok().entity(GestaoErros.getMsg(11)).build();
+				} else {
+					return Response.status(400).entity("o user não foi continua com os priv anteriores").build();
+				}
+				 
+			} else {
+				System.out.println("não tem permissões para apagar o ADMIN");
+				return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+	
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity("O user continua marcado para eliminar").build();
+		}
+	}
+	
+	/**
+	 * permite alterar priv de user para membro
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
+	@POST
+	@Path("{userId: [0-9]+}/updateToAdmin")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response changeUserPrivToAdmin(@PathParam("userId") int  userId,
+			@HeaderParam("Authorization") String authString) {
+		try {
+			UserDTOResp user = userService.getUserDTORespById(userId);
+			if (user == null) { // o id do url não existir nao avança
+				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
+			}
+
+			//if (userId!=1) {// não permitimos que se apage o user admin
+			if(!user.getEmail().equals("admin@aor.pt")) {
+				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
+					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+				}
+	
+				if (!userService.hasLoggedUserAdminPriv(authString)) {// está logado não tem priv admin nao pode apagar ninguem
+					System.out.println("não tem permissões para desmarcar para apagar este utilizador");
+					return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+				}
+	
+				
+				if (userService.changeUserPrivToAdmin(userId)) {
+					return Response.ok().entity(GestaoErros.getMsg(11)).build();
+				} else {
+					return Response.status(400).entity("o user não foi continua com os priv anteriores").build();
+				}
+				 
+			} else {
+				System.out.println("não tem permissões para apagar o ADMIN");
+				return Response.status(403).entity(GestaoErros.getMsg(9)).build();
+	
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity("O user continua marcado para eliminar").build();
+		}
+	}
+	
+	
+	
+	
+	
+	
 	 
 		@POST
 		@Path("populateUserTable")

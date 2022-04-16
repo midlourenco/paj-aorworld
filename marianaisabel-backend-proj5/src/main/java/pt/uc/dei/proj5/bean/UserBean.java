@@ -589,25 +589,26 @@ public class UserBean implements Serializable {
 		}
 	}
 	/**
-	 * Método que no caso em que o utilizador não esteja marcado para eliminar, marca-o para eliminar, caso contrário elimina-o da Base de dados
+	 * Método que no caso em que o utilizador não esteja marcado para eliminar, marca-o para eliminar, (FUNCIONALIDADE SUSPENSA: caso contrário elimina-o da Base de dados)
 	 * @return
 	 */
 	public boolean deleteUser(int userID) {
 		try {
 			User user = userDao.find(userID);
 			if (user.isDeleted()) {
-				System.out.println("não faz nada. nao permitimos delete definitivo da base de dados");
+				System.out.println("nesta fase, não faz nada. nao permitimos delete definitivo da base de dados");
 //				userDao.deleteById(username); // este delete vai remover o conteudo associado ao user - REMOVER OS CASCADES?!?
 //				dashboardService.updateGeneralDashboard();
 				return false;		
 			} else {
-				userDao.markedAsDeleted(userID);
+				userDao.blockUser(userID); //passa viwer, fica sem token e fica marcado como deleted na BD
+			//	userDao.markAsDeleted(userID); // fica marcado como deleted na BD
 				return true;
 			}
 		
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("ocorreu algum problema a procurar por user na BD - actividade não existe?");
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
 			return false;
 		}
 	}
@@ -621,21 +622,60 @@ public class UserBean implements Serializable {
 	public boolean undeletedUser(int userID) {
 		try {
 			User user = userDao.find(userID);
-			if (user.isDeleted()) { // se estiver marcado como deleted coloca o delete a false
-				userDao.markedAsNonDeleted(userID);
+			if (user.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
+				userDao.unblockUser(user);
+			//	userDao.markAsNonDeleted(userID);
 				return true;
 			} else { // se não estiver marcado como delete não faz nada;
 				return false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("ocorreu algum problema a procurar por user na BD - actividade não existe?");
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
 			return false;
 		}
 	}
 	
 	
+
+
+	/**
+	 * Método que permite alterar priv de um utilizador a membro 
+		 * @return
+	 */
+	public boolean changeUserPrivToMember (int userID) {
+		try {
+			User user = userDao.find(userID);
+			if (!user.isDeleted()) {
+				userDao.changeUserPrivToMember(userID);
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
 	
+	/**
+	 * Método que permite alterar priv de um utilizador a admin 
+	 * @return
+	 */
+	public boolean changeUserPrivToAdmin(int userID) {
+		try {
+			User user = userDao.find(userID);
+			if (!user.isDeleted()) {
+			userDao.changeUserPrivToAdmin(userID);
+			return true;
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
 	
 	
 //	/////////////////////////////////////////////////////////////////////////////

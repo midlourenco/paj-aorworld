@@ -157,7 +157,7 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 //		}
 //	}
 
-	public void markedAsDeleted(Object id) {
+	public void markAsDeleted(Object id) {
 		try {
 			System.out.println("A coluna ID deste objecto é: " + getIdColumnName());
 			System.out.println("o id é :" + id);
@@ -177,7 +177,7 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 
 	}
 
-	public void markedAsNonDeleted(Object id) {
+	public void markAsNonDeleted(Object id) {
 		try {
 			System.out.println("A coluna ID deste objecto é: " + getIdColumnName());
 			System.out.println("o id é :" + id);

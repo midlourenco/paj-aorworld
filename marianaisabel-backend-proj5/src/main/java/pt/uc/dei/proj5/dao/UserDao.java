@@ -113,6 +113,7 @@ public class UserDao extends AbstractDao<User> {
 		userDTOResp.setBiography(userEntity.getBiography());
 		userDTOResp.setPrivileges(userEntity.getPrivileges());
 		userDTOResp.setId(userEntity.getId());
+		userDTOResp.setDeleted(userEntity.isDeleted());
 		return userDTOResp;
 	}
 	
@@ -292,6 +293,110 @@ public class UserDao extends AbstractDao<User> {
 		}
 	}
 	
+	
+	
+
+	/**
+	 * Bloquear (despromover ou não aceitar) um user: alterar os privilégios para viewer, marcar como apagado, retirar token
+	 * @param id
+	 */
+	public void blockUser(Object id) {
+		try {
+			System.out.println("entrei em blockUser e o id é :" + id);
+
+			final CriteriaUpdate<User> criteriaUpdate = em.getCriteriaBuilder().createCriteriaUpdate(User.class);
+
+			Root<User> c = criteriaUpdate.from(User.class);
+			criteriaUpdate.set("deleted", true);
+			criteriaUpdate.set("privileges", UserPriv.VIEWER);
+			criteriaUpdate.set("token", null);
+			criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get("id"), id));
+
+			em.createQuery(criteriaUpdate).executeUpdate();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+		}
+	}
+		
+	
+	/**
+	 * Desbloquear (estado de registo para aprovação) um user: alterar os privilégios para viewer, desmarcar como apagado, retirar token
+	 * @param id
+	 */
+	public void unblockUser(Object id) {
+		try {
+			System.out.println("entrei em blockUser e o id é :" + id);
+
+			final CriteriaUpdate<User> criteriaUpdate = em.getCriteriaBuilder().createCriteriaUpdate(User.class);
+
+			Root<User> c = criteriaUpdate.from(User.class);
+			criteriaUpdate.set("deleted", false);
+			criteriaUpdate.set("privileges", UserPriv.VIEWER);
+			criteriaUpdate.set("token", null);
+			criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get("id"), id));
+
+			em.createQuery(criteriaUpdate).executeUpdate();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+		}
+	}
+		
+	
+	
+	/**
+	 * alterar privilégios de um utilizador para membro
+	 * @param id
+	 */
+		public void changeUserPrivToMember(Object id) {
+			try {
+				System.out.println("entrei em promoteUserToMember e o id é :" + id);
+
+				final CriteriaUpdate<User> criteriaUpdate = em.getCriteriaBuilder().createCriteriaUpdate(User.class);
+
+				Root<User> c = criteriaUpdate.from(User.class);
+				//criteriaUpdate.set("deleted", false);
+				criteriaUpdate.set("privileges", UserPriv.MEMBER);
+				criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get(getIdColumnName()), id));
+				em.createQuery(criteriaUpdate).executeUpdate();
+
+			} catch (EJBException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		/**
+		 * alterar privilégios de um utilizador para admin
+		 * @param id
+		 */
+		
+		public void changeUserPrivToAdmin(Object id) {
+			try {
+				System.out.println("entrei em promoteUserToMember e o id é :" + id);
+
+				final CriteriaUpdate<User> criteriaUpdate = em.getCriteriaBuilder().createCriteriaUpdate(User.class);
+
+				Root<User> c = criteriaUpdate.from(User.class);
+				//criteriaUpdate.set("deleted", false);
+				criteriaUpdate.set("privileges", UserPriv.ADMIN);
+				criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get(getIdColumnName()), id));
+				em.createQuery(criteriaUpdate).executeUpdate();
+
+			} catch (EJBException e) {
+				e.printStackTrace();
+			}
+
+		}
+	
+	///////////////////////////
+	//DASHBOARD
+	///////////////////////
+	
+	
+	
+	
 	/**
 	 * D1 número total de users;
 	 * @return
@@ -335,9 +440,6 @@ public class UserDao extends AbstractDao<User> {
 //		return "email";
 //	}
 
-	
-	
-	
 	
 	
 }
