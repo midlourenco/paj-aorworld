@@ -6,9 +6,13 @@ import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
+import pt.uc.dei.proj5.entity.Keyword;
+import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.dao.KeywordDao;
+import pt.uc.dei.proj5.dao.NewsDao;
 import pt.uc.dei.proj5.dao.ProjectDao;
+import pt.uc.dei.proj5.dto.NewsDTOResp;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 
 @RequestScoped
@@ -37,4 +41,40 @@ public class KeywordBean {
 		return projDTOResp;
 	}
 	
+	public ArrayList<NewsDTOResp> getOnlyPublicNewsAssocToKeyword(String keyword){
+		ArrayList<NewsDTOResp>  newsDTOResp= new ArrayList<>();
+		List<News> news= keywordDao.getOnlyPublicNewsAssocToKeyword(keyword);
+		
+		for (News n : news) {
+			newsDTOResp.add(NewsDao.convertEntityToDTOResp(n));
+		}
+		return newsDTOResp;
+	}
+	
+	public ArrayList<NewsDTOResp> getAllNewsAssocToKeyword(String keyword){
+		ArrayList<NewsDTOResp>  newsDTOResp= new ArrayList<>();
+		List<News> news= keywordDao.getAllNewsAssocToKeyword(keyword);
+		
+		for (News n : news) {
+			newsDTOResp.add(NewsDao.convertEntityToDTOResp(n));
+		}
+		return newsDTOResp;
+	}
+	
+	
+	public ArrayList<String> getAllKeywords() {
+		try {
+		ArrayList<String>  str_keyword = new ArrayList<>();
+		List<Keyword> keywords = keywordDao.findAll();
+		for (Keyword k : keywords) {
+			str_keyword.add(k.getKeyword());
+		}
+		return str_keyword;
+		}catch(Exception e) {
+			System.out.println("não há keywords");
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 }

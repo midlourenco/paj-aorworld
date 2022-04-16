@@ -28,21 +28,27 @@ public class ProjectDao extends AbstractDao<Project> {
 	//METODOS ESTATICOS DE CONVERSAO ENTRE ENTIDADE E DTOs
 	////////////////////////////////////////////////////////
 	
-	public static Project convertDTOToEntity(ProjectDTO projectDTO, User createdBy, User lastModifdBy ) {
+	public static Project convertDTOToEntity(ProjectDTO projectDTO) {
 		System.out.println("Entrei em convertDTOToEntity Project");
-		Project projectEntity = new Project();
+		Project projectEntity;
+		//if(existentProject==null) {
+			projectEntity = new Project();
+//		}else {
+//			projectEntity=existentProject;
+//		}
+		
 		projectEntity.setTitle(projectDTO.getTitle());
 		projectEntity.setDescription(projectDTO.getDescription());
 		projectEntity.setImage(projectDTO.getImage());
 		projectEntity.setVisibility(projectDTO.isVisibility());
 		
-		if(createdBy!=null) {
-			projectEntity.setCreatedBy(createdBy);
-		}
-		if(lastModifdBy!=null) {
-			projectEntity.setLastModifBy(lastModifdBy);
-			projectEntity.setLastModifDate(new Timestamp(System.currentTimeMillis()));
-		}
+//		if(createdBy!=null) {
+//			projectEntity.setCreatedBy(createdBy);
+//		}
+//		if(lastModifdBy!=null) {
+//			projectEntity.setLastModifBy(lastModifdBy);
+//			projectEntity.setLastModifDate(new Timestamp(System.currentTimeMillis()));
+//		}
 		
 		//TODO complete here
 		//news
@@ -97,41 +103,42 @@ public class ProjectDao extends AbstractDao<Project> {
 	////////////////////////////////////////////////////////
 	
 
-	
-	/**
-	 * devolve todos os projectos criados por de um User (apagados ou nao, partilhados ou nao, visiveis para todos ou nao)
-	 * @param ProjectName
-	 * @param user
-	 * @return
-	 */
-	public List<Project> getAllProjectCreatedByUser(User createdBy) {
-
-		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
-
-		Root<Project> c = criteriaQuery.from(Project.class);
-
-		criteriaQuery.select(c).where(em.getCriteriaBuilder().equal(c.get("createdBy"), createdBy));
-		
-		try {
-			return em.createQuery(criteriaQuery).getResultList();
-
-		} catch (EJBException e) {
-			e.printStackTrace();
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("false");
-			return null;
-		}
-	}
-
-	
+//	
+//	/**
+//	 * devolve todos os projectos criados por de um User (apagados ou nao, partilhados ou nao, visiveis para todos ou nao)
+//	 * @param ProjectName
+//	 * @param user
+//	 * @return
+//	 */
+//	public List<Project> getAllProjectCreatedByUser(User createdBy) {
+//
+//		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+//
+//		Root<Project> c = criteriaQuery.from(Project.class);
+//
+//		criteriaQuery.select(c).where(em.getCriteriaBuilder().equal(c.get("createdBy"), createdBy));
+//		
+//		try {
+//			return em.createQuery(criteriaQuery).getResultList();
+//
+//		} catch (EJBException e) {
+//			e.printStackTrace();
+//			return null;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.out.println("false");
+//			return null;
+//		}
+//	}
+//
+//	
 	/**
 	 * devolve as projectos de um user que nao estejam marcados para apagar (independentemente de terem sido ou nao partilhados)
 	 * @param user
 	 * @return
 	 */
-	public List<Project> getNonDeletedProjectsCreatedByUser(User createdBy) {
+	public List<Project> getAllNonDeletedProjectsFromUser(User createdBy) {
+		
 		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		
 		Root<Project> c = criteriaQuery.from(Project.class);
@@ -146,13 +153,33 @@ public class ProjectDao extends AbstractDao<Project> {
 			return null;
 		}
 	}
-
+	/**
+	 * devolve as projectos públicos de um user que nao estejam marcados para apagar (independentemente de terem sido ou nao partilhados)
+	 * @param user
+	 * @return
+	 */
+	public List<Project> getOnlyPublicNonDeletedProjectsFromUser(User createdBy) {
+		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		
+		Root<Project> c = criteriaQuery.from(Project.class);
+		
+		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("createdBy"), createdBy),
+				em.getCriteriaBuilder().equal(c.get("visibility"), true),
+				em.getCriteriaBuilder().equal(c.get("deleted"), false)));
+		try {
+			return em.createQuery(criteriaQuery).getResultList();
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 * devolve as projectos de um user que estejam marcados para apagar (independentemente de terem sido ou nao partilhados)
 	 * @param user
 	 * @return
 	 */
-	public List<Project> getMarkedAsDeletedProjectsCreatedByUser(User createdBy) {
+	public List<Project> getAllProjectsMarkedAsDeletedFromUser(User createdBy) {
 		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		Root<Project> c = criteriaQuery.from(Project.class);
 		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
@@ -167,6 +194,25 @@ public class ProjectDao extends AbstractDao<Project> {
 	}
 
 
+	/**
+	 * devolve as projectos publicos de um user que estejam marcados para apagar (independentemente de terem sido ou nao partilhados)
+	 * @param user
+	 * @return
+	 */
+	public List<Project> getOnlyPublicProjectsMarkedAsDeletedFromUser(User createdBy) {
+		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		Root<Project> c = criteriaQuery.from(Project.class);
+		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("createdBy"), createdBy),
+				em.getCriteriaBuilder().equal(c.get("visibility"), true),
+				em.getCriteriaBuilder().equal(c.get("deleted"), true)));
+		try {
+			return em.createQuery(criteriaQuery).getResultList();
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 * devolve as projectos  que  estejam marcados para apagar de visibilidade publica (independentemente de terem sido ou nao partilhados)
 	 * @param user
@@ -251,7 +297,7 @@ public class ProjectDao extends AbstractDao<Project> {
 	 * @return
 	 */
 	public boolean alreadyExistProjectTitleByThisCreatedUser(String projectTitle, User user) {
-final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		
 		Root<Project> c = criteriaQuery.from(Project.class);
 		

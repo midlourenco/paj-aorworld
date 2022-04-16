@@ -36,11 +36,11 @@ public class UserBean implements Serializable {
 
 	
 	/**
-	 * Devolve um utilizador a partir do seu token
+	 * Devolve um utilizador a partir do seu token que não esteja marcado para eliminar
 	 * @param authString
 	 * @return
 	 */
-	public User getUserEntityByToken(String authString) {
+	public User getNonDeletedEntityByToken(String authString) {
 		// System.out.println("entrei no get user by token");
 		try {
 			User user = userDao.findUserByToken(authString);
@@ -52,9 +52,10 @@ public class UserBean implements Serializable {
 			return null;
 		}
 	}
+
 	/**
 	 * Devolve um UserDTO válido (não marcado como eliminado) recebendo um token
-	 * 
+	 * @deprecated
 	 * @param authString
 	 * @return
 	 */
@@ -64,6 +65,23 @@ public class UserBean implements Serializable {
 			User user = userDao.findUserByToken(authString);
 			// System.out.println("getUserbytoken:" + user);
 			return UserDao.convertEntitytoDTO(user);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * Devolve um utilizador a partir do seu id quer  esteja marcado para eliminar ou não
+	 * @param email
+	 * @return
+	 */
+	public User getUserEntitybyId(int userId ) {
+		try {
+			User user = userDao.find(userId);
+			return user;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -400,7 +418,22 @@ public class UserBean implements Serializable {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Devolve se um user tem ou não priv admin
+	 * 
+	 * @param authString
+	 * @return
+	 */
+	public boolean hasLoggedUserAdminPriv(User user) {
+		System.out.println("dentro do hasLoggedUserAdminPriv");
+		if(user.getPrivileges()==User.UserPriv.ADMIN) {
+			System.out.println("privilegios do user logado: " + user.getPrivileges());
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Devolve se um user tem ou não priv de membro registado
 	 * 
@@ -450,7 +483,22 @@ public class UserBean implements Serializable {
 		}
 	}
 
-	
+	/**
+	 * Devolve se o user autenticado é o user do serviço que se está aceder
+	 * 
+	 * @param authstring
+	 * @param username
+	 * @return
+	 */
+	public boolean isUserAuthenticated(User authenticatedUser, User createdBy) {
+		//compara-se os ids de quem está logado com o do serviço que se está a aceder:
+		if (authenticatedUser.getId()==createdBy.getId()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * Apaga o token de um utiliador que faz logout
 	 * @param authString
@@ -548,18 +596,23 @@ public class UserBean implements Serializable {
 		try {
 			User user = userDao.find(userID);
 			if (user.isDeleted()) {
-				userDao.deleteById(userID);
-				//dashboardService.updateGeneralDashboard();
+				System.out.println("não faz nada. nao permitimos delete definitivo da base de dados");
+//				userDao.deleteById(username); // este delete vai remover o conteudo associado ao user - REMOVER OS CASCADES?!?
+//				dashboardService.updateGeneralDashboard();
+				return false;		
 			} else {
 				userDao.markedAsDeleted(userID);
+				return true;
 			}
-			return true;
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("ocorreu algum problema a procurar por user na BD - actividade não existe?");
 			return false;
 		}
 	}
+	
+
 
 	/**
 	 * Método que permite desmarcar de eliminar de um utilizador

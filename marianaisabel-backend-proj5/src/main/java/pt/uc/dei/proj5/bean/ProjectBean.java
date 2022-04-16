@@ -2,7 +2,9 @@ package pt.uc.dei.proj5.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -36,15 +38,29 @@ public class ProjectBean implements Serializable {
 	//GET DE PROJECTOS
 	/////////////////////////////
 		
-	public Project getProjectEntitybyId(int projectId) {
+	public Project getNonDeletedProjectEntityById(int projectId) {
 		try {
 			return projectDao.findEntityIfNonDelete(projectId);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public ProjectDTOResp getNonDeletedProjectDTORespById(int projectId) {
+		return ProjectDao.convertEntityToDTOResp(getNonDeletedProjectEntityById(projectId));
+	}
 	
-
+	public Project getProjectEntityById(int projectId) {
+		try {
+			return projectDao.find(projectId);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ProjectDTOResp getProjectDTORespById(int projectId) {
+		return ProjectDao.convertEntityToDTOResp(getProjectEntityById(projectId));
 	}
 	
 	
@@ -136,45 +152,96 @@ public class ProjectBean implements Serializable {
 	
 	
 	public ProjectDTOResp addProject(User createdBy, ProjectDTO projectDTO ) {
-		ProjectDTOResp projectDTOResp=null;
 		System.out.println("Entrei em addProject ProjectBean"); 
 		
-		//if(!projectDao.alreadyExistProjectTitleByThisCreatedUser(projectDTO.getTitle(), createdBy) && !projectDTO.getTitle().equals("")) {
+		//if(!projectDao.alreadyExistProjectTitleByThisCreatedUser(projectDTO.getTitle(), createdBy) && !projectDTO.getTitle().equals("")) { ---> RETIRADA VALIDAÇAO /RESTRIÇÂO De um user nao poder inserir mais do 1 proj com o mesmo titulo
 			
-			Project project = ProjectDao.convertDTOToEntity(projectDTO, createdBy, null);
+			Project project = ProjectDao.convertDTOToEntity(projectDTO);
+			project.setCreatedBy(createdBy); //adiciono o titular do projecto À entidade
 			projectDao.persist(project);
 			
-			ArrayList<String> keywords = projectDTO.getKeywords();
-			for (String keyword : keywords) {
+			Set<Keyword> keywords = new HashSet<>();
+			ArrayList<String> keywordsSTR = projectDTO.getKeywords();
+			for (String keyword : keywordsSTR) {
 				System.out.println("entrei no for das keywords");
-				Keyword keywordEntity =	keywordDao.associateProjectorNewsToKeyword(keyword, project, null);
+				keywords.add(keywordDao.getKeywordEntityFromString(keyword));
+				System.out.println("adicionei a keyword ao set");
+				//Keyword keywordEntity =	keywordDao.getKeywordEntityFromString(keyword);
 				//Project projectEnytity= getProjectEntitybyId(project.getId());
-				System.out.println("criei entity keyword" + keywordEntity + "vou adicionar a projecto "+ project);
-				projectDao.associateKeywordToProject(keywordEntity, project);
-				System.out.println("associei ao proj. fim do ciclo for");
+				//System.out.println("criei entity keyword" + keywordEntity + "vou adicionar a projecto "+ project);
+				//projectDao.associateKeywordToProject(keywordEntity, project);
+				//System.out.println("associei ao proj. fim do ciclo for");
 			}
+			project.setKeywords(keywords);
 			projectDao.merge(project);
 	
-			projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
+			ProjectDTOResp projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
 //		}else {
 //			System.out.println("Já existe um projecto com este título criado por este utilizador");
 //		}
+	
+		return projectDTOResp;
+	}
+	
+	
+	public ProjectDTOResp updateProject(User lastModifBy, int projectId, ProjectDTO projectDTO ) {
+		Project project = ProjectDao.convertDTOToEntity(projectDTO);
+		project.setId(projectId);
+		project.setLastModifByAndDate(lastModifBy);
+		Set<Keyword> keywords = new HashSet<>();
+		ArrayList<String> keywordsSTR = projectDTO.getKeywords();
+		for (String keyword : keywordsSTR) {
+			System.out.println("entrei no for das keywords");
+			keywords.add(keywordDao.getKeywordEntityFromString(keyword));
+			System.out.println("adicionei a keyword ao set");
+		}
+		project.setKeywords(keywords);
+		projectDao.merge(project);
 		
+		ProjectDTOResp projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
 		
 		return projectDTOResp;
 	}
 	
 	
-	public ProjectDTOResp getProject(int projectId) {
-		return ProjectDao.convertEntityToDTOResp(projectDao.findEntityIfNonDelete(projectId));
+	///////////////////////////////
+	//LISTAS DE PROJECTOS
+	/////////////////////////////
+	//************LISTAS Por user*******
+	
+	
+	public ArrayList<ProjectDTOResp> getAllNonDeletedProjectsFromUser(User createdBy){
+		ArrayList<ProjectDTOResp> projectsDTOResp =new ArrayList<ProjectDTOResp> ();
+		
+		List<Project> projects =  projectDao.getOnlyPublicNonDeletedProjectsFromUser(createdBy);
+		
+		for (Project project : projects) {
+			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+		}
+		
+		return projectsDTOResp;
+	}
+	
+	public ArrayList<ProjectDTOResp> getOnlyPublicNonDeletedProjectsFromUser(User createdBy){
+		ArrayList<ProjectDTOResp> projectsDTOResp =new ArrayList<ProjectDTOResp> ();
+		
+		List<Project> projects =  projectDao.getOnlyPublicNonDeletedProjectsFromUser(createdBy);
+		
+		for (Project project : projects) {
+			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+		}
+		
+		return projectsDTOResp;
 	}
 	
 	
 	
-	public ArrayList<ProjectDTOResp> getAllProjectCreatedByUser(User createdBy){
+	
+	
+	public ArrayList<ProjectDTOResp> getAllProjectsMarkedAsDeletedFromUser(User createdBy){
 		ArrayList<ProjectDTOResp> projectsDTOResp =new ArrayList<ProjectDTOResp> ();
 		
-		List<Project> projects =  projectDao.getAllProjectCreatedByUser(createdBy);
+		List<Project> projects =  projectDao.getAllProjectsMarkedAsDeletedFromUser(createdBy);
 		
 		for (Project project : projects) {
 			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
@@ -183,6 +250,27 @@ public class ProjectBean implements Serializable {
 		return projectsDTOResp;
 	}
 
+	
+	public ArrayList<ProjectDTOResp> getOnlyPublicProjectsMarkedAsDeletedFromUser(User createdBy){
+		ArrayList<ProjectDTOResp> projectsDTOResp =new ArrayList<ProjectDTOResp> ();
+		
+		List<Project> projects =  projectDao.getOnlyPublicProjectsMarkedAsDeletedFromUser(createdBy);
+		
+		for (Project project : projects) {
+			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+		}
+		
+		return projectsDTOResp;
+	}
+	
+	
+	
+	
+	
+	
+	//************LISTAS GERAIS*******
+	
+	
 	public ArrayList<ProjectDTOResp> getOnlyPublicProjectsNonDeleted(){
 		ArrayList<ProjectDTOResp> projectsDTOResp =new ArrayList<ProjectDTOResp> ();
 		

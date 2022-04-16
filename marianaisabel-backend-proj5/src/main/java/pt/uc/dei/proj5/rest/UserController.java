@@ -304,7 +304,7 @@ public class UserController {
 	//não vamos mandar a password junto com o perfil
 	// Get user profile
 	@GET
-	@Path("{userId}")
+	@Path("{userId: [0-9]+}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("userId") int userId, @HeaderParam("Authorization") String authString) {
 		try {
@@ -335,7 +335,7 @@ public class UserController {
 
 	//  Change user profile POST /rest/users/{userId}/
 	@POST
-	@Path("{userId}/")
+	@Path("{userId: [0-9]+}/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateUserInfo(@PathParam("userId") int userId, @Valid UserDTO changeUser,
 			@HeaderParam("Authorization") String authString) {
@@ -369,7 +369,7 @@ public class UserController {
 	
 //  Change user profile POST /rest/users/{userId}/
 	@POST
-	@Path("{userId}/updatePassword")
+	@Path("{userId: [0-9]+}/updatePassword")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateUserInfo(@PathParam("userId") int userId, String newPass,
 			@HeaderParam("Authorization") String authString) {
@@ -413,7 +413,7 @@ public class UserController {
 
 
 	@DELETE
-	@Path("{userId}")
+	@Path("{userId: [0-9]+}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response deleteUser(@PathParam("userId") int userId,
 			@HeaderParam("Authorization") String authString) {
@@ -452,7 +452,7 @@ public class UserController {
 	}
 
 	@POST
-	@Path("{userId}/undelete")
+	@Path("{userId: [0-9]+}/undelete")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response undeletedUser(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {

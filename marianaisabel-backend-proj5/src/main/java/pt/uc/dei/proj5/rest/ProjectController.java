@@ -3,6 +3,7 @@ package pt.uc.dei.proj5.rest;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -10,59 +11,63 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
+import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
 import pt.uc.dei.proj5.other.GestaoErros;
 import pt.uc.dei.proj5.bean.ProjectBean;
 import pt.uc.dei.proj5.bean.UserBean;
 import pt.uc.dei.proj5.dto.ProjectDTO;
-@Path("users")
+
+@Path("projects")
 public class ProjectController {
 	
 	@Inject
 	private GestaoErros gestaoErros;
-
 	@Inject
 	private UserBean userService;
 	@Inject
 	private ProjectBean projectService;
 
-	
-	// Add project to user - so o user logado pode criar  conteúdos no seu nome
+	/**
+	 * Add project to user - so o user logado pode criar conteúdos no seu nome
+	 * @param authString
+	 * @param newProject
+	 * @return
+	 */
+	//@Path("{userId}/projects")
 	@POST
-	@Path("{userId}/projects")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addProject(@PathParam("userId") int userId, @HeaderParam("Authorization") String authString, ProjectDTO newProject) {
+	public Response addProject(@HeaderParam("Authorization") String authString, ProjectDTO newProject) {
 
-		System.out.println("Entrei em add project no controller com userId: " + userId + " token " + authString);
+		System.out.println("Entrei em add project no controller com  token " + authString);
 
 		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
 			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 		}
 
 		try {
-			User user = userService.getNonDeletedUserEntityById(userId); // utilizador onde estou a criar o projecto
-			boolean userAuthenticated = userService.isUserAuthenticated(authString, userId);// verifica se utilizador ao qual se está adicionar projecto é o user logado
-			System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + userAuthenticated);
-			
-			if (!userAuthenticated) {// quem está logado não é o utilizador do userid - não pode criar projectos noutro utilizador -> //&& !userPrivAdmin - o admin poderia criar noutro utilizador -RETIRADO
-				System.out.println("não tem permissões para criar projectos neste utilizador");
-				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
-			}
+			User user = userService.getNonDeletedEntityByToken(authString); // utilizador onde estou a criar o projecto
+		//	boolean userAuthenticated = userService.isUserAuthenticated(authString, userId);// verifica se utilizador ao qual se está adicionar projecto é o user logado
+		//	System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + userAuthenticated);
+//			if (!userAuthenticated) {// quem está logado não é o utilizador do userid - não pode criar projectos noutro utilizador -> //&& !userPrivAdmin - o admin poderia criar noutro utilizador -RETIRADO
+//				System.out.println("não tem permissões para criar projectos neste utilizador");
+//				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+//			}
 
-			if(user.getPrivileges()!=UserPriv.VIEWER){ //o user logado é membro ou admin:
+			if(user.getPrivileges()!=UserPriv.VIEWER){ // (duplo check-ele podia estar logado qdo foi despromovido a viewer) o user logado é membro ou admin:
 				ProjectDTOResp resultado = projectService.addProject(user, newProject);
 				if (resultado != null) {
 					return Response.ok(resultado).build();
 				} else {
 					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
 				}
-
 			}
 			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
 
@@ -71,28 +76,75 @@ public class ProjectController {
 		}
 
 	}
-
-
-	// Get project from user
-	@GET
-	@Path("{userId}/projects/{projectId}")
+	
+	/**
+	 * update one project
+	 * @param projectId
+	 * @param authString
+	 * @param newProject
+	 * @return
+	 */
+	@POST
+	@Path("{projectId: [0-9]+}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getProject(@PathParam("userId") int userId, @PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateProject(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString, ProjectDTO newProject) {
+		System.out.println("Entrei em updateProject no controller com token " + authString);
+		try {
+			Project project =projectService.getNonDeletedProjectEntityById(projectId); //não se vai fazer update de um projecto apagado
+			User userOwner = project.getCreatedBy(); // o criador do projecto
+			User userAuthenticated  = userService.getNonDeletedEntityByToken(authString); //vai ser o lastModifBy
+	
+			boolean isloggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(userAuthenticated);// verifica se quem está logado é um admin
+			boolean isOwnerSameAsAuthenticated = userService.isUserAuthenticated(userAuthenticated, userOwner);// verifica se utilizador ao qual se está adicionar projecto é o user logado
+			//boolean isloggedAuthorizedToGetProject = projectService.isProjectAssocToUser(projectId, userOwner.getId());// verifica se utilizador do qual se está a fazer get projecto é o user criador ou um dos associados ao projecto - neste caso este tabém não pode editar
+			System.out.println("o utilizador logado tem privilégios de admin: " + isloggedUserPrivAdmin);
+			System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + isOwnerSameAsAuthenticated);
+			//System.out.println("o utilizador logado tem autorização para fazer get do Projecto: " + isloggedAuthorizedToGetProject);
+		
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não é publico e o utilizador não está logado ou não tem token válido																				
+				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+			}
+			
+			if (!isOwnerSameAsAuthenticated && !isloggedUserPrivAdmin){// quem está logado não é o utilizador do userid nem é admin - não pode criar projectos noutro utilizador
+				System.out.println("não tem permissões para ver projectos deste utilizador");
+				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+			}
+			
+			ProjectDTOResp resultado = projectService.updateProject(userAuthenticated,projectId, newProject);
+
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}		
+	}
+	
+	
+
+
+	/**
+	 * Get one specific project
+	 * @param projectId
+	 * @param authString
+	 * @return
+	 */
+	@GET
+	@Path("{projectId: [0-9]+}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProject( @PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
 		boolean projectPublicVisibilty=false;
 		ProjectDTOResp resultado=null ;
-		System.out.println("Entrei em get project no controller com userId: " + userId + " token " + authString);
-		try {
-			User user = userService.getNonDeletedUserEntityById(userId); // utilizador onde estou a criar o projecto
-			boolean userPrivAdmin = userService.hasLoggedUserAdminPriv(authString);// verifica se quem está logado é um admin
-			boolean userAuthenticated = userService.isUserAuthenticated(authString, userId);// verifica se utilizador ao qual se está adicionar projecto é o user logado
-			boolean userAuthorizedToGetProject = projectService.isProjectAssocToUser(projectId, userId);// verifica se utilizador do qual se está a fazer get projecto é o user criador ou um dos associados ao projecto 
+		System.out.println("Entrei em get project no controller com token " + authString);
+		try {		
 			projectPublicVisibilty = projectService.isProjectWithPublicVisibility(projectId);
-			System.out.println("o utilizador logado tem privilégios de admin: " + userPrivAdmin);
-			System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + userAuthenticated);
-			System.out.println("o utilizador logado tem autorização para fazer get do Projecto: " + userPrivAdmin);
+			resultado = projectService.getProjectDTORespById(projectId);
 			System.out.println("o projecto é visivel ao público em geral: " + projectPublicVisibilty);
-	
-			resultado = projectService.getProject(projectId);
 			
 			if ((!projectPublicVisibilty) && (authString == null || authString.isEmpty() || !userService.isValidToken(authString))) {// não é publico e o utilizador não está logado ou não tem token válido																				
 				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
@@ -122,10 +174,104 @@ public class ProjectController {
 
 	}
 	
-	
-	// Get All project from user
+	//TODO validar se o user no queryParam é um numero
+	//https://dennis-xlc.gitbooks.io/restful-java-with-jax-rs-2-0-2rd-edition/content/en/part1/chapter5/query_param.html
+	//GET /projects?user=xxxx
+	/**
+	 *  Get All projects from user
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
 	@GET
-	@Path("projects")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllProjectFromUser (@QueryParam("user")  @Pattern(regexp = "[0-9]+", message = "The user id must be a valid number") int userId, @HeaderParam("Authorization") String authString) {
+		System.out.println("Entrei em getAllProject no controller com token? : " + authString);
+		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus projectos
+		
+		try {
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+				ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				}			
+			}
+			
+			ArrayList<ProjectDTOResp>  resultado = projectService.getAllNonDeletedProjectsFromUser(user);
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicNonDeletedProjectsFromUser(user);
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
+
+	/**
+	 *  Get All projects from user marked as deleted
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
+	@GET
+	@Path("deletedList")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProjectFromUserMarkedAsDeleted (@QueryParam("user")  @Pattern(regexp = "[0-9]+", message = "The user id must be a valid number") int userId, @HeaderParam("Authorization") String authString) {
+		System.out.println("Entrei em getAllProject no controller com token? : " + authString);
+		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus projectos
+		
+		try {
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+				ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsMarkedAsDeletedFromUser(user);
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				}			
+			}
+			
+			ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsMarkedAsDeletedFromUser(user);
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsMarkedAsDeletedFromUser(user);
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
+
+	
+	/**
+	 *  Get All projects
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllProject (@HeaderParam("Authorization") String authString) {
 
@@ -162,12 +308,59 @@ public class ProjectController {
 	}
 
 	
+	/**
+	 *  Get All projects marked as deleted
+	 * @param userId
+	 * @param authString
+	 * @return
+	 */
+	@GET
+	@Path("deletedList")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllProjectMarkedAsDeleted (@HeaderParam("Authorization") String authString) {
+
+		System.out.println("Entrei em getAllProject no controller com token? : " + authString);
+		try {
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+				ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				}			
+			}
+			
+			ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsMarkedAsDeleted();
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
+
 	
-	//para editar é que se tem de validar o seguinte
-//	if ((!userAuthenticated && !userPrivAdmin) || (!userAuthorizedToGetProject && !userPrivAdmin)){// quem está logado não é o utilizador do userid nem é admin - não pode criar projectos noutro utilizador
-//		System.out.println("não tem permissões para ver projectos deste utilizador");
-//		return Response.status(403).entity(GestaoErros.getMsg(13)).build();
-//	}
+	
+	
+	
+	
+	
+	
+	
+
+
 	
 	
 	

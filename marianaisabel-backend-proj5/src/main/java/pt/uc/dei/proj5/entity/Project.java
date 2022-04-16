@@ -192,6 +192,10 @@ public class Project implements Serializable{
 	public void setLastModifBy(User lastModifBy) {
 		this.lastModifBy = lastModifBy;
 	}
+	public void setLastModifByAndDate(User lastModifBy) {
+		this.lastModifBy = lastModifBy;
+		this.lastModifDate = new Timestamp(System.currentTimeMillis());
+	}
 
 	public List<ProjectSharing> getProjectSharing() {
 		return projectSharing;

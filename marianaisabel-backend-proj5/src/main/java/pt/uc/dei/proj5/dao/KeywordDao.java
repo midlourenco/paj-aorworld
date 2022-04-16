@@ -63,16 +63,12 @@ public class KeywordDao extends AbstractDao<Keyword> {
 	public List<Keyword> getKeywordsAssocToProjet(int projectId) {
 
 		final CriteriaQuery<Keyword> criteriaQuery = em.getCriteriaBuilder().createQuery(Keyword.class);
-
 		Root<Project> projectRoot = criteriaQuery.from(Project.class);
 		Join<Project, Keyword> joinProjectsKeywords = projectRoot.join("keywords");
-
 		criteriaQuery.where(em.getCriteriaBuilder().equal(projectRoot.get("projects"), projectId));
 			
-
 		try{
 			List<Keyword> resultado= em.createQuery(criteriaQuery.select(joinProjectsKeywords)).getResultList();
-			
 			return resultado;
 
 		}catch (EJBException e) {
@@ -85,10 +81,8 @@ public class KeywordDao extends AbstractDao<Keyword> {
 	public List<Keyword> getKeywordsAssocToNews(int newsId) {
 
 		final CriteriaQuery<Keyword> criteriaQuery = em.getCriteriaBuilder().createQuery(Keyword.class);
-
 		Root<News> newsRoot = criteriaQuery.from(News.class);
 		Join<News, Keyword> joinNewsKeywords = newsRoot.join("keywords");
-		
 		criteriaQuery.where(em.getCriteriaBuilder().equal(newsRoot.get("news"), newsId));
 			
 		try{
@@ -102,18 +96,23 @@ public class KeywordDao extends AbstractDao<Keyword> {
 	}
 
 	
-	public List<News> getNewsAssocToKeyword(String keywordStr) {
-
+	public List<News> getOnlyPublicNewsAssocToKeyword(String keywordStr) {
+//		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+//		Root<Keyword> keywordRoot = criteriaQuery.from(Keyword.class);
+//		Join<Keyword,News> joinNewsKeywords = keywordRoot.join("keywords");
+//		criteriaQuery.where(em.getCriteriaBuilder().equal(keywordRoot.get("keywords"), keywordStr));
+//				final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
+		Join<Keyword, News> news = keyword.join("news");
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr),
+				em.getCriteriaBuilder().equal(news.get("visibility"), true)));
 
-		Root<Keyword> keywordRoot = criteriaQuery.from(Keyword.class);
-		Join<Keyword,News> joinNewsKeywords = keywordRoot.join("keywords");
-		
-		criteriaQuery.where(em.getCriteriaBuilder().equal(keywordRoot.get("keywords"), keywordStr));
-			
 		try{
-			List<News> resultado= em.createQuery(criteriaQuery.select(joinNewsKeywords)).getResultList();
+			List<News> resultado= em.createQuery(criteriaQuery.select(news)).getResultList();
 			return resultado;
+
 
 		}catch (EJBException e) {
 			e.printStackTrace();
@@ -122,29 +121,30 @@ public class KeywordDao extends AbstractDao<Keyword> {
 	}
 	
 	
-	public List<Project> getOnlyPublicProjectsAssocToKeyword(String keywordStr) {
-
-//		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
-//
-//		Root<Keyword> keywordRoot = criteriaQuery.from(Keyword.class);
-//		Join<Keyword,Project> joinProjectKeywords = keywordRoot.join("projects");
-//		
-//		criteriaQuery.where(em.getCriteriaBuilder().and(
-//				em.getCriteriaBuilder().equal(keywordRoot.get("keywords"), keywordStr),
-//				em.getCriteriaBuilder().equal(joinProjectKeywords.get("visibility"), true)));
-//			
-//		
-		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
-
+	
+	public List<News> getAllNewsAssocToKeyword(String keywordStr) {
+		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
 		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
-
+		Join<Keyword, News> news = keyword.join("news");
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr));
+			
+		try{
+			List<News> result = em.createQuery(criteriaQuery.select(news)).getResultList();
+			return result;
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public List<Project> getOnlyPublicProjectsAssocToKeyword(String keywordStr) {
+		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
 		Join<Keyword, Project> project = keyword.join("projects");
-
 		criteriaQuery.select(project).where(em.getCriteriaBuilder().and(
 				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr),
 				em.getCriteriaBuilder().equal(project.get("visibility"), true)));
-
-
+		
 		try{
 			List<Project> resultado= em.createQuery(criteriaQuery.select(project)).getResultList();
 			return resultado;
@@ -162,7 +162,6 @@ public class KeywordDao extends AbstractDao<Keyword> {
 	 * @return
 	 */
 	public List<Project> getAllProjectsAssocToKeyword(String keywordStr) {
-
 //		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		//Root<Keyword> keywordRoot = criteriaQuery.from(Keyword.class);
 		//Join<Keyword,Project> joinProjectKeywords = keywordRoot.join("projects");
@@ -170,14 +169,10 @@ public class KeywordDao extends AbstractDao<Keyword> {
 
 		
 		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
-
 		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
-
 		Join<Keyword, Project> project = keyword.join("projects");
-
 		criteriaQuery.select(project).where(em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr));
 					
-		
 		try{
 			//List<Project> resultado= em.createQuery(criteriaQuery.select(joinProjectKeywords)).getResultList();
 			List<Project> result = em.createQuery(criteriaQuery.select(project)).getResultList();
@@ -191,7 +186,7 @@ public class KeywordDao extends AbstractDao<Keyword> {
 	}
 	
 	
-	public Keyword associateProjectorNewsToKeyword(String keywordStr, Project project, News news) {
+	public Keyword getKeywordEntityFromString(String keywordStr) {
 		System.out.println("Entrei em associateKeywordToProjectOrNews Keyword");
 		System.out.println("keyword que vou gravar é " + keywordStr);
 		Keyword keyword;
