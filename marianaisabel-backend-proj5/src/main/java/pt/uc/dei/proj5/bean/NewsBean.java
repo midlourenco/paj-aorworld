@@ -214,7 +214,7 @@ public class NewsBean implements Serializable {
 	public ArrayList<NewsDTOResp> getAllNonDeletedNewssFromUser(User createdBy){
 		ArrayList<NewsDTOResp> newssDTOResp =new ArrayList<NewsDTOResp> ();
 		
-		List<News> newss =  newsDao.getOnlyPublicNonDeletedNewssFromUser(createdBy);
+		List<News> newss =  newsDao.getAllNonDeletedNewssFromUser(createdBy);
 		
 		for (News news : newss) {
 			newssDTOResp.add(NewsDao.convertEntityToDTOResp(news));

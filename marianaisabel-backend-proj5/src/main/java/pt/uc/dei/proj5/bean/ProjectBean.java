@@ -215,7 +215,7 @@ public class ProjectBean implements Serializable {
 	public ArrayList<ProjectDTOResp> getAllNonDeletedProjectsFromUser(User createdBy){
 		ArrayList<ProjectDTOResp> projectsDTOResp =new ArrayList<ProjectDTOResp> ();
 		
-		List<Project> projects =  projectDao.getOnlyPublicNonDeletedProjectsFromUser(createdBy);
+		List<Project> projects =  projectDao.getAllNonDeletedProjectsFromUser(createdBy);
 		
 		for (Project project : projects) {
 			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));

@@ -38,6 +38,7 @@ public class KeywordDao extends AbstractDao<Keyword> {
 		 
 		 for (Keyword keyword : keywords) {
 			 arrayString.add(keyword.getKeyword());
+			 System.out.println(keyword.getKeyword());
 		}
 		 
 		 

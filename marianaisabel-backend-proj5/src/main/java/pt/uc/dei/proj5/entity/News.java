@@ -21,6 +21,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 /**
  * The persistent class for the News database table.
  * 
@@ -63,17 +66,20 @@ public class News implements Serializable {
 	@ManyToOne (optional=true)  //presença obrigatória na relação
 	@JoinColumn(name="UpdatedBy_News")
 	private User lastModifBy;
-
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany
 	private List<Project> projects;
 	
 	//alternativa	private String keywords;
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade = CascadeType.MERGE)
 	private Set<Keyword> keywords;
 	
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE) // cada news tem uma muitas notificaçoes associados. por isso tem uma lista de produtos
 	private List<Notification> notifications;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="news",cascade = CascadeType.REMOVE)
 	private List<NewsSharing> projectSharing;
 	

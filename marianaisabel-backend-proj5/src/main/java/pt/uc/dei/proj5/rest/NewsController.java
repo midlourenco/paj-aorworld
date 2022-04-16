@@ -52,7 +52,7 @@ public class NewsController {
 		}
 
 		try {
-			User user = userService.getNonDeletedEntityByToken(authString); // utilizador onde estou a criar o newso
+			User user = userService.getNonDeletedEntityByToken(authString); // utilizador onde estou a criar o news
 
 			if(user.getPrivileges()!=UserPriv.VIEWER){ // (duplo check-ele podia estar logado qdo foi despromovido a viewer) o user logado é membro ou admin:
 				NewsDTOResp resultado = newsService.addNews(user, newNews);
@@ -84,7 +84,7 @@ public class NewsController {
 	public Response updateNews(@PathParam("newsId") int newsId, @HeaderParam("Authorization") String authString, NewsDTO newNews) {
 		System.out.println("Entrei em updateNews no controller com token " + authString);
 		try {
-			News news =newsService.getNonDeletedNewsEntityById(newsId); //não se vai fazer update de um newso apagado
+			News news =newsService.getNonDeletedNewsEntityById(newsId); //não se vai fazer update de um news apagado
 			User userOwner = news.getCreatedBy(); // o criador da noticia
 			User userAuthenticated  = userService.getNonDeletedEntityByToken(authString); //vai ser o lastModifBy
 	
@@ -97,8 +97,8 @@ public class NewsController {
 				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 			}
 			
-			if (!isOwnerSameAsAuthenticated && !isloggedUserPrivAdmin){// quem está logado não é o utilizador do userid nem é admin - não pode criar newsos noutro utilizador
-				System.out.println("não tem permissões para ver newsos deste utilizador");
+			if (!isOwnerSameAsAuthenticated && !isloggedUserPrivAdmin){// quem está logado não é o utilizador do userid nem é admin - não pode criar news noutro utilizador
+				System.out.println("não tem permissões para ver news deste utilizador");
 				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
 			}
 			
@@ -133,7 +133,7 @@ public class NewsController {
 		try {		
 			newsPublicVisibilty = newsService.isNewsWithPublicVisibility(newsId);
 			resultado = newsService.getNewsDTORespById(newsId);
-			System.out.println("o newso é visivel ao público em geral: " + newsPublicVisibilty);
+			System.out.println("o news é visivel ao público em geral: " + newsPublicVisibilty);
 			
 			if ((!newsPublicVisibilty) && (authString == null || authString.isEmpty() || !userService.isValidToken(authString))) {// não é publico e o utilizador não está logado ou não tem token válido																				
 				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
@@ -178,8 +178,8 @@ public class NewsController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllNews (@QueryParam("user")  int userId, @HeaderParam("Authorization") String authString) {
 		System.out.println("Entrei em getAllNews por user no controller com token? : " + authString);
-		System.out.println("vou querer os newsos do userid " + userId);
-		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus newsos
+		System.out.println("vou querer os news do userid " + userId);
+		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus news
 		System.out.println(user);
 		ArrayList<NewsDTOResp> resultado=new ArrayList<>();
 		
@@ -243,7 +243,7 @@ public class NewsController {
 	public Response getAllNewsMarkedAsDeleted (@QueryParam("user")  int userId, @HeaderParam("Authorization") String authString) {
 		ArrayList<NewsDTOResp> resultado  = new ArrayList<>();
 		System.out.println("Entrei em getAllNews deleted no controller com token? : " + authString);
-		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus newsos
+		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus news
 		
 		try {
 			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
