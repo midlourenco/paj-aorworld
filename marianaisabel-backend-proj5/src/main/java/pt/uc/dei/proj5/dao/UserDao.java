@@ -136,7 +136,30 @@ public class UserDao extends AbstractDao<User> {
 			return null;
 		}
 	}
-	
+	/**
+	 *Função que devolve um utilizador a partir de um determinado token que nao esteja marcado para eliminar
+	 * @return
+	 */
+	public boolean existAutoAdmin() {
+		try {
+			final CriteriaQuery<User> criteriaQuery  = em.getCriteriaBuilder().createQuery(User.class);
+			Root<User> c= criteriaQuery.from(User.class);
+			criteriaQuery.select(c).where(em.getCriteriaBuilder().equal(c.get("autoAdmin"),true));
+			
+			if( em.createQuery(criteriaQuery).getSingleResult()!=null) {
+				return true;
+			}else {
+				return false;
+			}
+		}catch(EJBException e) {
+			System.out.println("não há nenhum utilizador na BD com este atributo: ");
+			e.printStackTrace();
+			return false;
+		}catch (Exception e) {
+			System.out.println("não há nenhum utilizador na BD com este atributo: ");
+			return false;
+		}
+	}
 	/**
 	 *Função que devolve um utilizador a partir de um determinado email (pretende-se marcado para eliminar ou não)
 	 * @return

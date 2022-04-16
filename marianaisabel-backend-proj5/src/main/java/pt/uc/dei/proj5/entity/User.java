@@ -49,7 +49,9 @@ public class User implements Serializable {
 
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
-
+	
+	@Column (name= "autoAdmin", nullable = true)
+	private boolean autoAdmin;
 	//	@ColumnTransformer(
 //    forColumn = "password",
 //    write = "HEX(AES_ENCRYPT(?, 'password'))",
@@ -280,10 +282,31 @@ public class User implements Serializable {
 		this.biography = biography;
 	}
 
-	
+    public boolean isAutoAdmin() {
+		return autoAdmin;
+	}
 
 
-    public Timestamp getLastModifDate() {
+
+	public void setAutoAdmin(boolean autoAdmin) {
+		this.autoAdmin = autoAdmin;
+	}
+
+
+
+	public List<NewsSharing> getNewsSharing() {
+		return newsSharing;
+	}
+
+
+
+	public void setNewsSharing(List<NewsSharing> newsSharing) {
+		this.newsSharing = newsSharing;
+	}
+
+
+
+	public Timestamp getLastModifDate() {
 		return lastModifDate;
 	}
 

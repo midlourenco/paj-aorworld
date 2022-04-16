@@ -66,7 +66,7 @@ public class ProjectController {
 				if (resultado != null) {
 					return Response.ok(resultado).build();
 				} else {
-					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 				}
 			}
 			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
@@ -116,7 +116,7 @@ public class ProjectController {
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 			}
 				
 		} catch (Exception e) {
@@ -153,7 +153,7 @@ public class ProjectController {
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 			}
 		} catch (NullPointerException e) { // caso não tenha Authorization no header
 			e.printStackTrace();
@@ -162,10 +162,10 @@ public class ProjectController {
 				if (resultado != null) {
 					return Response.ok(resultado).build();
 				}else {
-					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 				}
 			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 			}				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -206,7 +206,7 @@ public class ProjectController {
 				if (resultado != null) {
 					return Response.ok(resultado).build();
 				} else {
-					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 				}			
 			}
 			
@@ -221,7 +221,7 @@ public class ProjectController {
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 			}
 
 		} catch (NullPointerException e) {
@@ -236,7 +236,7 @@ public class ProjectController {
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 			}
 		} catch (Exception e) {
 			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
@@ -269,7 +269,7 @@ public class ProjectController {
 				if (resultado != null) {
 					return Response.ok(resultado).build();
 				} else {
-					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 				}			
 			}
 			if(userId>0) {
@@ -280,7 +280,7 @@ public class ProjectController {
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 			}
 
 		} catch (NullPointerException e) {
@@ -293,7 +293,7 @@ public class ProjectController {
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
 			}
 		} catch (Exception e) {
 			return Response.status(400).entity(GestaoErros.getMsg(17)).build();

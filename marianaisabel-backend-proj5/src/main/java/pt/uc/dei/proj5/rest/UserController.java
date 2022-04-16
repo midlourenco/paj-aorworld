@@ -24,6 +24,7 @@ import pt.uc.dei.proj5.bean.UserBean;
 import pt.uc.dei.proj5.dto.UserDTO;
 import pt.uc.dei.proj5.dto.UserDTORegister;
 import pt.uc.dei.proj5.dto.UserDTOResp;
+import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
 import pt.uc.dei.proj5.other.GestaoErros;
 
@@ -134,7 +135,7 @@ public class UserController {
 				if (userService.createUser(newUser)) {// método que grava user na BD
 					System.out.println("user criado com sucesso");
 					UriBuilder createdURI = context.getAbsolutePathBuilder(); //podia-se ainda adicionar a path directa para o novo user criado .path(Integer.toString(userId));
-					a_resposta = Response.created(createdURI.build()).entity(GestaoErros.getMsg(20)).build();
+					a_resposta = Response.created(createdURI.build()).build();
 
 				} else {
 					a_resposta = Response.status(400).entity("email já se encontra registado").build();// 400 - conflito - o username (PK do user, já existe)
@@ -340,29 +341,37 @@ public class UserController {
 	public Response updateUserInfo(@PathParam("userId") int userId, @Valid UserDTO changeUser,
 			@HeaderParam("Authorization") String authString) {
 
-		System.out.println("changedUser recebido: " + changeUser);
-		if (authString.equals("") || authString.isEmpty() || authString == null || !userService.isValidToken(authString)) { // token valido?
-			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+		User userToUpdate = userService.getNonDeletedUserEntityById(userId);
+		if (userToUpdate == null) { // o id do url não existir nao avança
+			return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 		}
-		
-		boolean loggedUserHasAdminPriv = userService.hasLoggedUserAdminPriv(authString);
-		boolean isThisProfileFromLoggedUser = userService.isUserAuthenticated(authString, userId);
-		
-		if (!isThisProfileFromLoggedUser && !loggedUserHasAdminPriv) {// username nao é de quem está logado nem quem está logado tem priv de admin
-			return Response.status(403).entity(GestaoErros.getMsg(5)).build();
-		}
-		
-		try {
-			boolean resultado = userService.updateUser(userId, changeUser, loggedUserHasAdminPriv);
-			UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
 
-			if (resultado == true) {
-				return Response.ok(userDTOResp).build();
-			}
-		} catch (Exception e) {
-			return Response.status(400).entity(GestaoErros.getMsg(0)).build();
-		}
+		//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
+		if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
 		
+			System.out.println("changedUser recebido: " + changeUser);
+			if (authString.equals("") || authString.isEmpty() || authString == null || !userService.isValidToken(authString)) { // token valido?
+				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+			}
+			
+			boolean loggedUserHasAdminPriv = userService.hasLoggedUserAdminPriv(authString);
+			boolean isThisProfileFromLoggedUser = userService.isUserAuthenticated(authString, userId);
+			
+			if (!isThisProfileFromLoggedUser && !loggedUserHasAdminPriv) {// username nao é de quem está logado nem quem está logado tem priv de admin
+				return Response.status(403).entity(GestaoErros.getMsg(5)).build();
+			}
+			
+			try {
+				boolean resultado = userService.updateUser(userId, changeUser, loggedUserHasAdminPriv);
+				UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
+	
+				if (resultado == true) {
+					return Response.ok(userDTOResp).build();
+				}
+			} catch (Exception e) {
+				return Response.status(400).entity(GestaoErros.getMsg(0)).build();
+			}
+		}
 		return Response.status(400).entity(GestaoErros.getMsg(0)).build(); //
 	}
 
@@ -377,36 +386,43 @@ public class UserController {
 		Response a_resposta;
 		JSONObject obj = new JSONObject(newPass);
 		String password = obj.getString("password");
-		
-		
-		if(password.equals("") ||password.isEmpty() || password==null) {
-			return Response.status(400).entity(GestaoErros.getMsg(0)).build(); 
+		User userToUpdate = userService.getNonDeletedUserEntityById(userId);
+		if (userToUpdate == null) { // o id do url não existir nao avança
+			return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 		}
-		
-		System.out.println("changedUserPass recebido: " + newPass);
-		
-		if (authString.equals("") || authString.isEmpty() || authString == null || !userService.isValidToken(authString)) { // token valido?
-			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-		}
-		
-		boolean loggedUserHasAdminPriv = userService.hasLoggedUserAdminPriv(authString);
-		boolean isThisProfileFromLoggedUser = userService.isUserAuthenticated(authString, userId);
-		
-		if (!isThisProfileFromLoggedUser && !loggedUserHasAdminPriv) {// username nao é de quem está logado nem quem está logado tem priv de admin
-			return Response.status(403).entity(GestaoErros.getMsg(5)).build();
-		}
-		
-		try {
-			boolean resultado = userService.updateUserPassword(userId, password, loggedUserHasAdminPriv);
-			UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
 
-			if (resultado == true) {
-				return Response.ok().build();
-			}
-		} catch (Exception e) {
-			return Response.status(400).entity(GestaoErros.getMsg(0)).build();
-		}
+		//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
+		if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
 		
+			if(password.equals("") ||password.isEmpty() || password==null) {
+				return Response.status(400).entity(GestaoErros.getMsg(0)).build(); 
+			}
+			
+			System.out.println("changedUserPass recebido: " + newPass);
+			
+			if (authString.equals("") || authString.isEmpty() || authString == null || !userService.isValidToken(authString)) { // token valido?
+				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+			}
+			
+			boolean loggedUserHasAdminPriv = userService.hasLoggedUserAdminPriv(authString);
+			boolean isThisProfileFromLoggedUser = userService.isUserAuthenticated(authString, userId);
+			
+			if (!isThisProfileFromLoggedUser && !loggedUserHasAdminPriv) {// username nao é de quem está logado nem quem está logado tem priv de admin
+				return Response.status(403).entity(GestaoErros.getMsg(5)).build();
+			}
+			
+			try {
+				boolean resultado = userService.updateUserPassword(userId, password, loggedUserHasAdminPriv);
+				UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
+	
+				if (resultado == true) {
+					return Response.ok().entity(GestaoErros.getMsg(11)).build();
+				}
+			
+			} catch (Exception e) {
+				return Response.status(400).entity(GestaoErros.getMsg(0)).build();
+			}
+		}
 		return Response.status(400).entity(GestaoErros.getMsg(0)).build(); //
 	}
 
@@ -423,13 +439,13 @@ public class UserController {
 	public Response blockUser(@PathParam("userId") int userId,
 			@HeaderParam("Authorization") String authString) {
 		try {
-			UserDTOResp user = userService.getUserDTORespById(userId);
-			if (user == null) { // o id do url não existir nao avança
+			User userToUpdate = userService.getNonDeletedUserEntityById(userId);
+			if (userToUpdate == null) { // o id do url não existir nao avança
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
-		//if (userId!=1) {// não permitimos que se apage o user  admin id 1
-			if(!user.getEmail().equals("admin@aor.pt")) {
+			//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
+			if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
 				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
 					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 				}
@@ -470,13 +486,13 @@ public class UserController {
 	public Response undeletedUser(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {
 		try {
-			UserDTOResp user = userService.getUserDTORespById(userId);
-			if (user == null) { // o id do url não existir nao avança
+			User userToUpdate = userService.getNonDeletedUserEntityById(userId);
+			if (userToUpdate == null) { // o id do url não existir nao avança
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
-			//if (userId!=1) {// não permitimos que se apage o user admin
-			if(!user.getEmail().equals("admin@aor.pt")) {
+			//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
+			if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
 				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
 					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 				}
@@ -488,7 +504,8 @@ public class UserController {
 	
 				
 				if (userService.undeletedUser(userId)) {
-					return Response.ok().entity(GestaoErros.getMsg(11)).build();
+					UserDTOResp updatedUser = userService.getNonDeletedUserDTORespById(userId);
+					return Response.ok(updatedUser).build();
 				} else {
 					return Response.status(400).entity("o user não foi continua com marca de apagar").build();
 				}
@@ -516,13 +533,13 @@ public class UserController {
 	public Response changeUserPrivToMember(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {
 		try {
-			UserDTOResp user = userService.getUserDTORespById(userId);
-			if (user == null) { // o id do url não existir nao avança
+			User userToUpdate = userService.getNonDeletedUserEntityById(userId);
+			if (userToUpdate == null) { // o id do url não existir nao avança
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
-			//if (userId!=1) {// não permitimos que se apage o user admin
-			if(!user.getEmail().equals("admin@aor.pt")) {
+			//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
+			if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
 				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
 					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 				}
@@ -534,7 +551,9 @@ public class UserController {
 	
 				
 				if (userService.changeUserPrivToMember(userId)) {
-					return Response.ok().entity(GestaoErros.getMsg(11)).build();
+					UserDTOResp updatedUser = userService.getNonDeletedUserDTORespById(userId);
+					
+					return Response.ok(updatedUser).build();
 				} else {
 					return Response.status(400).entity("o user não foi continua com os priv anteriores").build();
 				}
@@ -562,13 +581,13 @@ public class UserController {
 	public Response changeUserPrivToAdmin(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {
 		try {
-			UserDTOResp user = userService.getUserDTORespById(userId);
-			if (user == null) { // o id do url não existir nao avança
+			User userToUpdate = userService.getNonDeletedUserEntityById(userId);
+			if (userToUpdate == null) { // o id do url não existir nao avança
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
-			//if (userId!=1) {// não permitimos que se apage o user admin
-			if(!user.getEmail().equals("admin@aor.pt")) {
+			//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
+			if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
 				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
 					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 				}
@@ -580,7 +599,9 @@ public class UserController {
 	
 				
 				if (userService.changeUserPrivToAdmin(userId)) {
-					return Response.ok().entity(GestaoErros.getMsg(11)).build();
+					UserDTOResp updatedUser = userService.getNonDeletedUserDTORespById(userId);
+					
+					return Response.ok(updatedUser).build();
 				} else {
 					return Response.status(400).entity("o user não foi continua com os priv anteriores").build();
 				}

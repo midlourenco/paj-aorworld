@@ -28,11 +28,12 @@ public class InitialDataBean implements Serializable {
 		//UserBean userService= new UserBean ();
 		System.out.println("postConstruct para criaçao de admin: ");
 		try {
-		if(userDao.findUserByEmail("admin@aor.pt")==null) {
+		if(!userDao.existAutoAdmin()) { //se não existe user automatico cria-o
 			System.out.println("não existe user admin");
 			UserDTORegister admin= new UserDTORegister("root_admin", "ultimo nome", "admin", "admin@aor.pt", "https://png.pngitem.com/pimgs/s/24-245629_awesome-face-pose-5-2017-stay-calm-and.png","eu sou o admin construido por defeito na BD");
 			//userService.createUser(admin);
 			User userToPersist = UserDao.convertDTORegisterToEntity(admin);
+			userToPersist.setAutoAdmin(true);
 			userToPersist.setPrivileges(UserPriv.ADMIN);
 			userDao.persist(userToPersist);
 			System.out.println("criei user admin");

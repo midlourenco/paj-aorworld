@@ -20,7 +20,6 @@ public class  GestaoErros {
 		tabErros.put(2, "O username ao qual está a aceder para operações detalhes não existe ou está marcado para eliminar");
 		tabErros.put(3, "O username ao qual está a aceder para operações de projecto não existe ou está marcado para eliminar");
 		tabErros.put(4, "O username ao qual está a aceder para operações de noticia não existe ou está marcado para eliminar");
-		tabErros.put(6, "Já existe uma projecto com o mesmo titulo criado por este utilizador");
 		tabErros.put(12, "Não foi possível listar as noticias / projectos deste utilizador");
 		tabErros.put(18, "Não é possível alterar o email");
 		tabErros.put(17, "Não foi possível apresentar/criar/apagar/alterar/recuperar a projecto/noticia");
