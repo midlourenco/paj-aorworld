@@ -91,17 +91,17 @@ public class User implements Serializable {
 	//https://stackoverflow.com/questions/4334970/hibernate-throws-multiplebagfetchexception-cannot-simultaneously-fetch-multipl
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "createdBy")
 	private List<News> createdNews;
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "lastModifBy", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "lastModifBy")
 	private List<News> updatedNews;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "createdBy", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "createdBy")
 	private List<Project> createdProjects;
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "lastModifBy", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "lastModifBy")
 	private List<Project> updatedProjects;
 
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -109,11 +109,11 @@ public class User implements Serializable {
 	private List<Notification> notifications;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "user")
 	private List<ProjectSharing> projectSharing;
 
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "user")
 	private List<NewsSharing> newsSharing;
 
 	

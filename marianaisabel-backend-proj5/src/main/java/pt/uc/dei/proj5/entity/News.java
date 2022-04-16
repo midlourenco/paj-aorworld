@@ -60,15 +60,15 @@ public class News implements Serializable {
 	@JoinColumn(name="CreatedBy_News")
 	private User createdBy;
 	
-	@ManyToOne (optional=false)  //presença obrigatória na relação
+	@ManyToOne (optional=true)  //presença obrigatória na relação
 	@JoinColumn(name="UpdatedBy_News")
 	private User lastModifBy;
 
-	@ManyToMany(cascade = CascadeType.REMOVE)
+	@ManyToMany
 	private List<Project> projects;
 	
 	//alternativa	private String keywords;
-	@ManyToMany(cascade = CascadeType.REMOVE)
+	@ManyToMany(cascade = CascadeType.MERGE)
 	private Set<Keyword> keywords;
 	
 	@OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE) // cada news tem uma muitas notificaçoes associados. por isso tem uma lista de produtos
@@ -135,6 +135,10 @@ public class News implements Serializable {
 
 	public void setLastModifBy(User lastModifBy) {
 		this.lastModifBy = lastModifBy;
+	}
+	public void setLastModifByAndDate(User lastModifBy) {
+		this.lastModifBy = lastModifBy;
+		this.lastModifDate = new Timestamp(System.currentTimeMillis());
 	}
 
 	public List<Project> getProjects() {

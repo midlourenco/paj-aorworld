@@ -7,7 +7,7 @@ public class NewsDTO {
 	private String description;
 	private String image;
 	private ArrayList<String> keywords;
-	private ArrayList<Integer> news;
+	private ArrayList<Integer> projects;
 	private boolean visibility;
 	
 	
@@ -57,12 +57,12 @@ public class NewsDTO {
 		this.keywords = keywords;
 	}
 
-	public ArrayList<Integer> getNews() {
-		return news;
+	public ArrayList<Integer> getProjects() {
+		return projects;
 	}
 
-	public void setNews(ArrayList<Integer> news) {
-		this.news = news;
+	public void setProjects(ArrayList<Integer> projects) {
+		this.projects = projects;
 	}
 
 	public boolean isVisibility() {

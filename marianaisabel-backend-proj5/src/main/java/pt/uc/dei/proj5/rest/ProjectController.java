@@ -175,6 +175,7 @@ public class ProjectController {
 	}
 	
 
+	
 //	//TODO validar se o user no queryParam é um numero - annotation pattern não funcionou no postman  @Pattern(regexp = "[0-9]+", message = "The user id must be a valid number") int userId,
 //	//https://dennis-xlc.gitbooks.io/restful-java-with-jax-rs-2-0-2rd-edition/content/en/part1/chapter5/query_param.html
 //	//GET /projects?user=xxxx

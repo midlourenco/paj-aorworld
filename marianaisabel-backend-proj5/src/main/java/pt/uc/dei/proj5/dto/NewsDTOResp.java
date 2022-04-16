@@ -12,14 +12,13 @@ public class NewsDTOResp {
 	private boolean visibility;
 	private String createdDate;
 	private String lastModifDate;
-	private String createdBy;
-	private String lastModifBy;
+	private UserDTOResp createdBy;
+	private UserDTOResp lastModifBy;
 	
 	
-	private ArrayList<UserDTOResp> associatedUsersOfThisNews= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-	private ArrayList<ProjectDTOResp> associatedProjectsOfThisNews= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-	private ArrayList<String> keywordsOfThisNews= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
-	
+	private ArrayList<UserDTOResp> users= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
+	private ArrayList<ProjectDTOResp> projects = new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
+	private ArrayList<String> keywords= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 	
 	
 	
@@ -79,47 +78,54 @@ public class NewsDTOResp {
 	}
 	public void setLastModifDate(String lastModifDate) {
 		this.lastModifDate = lastModifDate;
-	}
-	public String getCreatedBy() {
+	}	
+	
+	public UserDTOResp getCreatedBy() {
 		return createdBy;
 	}
-	public void setCreatedBy(String createdBy) {
+
+
+	public void setCreatedBy(UserDTOResp createdBy) {
 		this.createdBy = createdBy;
 	}
-	public String getLastModifBy() {
+
+
+	public UserDTOResp getLastModifBy() {
 		return lastModifBy;
 	}
-	public void setLastModifBy(String lastModifBy) {
+
+
+	public void setLastModifBy(UserDTOResp lastModifBy) {
 		this.lastModifBy = lastModifBy;
 	}
-	
-		public ArrayList<UserDTOResp> getAssociatedUsersOfThisNews() {
-		return associatedUsersOfThisNews;
+
+	public ArrayList<ProjectDTOResp> getProjects() {
+		return projects;
 	}
 
 
-	public void setAssociatedUsersOfThisNews(ArrayList<UserDTOResp> associatedUsersOfThisNews) {
-		this.associatedUsersOfThisNews = associatedUsersOfThisNews;
+	public void setProjects(ArrayList<ProjectDTOResp> projects) {
+		this.projects = projects;
 	}
 
 
-	public ArrayList<ProjectDTOResp> getAssociatedProjectsOfThisNews() {
-		return associatedProjectsOfThisNews;
+	public ArrayList<UserDTOResp> getUsers() {
+		return users;
 	}
 
 
-	public void setAssociatedProjectsOfThisNews(ArrayList<ProjectDTOResp> associatedProjectsOfThisNews) {
-		this.associatedProjectsOfThisNews = associatedProjectsOfThisNews;
+	public void setUsers(ArrayList<UserDTOResp> users) {
+		this.users = users;
 	}
 
 
-	public ArrayList<String> getKeywordsOfThisNews() {
-		return keywordsOfThisNews;
+	public ArrayList<String> getKeywords() {
+		return keywords;
 	}
 
 
-	public void setKeywordsOfThisNews(ArrayList<String> keywordsOfThisNews) {
-		this.keywordsOfThisNews = keywordsOfThisNews;
+	public void setKeywords(ArrayList<String> keywords) {
+		this.keywords = keywords;
 	}
 
 

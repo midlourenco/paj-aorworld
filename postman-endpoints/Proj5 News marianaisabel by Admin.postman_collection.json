@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "25516393-ed10-4a0a-bca5-276b4e0520c6",
+		"name": "Proj5 News marianaisabel by Admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "F23- create news",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\" : \"noticia novo\",\n\t\"description\" : \"há cada vez mais projectos nas univ portuguesas\",\n\t\"image\" : \"https://mundodainvestigacao.pt\",\n\t\"keywords\": [\"coimbra\",\"lisboa\",\"porto\"],\n    \"projects\":[],\n    \"visibility\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/news",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F24a - Get all news",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F24b - Get all deleted  news",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news/deletedList",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"deletedList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F24c - Get all news from user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news?user=1",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F24d - Get all deleted news from user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news/deletedList?user=1",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"deletedList"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F25 - Get news details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news/2",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F26 - Edit news detail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"projecto piloto\",\r\n\t\"description\" : \" investigação profunda \",\r\n\t\"image\" : \"https://umaimagem2.pt\",\r\n\t\"keywords\": [\"piloto\",\"fogo\",\"dormir\"],\r\n    \"news\":[],\r\n    \"visibility\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/news/2",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F27 - Associated Project to News",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\": \"hello\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/news/associatedproject/1",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"associatedproject",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F28- Delete news",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news/2",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F29 - Undelete news",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news/2/undelete",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"2",
+						"undelete"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
