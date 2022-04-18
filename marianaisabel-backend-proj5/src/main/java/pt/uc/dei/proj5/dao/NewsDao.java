@@ -3,6 +3,7 @@ package pt.uc.dei.proj5.dao;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -63,12 +64,14 @@ public class NewsDao extends AbstractDao<News> {
 		newsDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(newsEntity.getCreatedBy()));
 		newsDTOResp.setKeywords(KeywordDao.convertEntityListToArrayString(newsEntity.getKeywords()));
 
-		ArrayList<ProjectDTOResp> projectArray = new ArrayList<>();
-		for (Project p : newsEntity.getProjects()) {
-			projectArray.add(ProjectDao.convertEntityToDTOResp(p));
+		Set<Project> projectListFromBD =newsEntity.getProjects();
+		if(projectListFromBD.size()>0) {
+			ArrayList<ProjectDTOResp> projectArray = new ArrayList<>();
+			for (Project p : projectListFromBD) {
+				projectArray.add(ProjectDao.convertEntityToDTO_FORNEWSARRAY(p));
+			}
+			newsDTOResp.setProjects(projectArray);
 		}
-		newsDTOResp.setProjects(projectArray);
-		
 		if (newsEntity.getCreatedDate() != null) {
 			newsDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getCreatedDate()));
 
@@ -96,6 +99,45 @@ public class NewsDao extends AbstractDao<News> {
 		return newsDTOResp;
 	}
 
+	public static NewsDTOResp convertEntityToDTOResp_FORPROJECTARRAY(News newsEntity) {
+		System.out.println("Entrei em convertEntityToDTOResp News");
+		NewsDTOResp newsDTOResp = new NewsDTOResp();
+		newsDTOResp.setId(newsEntity.getId());
+		newsDTOResp.setTitle(newsEntity.getTitle());
+		newsDTOResp.setDescription(newsEntity.getDescription());
+		newsDTOResp.setImage(newsEntity.getImage());
+		newsDTOResp.setDeleted(newsEntity.isDeleted());
+		newsDTOResp.setVisibility(newsEntity.isVisibility());
+		newsDTOResp.setId(newsEntity.getId());
+		newsDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(newsEntity.getCreatedBy()));
+
+		
+		if (newsEntity.getCreatedDate() != null) {
+			newsDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getCreatedDate()));
+
+		} else {
+			newsDTOResp.setCreatedDate("");
+		}
+
+		if (newsEntity.getLastModifDate() != null) {
+			newsDTOResp.setLastModifDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getLastModifDate()));
+			newsDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(newsEntity.getLastModifBy()));
+
+		} else {
+			newsDTOResp.setLastModifDate("");
+		}
+
+		// TODO complete here
+		// newsDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(newsEntity.getLastModifBy()));
+		// private ArrayList<UserDTOResp> associatedUsersOfThisNews= new ArrayList<>();
+		// //se esta categoria foi partilhada com alguem este array é >0 e tem o
+		// username com quem se partilhou a mesma
+		// private ArrayList<newsDTOResp> associatedNewsOfThisNews= new ArrayList<>();
+		// //se esta categoria foi partilhada com alguem este array é >0 e tem o
+		// username com quem se partilhou a mesma
+
+		return newsDTOResp;
+	}
 	/////////////////////////////////////////////////////////
 	// METODOS devolvem Listas de News
 	////////////////////////////////////////////////////////

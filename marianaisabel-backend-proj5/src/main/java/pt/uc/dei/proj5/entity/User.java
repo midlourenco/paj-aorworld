@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 //import java.util.HexFormat;  //apenas para java 17
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.DatatypeConverter;
@@ -124,6 +126,9 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user")
 	private List<NewsSharing> newsSharing;
 
+	@ManyToMany(mappedBy="users")
+	private Set<News> news;
+	
 	
 	//OUTRAS IDEIAS: em vez de member- editor/publisher ...
 	public enum UserPriv {VIEWER,MEMBER,ADMIN};
@@ -335,6 +340,18 @@ public class User implements Serializable {
 
 	public String getPassword() {
 		return password;
+	}
+
+
+
+	public Set<News> getNews() {
+		return news;
+	}
+
+
+
+	public void setNews(Set<News> news) {
+		this.news = news;
 	}
 
 

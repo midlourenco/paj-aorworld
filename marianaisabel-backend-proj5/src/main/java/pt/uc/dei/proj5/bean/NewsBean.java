@@ -178,21 +178,38 @@ public class NewsBean implements Serializable {
 			}
 			news.setKeywords(keywords);
 			
-			List<Project> projects = new ArrayList<>();
+			Set<Project> projects = new HashSet<>();
 			ArrayList<Integer> projectsIdList = newsDTO.getProjects();
 			for (Integer projectId : projectsIdList) {
 				System.out.println("entrei no for projectsIdlist " + projectId );
-				try {
+				//try {
 					Project p = projectDao.findEntityIfNonDelete(projectId);//a ideia será adicionar um projecto ja existente
-					projects.add(p);
+					if(p!=null) {
+						projects.add(p);
+						System.out.println("adicionei a project ao set");
+					}
+//				}catch (Exception e) {
+//					e.printStackTrace();
+//					System.out.println("o projecto " + projectId + " nao existe ou está marcada para eliminar");
+//				}
+			}
+			if(projects.size()>0) {
+				news.setProjects(projects);
+			}
+			Set<User> users = new HashSet<>();
+			ArrayList<Integer> usersId = newsDTO.getUsers();
+			for (Integer userId : usersId) {
+				System.out.println("entrei no for projectsIdlist " + userId );
+				User u = userDao.findEntityIfNonDelete(userId);//a ideia será adicionar um projecto ja existente
+				if(u!=null) {
+					users.add(u);
 					System.out.println("adicionei a project ao set");
-				}catch (Exception e) {
-					e.printStackTrace();
-					System.out.println("o projecto " + projectId + " nao existe ou está marcada para eliminar");
 				}
 			}
-			news.setProjects(projects);
-			
+			if(users.size()>0) {
+				news.setUsers(users);
+			}
+		
 			newsDao.merge(news);
 	
 			NewsDTOResp newsDTOResp=NewsDao.convertEntityToDTOResp(news);
@@ -218,20 +235,33 @@ public class NewsBean implements Serializable {
 			System.out.println("adicionei a keyword ao set");
 		}
 		news.setKeywords(keywords);
-		List<Project> projects = new ArrayList<>();
+		Set<Project> projects = new HashSet<>();
 		ArrayList<Integer> projectsIdList = newsDTO.getProjects();
 		for (Integer projectId : projectsIdList) {
-			System.out.println("entrei no for projectsIdlist");
-			try {
-				Project p = projectDao.findEntityIfNonDelete(projectId);//a ideia será adicionar um projecto ja existente
+			System.out.println("entrei no for projectsIdlist " + projectId );
+			Project p = projectDao.findEntityIfNonDelete(projectId);//a ideia será adicionar um projecto ja existente
+			if(p!=null) {
 				projects.add(p);
 				System.out.println("adicionei a project ao set");
-			}catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("o projecto " + projectId + " nao existe ou está marcada para eliminar");
 			}
 		}
-		news.setProjects(projects);
+		if(projects.size()>0) {
+			news.setProjects(projects);
+		}
+		Set<User> users = new HashSet<>();
+		ArrayList<Integer> usersId = newsDTO.getUsers();
+		for (Integer userId : usersId) {
+			System.out.println("entrei no for projectsIdlist " + userId );
+			User u = userDao.findEntityIfNonDelete(userId);//a ideia será adicionar um projecto ja existente
+			if(u!=null) {
+				users.add(u);
+				System.out.println("adicionei a project ao set");
+			}
+		}
+		if(users.size()>0) {
+			news.setUsers(users);
+		}
+	
 
 		newsDao.merge(news);
 		

@@ -7,7 +7,6 @@ public class ProjectDTO {
 	private String description;
 	private String image;
 	private ArrayList<String> keywords;
-	private ArrayList<Integer> news;
 	private boolean visibility;
 	
 	/**
@@ -63,13 +62,6 @@ public class ProjectDTO {
 		this.visibility = visibility;
 	}
 
-	public ArrayList<Integer> getNews() {
-		return news;
-	}
-
-	public void setNews(ArrayList<Integer> news) {
-		this.news = news;
-	}
 
 
 	@Override

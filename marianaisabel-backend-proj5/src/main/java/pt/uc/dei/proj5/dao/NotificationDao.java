@@ -61,11 +61,29 @@ public class NotificationDao extends AbstractDao<Notification> {
 		
 	//////////////////////////////////////
 	/**
-	 * Notificaçao INFORMAR UM USER QUE FOI ASSOCIADO A UM PROJECT
+	 * Notificaçao INFORMAR UM USER QUE FOI ASSOCIADO A UMA NEWS SHARING
 	 * @param user
 	 * @param newsSharing
 	 */
 	/////////////////////////////////////
+//	public void inviteAssocNewstNotif(User user, NewsSharing newsSharing) {
+//		Notification notifEntity = new Notification();
+//		notifEntity.setNewsSharing(newsSharing);
+//		notifEntity.setUser(user);
+//		notifEntity.setAlreadyRead(false);
+//		notifEntity.setNotificationType(NotificationType.PROJECT_ASSOC);
+//		notifEntity.setTitle("Foi associado à notícia '"+ newsSharing.getNews().getTitle() + "'");
+//		persist(notifEntity);
+//	}
+	
+	//////////////////////////////////////
+	/**
+	 * Notificaçao INFORMAR UM USER QUE FOI ASSOCIADO A UMA NEWS
+	 * @param user
+	 * @param newsSharing
+	 */
+	/////////////////////////////////////
+	
 	public void inviteAssocNewstNotif(User user, NewsSharing newsSharing) {
 		Notification notifEntity = new Notification();
 		notifEntity.setNewsSharing(newsSharing);
@@ -75,8 +93,6 @@ public class NotificationDao extends AbstractDao<Notification> {
 		notifEntity.setTitle("Foi associado à notícia '"+ newsSharing.getNews().getTitle() + "'");
 		persist(notifEntity);
 	}
-	
-	
 	
 	//////////////////////////////////
 	/**

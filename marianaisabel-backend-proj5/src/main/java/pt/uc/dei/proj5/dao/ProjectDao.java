@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -75,12 +76,14 @@ public class ProjectDao extends AbstractDao<Project> {
 		projectDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(projectEntity.getCreatedBy()));
 		projectDTOResp.setKeywords(KeywordDao.convertEntityListToArrayString(projectEntity.getKeywords()));
 		
-		ArrayList<NewsDTOResp> newsArray = new ArrayList<>();
-		for (News news : projectEntity.getNews()) {
-			newsArray.add(NewsDao.convertEntityToDTOResp(news));
+		Set<News> newsListFromBD =projectEntity.getNews();
+		if(newsListFromBD.size()>0) {
+			ArrayList<NewsDTOResp> newsArray = new ArrayList<>();
+			for (News news : newsListFromBD) {
+				newsArray.add(NewsDao.convertEntityToDTOResp_FORPROJECTARRAY(news));
+			}
+			projectDTOResp.setAssociatedNews(newsArray);
 		}
-		projectDTOResp.setAssociatedNews(newsArray);
-		
 		if (projectEntity.getCreatedDate() != null) {
 			projectDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getCreatedDate()));
 
@@ -96,7 +99,36 @@ public class ProjectDao extends AbstractDao<Project> {
 		} else {
 			projectDTOResp.setLastModifDate("");
 		}
+		
+		return projectDTOResp;
+	}
 	
+		public static ProjectDTOResp convertEntityToDTO_FORNEWSARRAY(Project projectEntity) {
+			System.out.println("Entrei em convertEntityToDTOResp Project");
+			ProjectDTOResp projectDTOResp = new ProjectDTOResp();
+			projectDTOResp.setId(projectEntity.getId());
+			projectDTOResp.setTitle(projectEntity.getTitle());
+			projectDTOResp.setDescription(projectEntity.getDescription());
+			projectDTOResp.setImage(projectEntity.getImage());
+			projectDTOResp.setDeleted(projectEntity.isDeleted());
+			projectDTOResp.setVisibility(projectEntity.isVisibility());
+			projectDTOResp.setId(projectEntity.getId());
+			projectDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(projectEntity.getCreatedBy()));
+
+			if (projectEntity.getCreatedDate() != null) {
+				projectDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getCreatedDate()));
+
+			} else {
+				projectDTOResp.setCreatedDate("");
+			}
+			
+			if (projectEntity.getLastModifDate() != null) {
+				projectDTOResp.setLastModifDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getLastModifDate()));
+				projectDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(projectEntity.getLastModifBy()));		
+
+			} else {
+				projectDTOResp.setLastModifDate("");
+			}
 		
 
 		//TODO complete here

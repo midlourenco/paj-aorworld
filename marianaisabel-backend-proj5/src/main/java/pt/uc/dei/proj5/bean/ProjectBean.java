@@ -177,23 +177,27 @@ public class ProjectBean implements Serializable {
 				//System.out.println("associei ao proj. fim do ciclo for");
 			}
 			project.setKeywords(keywords);
-			
-			List<News> news = new ArrayList<>();
-			ArrayList<Integer> newsIdList = projectDTO.getNews();
-			for (Integer newsId : newsIdList) {
-				System.out.println("entrei no for das newsId");
-				try {
-					News n = newsDao.findEntityIfNonDelete(newsId);//a ideia será adicionar uma noticia ja existente
-					news.add(n);
-					System.out.println("adicionei a news ao set");
-				}catch (Exception e) {
-					e.printStackTrace();
-					System.out.println("a noticia " + newsId + " nao existe ou está marcada para eliminar");
-				}
-			}
-			project.setNews(news);
 			projectDao.merge(project);
-	
+//			As noticias é que adicionam projectos
+//		Set<News> news = new HashSet<>();
+//			ArrayList<Integer> newsIdList = projectDTO.getNews();
+//			for (Integer newsId : newsIdList) {
+//				System.out.println("entrei no for das newsId");
+//				//try {
+//					News n = newsDao.findEntityIfNonDelete(newsId);//a ideia será adicionar uma noticia ja existente
+//					if(n!=null) {
+//						System.out.println(n);
+//						news.add(n);
+//					}
+//					System.out.println("adicionei a news ao set");
+////				}catch (Exception e) {
+////					e.printStackTrace();
+////					System.out.println("a noticia " + newsId + " nao existe ou está marcada para eliminar");
+////				}
+//			}
+//			if(news.size()>0) {
+//				project.setNews(news);
+//			}
 			ProjectDTOResp projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
 //		}else {
 //			System.out.println("Já existe um projecto com este título criado por este utilizador");
@@ -217,21 +221,7 @@ public class ProjectBean implements Serializable {
 			System.out.println("adicionei a keyword ao set");
 		}
 		project.setKeywords(keywords);
-		
-		List<News> news = new ArrayList<>();
-		ArrayList<Integer> newsIdList = projectDTO.getNews();
-		for (Integer newsId : newsIdList) {
-			System.out.println("entrei no for das newsId");
-			try {
-				News n = newsDao.findEntityIfNonDelete(newsId);//a ideia será adicionar uma noticia ja existente
-				news.add(n);
-				System.out.println("adicionei a news ao set");
-			}catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("a noticia " + newsId + " nao existe ou está marcada para eliminar");
-			}
-		}
-		project.setNews(news);
+
 		projectDao.merge(project);
 		
 		ProjectDTOResp projectDTOResp=ProjectDao.convertEntityToDTOResp(project);

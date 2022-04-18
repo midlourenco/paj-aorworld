@@ -8,6 +8,7 @@ public class NewsDTO {
 	private String image;
 	private ArrayList<String> keywords;
 	private ArrayList<Integer> projects;
+	private ArrayList<Integer> users;
 	private boolean visibility;
 	
 	
@@ -71,6 +72,15 @@ public class NewsDTO {
 
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
+	}
+
+	
+	public ArrayList<Integer> getUsers() {
+		return users;
+	}
+
+	public void setUsers(ArrayList<Integer> users) {
+		this.users = users;
 	}
 
 	@Override

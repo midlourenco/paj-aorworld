@@ -69,14 +69,15 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 	}
 
 	public List<T> findAllMarkedAsDeleted() {
-
-		final CriteriaQuery<T> criteriaQuery = em.getCriteriaBuilder().createQuery(clazz);
-
-		Root<T> c = criteriaQuery.from(clazz);
-
-		criteriaQuery.select(c).where(em.getCriteriaBuilder().equal(c.get("deleted"), true));
-
-		return em.createQuery(criteriaQuery).getResultList();
+		try {
+			final CriteriaQuery<T> criteriaQuery = em.getCriteriaBuilder().createQuery(clazz);
+			Root<T> c = criteriaQuery.from(clazz);
+			criteriaQuery.select(c).where(em.getCriteriaBuilder().equal(c.get("deleted"), true));
+			return em.createQuery(criteriaQuery).getResultList();
+		}catch (Exception e) {
+			System.out.println("findAllMarkedAsDeleted - não existe nenhum resultado");
+			return null;
+		}
 	}
 
 	public void deleteAll() {
@@ -119,7 +120,8 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 			return em.createQuery(criteriaQuery).getSingleResult();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("findAllMarkedAsDeleted - não existe nenhum resultado");
 			return null;
 		}
 	}
@@ -140,6 +142,7 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("findAllMarkedAsDeleted - não existe nenhum resultado");
 			return null;
 		}
 	}

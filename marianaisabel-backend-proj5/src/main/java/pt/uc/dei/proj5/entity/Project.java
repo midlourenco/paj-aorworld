@@ -89,13 +89,14 @@ public class Project implements Serializable{
 	private List<ProjectSharing> projectSharing;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(mappedBy="projects",cascade = CascadeType.MERGE)
-	private List<News> news=new ArrayList<>();
+	@ManyToMany(mappedBy="projects")  //numa noticia pode-se associar vários projectos
+	private Set<News> news=new HashSet<>();
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(cascade = CascadeType.MERGE)
+	//(cascade = CascadeType.MERGE)
 //	@JoinTable(name="Project_Keyword", joinColumns={@JoinColumn(name="projects_id", referencedColumnName="id")},
 //	inverseJoinColumns={@JoinColumn(name="keywords_keyword", referencedColumnName="keyword")})
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
 	private Set<Keyword> keywords=new HashSet<>();;
 
 
@@ -205,11 +206,11 @@ public class Project implements Serializable{
 		this.projectSharing = projectSharing;
 	}
 
-	public List<News> getNews() {
+	public Set<News> getNews() {
 		return news;
 	}
 
-	public void setNews(List<News> news) {
+	public void setNews(Set<News> news) {
 		this.news = news;
 	}
 

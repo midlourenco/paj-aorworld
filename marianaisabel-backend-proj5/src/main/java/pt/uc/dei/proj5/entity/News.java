@@ -69,12 +69,12 @@ public class News implements Serializable {
 	@JoinColumn(name="UpdatedBy_News")
 	private User lastModifBy;
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany (cascade = CascadeType.MERGE)
-	private List<Project> projects=new ArrayList<>();
+	@ManyToMany 
+	private Set<Project> projects=new HashSet<>();
 	
 	//alternativa	private String keywords;
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@ManyToMany
 	private Set<Keyword> keywords=new HashSet<>();
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -84,6 +84,9 @@ public class News implements Serializable {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="news",cascade = CascadeType.REMOVE)
 	private List<NewsSharing> projectSharing;
+	
+	@ManyToMany
+	private Set<User> users;
 	
 	
 	public News() {
@@ -149,11 +152,11 @@ public class News implements Serializable {
 		this.lastModifDate = new Timestamp(System.currentTimeMillis());
 	}
 
-	public List<Project> getProjects() {
+	public Set<Project> getProjects() {
 		return projects;
 	}
 
-	public void setProjects(List<Project> projects) {
+	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
 	}
 
@@ -195,6 +198,24 @@ public class News implements Serializable {
 
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
+	}
+	
+	
+
+//	public List<NewsSharing> getProjectSharing() {
+//		return projectSharing;
+//	}
+//
+//	public void setProjectSharing(List<NewsSharing> projectSharing) {
+//		this.projectSharing = projectSharing;
+//	}
+
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	@Override
