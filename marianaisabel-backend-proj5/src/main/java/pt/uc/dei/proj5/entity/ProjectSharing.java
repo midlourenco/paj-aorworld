@@ -39,7 +39,7 @@ public class ProjectSharing implements Serializable{
 
 	@ManyToOne
 	@JoinColumn(name = "Project_ProjectSharing")
-	private News project;
+	private Project project;
 
 	@OneToMany(mappedBy = "projectSharing", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private List<Notification> notifications;
@@ -89,10 +89,10 @@ public class ProjectSharing implements Serializable{
 	public void setUser(User user) {
 		this.user = user;
 	}
-	public News getProject() {
+	public Project getProject() {
 		return project;
 	}
-	public void setProject(News project) {
+	public void setProject(Project project) {
 		this.project = project;
 	}
 	public Timestamp getCreatedDate() {

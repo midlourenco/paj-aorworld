@@ -2,6 +2,7 @@ package pt.uc.dei.proj5.dao;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -11,8 +12,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
+import pt.uc.dei.proj5.dto.NewsDTOResp;
 import pt.uc.dei.proj5.dto.ProjectDTO;
 import pt.uc.dei.proj5.entity.Keyword;
+import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 
@@ -72,6 +75,12 @@ public class ProjectDao extends AbstractDao<Project> {
 		projectDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(projectEntity.getCreatedBy()));
 		projectDTOResp.setKeywords(KeywordDao.convertEntityListToArrayString(projectEntity.getKeywords()));
 		
+		ArrayList<NewsDTOResp> newsArray = new ArrayList<>();
+		for (News news : projectEntity.getNews()) {
+			newsArray.add(NewsDao.convertEntityToDTOResp(news));
+		}
+		projectDTOResp.setAssociatedNews(newsArray);
+		
 		if (projectEntity.getCreatedDate() != null) {
 			projectDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getCreatedDate()));
 
@@ -88,6 +97,7 @@ public class ProjectDao extends AbstractDao<Project> {
 			projectDTOResp.setLastModifDate("");
 		}
 	
+		
 
 		//TODO complete here
 //	projectDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(projectEntity.getLastModifBy()));		
@@ -329,4 +339,12 @@ public class ProjectDao extends AbstractDao<Project> {
 		//merge(project);
 	}
 
+	
+	public void associateNewsToProject(News news, Project project) {
+		if(!project.getNews().contains(news)) {
+			project.getNews().add(news);
+		System.out.println("adicionei news ao project em associateKeywordToProject ");
+		
+		}
+	}
 }

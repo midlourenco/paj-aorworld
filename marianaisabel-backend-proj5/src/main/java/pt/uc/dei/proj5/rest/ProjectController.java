@@ -3,8 +3,8 @@ package pt.uc.dei.proj5.rest;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -300,7 +300,85 @@ public class ProjectController {
 		}
 
 	}
+	/**
+	 * Apagar (marcar para apagado, soft delete) de um projecto 
+	 * @param projectId
+	 * @param authString
+	 * @return
+	 */
+	@DELETE
+	@Path("{projectId: [0-9]+}")
+	public Response deleteProject(@PathParam("projectId") int projectId,	@HeaderParam("Authorization") String authString) {
+		System.out.println("entrei em deleteProject trouxe o id: " + projectId +  " token "+ authString);
 
+
+		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// está logado mas token não é valido																					// válido
+			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+		}
+		Project project =projectService.getNonDeletedProjectEntityById(projectId);
+		boolean isLoggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(authString);
+		boolean isAuthenticatedUserCreaterOfProject = userService.isUserAuthenticated(authString, project.getCreatedBy().getId());// utilizador ao qual se está modificar/apagar rpojecto vs detentor do token
+		System.out.println("o projecto é do user autenticado: " + isAuthenticatedUserCreaterOfProject);
+		System.out.println("o user autenticado tem priv admin: " + isLoggedUserPrivAdmin);
+	
+		if ((!isAuthenticatedUserCreaterOfProject && !isLoggedUserPrivAdmin)) { //so o criador ou um admin é que pode apagar um projecto
+			System.out.println(GestaoErros.getMsg(13));
+			return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+		}
+
+		try {
+			if (projectService.deleteProject(projectId)) {
+				return Response.ok().build();
+			} else {
+				return Response.status(400).entity("A categoria continua marcada para eliminar").build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
+
+	/**
+	 *  Recuperar  um projecto marcado para apagar
+	 * @param projectId
+	 * @param authString
+	 * @return
+	 */
+	@POST
+	@Path("{projectId: [0-9]+}/undelete")
+//	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response undeletedPrject(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
+		System.out.println("entrei em undeletedPrject ");
+		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// está logado mas token não é valido																					// válido
+			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+		}
+		Project project =projectService.getNonDeletedProjectEntityById(projectId);
+		boolean isLoggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(authString);
+		boolean isAuthenticatedUserCreaterOfProject = userService.isUserAuthenticated(authString, project.getCreatedBy().getId());// utilizador ao qual se está modificar/apagar rpojecto vs detentor do token
+		System.out.println("o projecto é do user autenticado: " + isAuthenticatedUserCreaterOfProject);
+		System.out.println("o user autenticado tem priv admin: " + isLoggedUserPrivAdmin);
+	
+		if ((!isAuthenticatedUserCreaterOfProject && !isLoggedUserPrivAdmin)) { //so o criador ou um admin é que pode apagar um projecto
+			System.out.println(GestaoErros.getMsg(13));
+			return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+		}
+
+		try {
+			if (projectService.undeleteProject(projectId)) {
+				return Response.ok().build();
+			} else {
+				return Response.status(400).entity("A categoria continua marcada para eliminar").build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
 	
 	
 	

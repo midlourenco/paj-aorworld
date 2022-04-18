@@ -12,10 +12,13 @@ import javax.inject.Inject;
 import pt.uc.dei.proj5.dao.KeywordDao;
 import pt.uc.dei.proj5.dao.NewsDao;
 import pt.uc.dei.proj5.dao.NewsSharingDao;
+import pt.uc.dei.proj5.dao.ProjectDao;
 import pt.uc.dei.proj5.dao.UserDao;
 import pt.uc.dei.proj5.dto.NewsDTO;
 import pt.uc.dei.proj5.dto.NewsDTOResp;
 import pt.uc.dei.proj5.entity.Keyword;
+import pt.uc.dei.proj5.entity.News;
+import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.User;
 
@@ -27,6 +30,8 @@ public class NewsBean implements Serializable {
 	private UserDao userDao;
 	@Inject
 	private NewsDao newsDao;
+	@Inject
+	private ProjectDao projectDao;
 	@Inject
 	private KeywordDao keywordDao;
 	@Inject
@@ -172,6 +177,22 @@ public class NewsBean implements Serializable {
 				//System.out.println("associei ao proj. fim do ciclo for");
 			}
 			news.setKeywords(keywords);
+			
+			List<Project> projects = new ArrayList<>();
+			ArrayList<Integer> projectsIdList = newsDTO.getProjects();
+			for (Integer projectId : projectsIdList) {
+				System.out.println("entrei no for projectsIdlist " + projectId );
+				try {
+					Project p = projectDao.findEntityIfNonDelete(projectId);//a ideia será adicionar um projecto ja existente
+					projects.add(p);
+					System.out.println("adicionei a project ao set");
+				}catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("o projecto " + projectId + " nao existe ou está marcada para eliminar");
+				}
+			}
+			news.setProjects(projects);
+			
 			newsDao.merge(news);
 	
 			NewsDTOResp newsDTOResp=NewsDao.convertEntityToDTOResp(news);
@@ -197,6 +218,21 @@ public class NewsBean implements Serializable {
 			System.out.println("adicionei a keyword ao set");
 		}
 		news.setKeywords(keywords);
+		List<Project> projects = new ArrayList<>();
+		ArrayList<Integer> projectsIdList = newsDTO.getProjects();
+		for (Integer projectId : projectsIdList) {
+			System.out.println("entrei no for projectsIdlist");
+			try {
+				Project p = projectDao.findEntityIfNonDelete(projectId);//a ideia será adicionar um projecto ja existente
+				projects.add(p);
+				System.out.println("adicionei a project ao set");
+			}catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("o projecto " + projectId + " nao existe ou está marcada para eliminar");
+			}
+		}
+		news.setProjects(projects);
+
 		newsDao.merge(news);
 		
 		NewsDTOResp newsDTOResp=NewsDao.convertEntityToDTOResp(news);
@@ -320,6 +356,46 @@ public class NewsBean implements Serializable {
 		return newssDTOResp;
 	}
 	
+	public boolean deleteNews(int newsID) {
+		try {
+			News news = newsDao.find(newsID);
+			if (news.isDeleted()) {
+				System.out.println("nesta fase, não faz nada. nao permitimos delete definitivo da base de dados");
+//				newsDao.deleteById(userID); // este delete vai remover o conteudo associado ao user - REMOVER OS CASCADES?!?
+//				dashboardService.updateGeneralDashboard();
+				return false;		
+			} else {
+				newsDao.markAsDeleted(newsID); // fica marcado como deleted na BD
+				return true;
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
 	
+
+
+	/**
+	 * Método que permite desmarcar de eliminar de um projecto
+	 * @return
+	 */
+	public boolean undeleteNews(int newsID) {
+		try {
+			News news = newsDao.find(newsID);
+			if (news.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
+				newsDao.markAsNonDeleted(newsID);
+				return true;
+			} else { // se não estiver marcado como delete não faz nada;
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
 	
 }

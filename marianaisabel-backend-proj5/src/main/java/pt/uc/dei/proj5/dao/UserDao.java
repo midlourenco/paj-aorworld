@@ -298,14 +298,13 @@ public class UserDao extends AbstractDao<User> {
 	 * @param token
 	 * @return
 	 */
-	public void deleteValueOfCurrentToken(String token) {
+	public void logout(String token) {
 		try {
 			System.out.println("deleting token");
 			final CriteriaUpdate<User> criteriaUpdate = em.getCriteriaBuilder().createCriteriaUpdate(User.class);
-			
 			Root<User> c= criteriaUpdate.from(User.class);
-			
 			criteriaUpdate.set("token",null);
+			criteriaUpdate.set("lastLogoutDate",new Timestamp(System.currentTimeMillis()));
 			criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get("token"),token));
 			
 			em.createQuery(criteriaUpdate).executeUpdate();

@@ -85,6 +85,12 @@ public class User implements Serializable {
 	@Column(name = "lastModifDate", nullable = true )
 	private Timestamp lastModifDate;
 
+	@Column(name = "lastLogoutDate", nullable = true )
+	private Timestamp lastLogoutDate;
+
+	@Column(name = "autoAcceptInvites", nullable = true )
+	private boolean autoAcceptInvites;
+
 	
 
 	//fetch => FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ign
@@ -281,45 +287,58 @@ public class User implements Serializable {
 	public void setBiography(String biography) {
 		this.biography = biography;
 	}
-
     public boolean isAutoAdmin() {
 		return autoAdmin;
 	}
-
-
-
 	public void setAutoAdmin(boolean autoAdmin) {
 		this.autoAdmin = autoAdmin;
 	}
-
-
-
 	public List<NewsSharing> getNewsSharing() {
 		return newsSharing;
 	}
-
-
-
 	public void setNewsSharing(List<NewsSharing> newsSharing) {
 		this.newsSharing = newsSharing;
 	}
-
-
-
 	public Timestamp getLastModifDate() {
 		return lastModifDate;
 	}
-
-
-
 	public void setLastModifDate(Timestamp lastModifDate) {
 		this.lastModifDate = lastModifDate;
-	}
-
+	}	
 
 	
 	//HASHING PASSWORD -> criado para o trabalho de IPJ e adapatado para este novo projecto
 	
+	public Timestamp getLastLogoutDate() {
+		return lastLogoutDate;
+	}
+
+
+
+	public void setLastLogoutDate(Timestamp lastLogoutDate) {
+		this.lastLogoutDate = lastLogoutDate;
+	}
+
+
+
+	public boolean isAutoAcceptInvites() {
+		return autoAcceptInvites;
+	}
+
+
+
+	public void setAutoAcceptInvites(boolean autoAcceptInvites) {
+		this.autoAcceptInvites = autoAcceptInvites;
+	}
+
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+
 	/**
      * Método que implementa o algoritmo PBKDF2 que permite obter uma hash da password em vez da própria password.
      *

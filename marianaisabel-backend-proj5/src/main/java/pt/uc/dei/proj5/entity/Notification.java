@@ -134,6 +134,14 @@ public class Notification implements Serializable {
 		this.projectSharing = projectSharing;
 	}
 
+	public NewsSharing getNewsSharing() {
+		return newsSharing;
+	}
+
+	public void setNewsSharing(NewsSharing newsSharing) {
+		this.newsSharing = newsSharing;
+	}
+
 	@Override
 	public String toString() {
 		return "Notification [id=" + id + ", title=" + title + ", alreadyRead=" + alreadyRead + ", createdDate="

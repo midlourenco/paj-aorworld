@@ -10,11 +10,13 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
 import pt.uc.dei.proj5.entity.Keyword;
+import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.dao.KeywordDao;
 import pt.uc.dei.proj5.dao.ProjectDao;
 import pt.uc.dei.proj5.dao.ProjectSharingDao;
+import pt.uc.dei.proj5.dao.NewsDao;
 import pt.uc.dei.proj5.dao.UserDao;
 import pt.uc.dei.proj5.dto.ProjectDTO;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
@@ -30,6 +32,8 @@ public class ProjectBean implements Serializable {
 	private ProjectDao projectDao;
 	@Inject
 	private KeywordDao keywordDao;
+	@Inject
+	private NewsDao newsDao;
 	@Inject
 	private ProjectSharingDao projectSharingDao;
 	
@@ -173,6 +177,21 @@ public class ProjectBean implements Serializable {
 				//System.out.println("associei ao proj. fim do ciclo for");
 			}
 			project.setKeywords(keywords);
+			
+			List<News> news = new ArrayList<>();
+			ArrayList<Integer> newsIdList = projectDTO.getNews();
+			for (Integer newsId : newsIdList) {
+				System.out.println("entrei no for das newsId");
+				try {
+					News n = newsDao.findEntityIfNonDelete(newsId);//a ideia será adicionar uma noticia ja existente
+					news.add(n);
+					System.out.println("adicionei a news ao set");
+				}catch (Exception e) {
+					e.printStackTrace();
+					System.out.println("a noticia " + newsId + " nao existe ou está marcada para eliminar");
+				}
+			}
+			project.setNews(news);
 			projectDao.merge(project);
 	
 			ProjectDTOResp projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
@@ -198,6 +217,21 @@ public class ProjectBean implements Serializable {
 			System.out.println("adicionei a keyword ao set");
 		}
 		project.setKeywords(keywords);
+		
+		List<News> news = new ArrayList<>();
+		ArrayList<Integer> newsIdList = projectDTO.getNews();
+		for (Integer newsId : newsIdList) {
+			System.out.println("entrei no for das newsId");
+			try {
+				News n = newsDao.findEntityIfNonDelete(newsId);//a ideia será adicionar uma noticia ja existente
+				news.add(n);
+				System.out.println("adicionei a news ao set");
+			}catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("a noticia " + newsId + " nao existe ou está marcada para eliminar");
+			}
+		}
+		project.setNews(news);
 		projectDao.merge(project);
 		
 		ProjectDTOResp projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
@@ -206,11 +240,59 @@ public class ProjectBean implements Serializable {
 	}
 	
 	
+	
+	/**
+	 * Método que no caso em que o projecto não esteja marcado para eliminar, marca-o para eliminar, (FUNCIONALIDADE SUSPENSA: caso contrário elimina-o da Base de dados)
+	 * @return
+	 */
+	public boolean deleteProject(int projectID) {
+		try {
+			Project project = projectDao.find(projectID);
+			if (project.isDeleted()) {
+				System.out.println("nesta fase, não faz nada. nao permitimos delete definitivo da base de dados");
+//				projectDao.deleteById(userID); // este delete vai remover o conteudo associado ao user - REMOVER OS CASCADES?!?
+//				dashboardService.updateGeneralDashboard();
+				return false;		
+			} else {
+				projectDao.markAsDeleted(projectID); // fica marcado como deleted na BD
+				return true;
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
+	
+
+
+	/**
+	 * Método que permite desmarcar de eliminar de um projecto
+	 * @return
+	 */
+	public boolean undeleteProject(int projectID) {
+		try {
+			Project project = projectDao.find(projectID);
+			if (project.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
+				projectDao.markAsNonDeleted(projectID);
+				return true;
+			} else { // se não estiver marcado como delete não faz nada;
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
+	
+	
+	
 	///////////////////////////////
 	//LISTAS DE PROJECTOS
 	/////////////////////////////
 	//************LISTAS Por user*******
-	
 	
 	public ArrayList<ProjectDTOResp> getAllNonDeletedProjectsFromUser(User createdBy){
 		ArrayList<ProjectDTOResp> projectsDTOResp =new ArrayList<ProjectDTOResp> ();
@@ -235,9 +317,6 @@ public class ProjectBean implements Serializable {
 		
 		return projectsDTOResp;
 	}
-	
-	
-	
 	
 	
 	public ArrayList<ProjectDTOResp> getAllProjectsMarkedAsDeletedFromUser(User createdBy){
@@ -320,7 +399,6 @@ public class ProjectBean implements Serializable {
 		
 		return projectsDTOResp;
 	}
-	
-	
+
 	
 }

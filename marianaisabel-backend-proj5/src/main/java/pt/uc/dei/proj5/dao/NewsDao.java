@@ -1,6 +1,7 @@
 package pt.uc.dei.proj5.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -10,7 +11,9 @@ import javax.persistence.criteria.Root;
 
 import pt.uc.dei.proj5.dto.NewsDTO;
 import pt.uc.dei.proj5.dto.NewsDTOResp;
+import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.entity.News;
+import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 
 @Stateless
@@ -60,6 +63,12 @@ public class NewsDao extends AbstractDao<News> {
 		newsDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(newsEntity.getCreatedBy()));
 		newsDTOResp.setKeywords(KeywordDao.convertEntityListToArrayString(newsEntity.getKeywords()));
 
+		ArrayList<ProjectDTOResp> projectArray = new ArrayList<>();
+		for (Project p : newsEntity.getProjects()) {
+			projectArray.add(ProjectDao.convertEntityToDTOResp(p));
+		}
+		newsDTOResp.setProjects(projectArray);
+		
 		if (newsEntity.getCreatedDate() != null) {
 			newsDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getCreatedDate()));
 

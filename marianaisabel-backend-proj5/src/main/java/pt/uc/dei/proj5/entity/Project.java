@@ -89,8 +89,8 @@ public class Project implements Serializable{
 	private List<ProjectSharing> projectSharing;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany(mappedBy="projects")
-	private Set<News> news=new HashSet<>();
+	@ManyToMany(mappedBy="projects",cascade = CascadeType.MERGE)
+	private List<News> news=new ArrayList<>();
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade = CascadeType.MERGE)
@@ -205,11 +205,11 @@ public class Project implements Serializable{
 		this.projectSharing = projectSharing;
 	}
 
-	public Set<News> getNews() {
+	public List<News> getNews() {
 		return news;
 	}
 
-	public void setNews(Set<News> news) {
+	public void setNews(List<News> news) {
 		this.news = news;
 	}
 

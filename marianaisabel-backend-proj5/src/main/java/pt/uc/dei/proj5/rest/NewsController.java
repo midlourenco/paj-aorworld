@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import pt.uc.dei.proj5.dto.NewsDTOResp;
+import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
@@ -288,8 +290,85 @@ public class NewsController {
 	}
 
 	
+	/**
+	 * Apagar (marcar para apagado, soft delete) de um noticia 
+	 * @param newsId
+	 * @param authString
+	 * @return
+	 */
+	@DELETE
+	@Path("{newsId: [0-9]+}")
+	public Response deleteNews(@PathParam("newsId") int newsId,	@HeaderParam("Authorization") String authString) {
+		System.out.println("entrei em deleteNews trouxe o id: " + newsId +  " token "+ authString);
+
+
+		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// está logado mas token não é valido																					// válido
+			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+		}
+		News news =newsService.getNonDeletedNewsEntityById(newsId);
+		boolean isLoggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(authString);
+		boolean isAuthenticatedUserCreaterOfNews = userService.isUserAuthenticated(authString, news.getCreatedBy().getId());// utilizador ao qual se está modificar/apagar rpojecto vs detentor do token
+		System.out.println("o noticia é do user autenticado: " + isAuthenticatedUserCreaterOfNews);
+		System.out.println("o user autenticado tem priv admin: " + isLoggedUserPrivAdmin);
 	
+		if ((!isAuthenticatedUserCreaterOfNews && !isLoggedUserPrivAdmin)) { //so o criador ou um admin é que pode apagar um noticia
+			System.out.println(GestaoErros.getMsg(13));
+			return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+		}
+
+		try {
+			if (newsService.deleteNews(newsId)) {
+				return Response.ok().build();
+			} else {
+				return Response.status(400).entity("A categoria continua marcada para eliminar").build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
+
+	/**
+	 *  Recuperar  um noticia marcado para apagar
+	 * @param newsId
+	 * @param authString
+	 * @return
+	 */
+	@POST
+	@Path("{newsId: [0-9]+}/undelete")
+//	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response undeletedPrject(@PathParam("newsId") int newsId, @HeaderParam("Authorization") String authString) {
+		System.out.println("entrei em undeletedPrject ");
+		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// está logado mas token não é valido																					// válido
+			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+		}
+		News news =newsService.getNonDeletedNewsEntityById(newsId);
+		boolean isLoggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(authString);
+		boolean isAuthenticatedUserCreaterOfNews = userService.isUserAuthenticated(authString, news.getCreatedBy().getId());// utilizador ao qual se está modificar/apagar rpojecto vs detentor do token
+		System.out.println("o noticia é do user autenticado: " + isAuthenticatedUserCreaterOfNews);
+		System.out.println("o user autenticado tem priv admin: " + isLoggedUserPrivAdmin);
 	
+		if ((!isAuthenticatedUserCreaterOfNews && !isLoggedUserPrivAdmin)) { //so o criador ou um admin é que pode apagar um noticia
+			System.out.println(GestaoErros.getMsg(13));
+			return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+		}
+
+		try {
+			if (newsService.undeleteNews(newsId)) {
+				return Response.ok().build();
+			} else {
+				return Response.status(400).entity("A categoria continua marcada para eliminar").build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
 	
 	
 	

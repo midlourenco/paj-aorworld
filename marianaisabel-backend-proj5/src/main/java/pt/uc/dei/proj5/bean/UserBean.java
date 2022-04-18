@@ -508,7 +508,7 @@ public class UserBean implements Serializable {
 		// User u =userDao.findUserByToken(authString);
 		// System.out.println("antes de delete token: " + u.getToken());
 		try {
-			userDao.deleteValueOfCurrentToken(authString);
+			userDao.logout(authString);
 			// System.out.println("depois de delete token: " + u.getToken());
 			return true;
 		} catch (Exception e) {

@@ -2,6 +2,8 @@ package pt.uc.dei.proj5.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -67,13 +69,13 @@ public class News implements Serializable {
 	@JoinColumn(name="UpdatedBy_News")
 	private User lastModifBy;
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@ManyToMany
-	private List<Project> projects;
+	@ManyToMany (cascade = CascadeType.MERGE)
+	private List<Project> projects=new ArrayList<>();
 	
 	//alternativa	private String keywords;
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ManyToMany(cascade = CascadeType.MERGE)
-	private Set<Keyword> keywords;
+	private Set<Keyword> keywords=new HashSet<>();
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE) // cada news tem uma muitas notificaçoes associados. por isso tem uma lista de produtos
@@ -200,7 +202,7 @@ public class News implements Serializable {
 		return "News [id=" + id + ", title=" + title + ", description=" + description + ", image=" + image
 				+ ", deleted=" + deleted + ", visibility=" + visibility + ", createdDate=" + createdDate
 				+ ", lastModifDate=" + lastModifDate + ", createdBy=" + createdBy + ", lastModifBy=" + lastModifBy
-				+ ", projects=" + projects + ", keywords=" + keywords + ", notifications=" + notifications + "]";
+				+ "]";
 	}
 
 

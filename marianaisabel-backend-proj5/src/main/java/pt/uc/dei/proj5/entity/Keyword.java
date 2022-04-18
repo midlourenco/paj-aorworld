@@ -82,7 +82,7 @@ public class Keyword implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Keyword [keyword=" + keyword + ", projects=" + projects + ", news=" + news + "]";
+		return "Keyword [keyword=" + keyword + "]";
 	}
 	
 	
