@@ -15,7 +15,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.DatatypeConverter;
@@ -94,6 +96,12 @@ public class User implements Serializable {
 	private boolean autoAcceptInvites;
 
 	
+	
+	@ManyToOne (optional=true)  //presença não é  obrigatória na relação
+	private User lastModifBy;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="lastModifBy")
+	private List<User> updatedUsers;
 
 	//fetch => FetchType.EAGER, cascade = CascadeType.REMOVE) // este fetch EAGER - as lista seguinte não é ign
 		//fetch = FetchType.EAGER,
@@ -122,10 +130,10 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user")
 	private List<ProjectSharing> projectSharing;
 
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	@OneToMany(mappedBy = "user")
+//	private List<NewsSharing> newsSharing;
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "user")
-	private List<NewsSharing> newsSharing;
-
 	@ManyToMany(mappedBy="users")
 	private Set<News> news;
 	
@@ -298,12 +306,12 @@ public class User implements Serializable {
 	public void setAutoAdmin(boolean autoAdmin) {
 		this.autoAdmin = autoAdmin;
 	}
-	public List<NewsSharing> getNewsSharing() {
-		return newsSharing;
-	}
-	public void setNewsSharing(List<NewsSharing> newsSharing) {
-		this.newsSharing = newsSharing;
-	}
+//	public List<NewsSharing> getNewsSharing() {
+//		return newsSharing;
+//	}
+//	public void setNewsSharing(List<NewsSharing> newsSharing) {
+//		this.newsSharing = newsSharing;
+//	}
 	public Timestamp getLastModifDate() {
 		return lastModifDate;
 	}
@@ -311,7 +319,11 @@ public class User implements Serializable {
 		this.lastModifDate = lastModifDate;
 	}	
 
-	
+	public void setLastModifByAndDate(User lastModifBy) {
+		this.lastModifBy = lastModifBy;
+		this.lastModifDate = new Timestamp(System.currentTimeMillis());
+	}
+
 	//HASHING PASSWORD -> criado para o trabalho de IPJ e adapatado para este novo projecto
 	
 	public Timestamp getLastLogoutDate() {

@@ -65,9 +65,9 @@ public class Notification implements Serializable {
 	@JoinColumn(name = "ProjectSharing_Notification", nullable = true)
 	private ProjectSharing projectSharing;
 	
-	@ManyToOne 
-	@JoinColumn(name = "NewsSharing_Notification", nullable = true)
-	private NewsSharing newsSharing;
+//	@ManyToOne 
+//	@JoinColumn(name = "NewsSharing_Notification", nullable = true)
+//	private NewsSharing newsSharing;
 
 
 	public String getTitle() {
@@ -134,19 +134,19 @@ public class Notification implements Serializable {
 		this.projectSharing = projectSharing;
 	}
 
-	public NewsSharing getNewsSharing() {
-		return newsSharing;
-	}
-
-	public void setNewsSharing(NewsSharing newsSharing) {
-		this.newsSharing = newsSharing;
-	}
+//	public NewsSharing getNewsSharing() {
+//		return newsSharing;
+//	}
+//
+//	public void setNewsSharing(NewsSharing newsSharing) {
+//		this.newsSharing = newsSharing;
+//	}
 
 	@Override
 	public String toString() {
 		return "Notification [id=" + id + ", title=" + title + ", alreadyRead=" + alreadyRead + ", createdDate="
-				+ createdDate + ", notificationType=" + notificationType + ", user=" + user + ", news=" + news
-				+ ", projectSharing=" + projectSharing + ", newsSharing=" + newsSharing + "]";
+				+ createdDate + ", notificationType=" + notificationType + ", user=" + user + ", " 
+				+  "]";
 	}
 
 	

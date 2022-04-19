@@ -81,10 +81,10 @@ public class News implements Serializable {
 	@OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE) // cada news tem uma muitas notificaçoes associados. por isso tem uma lista de produtos
 	private List<Notification> notifications;
 
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	@OneToMany(mappedBy="news",cascade = CascadeType.REMOVE)
+//	private List<NewsSharing> projectSharing;
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="news",cascade = CascadeType.REMOVE)
-	private List<NewsSharing> projectSharing;
-	
 	@ManyToMany
 	private Set<User> users;
 	

@@ -59,7 +59,7 @@ public class UserDao extends AbstractDao<User> {
 	 *Função para converter um user DTO para uma Entidade (pre-existente) de utilizador
 	 * @return
 	 */
-	public static User convertDTOtoEntity(UserDTO userDTO, User userEntity, boolean hasAdminPriv,String password) {
+	public static User convertDTOtoEntity(UserDTO userDTO, User userEntity, boolean hasAdminPriv,String password, User lastModifBy) {
 		System.out.println("Entrei em converter user dto para entidade");
 		if(userDTO!=null) {
 			userEntity.setEmail(userDTO.getEmail());
@@ -74,8 +74,8 @@ public class UserDao extends AbstractDao<User> {
 		if(password!=null) {
 			userEntity.setPassword(password);
 		}
-		
-		userEntity.setLastModifDate(new Timestamp(System.currentTimeMillis()));
+		userEntity.setLastModifByAndDate(lastModifBy);
+	//	userEntity.setLastModifDate(new Timestamp(System.currentTimeMillis()));
 		System.out.println(userEntity.getLastModifDate());
 		return userEntity;
 	}
@@ -118,6 +118,7 @@ public class UserDao extends AbstractDao<User> {
 	}
 	
 	
+
 	/**
 	 *Função que devolve um utilizador a partir de um determinado token que nao esteja marcado para eliminar
 	 * @return
@@ -322,7 +323,7 @@ public class UserDao extends AbstractDao<User> {
 	 * Bloquear (despromover ou não aceitar) um user: alterar os privilégios para viewer, marcar como apagado, retirar token
 	 * @param id
 	 */
-	public void blockUser(Object id) {
+	public void blockUser(Object id, User lastModifBy) {
 		try {
 			System.out.println("entrei em blockUser e o id é :" + id);
 
@@ -332,6 +333,8 @@ public class UserDao extends AbstractDao<User> {
 			criteriaUpdate.set("deleted", true);
 			criteriaUpdate.set("privileges", UserPriv.VIEWER);
 			criteriaUpdate.set("token", null);
+			criteriaUpdate.set("lastModifBy", lastModifBy);
+			criteriaUpdate.set("lastModifDate",  new Timestamp(System.currentTimeMillis()));
 			criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get("id"), id));
 
 			em.createQuery(criteriaUpdate).executeUpdate();
@@ -346,7 +349,7 @@ public class UserDao extends AbstractDao<User> {
 	 * Desbloquear (estado de registo para aprovação) um user: alterar os privilégios para viewer, desmarcar como apagado, retirar token
 	 * @param id
 	 */
-	public void unblockUser(Object id) {
+	public void unblockUser(Object id, User lastModifBy) {
 		try {
 			System.out.println("entrei em blockUser e o id é :" + id);
 
@@ -356,6 +359,8 @@ public class UserDao extends AbstractDao<User> {
 			criteriaUpdate.set("deleted", false);
 			criteriaUpdate.set("privileges", UserPriv.VIEWER);
 			criteriaUpdate.set("token", null);
+			criteriaUpdate.set("lastModifBy", lastModifBy);
+			criteriaUpdate.set("lastModifDate",  new Timestamp(System.currentTimeMillis()));
 			criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get("id"), id));
 
 			em.createQuery(criteriaUpdate).executeUpdate();
@@ -371,7 +376,7 @@ public class UserDao extends AbstractDao<User> {
 	 * alterar privilégios de um utilizador para membro
 	 * @param id
 	 */
-		public void changeUserPrivToMember(Object id) {
+		public void changeUserPrivToMember(Object id, User lastModifBy) {
 			try {
 				System.out.println("entrei em promoteUserToMember e o id é :" + id);
 
@@ -381,6 +386,8 @@ public class UserDao extends AbstractDao<User> {
 				//criteriaUpdate.set("deleted", false);
 				criteriaUpdate.set("privileges", UserPriv.MEMBER);
 				criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get(getIdColumnName()), id));
+				criteriaUpdate.set("lastModifBy", lastModifBy);
+				criteriaUpdate.set("lastModifDate",  new Timestamp(System.currentTimeMillis()));
 				em.createQuery(criteriaUpdate).executeUpdate();
 
 			} catch (EJBException e) {
@@ -394,7 +401,7 @@ public class UserDao extends AbstractDao<User> {
 		 * @param id
 		 */
 		
-		public void changeUserPrivToAdmin(Object id) {
+		public void changeUserPrivToAdmin(Object id, User lastModifBy) {
 			try {
 				System.out.println("entrei em promoteUserToMember e o id é :" + id);
 
@@ -404,6 +411,8 @@ public class UserDao extends AbstractDao<User> {
 				//criteriaUpdate.set("deleted", false);
 				criteriaUpdate.set("privileges", UserPriv.ADMIN);
 				criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get(getIdColumnName()), id));
+				criteriaUpdate.set("lastModifBy", lastModifBy);
+				criteriaUpdate.set("lastModifDate",  new Timestamp(System.currentTimeMillis()));
 				em.createQuery(criteriaUpdate).executeUpdate();
 
 			} catch (EJBException e) {

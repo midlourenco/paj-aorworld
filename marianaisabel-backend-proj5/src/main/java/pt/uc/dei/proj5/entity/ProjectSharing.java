@@ -33,6 +33,9 @@ public class ProjectSharing implements Serializable{
 	@Column(name = "accepted", nullable = false)
 	private boolean accepted;
 
+	@Column(name = "userRole", nullable = false)
+	private String userRole;
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "User_ProjectSharing")
 	private User user;

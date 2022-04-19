@@ -29,18 +29,22 @@ public class ProjectSharingBean implements Serializable{
 	@Inject
 	private NotificationDao notificationDao;
 	
-	public boolean associateUserToProject(int projectId, ArrayList<Integer> usersId) {
+	public boolean associateUserToProject(User lastModifBy, int projectId, String [] usersId) {
 		System.out.println("entrei em associateUserToProject");
 		
 		try {
 			Project project = projectDao.findEntityIfNonDelete(projectId);
-			for (Integer userId : usersId) {
+			for (String userIdSTR : usersId) {
+				int userId=  Integer.parseInt(userIdSTR);
+				
 				User userToAssocToProject = userService.getNonDeletedUserEntityById(userId);
 				if(!projectSharingDao.isUserAlreadyAssociatedToProject(project, userToAssocToProject)) {
 					System.out.println("o user pode ser associado ao projecto");
 			
 					ProjectSharing projectSharing = projectSharingDao.associateUserToProject(project, userToAssocToProject );
 					notificationDao.inviteAssocProjectNotif(userToAssocToProject, projectSharing);			
+					project.setLastModifByAndDate(lastModifBy);
+					projectDao.merge(project);
 				}
 				return true;
 			}
@@ -52,13 +56,17 @@ public class ProjectSharingBean implements Serializable{
 	}
 	
 	
-	public boolean acceptAssocToProject(int projectSharingId) {
+	public boolean acceptAssocToProject(User lastModifBy, int projectId) {
 		System.out.println("entrei em acceptAssocToProject");
 		try {
-			ProjectSharing projectSharing = projectSharingDao.find(projectSharingId);
+			//ProjectSharing projectSharing = projectSharingDao.find(projectSharingId);
+			Project project = projectDao.findEntityIfNonDelete(projectId);
+			ProjectSharing projectSharing = projectSharingDao.getProjectAssociatedToUser(project, lastModifBy);
 			if(projectSharing!=null) {
 				projectSharing.setAccepted(true);
 				projectSharingDao.merge(projectSharing);
+				project.setLastModifByAndDate(lastModifBy);
+				projectDao.merge(project);
 				return true;
 			}
 			return false;
@@ -68,14 +76,18 @@ public class ProjectSharingBean implements Serializable{
 		}
 	}
 	
-	public boolean cancelAssocToProject(int projectSharingId) {
+	public boolean cancelAssocToProject(User lastModifBy, int projectId) {
 		System.out.println("entrei em cancelAssocToProject");
 		try {
-			ProjectSharing projectSharing = projectSharingDao.find(projectSharingId);
+			//ProjectSharing projectSharing = projectSharingDao.find(projectSharingId);
+			Project project = projectDao.findEntityIfNonDelete(projectId);
+			ProjectSharing projectSharing = projectSharingDao.getProjectAssociatedToUser(project, lastModifBy);
 			if(projectSharing!=null) {
-				projectSharing.setAccepted(true);
 				projectSharingDao.delete(projectSharing);
+				project.setLastModifByAndDate(lastModifBy);
+				projectDao.merge(project);
 				return true;
+			
 			}
 			return false;
 		}catch(Exception e) {

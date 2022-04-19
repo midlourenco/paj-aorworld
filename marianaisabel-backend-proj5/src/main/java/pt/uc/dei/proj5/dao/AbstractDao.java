@@ -1,6 +1,7 @@
 package pt.uc.dei.proj5.dao;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.ejb.EJBException;
@@ -160,7 +161,7 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 //		}
 //	}
 
-	public void markAsDeleted(Object id) {
+	public void markAsDeleted(Object id, Object lastModifBy) {
 		try {
 			System.out.println("A coluna ID deste objecto é: " + getIdColumnName());
 			System.out.println("o id é :" + id);
@@ -170,8 +171,10 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 			Root<T> c = criteriaUpdate.from(clazz);
 
 			criteriaUpdate.set("deleted", true);
+			criteriaUpdate.set("lastModifBy", lastModifBy);
+			criteriaUpdate.set("lastModifDate",  new Timestamp(System.currentTimeMillis()));
 			criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get(getIdColumnName()), id));
-
+			
 			em.createQuery(criteriaUpdate).executeUpdate();
 
 		} catch (EJBException e) {
@@ -180,7 +183,7 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 
 	}
 
-	public void markAsNonDeleted(Object id) {
+	public void markAsNonDeleted(Object id,Object lastModifBy) {
 		try {
 			System.out.println("A coluna ID deste objecto é: " + getIdColumnName());
 			System.out.println("o id é :" + id);
@@ -188,6 +191,8 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 			final CriteriaUpdate<T> criteriaUpdate = em.getCriteriaBuilder().createCriteriaUpdate(clazz);
 			Root<T> c = criteriaUpdate.from(clazz);
 			criteriaUpdate.set("deleted", false);
+			criteriaUpdate.set("lastModifBy", lastModifBy);
+			criteriaUpdate.set("lastModifDate",  new Timestamp(System.currentTimeMillis()));
 			criteriaUpdate.where(em.getCriteriaBuilder().equal(c.get(getIdColumnName()), id));
 			em.createQuery(criteriaUpdate).executeUpdate();
 

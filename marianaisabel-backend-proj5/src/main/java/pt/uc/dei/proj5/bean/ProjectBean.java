@@ -235,8 +235,9 @@ public class ProjectBean implements Serializable {
 	 * Método que no caso em que o projecto não esteja marcado para eliminar, marca-o para eliminar, (FUNCIONALIDADE SUSPENSA: caso contrário elimina-o da Base de dados)
 	 * @return
 	 */
-	public boolean deleteProject(int projectID) {
+	public boolean deleteProject(String authString,int projectID) {
 		try {
+			User lastModifBy= userDao.findEntityIfNonDelete(authString);
 			Project project = projectDao.find(projectID);
 			if (project.isDeleted()) {
 				System.out.println("nesta fase, não faz nada. nao permitimos delete definitivo da base de dados");
@@ -244,7 +245,8 @@ public class ProjectBean implements Serializable {
 //				dashboardService.updateGeneralDashboard();
 				return false;		
 			} else {
-				projectDao.markAsDeleted(projectID); // fica marcado como deleted na BD
+				projectDao.markAsDeleted(projectID,lastModifBy); // fica marcado como deleted na BD
+				//project.setLastModifByAndDate(lastModifBy);
 				return true;
 			}
 		
@@ -261,11 +263,13 @@ public class ProjectBean implements Serializable {
 	 * Método que permite desmarcar de eliminar de um projecto
 	 * @return
 	 */
-	public boolean undeleteProject(int projectID) {
+	public boolean undeleteProject(String authString,int projectID) {
 		try {
+			User lastModifBy= userDao.findEntityIfNonDelete(authString);
 			Project project = projectDao.find(projectID);
 			if (project.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
-				projectDao.markAsNonDeleted(projectID);
+				projectDao.markAsNonDeleted(projectID,lastModifBy);
+				//project.setLastModifByAndDate(lastModifBy);
 				return true;
 			} else { // se não estiver marcado como delete não faz nada;
 				return false;

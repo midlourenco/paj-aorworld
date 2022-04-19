@@ -473,8 +473,11 @@ public class UserBean implements Serializable {
 	 */
 	public boolean isUserAuthenticated(String authString, int userID) {
 		//token do utilizador do serviço ao qual se está a aceder
-		String loggedUserToken = getNonDeletedUserEntityById(userID).getToken(); 
-		
+		User loggedUser = getNonDeletedUserEntityById(userID);
+		String loggedUserToken ="";
+		if(loggedUser!=null) {
+			loggedUserToken = loggedUser.getToken(); 
+		}
 		//compara-se o token de quem está logado com o do serviço que se está a aceder:
 		if (!authString.equals(loggedUserToken)) {
 			return false;
@@ -548,12 +551,13 @@ public class UserBean implements Serializable {
 	 * Guarda novos detalhes de um utilizador na Base de dados
 	 * @return
 	 */
-	public boolean updateUser(int userId, UserDTO changedUser, boolean hasAdminPriv) {
+	public boolean updateUser(int userId, UserDTO changedUser, boolean hasAdminPriv, String authstring) {
 
 		User user = getNonDeletedUserEntityById(userId);
+		User lastModifBy = getNonDeletedEntityByToken(authstring);
 
 		 try {
-			user= UserDao.convertDTOtoEntity(changedUser, user,hasAdminPriv,null);
+			user= UserDao.convertDTOtoEntity(changedUser, user,hasAdminPriv,null,lastModifBy);
 
 			System.out.println("changedUser info: " + user);
 			userDao.merge(user); // guarda na BD
@@ -571,12 +575,13 @@ public class UserBean implements Serializable {
 	 * Guarda nova password de um utilizador na Base de dados
 	 * @return
 	 */
-	public boolean updateUserPassword(int userId, String password, boolean hasAdminPriv) {
+	public boolean updateUserPassword(int userId, String password, boolean hasAdminPriv,String authstring) {
 
 		User user = getNonDeletedUserEntityById(userId);
+		User lastModifBy = getNonDeletedEntityByToken(authstring);
 
 		 try {
-			user= UserDao.convertDTOtoEntity(null, user,hasAdminPriv, password);
+			user= UserDao.convertDTOtoEntity(null, user,hasAdminPriv, password,lastModifBy);
 
 			System.out.println("changedUser info: " + user);
 			userDao.merge(user); // guarda na BD
@@ -592,16 +597,17 @@ public class UserBean implements Serializable {
 	 * Método que no caso em que o utilizador não esteja marcado para eliminar, marca-o para eliminar, (FUNCIONALIDADE SUSPENSA: caso contrário elimina-o da Base de dados)
 	 * @return
 	 */
-	public boolean deleteUser(int userID) {
+	public boolean deleteUser(int userID,String authString) {
 		try {
 			User user = userDao.find(userID);
+			User loggedUser =getNonDeletedEntityByToken(authString);
 			if (user.isDeleted()) {
 				System.out.println("nesta fase, não faz nada. nao permitimos delete definitivo da base de dados");
 //				userDao.deleteById(username); // este delete vai remover o conteudo associado ao user - REMOVER OS CASCADES?!?
 //				dashboardService.updateGeneralDashboard();
 				return false;		
 			} else {
-				userDao.blockUser(userID); //passa viwer, fica sem token e fica marcado como deleted na BD
+				userDao.blockUser(userID,loggedUser); //passa viwer, fica sem token e fica marcado como deleted na BD
 			//	userDao.markAsDeleted(userID); // fica marcado como deleted na BD
 				return true;
 			}
@@ -619,15 +625,17 @@ public class UserBean implements Serializable {
 	 * Método que permite desmarcar de eliminar de um utilizador
 	 * @return
 	 */
-	public boolean undeletedUser(int userID) {
+	public boolean undeletedUser(int userID, String authString) {
 		try {
 			User user = userDao.find(userID);
+			User loggedUser =getNonDeletedEntityByToken(authString);
 			if (user.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
-				userDao.unblockUser(user);
+				userDao.unblockUser(user,loggedUser);
 			//	userDao.markAsNonDeleted(userID);
 				return true;
 			} else { // se não estiver marcado como delete não faz nada;
-				return false;
+				System.out.println("o user nao estava marcado para apagar");
+				return true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -643,11 +651,13 @@ public class UserBean implements Serializable {
 	 * Método que permite alterar priv de um utilizador a membro 
 		 * @return
 	 */
-	public boolean changeUserPrivToMember (int userID) {
+	public boolean changeUserPrivToMember (int userID,String authString) {
 		try {
 			User user = userDao.find(userID);
+			User loggedUser =getNonDeletedEntityByToken(authString);
+			System.out.println("o user logado" + loggedUser);
 			if (!user.isDeleted()) {
-				userDao.changeUserPrivToMember(userID);
+				userDao.changeUserPrivToMember(userID,loggedUser);
 				return true;
 			}
 			return false;
@@ -662,11 +672,12 @@ public class UserBean implements Serializable {
 	 * Método que permite alterar priv de um utilizador a admin 
 	 * @return
 	 */
-	public boolean changeUserPrivToAdmin(int userID) {
+	public boolean changeUserPrivToAdmin(int userID, String authString) {
 		try {
 			User user = userDao.find(userID);
+			User loggedUser =getNonDeletedEntityByToken(authString);
 			if (!user.isDeleted()) {
-			userDao.changeUserPrivToAdmin(userID);
+			userDao.changeUserPrivToAdmin(userID,loggedUser);
 			return true;
 			}
 			return false;
@@ -676,6 +687,8 @@ public class UserBean implements Serializable {
 			return false;
 		}
 	}
+	
+	
 	
 	
 //	/////////////////////////////////////////////////////////////////////////////

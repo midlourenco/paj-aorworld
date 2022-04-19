@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import pt.uc.dei.proj5.dto.NewsDTO;
 import pt.uc.dei.proj5.dto.NewsDTOResp;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
+import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
@@ -63,54 +64,27 @@ public class NewsDao extends AbstractDao<News> {
 		newsDTOResp.setId(newsEntity.getId());
 		newsDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(newsEntity.getCreatedBy()));
 		newsDTOResp.setKeywords(KeywordDao.convertEntityListToArrayString(newsEntity.getKeywords()));
-
-		Set<Project> projectListFromBD =newsEntity.getProjects();
-		if(projectListFromBD.size()>0) {
+		System.out.println("adicionei os atributos simples dentro news DTOResp");
+		Set<Project> projectListFromNews =newsEntity.getProjects();
+		if(projectListFromNews!=null) {
 			ArrayList<ProjectDTOResp> projectArray = new ArrayList<>();
-			for (Project p : projectListFromBD) {
+			for (Project p : projectListFromNews) {
 				projectArray.add(ProjectDao.convertEntityToDTO_FORNEWSARRAY(p));
 			}
 			newsDTOResp.setProjects(projectArray);
 		}
-		if (newsEntity.getCreatedDate() != null) {
-			newsDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getCreatedDate()));
-
-		} else {
-			newsDTOResp.setCreatedDate("");
+		System.out.println("adicioneei os projectos dentro news DTOResp");
+		Set<User> usersListFromNews=newsEntity.getUsers();
+		if(usersListFromNews!=null) {
+			ArrayList<UserDTOResp> userArray = new ArrayList<>();
+			for (User u : usersListFromNews) {
+				userArray.add(UserDao.convertEntitytoDTOResp(u));
+			}
+			newsDTOResp.setUsers(userArray);
 		}
-
-		if (newsEntity.getLastModifDate() != null) {
-			newsDTOResp.setLastModifDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getLastModifDate()));
-			newsDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(newsEntity.getLastModifBy()));
-
-		} else {
-			newsDTOResp.setLastModifDate("");
-		}
-
-		// TODO complete here
-		// newsDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(newsEntity.getLastModifBy()));
-		// private ArrayList<UserDTOResp> associatedUsersOfThisNews= new ArrayList<>();
-		// //se esta categoria foi partilhada com alguem este array é >0 e tem o
-		// username com quem se partilhou a mesma
-		// private ArrayList<newsDTOResp> associatedNewsOfThisNews= new ArrayList<>();
-		// //se esta categoria foi partilhada com alguem este array é >0 e tem o
-		// username com quem se partilhou a mesma
-
-		return newsDTOResp;
-	}
-
-	public static NewsDTOResp convertEntityToDTOResp_FORPROJECTARRAY(News newsEntity) {
-		System.out.println("Entrei em convertEntityToDTOResp News");
-		NewsDTOResp newsDTOResp = new NewsDTOResp();
-		newsDTOResp.setId(newsEntity.getId());
-		newsDTOResp.setTitle(newsEntity.getTitle());
-		newsDTOResp.setDescription(newsEntity.getDescription());
-		newsDTOResp.setImage(newsEntity.getImage());
-		newsDTOResp.setDeleted(newsEntity.isDeleted());
-		newsDTOResp.setVisibility(newsEntity.isVisibility());
-		newsDTOResp.setId(newsEntity.getId());
-		newsDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(newsEntity.getCreatedBy()));
-
+		System.out.println("adicionei os utilizadores dentro news DTOResp");
+		
+		
 		
 		if (newsEntity.getCreatedDate() != null) {
 			newsDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getCreatedDate()));
@@ -128,13 +102,43 @@ public class NewsDao extends AbstractDao<News> {
 		}
 
 		// TODO complete here
-		// newsDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(newsEntity.getLastModifBy()));
+		
 		// private ArrayList<UserDTOResp> associatedUsersOfThisNews= new ArrayList<>();
-		// //se esta categoria foi partilhada com alguem este array é >0 e tem o
+		// //se esta news foi partilhada com alguem este array é >0 e tem o
 		// username com quem se partilhou a mesma
 		// private ArrayList<newsDTOResp> associatedNewsOfThisNews= new ArrayList<>();
-		// //se esta categoria foi partilhada com alguem este array é >0 e tem o
+		// //se esta news foi partilhada com alguem este array é >0 e tem o
 		// username com quem se partilhou a mesma
+
+		return newsDTOResp;
+	}
+
+	public static NewsDTOResp convertEntityToDTOResp_FORPROJECTARRAY(News newsEntity) {
+		System.out.println("Entrei em convertEntityToDTOResp News");
+		NewsDTOResp newsDTOResp = new NewsDTOResp();
+		newsDTOResp.setId(newsEntity.getId());
+		newsDTOResp.setTitle(newsEntity.getTitle());
+		newsDTOResp.setDescription(newsEntity.getDescription());
+		newsDTOResp.setImage(newsEntity.getImage());
+		newsDTOResp.setDeleted(newsEntity.isDeleted());
+		newsDTOResp.setVisibility(newsEntity.isVisibility());
+		newsDTOResp.setId(newsEntity.getId());
+		newsDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(newsEntity.getCreatedBy()));
+		
+		if (newsEntity.getCreatedDate() != null) {
+			newsDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getCreatedDate()));
+
+		} else {
+			newsDTOResp.setCreatedDate("");
+		}
+
+		if (newsEntity.getLastModifDate() != null) {
+			newsDTOResp.setLastModifDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newsEntity.getLastModifDate()));
+			newsDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(newsEntity.getLastModifBy()));
+
+		} else {
+			newsDTOResp.setLastModifDate("");
+		}
 
 		return newsDTOResp;
 	}

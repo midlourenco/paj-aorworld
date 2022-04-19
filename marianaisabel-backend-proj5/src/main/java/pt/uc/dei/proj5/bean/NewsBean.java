@@ -11,8 +11,9 @@ import javax.inject.Inject;
 
 import pt.uc.dei.proj5.dao.KeywordDao;
 import pt.uc.dei.proj5.dao.NewsDao;
-import pt.uc.dei.proj5.dao.NewsSharingDao;
+import pt.uc.dei.proj5.dao.NotificationDao;
 import pt.uc.dei.proj5.dao.ProjectDao;
+import pt.uc.dei.proj5.dao.ProjectSharingDao;
 import pt.uc.dei.proj5.dao.UserDao;
 import pt.uc.dei.proj5.dto.NewsDTO;
 import pt.uc.dei.proj5.dto.NewsDTOResp;
@@ -34,8 +35,12 @@ public class NewsBean implements Serializable {
 	private ProjectDao projectDao;
 	@Inject
 	private KeywordDao keywordDao;
+//	@Inject
+//	private NewsSharingDao newsSharingDao;
 	@Inject
-	private NewsSharingDao newsSharingDao;
+	private NotificationDao notificationDao;
+	@Inject
+	private ProjectSharingDao projectSharingDao;
 	
 	
 	///////////////////////////////
@@ -123,9 +128,11 @@ public class NewsBean implements Serializable {
 			if(news.getCreatedBy().getId()==user.getId()) {
 				System.out.println("o utilizador é o titular deste newso ");
 				return true;
-			} else if(newsSharingDao.isUserAlreadyAssociatedToNews(news, user)) {
-				System.out.println("o newso foi partilhado e aceite por este utilizador ");
-				return true;
+				
+				//TODO
+//			} else if(newsSharingDao.isUserAlreadyAssociatedToNews(news, user)) {
+//				System.out.println("o newso foi partilhado e aceite por este utilizador ");
+//				return true;
 			} else {
 				System.out.println("o newso não pertence ao utilizador ");
 				return false;
@@ -186,6 +193,21 @@ public class NewsBean implements Serializable {
 					Project p = projectDao.findEntityIfNonDelete(projectId);//a ideia será adicionar um projecto ja existente
 					if(p!=null) {
 						projects.add(p);
+						notificationDao.assocProjToNewstNotif(p.getCreatedBy(),news,p);
+						System.out.println("Enviei notif ao criador");
+						//try {
+						List<User> usersAssocProject = projectSharingDao.getUserAssocToProject(p);
+						System.out.println("fiz query para ver associados associados");
+						if(usersAssocProject!=null) {
+							System.out.println("entrei no if dos usersAssocProject");
+							for (User u : usersAssocProject) {
+								notificationDao.assocProjToNewstNotif(u,news,p);
+							}
+						}
+//						}catch(Exception e) {
+//							e.printStackTrace();
+//							System.out.println("exception para o caso de nao ter associados");
+//						}
 						System.out.println("adicionei a project ao set");
 					}
 //				}catch (Exception e) {
@@ -203,6 +225,7 @@ public class NewsBean implements Serializable {
 				User u = userDao.findEntityIfNonDelete(userId);//a ideia será adicionar um projecto ja existente
 				if(u!=null) {
 					users.add(u);
+					notificationDao.assocUserToNewstNotif(u,news);
 					System.out.println("adicionei a project ao set");
 				}
 			}
@@ -269,6 +292,87 @@ public class NewsBean implements Serializable {
 		
 		return newsDTOResp;
 	}
+	
+	
+
+	public boolean deleteNews(String authString, int newsID) {
+		try {
+			User user = userDao.findUserByToken(authString);
+			News news = newsDao.find(newsID);
+			if (news.isDeleted()) {
+				System.out.println("nesta fase, não faz nada. nao permitimos delete definitivo da base de dados");
+//				newsDao.deleteById(userID); // este delete vai remover o conteudo associado ao user - REMOVER OS CASCADES?!?
+//				dashboardService.updateGeneralDashboard();
+				return false;		
+			} else {
+				newsDao.markAsDeleted(newsID,user); // fica marcado como deleted na BD
+				return true;
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
+	
+
+
+	/**
+	 * Método que permite desmarcar de eliminar de um projecto
+	 * @return
+	 */
+	public boolean undeleteNews(String authString,int newsID) {
+		try {
+			System.out.println("entrei em undeleteNews");
+			User user = userDao.findUserByToken(authString);
+			News news = newsDao.find(newsID);
+			System.out.println("a noticia e user sao  " +news + user);
+			if (news.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
+				newsDao.markAsNonDeleted(newsID,user);
+//				news.setLastModifByAndDate(user);
+//				newsDao.merge(news);
+				return true;
+			} else { // se não estiver marcado como delete não faz nada;
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
+			return false;
+		}
+	}
+	
+	
+	public boolean assocUserToNews(String authString, int newsId ) {
+		try {
+			News  news = newsDao.findEntityIfNonDelete(newsId);
+			User user = userDao.findUserByToken(authString);
+			news.getUsers().add(user);
+			news.setLastModifByAndDate(user);
+			newsDao.merge(news);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	
+	public boolean desassocUserToNews(String authString, int newsId ) {
+		try {
+			News  news = newsDao.findEntityIfNonDelete(newsId);
+			User user = userDao.findUserByToken(authString);
+			news.getUsers().remove(user);
+			news.setLastModifByAndDate(user);
+			newsDao.merge(news);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	
 	
 	///////////////////////////////
@@ -384,48 +488,6 @@ public class NewsBean implements Serializable {
 		}
 		
 		return newssDTOResp;
-	}
-	
-	public boolean deleteNews(int newsID) {
-		try {
-			News news = newsDao.find(newsID);
-			if (news.isDeleted()) {
-				System.out.println("nesta fase, não faz nada. nao permitimos delete definitivo da base de dados");
-//				newsDao.deleteById(userID); // este delete vai remover o conteudo associado ao user - REMOVER OS CASCADES?!?
-//				dashboardService.updateGeneralDashboard();
-				return false;		
-			} else {
-				newsDao.markAsDeleted(newsID); // fica marcado como deleted na BD
-				return true;
-			}
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
-			return false;
-		}
-	}
-	
-
-
-	/**
-	 * Método que permite desmarcar de eliminar de um projecto
-	 * @return
-	 */
-	public boolean undeleteNews(int newsID) {
-		try {
-			News news = newsDao.find(newsID);
-			if (news.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
-				newsDao.markAsNonDeleted(newsID);
-				return true;
-			} else { // se não estiver marcado como delete não faz nada;
-				return false;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("ocorreu algum problema a procurar por user na BD - user não existe?");
-			return false;
-		}
 	}
 	
 }

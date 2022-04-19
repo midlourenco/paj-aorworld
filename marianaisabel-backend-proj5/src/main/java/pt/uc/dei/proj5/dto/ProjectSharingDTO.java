@@ -7,6 +7,8 @@ public class ProjectSharingDTO {
 	private String projectTitle;
 	private int sharedProjectId;
 	private UserDTOResp assocUserToThisProject; // com quem é que foi partilhada a noticia
+	private String userRole;
+	
 	/**
 	 * 
 	 */

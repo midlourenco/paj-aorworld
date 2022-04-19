@@ -8,12 +8,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
-import pt.uc.dei.proj5.entity.NewsSharing;
+import pt.uc.dei.proj5.dto.NotificationDTO;
+import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.ProjectSharing;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.Notification;
 import pt.uc.dei.proj5.entity.Notification.NotificationType;
-import pt.uc.dei.proj5.entity.User.UserPriv;
+import pt.uc.dei.proj5.entity.Project;
 
 @Stateless
 public class NotificationDao extends AbstractDao<Notification> {
@@ -29,7 +30,15 @@ public class NotificationDao extends AbstractDao<Notification> {
 	////////////////////////////////////////////////////////
 	
 
-	
+	public static NotificationDTO convertEntityToDTO(Notification notification) {
+		NotificationDTO notifDTO = new NotificationDTO();
+		notifDTO.setAlreadyRead(notification.isAlreadyRead());
+		notifDTO.setNotificationType(notification.getNotificationType());
+		notifDTO.setTitle(notification.getTitle());
+		notifDTO.setId(notification.getId());
+		notifDTO.setCreatedDate(notification.getCreatedDate().toString());
+		return notifDTO;
+	}
 
 
 	/////////////////////////////////////////////////////////
@@ -71,7 +80,7 @@ public class NotificationDao extends AbstractDao<Notification> {
 //		notifEntity.setNewsSharing(newsSharing);
 //		notifEntity.setUser(user);
 //		notifEntity.setAlreadyRead(false);
-//		notifEntity.setNotificationType(NotificationType.PROJECT_ASSOC);
+//		notifEntity.setNotificationType(NotificationType.NEWS_ASSOC);
 //		notifEntity.setTitle("Foi associado à notícia '"+ newsSharing.getNews().getTitle() + "'");
 //		persist(notifEntity);
 //	}
@@ -84,13 +93,32 @@ public class NotificationDao extends AbstractDao<Notification> {
 	 */
 	/////////////////////////////////////
 	
-	public void inviteAssocNewstNotif(User user, NewsSharing newsSharing) {
+	public void assocUserToNewstNotif(User user, News news) {
 		Notification notifEntity = new Notification();
-		notifEntity.setNewsSharing(newsSharing);
+		notifEntity.setNews(news);
 		notifEntity.setUser(user);
 		notifEntity.setAlreadyRead(false);
-		notifEntity.setNotificationType(NotificationType.PROJECT_ASSOC);
-		notifEntity.setTitle("Foi associado à notícia '"+ newsSharing.getNews().getTitle() + "'");
+		notifEntity.setNotificationType(NotificationType.NEWS_ASSOC);
+		notifEntity.setTitle("Foi associado à notícia '"+ news.getTitle() + "'");
+		persist(notifEntity);
+	}
+	
+	
+	//////////////////////////////////////
+	/**
+	 * Notificaçao INFORMAR UM USER QUE FOI UM PROJECTO AO QUAL ESTÁ ASSOC FPO ASSOC A UMA NEWS
+	 * @param user
+	 * @param newsSharing
+	 */
+	/////////////////////////////////////
+	
+	public void assocProjToNewstNotif(User user, News news, Project project) {
+		Notification notifEntity = new Notification();
+		notifEntity.setNews(news);
+		notifEntity.setUser(user);
+		notifEntity.setAlreadyRead(false);
+		notifEntity.setNotificationType(NotificationType.NEWS_ASSOC);
+		notifEntity.setTitle("O projecto '" + project.getTitle() +"'ao qual está ligado, foi associado à notícia '"+ news.getTitle() + "'");
 		persist(notifEntity);
 	}
 	

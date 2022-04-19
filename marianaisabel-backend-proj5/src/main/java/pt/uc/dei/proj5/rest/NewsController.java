@@ -317,10 +317,10 @@ public class NewsController {
 		}
 
 		try {
-			if (newsService.deleteNews(newsId)) {
+			if (newsService.deleteNews(authString,newsId)) {
 				return Response.ok().build();
 			} else {
-				return Response.status(400).entity("A categoria continua marcada para eliminar").build();
+				return Response.status(400).entity("A news continua marcada para eliminar").build();
 			}
 
 		} catch (Exception e) {
@@ -346,21 +346,26 @@ public class NewsController {
 			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 		}
 		News news =newsService.getNonDeletedNewsEntityById(newsId);
+		System.out.println("vou vero  user autenticado autor da noticia: ");
+		User newsOwener =news.getCreatedBy();
+		System.out.println("o user autenticado autor da noticia: " + newsOwener);
 		boolean isLoggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(authString);
-		boolean isAuthenticatedUserCreaterOfNews = userService.isUserAuthenticated(authString, news.getCreatedBy().getId());// utilizador ao qual se está modificar/apagar rpojecto vs detentor do token
-		System.out.println("o noticia é do user autenticado: " + isAuthenticatedUserCreaterOfNews);
 		System.out.println("o user autenticado tem priv admin: " + isLoggedUserPrivAdmin);
-	
+		boolean isAuthenticatedUserCreaterOfNews = userService.isUserAuthenticated(authString,newsOwener.getId());// utilizador ao qual se está modificar/apagar rpojecto vs detentor do token
+		System.out.println("o noticia é do user autenticado: " + isAuthenticatedUserCreaterOfNews);
+
+		
 		if ((!isAuthenticatedUserCreaterOfNews && !isLoggedUserPrivAdmin)) { //so o criador ou um admin é que pode apagar um noticia
 			System.out.println(GestaoErros.getMsg(13));
 			return Response.status(403).entity(GestaoErros.getMsg(13)).build();
 		}
 
 		try {
-			if (newsService.undeleteNews(newsId)) {
+			System.out.println("vou desmarcar para apagar");
+			if (newsService.undeleteNews(authString,newsId)) {
 				return Response.ok().build();
 			} else {
-				return Response.status(400).entity("A categoria continua marcada para eliminar").build();
+				return Response.status(400).entity("A news continua marcada para eliminar").build();
 			}
 
 		} catch (Exception e) {
@@ -372,7 +377,35 @@ public class NewsController {
 	
 	
 	
-	
+
+	/**
+	 *  Associar  um utilizador a uma noticia
+	 * @param newsId
+	 * @param authString
+	 * @return
+	 */
+	@POST
+	@Path("{newsId: [0-9]+}/associateMySelf")
+//	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response associateLoggedUserToNews(@PathParam("newsId") int newsId, @HeaderParam("Authorization") String authString) {
+		System.out.println("entrei em associateLoggedUserToNews ");
+		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// está logado mas token não é valido																					// válido
+			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+		}
+		try {
+			if (newsService.assocUserToNews(authString,newsId)) {
+				return Response.ok().build();
+			} else {
+				return Response.status(400).entity("nao fui  associado").build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}	
 	
 
 

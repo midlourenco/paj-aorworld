@@ -362,7 +362,7 @@ public class UserController {
 			}
 			
 			try {
-				boolean resultado = userService.updateUser(userId, changeUser, loggedUserHasAdminPriv);
+				boolean resultado = userService.updateUser(userId, changeUser, loggedUserHasAdminPriv,authString);
 				UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
 	
 				if (resultado == true) {
@@ -412,7 +412,7 @@ public class UserController {
 			}
 			
 			try {
-				boolean resultado = userService.updateUserPassword(userId, password, loggedUserHasAdminPriv);
+				boolean resultado = userService.updateUserPassword(userId, password, loggedUserHasAdminPriv,authString);
 				UserDTOResp userDTOResp = userService.getUserDTORespById(userId);
 	
 				if (resultado == true) {
@@ -455,7 +455,7 @@ public class UserController {
 					return Response.status(403).entity(GestaoErros.getMsg(9)).build();
 				}
 				
-				if (userService.deleteUser(userId)) {
+				if (userService.deleteUser(userId,authString)) {
 					return Response.ok().entity(GestaoErros.getMsg(11)).build();
 				} else {
 					return Response.status(400).entity("o user não foi apagado").build();
@@ -482,18 +482,22 @@ public class UserController {
 	 */
 	@POST
 	@Path("{userId: [0-9]+}/undelete")
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response undeletedUser(@PathParam("userId") int  userId,
-			@HeaderParam("Authorization") String authString) {
+	public Response undeletedUser(@PathParam("userId") int  userId, @HeaderParam("Authorization") String authString) {
 		try {
-			User userToUpdate = userService.getNonDeletedUserEntityById(userId);
+			System.out.println("dentro de undeletedUser");
+			
+			User userToUpdate = userService.getUserEntitybyId(userId);
 			if (userToUpdate == null) { // o id do url não existir nao avança
+				System.out.println("user to update nao é existe");
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
 			//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
 			if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
 				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
+					System.out.println("token recebido nao é existe");
 					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 				}
 	
@@ -502,12 +506,13 @@ public class UserController {
 					return Response.status(403).entity(GestaoErros.getMsg(9)).build();
 				}
 	
-				
-				if (userService.undeletedUser(userId)) {
-					UserDTOResp updatedUser = userService.getNonDeletedUserDTORespById(userId);
+				System.out.println("vou desmarcar de apagar");
+				if (userService.undeletedUser(userId,authString)) {
+					UserDTOResp updatedUser = userService.getNonDeletedUserDTORespById(userId );
+					System.out.println("desmarcado de apagar");
 					return Response.ok(updatedUser).build();
 				} else {
-					return Response.status(400).entity("o user não foi continua com marca de apagar").build();
+					return Response.status(400).entity("o user não foi atualizado, continua com marca de apagar").build();
 				}
 				 
 			} else {
@@ -529,6 +534,7 @@ public class UserController {
 	 */
 	@POST
 	@Path("{userId: [0-9]+}/updateToMember")
+	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response changeUserPrivToMember(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {
@@ -550,7 +556,7 @@ public class UserController {
 				}
 	
 				
-				if (userService.changeUserPrivToMember(userId)) {
+				if (userService.changeUserPrivToMember(userId,authString)) {
 					UserDTOResp updatedUser = userService.getNonDeletedUserDTORespById(userId);
 					
 					return Response.ok(updatedUser).build();
@@ -578,6 +584,7 @@ public class UserController {
 	@POST
 	@Path("{userId: [0-9]+}/updateToAdmin")
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response changeUserPrivToAdmin(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {
 		try {
@@ -598,7 +605,7 @@ public class UserController {
 				}
 	
 				
-				if (userService.changeUserPrivToAdmin(userId)) {
+				if (userService.changeUserPrivToAdmin(userId,authString)) {
 					UserDTOResp updatedUser = userService.getNonDeletedUserDTORespById(userId);
 					
 					return Response.ok(updatedUser).build();

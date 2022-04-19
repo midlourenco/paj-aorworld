@@ -105,7 +105,65 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 		return projectSharing;
 	}
 	
+
+
+	/**
+	 * metodo que verifica se um user já está associado a algum projecto ou se é o criador desse projecto
+	 *return true se já estiver associado ou se for o criador dele, falso caso contrário
+	 */
+	public ProjectSharing getProjectAssociatedToUser(Project project, User user) {
+		
+		final CriteriaQuery<ProjectSharing> criteriaQuery = em.getCriteriaBuilder().createQuery(ProjectSharing.class);
+		Root<ProjectSharing> c = criteriaQuery.from(ProjectSharing.class);
+		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("user"), user), //user convidado
+				em.getCriteriaBuilder().equal(c.get("project"), project), //categoria que foi partilhada
+				em.getCriteriaBuilder().equal(c.get("accepted"), false)));
+		
+		try {
+			 ProjectSharing result = em.createQuery(criteriaQuery).getSingleResult(); // em principio a existir seria uma lista de 1 elemento
+			 return result;
+		
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 	
+	
+
+	/**
+	 * lista de projectos em que um utilizador está associado (após partilha aceite)
+	 * @param user
+	 * @return
+	 */
+	public List<User> getUserAssocToProject(Project project) {
+		final CriteriaQuery<User> criteriaQuery = em.getCriteriaBuilder().createQuery(User.class);
+		Root<ProjectSharing> c = criteriaQuery.from(ProjectSharing.class);
+		Join<ProjectSharing, User> users = c.join("user");
+		
+		criteriaQuery.select(users).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("project"), project), //projecto que foi partilhada
+				em.getCriteriaBuilder().equal(c.get("accepted"), true)));
+		
+		try {
+			List<User> result = em.createQuery(criteriaQuery).getResultList(); // em principio a existir seria uma lista de 1 elemento
+			if (result.size() > 0) {
+				System.out.println("o projecto está partilhado com estes users e está aceite");
+				return result;
+			} else {
+				System.out.println("o projecto não está partilhado/aceite com nenhum user");
+				return null;
+			}
+		
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
 	
 	/**
 	 * lista de projectos em que um utilizador está associado (após partilha aceite)
@@ -221,7 +279,7 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 	
 	
 	/**
-	 * lista de usernames com os quais uma categoria foi partilhada
+	 * lista de usernames com os quais umaprojecto foi partilhada
 	 * @param Project
 	 * @return
 	 */
@@ -234,17 +292,17 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 		criteriaQuery.select(c).where(em.getCriteriaBuilder().equal(c.get("project"), project));
 		
 		try {
-			//Listas das partilhas desta categoria à qual se vai retirar o nome com quem foram partilhadas
+			//Listas das partilhas destaprojecto à qual se vai retirar o nome com quem foram partilhadas
 			List<ProjectSharing> partilhas = em.createQuery(criteriaQuery).getResultList(); 
 			for (ProjectSharing partilha : partilhas) {
 				teamNames.add(partilha.getUser().getFirstName() + " " + partilha.getUser().getLastName());
 			}
 			
 			if (teamNames.size() > 0) {
-				System.out.println("a categoria é partilhada com 1 ou + users ");
+				System.out.println("projecto é partilhada com 1 ou + users ");
 				return teamNames;
 			} else {
-				System.out.println("a categoria não é partilhada com nenhum user ");
+				System.out.println("projecto não é partilhada com nenhum user ");
 				return null;
 			}
 		
