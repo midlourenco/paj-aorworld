@@ -592,6 +592,7 @@ public class ProjectController {
 	
 	//projects/4/assocUsersList?user=8
 	@GET
+	@Path("{projectId: [0-9]+}/projectAssocToUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllProjectAssocToUser (@QueryParam("user")  int userId, @HeaderParam("Authorization") String authString) {
 		System.out.println("Entrei em getAllProjectAssocToUser por user no controller com token? : " + authString);

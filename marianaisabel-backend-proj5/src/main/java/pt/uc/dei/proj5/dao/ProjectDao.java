@@ -9,15 +9,17 @@ import java.util.Set;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.criteria.CriteriaQuery;
-
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
+import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.dto.NewsDTOResp;
 import pt.uc.dei.proj5.dto.ProjectDTO;
 import pt.uc.dei.proj5.entity.Keyword;
 import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.Project;
+import pt.uc.dei.proj5.entity.ProjectSharing;
 import pt.uc.dei.proj5.entity.User;
 
 @Stateless
@@ -84,6 +86,14 @@ public class ProjectDao extends AbstractDao<Project> {
 			}
 			projectDTOResp.setAssociatedNews(newsArray);
 		}
+		
+//		ArrayList<UserDTOResp> usersDTOResp =new ArrayList<>();
+//		List<User> users=getUserAssocToProject(projectEntity);
+//		for (User user : users) {
+//			usersDTOResp.add(UserDao.convertEntitytoDTOResp(user));
+//		}		
+//		projectDTOResp.setAssociatedUsers(users);
+		
 		if (projectEntity.getCreatedDate() != null) {
 			projectDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getCreatedDate()));
 
@@ -379,4 +389,40 @@ public class ProjectDao extends AbstractDao<Project> {
 		
 		}
 	}
+	
+	
+	
+//
+//	/**
+//	 * lista de projectos em que um utilizador está associado (após partilha aceite)
+//	 * @param user
+//	 * @return
+//	 */
+//	public List<User> getUserAssocToProject(Project project) {
+//		final CriteriaQuery<User> criteriaQuery = em.getCriteriaBuilder().createQuery(User.class);
+//		Root<ProjectSharing> c = criteriaQuery.from(ProjectSharing.class);
+//		Join<ProjectSharing, User> users = c.join("user");
+//		
+//		criteriaQuery.select(users).where(em.getCriteriaBuilder().and(
+//				em.getCriteriaBuilder().equal(c.get("project"), project), //projecto que foi partilhada
+//				em.getCriteriaBuilder().equal(c.get("accepted"), true)));
+//		
+//		try {
+//			List<User> result = em.createQuery(criteriaQuery).getResultList(); // em principio a existir seria uma lista de 1 elemento
+//			if (result.size() > 0) {
+//				System.out.println("o projecto está partilhado com estes users e está aceite");
+//				return result;
+//			} else {
+//				System.out.println("o projecto não está partilhado/aceite com nenhum user");
+//				return null;
+//			}
+//		
+//		} catch (EJBException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//		
+//		
+//	}
+	
 }

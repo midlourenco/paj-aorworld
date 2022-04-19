@@ -57,8 +57,9 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 		projectSharing.setUser(userToAssocToProj);
 		projectSharing.setUserRole(projectSharingDTO.getUserRoleInProject());
 
-
 		persist(projectSharing);
+
+		
 		return projectSharing;
 	}
 	
@@ -191,9 +192,7 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 			return null;
 		}
 		
-		
 	}
-	
 	/**
 	 * lista de projectos em que um utilizador está associado (após partilha aceite)
 	 * @param user
@@ -207,7 +206,7 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 		criteriaQuery.select(project).where(em.getCriteriaBuilder().and(
 				em.getCriteriaBuilder().equal(c.get("user"), user), //user convidado
 				em.getCriteriaBuilder().equal(c.get("accepted"), true),
-				em.getCriteriaBuilder().equal(project.get("delete"), false)));
+				em.getCriteriaBuilder().equal(project.get("deleted"), false)));
 		
 		try {
 			List<Project> result = em.createQuery(criteriaQuery).getResultList(); // em principio a existir seria uma lista de 1 elemento
@@ -234,7 +233,7 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 				em.getCriteriaBuilder().equal(c.get("user"), user), //user convidado
 				em.getCriteriaBuilder().equal(c.get("accepted"), true),
 				em.getCriteriaBuilder().equal(project.get("visibility"), true),
-				em.getCriteriaBuilder().equal(project.get("delete"), false)));
+				em.getCriteriaBuilder().equal(project.get("deleted"), false)));
 		
 		try {
 			List<Project> result = em.createQuery(criteriaQuery).getResultList(); // em principio a existir seria uma lista de 1 elemento
@@ -288,7 +287,7 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 				em.getCriteriaBuilder().equal(c.get("user"), user), //user convidado
 				em.getCriteriaBuilder().equal(c.get("accepted"), true),
 				em.getCriteriaBuilder().equal(project.get("visibility"), true),
-				em.getCriteriaBuilder().equal(project.get("delete"), true)));
+				em.getCriteriaBuilder().equal(project.get("deleted"), true)));
 		
 		try {
 			List<Project> result = em.createQuery(criteriaQuery).getResultList(); // em principio a existir seria uma lista de 1 elemento

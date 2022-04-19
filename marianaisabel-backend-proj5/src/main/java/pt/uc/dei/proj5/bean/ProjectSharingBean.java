@@ -105,6 +105,9 @@ public class ProjectSharingBean implements Serializable{
 		}
 	}
 	
+	
+	//TODO !!! ideia:  Map<String,  ArrayList<UserDTOResp>> ===>>> Map<funçao do user no projecto, Lista de users>
+	
 	public ArrayList<UserDTOResp> getUserAssocToProject(int projectId){
 		Project project = projectDao.findEntityIfNonDelete(projectId);
 		ArrayList<UserDTOResp> usersDTOResp =new ArrayList<>();
@@ -124,8 +127,12 @@ public class ProjectSharingBean implements Serializable{
 		List<Project> projects=projectSharingDao.getNonDeletedAssocProjectFromUser(user);
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			projDTOResp.setAssociatedUsers(users);
+			projectsDTOResp.add(projDTOResp);
 		}
+		
 		
 		return projectsDTOResp;
 	}
@@ -136,8 +143,11 @@ public class ProjectSharingBean implements Serializable{
 		List<Project> projects=projectSharingDao.getOnlyPublicNonDeletedAssocProjectFromUser(user);
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
-		}		
+			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			projDTOResp.setAssociatedUsers(users);
+			projectsDTOResp.add(projDTOResp);
+		}	
 		return projectsDTOResp;
 	}
 		
@@ -147,7 +157,10 @@ public class ProjectSharingBean implements Serializable{
 		List<Project> projects=projectSharingDao.getMarkedAsDeletedAssocProjectFromUser(user);
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			projDTOResp.setAssociatedUsers(users);
+			projectsDTOResp.add(projDTOResp);
 		}
 		
 		return projectsDTOResp;
@@ -159,9 +172,11 @@ public class ProjectSharingBean implements Serializable{
 		List<Project> projects=projectSharingDao.getOnlyPublicMarkedAsDeletedAssocProjectFromUser(user);
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			projDTOResp.setAssociatedUsers(users);
+			projectsDTOResp.add(projDTOResp);
 		}
-		
 		return projectsDTOResp;
 	}
 	
