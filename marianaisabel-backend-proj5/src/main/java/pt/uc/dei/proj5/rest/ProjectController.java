@@ -18,6 +18,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONObject;
 
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
+import pt.uc.dei.proj5.dto.ProjectSharingDTO;
+import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
@@ -400,10 +402,10 @@ public class ProjectController {
 	 * @return
 	 */
 	@POST
-	@Path("{projectId: [0-9]+}/associateUsers")
+	@Path("{projectId: [0-9]+}/associateUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response assocUsersToProect(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString, String users) {
+	public Response assocUsersToProect(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString, ProjectSharingDTO projectSharingDTO) {
 		System.out.println("Entrei em updateProject no controller com token " + authString);
 		try {
 			Project project =projectService.getNonDeletedProjectEntityById(projectId); //não se vai fazer update de um projecto apagado
@@ -426,11 +428,8 @@ public class ProjectController {
 				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
 			}
 			
-			JSONObject obj = new JSONObject(users);
-			String usersId = obj.getString("users");
-			String[]usersId_Array = usersId.split(",");
-			if(projectSharingService.associateUserToProject(userAuthenticated,projectId, usersId_Array)) {
-
+	
+			if(projectSharingService.associateUserToProject(userAuthenticated,projectId, projectSharingDTO)) {
 				return Response.ok().build();
 			} else {
 				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
@@ -452,7 +451,7 @@ public class ProjectController {
 	 * @return
 	 */
 	@POST
-	@Path("{projectId: [0-9]+}/accpetInvite")
+	@Path("{projectId: [0-9]+}/accpetInvite") //to mySelf
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response acceptInvite(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
@@ -499,10 +498,10 @@ public class ProjectController {
 	 * @return
 	 */
 	@POST
-	@Path("{projectId: [0-9]+}/cancelAssoc")
+	@Path("{projectId: [0-9]+}/cancelUserAssoc")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response cancelAssoc(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
+	public Response cancelAssoc(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString,ProjectSharingDTO projectSharingDTO) {
 		System.out.println("Entrei em updateProject no controller com token " + authString);
 		try {
 			Project project =projectService.getNonDeletedProjectEntityById(projectId); //não se vai fazer update de um projecto apagado
@@ -525,7 +524,7 @@ public class ProjectController {
 				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
 			}
 			
-			if(projectSharingService.cancelAssocToProject(userAuthenticated,projectId)) {
+			if(projectSharingService.cancelAssocToProject(userAuthenticated,projectId,projectSharingDTO)) {
 
 				return Response.ok().build();
 			} else {
@@ -540,7 +539,118 @@ public class ProjectController {
 	
 
 
+	/**
+	 * lista de users associados a projecto
+	 * @param projectId
+	 * @param authString
+	 * @param newProject
+	 * @return
+	 */
+	@GET
+	@Path("{projectId: [0-9]+}/assocUsersList")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response getUserAssocToProject(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
+		System.out.println("Entrei em updateProject no controller com token " + authString);
+		try {
+			Project project =projectService.getNonDeletedProjectEntityById(projectId); //não se vai fazer update de um projecto apagado
+			User userOwner = project.getCreatedBy(); // o criador do projecto
+			User userAuthenticated  = userService.getNonDeletedEntityByToken(authString); //vai ser o lastModifBy
+	
+			boolean isloggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(userAuthenticated);// verifica se quem está logado é um admin
+			boolean isOwnerSameAsAuthenticated = userService.isUserAuthenticated(userAuthenticated, userOwner);// verifica se utilizador ao qual se está adicionar projecto é o user logado
+			//boolean isloggedAuthorizedToGetProject = projectService.isProjectAssocToUser(projectId, userOwner.getId());// verifica se utilizador do qual se está a fazer get projecto é o user criador ou um dos associados ao projecto - neste caso este tabém não pode editar
+			System.out.println("o utilizador logado tem privilégios de admin: " + isloggedUserPrivAdmin);
+			System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + isOwnerSameAsAuthenticated);
+			//System.out.println("o utilizador logado tem autorização para fazer get do Projecto: " + isloggedAuthorizedToGetProject);
+		
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não é publico e o utilizador não está logado ou não tem token válido																				
+				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+			}
+			
+			if (!isOwnerSameAsAuthenticated && !isloggedUserPrivAdmin){// quem está logado não é o utilizador do userid nem é admin - não pode criar projectos noutro utilizador
+				System.out.println("não tem permissões para ver projectos deste utilizador");
+				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+			}
+			
+			ArrayList<UserDTOResp> users= projectSharingService.getUserAssocToProject(projectId);
+			if (users!=null) {
 
+				return Response.ok(users).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
+			}
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}		
+	}
+	
+
+
+	
+	//projects/4/assocUsersList?user=8
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllProjectAssocToUser (@QueryParam("user")  int userId, @HeaderParam("Authorization") String authString) {
+		System.out.println("Entrei em getAllProjectAssocToUser por user no controller com token? : " + authString);
+		System.out.println("vou querer os projectos do userid " + userId);
+		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus projectos
+		System.out.println(user);
+		ArrayList<ProjectDTOResp> resultado=new ArrayList<>();
+		
+		System.out.println("Entrei em getAllProject no controller com token? : " + authString);
+		try {
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+				if(userId>0) {
+					resultado = projectSharingService.getOnlyPublicNonDeletedAssocProjectFromUser(user);	
+				}else {
+					resultado = null;
+
+				}
+				//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
+				}			
+			}
+			
+			
+			if(userId>0) {
+				resultado = projectSharingService.getNonDeletedAssocProjectFromUser(user);	
+			}else {
+				resultado = null;
+
+			}
+			//ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsNonDeleted();
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			if(userId>0) {
+				resultado = projectSharingService.getOnlyPublicNonDeletedAssocProjectFromUser(user);	
+			}else {
+				resultado = null;
+
+			}
+	
+			//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
 	
 	
 	

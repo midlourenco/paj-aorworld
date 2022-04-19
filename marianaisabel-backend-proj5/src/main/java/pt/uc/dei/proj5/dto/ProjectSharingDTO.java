@@ -3,11 +3,10 @@ package pt.uc.dei.proj5.dto;
 
 public class ProjectSharingDTO {
 
-	private boolean accepted;
-	private String projectTitle;
-	private int sharedProjectId;
-	private UserDTOResp assocUserToThisProject; // com quem é que foi partilhada a noticia
-	private String userRole;
+//	private boolean accepted;
+	//private int projectId;
+	private int userId; // com quem é que foi partilhada a noticia
+	private String userRoleInProject;
 	
 	/**
 	 * 
@@ -16,35 +15,38 @@ public class ProjectSharingDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public boolean isAccepted() {
-		return accepted;
+//	public boolean isAccepted() {
+//		return accepted;
+//	}
+//	public void setAccepted(boolean accepted) {
+//		this.accepted = accepted;
+//	}
+//	public int getProjectId() {
+//		return projectId;
+//	}
+//	public void setProjectId(int projectId) {
+//		this.projectId = projectId;
+//	}
+	public String getUserRoleInProject() {
+		return userRoleInProject;
 	}
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
+	public void setUserRoleInProject(String userRoleInProject) {
+		this.userRoleInProject = userRoleInProject;
 	}
-	public String getProjectTitle() {
-		return projectTitle;
+	public int getUserId() {
+		return userId;
 	}
-	public void setProjectTitle(String projectTitle) {
-		this.projectTitle = projectTitle;
-	}
-	public int getSharedProjectId() {
-		return sharedProjectId;
-	}
-	public void setSharedProjectId(int sharedProjectId) {
-		this.sharedProjectId = sharedProjectId;
-	}
-	public UserDTOResp getAssocUserToThisProject() {
-		return assocUserToThisProject;
-	}
-	public void setAssocUserToThisProject(UserDTOResp assocUserToThisProject) {
-		this.assocUserToThisProject = assocUserToThisProject;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	@Override
 	public String toString() {
-		return "ProjectSharingDTO [accepted=" + accepted + ", projectTitle=" + projectTitle + ", sharedProjectId="
-				+ sharedProjectId + ", assocUserToThisProject=" + assocUserToThisProject + "]";
+		return "ProjectSharingDTO [userId=" + userId + ", userRoleInProject=" + userRoleInProject + "]";
 	}
+	
+
+	
+	
 
 	
 

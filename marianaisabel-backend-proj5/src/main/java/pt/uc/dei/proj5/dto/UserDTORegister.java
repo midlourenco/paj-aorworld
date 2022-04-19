@@ -30,6 +30,7 @@ public class UserDTORegister implements Serializable{
 	@NotBlank 
 	private String image;
 	private String biography;
+	private boolean autoAcceptInvites;
 
 
 	
@@ -95,6 +96,12 @@ public class UserDTORegister implements Serializable{
 	}
 	
 	
+	public boolean isAutoAcceptInvites() {
+		return autoAcceptInvites;
+	}
+	public void setAutoAcceptInvites(boolean autoAcceptInvites) {
+		this.autoAcceptInvites = autoAcceptInvites;
+	}
 	public String getBiography() {
 		return biography;
 	}

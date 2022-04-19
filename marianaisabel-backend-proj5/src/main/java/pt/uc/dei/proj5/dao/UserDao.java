@@ -46,6 +46,7 @@ public class UserDao extends AbstractDao<User> {
 		userEntity.setLastName(userDTOReg.getLastName());
 		userEntity.setImage(userDTOReg.getImage());
 		userEntity.setBiography(userDTOReg.getBiography());
+		userEntity.setAutoAcceptInvites(userDTOReg.isAutoAcceptInvites());
 		
 		userEntity.setPrivileges(UserPriv.VIEWER);
 		userEntity.setDeleted(false);

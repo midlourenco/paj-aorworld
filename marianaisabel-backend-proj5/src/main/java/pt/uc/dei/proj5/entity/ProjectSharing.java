@@ -54,37 +54,23 @@ public class ProjectSharing implements Serializable{
 	public ProjectSharing() {
 		
 	}
-	
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 	public boolean isAccepted() {
 		return accepted;
 	}
-
 	public void setAccepted(boolean accepted) {
 		this.accepted = accepted;
 	}
-
-	public User getUserJoinSharing() {
-		return user;
+	public String getUserRole() {
+		return userRole;
 	}
-
-	public void setUserJoinSharing(User user) {
-		this.user = user;
-	}
-
-	public List<Notification> getNotifications() {
-		return notifications;
-	}
-
-	public void setNotifications(List<Notification> notifications) {
-		this.notifications = notifications;
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
 	}
 	public User getUser() {
 		return user;
@@ -98,12 +84,21 @@ public class ProjectSharing implements Serializable{
 	public void setProject(Project project) {
 		this.project = project;
 	}
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+	public void setNotifications(List<Notification> notifications) {
+		this.notifications = notifications;
+	}
 	public Timestamp getCreatedDate() {
 		return createdDate;
 	}
 	public void setCreatedDate(Timestamp createdDate) {
 		this.createdDate = createdDate;
 	}
+
+
+
 	@Override
 	public String toString() {
 		return "ProjectSharing [id=" + id + ", accepted=" + accepted + ", user=" + user + ", project=" + project

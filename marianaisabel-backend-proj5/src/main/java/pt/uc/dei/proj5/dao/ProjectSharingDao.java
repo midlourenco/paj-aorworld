@@ -29,9 +29,9 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 	//METODOS ESTATICOS DE CONVERSAO ENTRE ENTIDADE E DTOs
 	////////////////////////////////////////////////////////
 	
-	public static Project convertDTOToEntity(ProjectSharingDTO projectSharingDTO, User createdBy, User lastModifdBy ) {
+	public static ProjectSharing convertDTOToEntity(ProjectSharingDTO projectSharingDTO ) {
 		System.out.println("Entrei em convertDTOToEntity Project");
-		Project projectSharingEntity = new Project();
+		ProjectSharing projectSharingEntity = new ProjectSharing();
 		//TODO complete here
 		
 		
@@ -49,6 +49,19 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 	}
 
 
+	
+	public ProjectSharing associateUserToProject(Project project, ProjectSharingDTO projectSharingDTO, User userToAssocToProj) {
+		ProjectSharing projectSharing = new ProjectSharing();
+		projectSharing.setAccepted(userToAssocToProj.isAutoAcceptInvites());
+		projectSharing.setProject(project);
+		projectSharing.setUser(userToAssocToProj);
+		projectSharing.setUserRole(projectSharingDTO.getUserRoleInProject());
+
+
+		persist(projectSharing);
+		return projectSharing;
+	}
+	
 	/////////////////////////////////////////////////////////
 	//METODOS devolvem Listas
 	////////////////////////////////////////////////////////
@@ -64,18 +77,18 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 	 * metodo que verifica se um user já está associado a algum projecto ou se é o criador desse projecto
 	 *return true se já estiver associado ou se for o criador dele, falso caso contrário
 	 */
-	public boolean isUserAlreadyAssociatedToProject(Project project, User user) {
-		
-		if(project.getCreatedBy().getId()==user.getId()) {
-			return true;
-		}
+	public boolean isUserAlreadyAssociatedToProject(Project project, User user) { //invite accepted or not
+		//se um criador nao se pudesse associar podia-se acrescentar o seguinte
+//		if(project.getCreatedBy().getId()==user.getId()) {
+//			return true;
+//		}
 		
 		final CriteriaQuery<ProjectSharing> criteriaQuery = em.getCriteriaBuilder().createQuery(ProjectSharing.class);
 		Root<ProjectSharing> c = criteriaQuery.from(ProjectSharing.class);
 		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
 				em.getCriteriaBuilder().equal(c.get("user"), user), //user convidado
-				em.getCriteriaBuilder().equal(c.get("project"), project), //categoria que foi partilhada
-				em.getCriteriaBuilder().equal(c.get("accepted"), true)));
+				em.getCriteriaBuilder().equal(c.get("project"), project) //projecto que foi partilhada
+			));
 		
 		try {
 			List<ProjectSharing> result = em.createQuery(criteriaQuery).getResultList(); // em principio a existir seria uma lista de 1 elemento
@@ -94,17 +107,7 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 		
 	}
 	
-	
-	public ProjectSharing associateUserToProject(Project project, User user) {
-		ProjectSharing projectSharing = new ProjectSharing();
-		projectSharing.setAccepted(user.isAutoAcceptInvites());
-		projectSharing.setProject(project);
-		projectSharing.setUser(user);
 
-		persist(projectSharing);
-		return projectSharing;
-	}
-	
 
 
 	/**
@@ -112,16 +115,42 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 	 *return true se já estiver associado ou se for o criador dele, falso caso contrário
 	 */
 	public ProjectSharing getProjectAssociatedToUser(Project project, User user) {
-		
+		System.out.println("entrei em getProjectAssociatedToUser proc projId: " + project.getId() + " user id "+ user.getId());
 		final CriteriaQuery<ProjectSharing> criteriaQuery = em.getCriteriaBuilder().createQuery(ProjectSharing.class);
 		Root<ProjectSharing> c = criteriaQuery.from(ProjectSharing.class);
 		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
 				em.getCriteriaBuilder().equal(c.get("user"), user), //user convidado
-				em.getCriteriaBuilder().equal(c.get("project"), project), //categoria que foi partilhada
-				em.getCriteriaBuilder().equal(c.get("accepted"), false)));
+				em.getCriteriaBuilder().equal(c.get("project"), project) //projecto que foi partilhada
+				));
 		
 		try {
 			 ProjectSharing result = em.createQuery(criteriaQuery).getSingleResult(); // em principio a existir seria uma lista de 1 elemento
+			 System.out.println("encontrei um ProjectSharing");
+			 return result;
+		
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * metodo que verifica se um user já está associado a algum projecto ou se é o criador desse projecto
+	 *return true se já estiver associado ou se for o criador dele, falso caso contrário
+	 */
+	public ProjectSharing getProjectAssociatedToUserACCEPTED(Project project, User user) {
+		System.out.println("entrei em getProjectAssociatedToUser");
+		final CriteriaQuery<ProjectSharing> criteriaQuery = em.getCriteriaBuilder().createQuery(ProjectSharing.class);
+		Root<ProjectSharing> c = criteriaQuery.from(ProjectSharing.class);
+		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("user"), user), //user convidado
+				em.getCriteriaBuilder().equal(c.get("project"), project), //projecto que foi partilhada
+				em.getCriteriaBuilder().equal(c.get("accepted"), true)));
+		
+		try {
+			 ProjectSharing result = em.createQuery(criteriaQuery).getSingleResult(); // em principio a existir seria uma lista de 1 elemento
+			 System.out.println("encontrei um ProjectSharing");
 			 return result;
 		
 		} catch (EJBException e) {
