@@ -18,6 +18,7 @@ h1 {
   text-align: center;
 }
 
+
 main > :first-child {
   margin-top: 10px;
 }
@@ -25,3 +26,8 @@ main > :first-child {
 main > :last-child {
   margin-bottom:10px;
 }
+
+/* maxW={{
+  base: "auto", // 0-80em
+  xl: "1200px" // 80em+
+}} */

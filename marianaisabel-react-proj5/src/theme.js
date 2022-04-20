@@ -35,7 +35,7 @@ const styles = {
     },
     // styles for the `a`
     a: {
-      color: "blue.500",
+      color: "teal.700",
       _hover: {
         textDecoration: "none"
       }
@@ -51,18 +51,18 @@ const styles = {
 
 const colors = {
   black: "#1F2D3D",
-  blue: {
-    50: "#e1ebff",
-    100: "#b1c2ff",
-    200: "#7e99ff",
-    300: "#4c70ff",
-    400: "#1a47ff",
-    500: "#0336FF", //#002ee6
-    600: "#0024b4",
-    700: "#001982",
-    800: "#000e51",
-    900: "#000521"
-  },
+  // blue: {
+  //   50: "#e1ebff",
+  //   100: "#b1c2ff",
+  //   200: "#7e99ff",
+  //   300: "#4c70ff",
+  //   400: "#1a47ff",
+  //   500: "#0336FF", //#002ee6
+  //   600: "#0024b4",
+  //   700: "#001982",
+  //   800: "#000e51",
+  //   900: "#000521"
+  // },
   primary: {
     50: "#e1ebff", // #e1ebff
     100: "#b1c2ff", // #b1c2ff
@@ -86,6 +86,18 @@ const colors = {
     700: "#5E6278",
     800: "#3F4254",
     900: "#181C32"
+  },
+  teal: {
+    50: "#E6FFFA",
+    100: "#B2F5EA",
+    200: "#81E6D9",
+    300: "#4FD1C5",
+    400: "#38B2AC",
+    500: "#319795",
+    600: "#2C7A7B",
+    700: "#285E61",
+    800: "#234E52",
+    900: "#1D4044"
   },
   brand: {
     blue: "#0336FF", // #0033FF
@@ -140,7 +152,8 @@ const components = {
       }
     }
   },
-  Button: {
+  Button: { // TODO https://chakra-ui-git-fix-typescript-autocomplete.chakra-ui.vercel.app/docs/theming/component-style
+    //estilo que todos os botões vão ter em comum
     baseStyle: {
       fontWeight: "600",
       rounded: "4px",

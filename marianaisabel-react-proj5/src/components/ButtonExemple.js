@@ -1,10 +1,10 @@
 import {useNavigate} from 'react-router-dom'
 //useHistory replace by useNavigate : history.push ->navigate("/home");
 
-function ButtonExemple(){
+function ButtonExemple({hrf}){
     let navigate = useNavigate();
     function handleClick() {
-      navigate("/");
+      navigate({hrf});
     }
     
     return(

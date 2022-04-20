@@ -6,7 +6,8 @@ import {
     BrowserRouter as Router,
     Route, 
     Routes,
-    Link
+    Link,
+    useParams
 } from 'react-router-dom';
 
 import {
@@ -19,14 +20,14 @@ import {
   HStack,
   StackDivider
 } from "@chakra-ui/react";
-import customTheme from "./theme.js";
 
 import Home from './pages/Home';
 import Login from './pages/Login';
 import News from './pages/News';
 import Projects from './pages/Projects';
+import Project from './pages/Projects';
 import AboutUs from './pages/AboutUs';
-
+import Header from "./components/sections/Header";
 //se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
 // import {Home, Login, News, Projects, AboutUs} from './pages'
 
@@ -45,41 +46,32 @@ function App() {
   );
   const NavBar = () => (
     <HStack spacing={3} divider={<StackDivider />} as="nav">
-      <Link to= "/"> 
-        <NavLink text="Home" /> 
-      </Link>
-      <Link to= "/login"> 
-        <NavLink text="Login" />
-      </Link>
-      <Link to= "/news"> 
-      <NavLink text="News" />
-      </Link>
-      <Link to= "/projects"> 
-        <NavLink text="Projects" />
-      </Link>
-      <Link to= "/about"> 
-        <NavLink text="About Us" />
-      </Link>
+      <NavLink text="Home" to= "/" /> 
+      <NavLink text="Login" to= "/login"/>
+      <NavLink text="News" to= "/news" />
+      <NavLink text="Projects" to= "/projects"/>
+      <NavLink text="About Us" to= "/about"/>
     </HStack>
   );
   return (
-    <ChakraProvider theme={customTheme}>
+   
       <Router>
         <div className="App">
           <h1> Teste de react Router </h1>
-
+          <Header />
           <NavBar />
 
           <Routes>
               <Route path= "/" exact element ={<Home />} />
               <Route path= "/login" element ={<Login />}/>
-              <Route path= "/news" element ={<News />}/>
+              <Route path= "/news" element ={<News />} />
               <Route path= "/projects" element ={<Projects />} />
+              <Route path= "/projects/:id" element ={<Project />} />
               <Route path= "/about" element ={<AboutUs />} />
           </Routes>
         </div>
       </Router>
-    </ChakraProvider>
+  
   );
 }
 
