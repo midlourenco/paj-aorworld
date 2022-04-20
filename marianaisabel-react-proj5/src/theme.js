@@ -144,9 +144,9 @@ const components = {
   Link: {
     baseStyle: {
       fontWeight: "inherit",
-      _hover: {
-        textDecoration: "none"
-      },
+      // _hover: {
+      //   textDecoration: "none"
+      // },
       _focus: {
         boxShadow: "none"
       }

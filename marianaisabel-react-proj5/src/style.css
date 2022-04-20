@@ -17,15 +17,18 @@ h1 {
 .App{
   text-align: center;
 }
+.msgErro{
+  color: red;
+  font-size:12px;
+}
 
-
-main > :first-child {
+/* main > :first-child {
   margin-top: 10px;
 }
 
 main > :last-child {
   margin-bottom:10px;
-}
+} */
 
 /* maxW={{
   base: "auto", // 0-80em

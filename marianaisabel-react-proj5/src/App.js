@@ -24,10 +24,14 @@ import {
 import Home from './pages/Home';
 import Login from './pages/Login';
 import News from './pages/News';
+import NewsElem from "./pages/NewsElem";
 import Projects from './pages/Projects';
 import Project from './pages/Projects';
 import AboutUs from './pages/AboutUs';
 import Header from "./components/sections/Header";
+import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
+
 //se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
 // import {Home, Login, News, Projects, AboutUs} from './pages'
 
@@ -39,18 +43,36 @@ export const myThemeProvider = ({ children }) => {
 function App() {
 
 
-  const NavLink = ({ text }) => (
-    <ChakraLink>
-      <Text fontSize="xl">{text}</Text>
+  const NavLink = ({ path, text }) => (
+    <ChakraLink as={Link} to ={path} >
+      <Text fontSize="xl" >{text}</Text>
     </ChakraLink>
   );
+
+
+  // <NavLink text="Home"/> 
+  // <NavLink text="Login" to= "/login"/>
+  // <NavLink text="News" to= "/news" />
+  // <NavLink text="Projects" to= "/projects"/>
+  // <NavLink text="About Us" to= "/about"/>
+  
   const NavBar = () => (
     <HStack spacing={3} divider={<StackDivider />} as="nav">
-      <NavLink text="Home" to= "/" /> 
-      <NavLink text="Login" to= "/login"/>
-      <NavLink text="News" to= "/news" />
-      <NavLink text="Projects" to= "/projects"/>
-      <NavLink text="About Us" to= "/about"/>
+      {/* <Link >  */}
+        <NavLink text="Home"  path= "/"  /> 
+      {/* </Link> */}
+      {/* <Link >  */}
+        <NavLink text="Login" path= "/login" />
+      {/* </Link> */}
+      {/* <Link >  */}
+      <NavLink text="News" path= "/news" />
+      {/* </Link> */}
+      {/* <Link >  */}
+      <NavLink text="Projects" path= "/projects" />
+      {/* </Link> */}
+      {/* <Link to= "/about">  */}
+        <NavLink text="About Us" path= "/about"/>
+      {/* </Link> */}
     </HStack>
   );
   return (
@@ -64,8 +86,11 @@ function App() {
           <Routes>
               <Route path= "/" exact element ={<Home />} />
               <Route path= "/login" element ={<Login />}/>
+              <Route path= "/reset_password"  element ={<ResetPassword />} />
+              <Route path= "/register" element ={<Register />} />
               <Route path= "/news" element ={<News />} />
-              <Route path= "/projects" element ={<Projects />} />
+              <Route path= "/news/:id" element ={<NewsElem />} />
+              <Route path= "/projects" exact element ={<Projects />} />
               <Route path= "/projects/:id" element ={<Project />} />
               <Route path= "/about" element ={<AboutUs />} />
           </Routes>

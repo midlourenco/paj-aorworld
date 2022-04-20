@@ -19,6 +19,7 @@ import {
     Avatar,
     FormControl,
     FormHelperText,
+    FormErrorMessage,
     InputRightElement
 } from "@chakra-ui/react";
 
@@ -36,7 +37,7 @@ const EyeSlashSymbol = chakra(FaEyeSlash);
 //2. caixa de texto propriamente dtia com o tipo de dados com placeholder e a variável do resultado
 //3. algum elemento à direita (por exemplo o botão para ver/esconder a password)
 
-const Login = (props) =>{
+const Login = () =>{
    // console.log(props);
    // props.history
    //exemplo para redireccionar para uma página dada uma dada condição:
@@ -46,7 +47,7 @@ const Login = (props) =>{
 
     const {register, handleSubmit, formState: {errors}}= useForm();
     //const onSubmit = values => console.log(values);
-
+   //const handleSubmitForm = ()=> handleSubmit((data)=>setData(data), console.log(data) );
     const [data, setData]= useState("");
     //mostrar e esconder a password
     const [showPassword, setShowPassword] = useState(false);
@@ -71,26 +72,27 @@ const Login = (props) =>{
             <Avatar bg="teal.500" />
             <Heading color="teal.400">Welcome</Heading>
             <Box minW={{ base: "90%", md: "468px" }}>
-                <form onSubmit={handleSubmit((data)=>setData(JSON.stringify(data), console.log(data)))}>
+                <form onSubmit={ handleSubmit((data)=>setData(data), console.log(data) )}>
                     <Stack
                         spacing={4}
                         p="1rem"
                         backgroundColor="whiteAlpha.900"
                         boxShadow="md"
                     >
-                    <FormControl>
+                    <FormControl isInvalid = {errors.email}>
                         <InputGroup> 
                             <InputLeftElement
                                 pointerEvents="none"
                                 children={<UserSymbol color="gray.300" />}
                             />
-                            <Input {...register("email")} type="email" placeholder="email address" />
-                            {errors.email && errors.email.message}
-
+                            <Input {...register("email", {required: true})} type="email" placeholder="email address" />
                         </InputGroup>
-
+                        {(errors.email)? 
+                        (<FormErrorMessage>Email is required.</FormErrorMessage>)
+                        : null 
+                        }
                     </FormControl>
-                    <FormControl>
+                    <FormControl isInvalid = {errors.password}>
                         <InputGroup>
                             <InputLeftElement
                                 pointerEvents="none"
@@ -98,7 +100,7 @@ const Login = (props) =>{
                                 children={<LockSymbol color="gray.300" />}
                             />
                             <Input
-                                {...register("password", {required: "Required"})}
+                                {...register("password", {required: true})}
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
                             />
@@ -108,10 +110,11 @@ const Login = (props) =>{
                                     {showPassword ? <EyeSlashSymbol color = "gray.400" /> :<EyeSymbol color = "gray.300" /> }
                                 </Button>
                             </InputRightElement>
-                            {errors.password && errors.password.message}
-
                         </InputGroup>
-
+                        {(errors.password)? 
+                        (<FormErrorMessage>Password is required.</FormErrorMessage>)
+                        : null 
+                        }
                         <FormHelperText textAlign="right">
                             <Link>forgot password?</Link>
                         </FormHelperText>
@@ -123,6 +126,7 @@ const Login = (props) =>{
                         variant="solid"
                         colorScheme="teal"
                         width="full"
+                        // onClick={console.log("carreguei em login")}
                     >
                         Login
                     </Button>
@@ -133,7 +137,7 @@ const Login = (props) =>{
             </Stack>
             <Box>
                 Create a new account?{" "}
-                <Link color="teal.500" href="#">
+                <Link color="teal.500" href="/register">
                 Sign Up
                 </Link>
             </Box>

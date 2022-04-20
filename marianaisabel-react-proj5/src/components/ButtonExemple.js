@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom'
 function ButtonExemple({hrf}){
     let navigate = useNavigate();
     function handleClick() {
-      navigate({hrf});
+      navigate("/" + {hrf});
     }
     
     return(
