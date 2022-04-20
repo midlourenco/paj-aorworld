@@ -1,5 +1,5 @@
-import * as React from "react";
-import './App.css';
+import React from "react";
+import './style.css';
 //In react-router-dom v6, "Switch" is replaced by routes "Routes".
 //https://stackoverflow.com/questions/63124161/attempted-import-error-switch-is-not-exported-from-react-router-dom
 import { 
@@ -19,6 +19,7 @@ import {
   HStack,
   StackDivider
 } from "@chakra-ui/react";
+import customTheme from "./theme.js";
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -26,49 +27,56 @@ import News from './pages/News';
 import Projects from './pages/Projects';
 import AboutUs from './pages/AboutUs';
 
+//se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
 // import {Home, Login, News, Projects, AboutUs} from './pages'
+
+
+export const myThemeProvider = ({ children }) => {
+  return <ChakraProvider>{children}</ChakraProvider>;
+};
 
 function App() {
 
-  type NavLinkProps = { text: string };
-  const NavLink = ({ text }: NavLinkProps) => (
+
+  const NavLink = ({ text }) => (
     <ChakraLink>
       <Text fontSize="xl">{text}</Text>
     </ChakraLink>
   );
   const NavBar = () => (
     <HStack spacing={3} divider={<StackDivider />} as="nav">
-      <Link to="/">
-        <NavLink text="Home" />
+      <Link to= "/"> 
+        <NavLink text="Home" /> 
       </Link>
-      <Link to="/about">
-        <NavLink text="About" />
+      <Link to= "/login"> 
+        <NavLink text="Login" />
+      </Link>
+      <Link to= "/news"> 
+      <NavLink text="News" />
+      </Link>
+      <Link to= "/projects"> 
+        <NavLink text="Projects" />
+      </Link>
+      <Link to= "/about"> 
+        <NavLink text="About Us" />
       </Link>
     </HStack>
   );
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={customTheme}>
       <Router>
         <div className="App">
           <h1> Teste de react Router </h1>
 
           <NavBar />
-          <Link to= "/"> Home</Link>
-          <Link to= "/login"> Login</Link>
-          <Link to= "/news"> News</Link>
-          <Link to= "/projects"> Projects</Link>
-          <Link to= "/aboutus"> About Us</Link>
-        
-          
-          
+
           <Routes>
               <Route path= "/" exact element ={<Home />} />
               <Route path= "/login" element ={<Login />}/>
               <Route path= "/news" element ={<News />}/>
               <Route path= "/projects" element ={<Projects />} />
-              <Route path= "/aboutus" element ={<AboutUs />} />
+              <Route path= "/about" element ={<AboutUs />} />
           </Routes>
-         
         </div>
       </Router>
     </ChakraProvider>

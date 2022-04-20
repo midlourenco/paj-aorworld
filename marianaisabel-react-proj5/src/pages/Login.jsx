@@ -5,7 +5,7 @@ const Login = (props) =>{
     console.log(props);
    // props.history
     if(true){
-        return <Navigate to="News" />
+        return <Navigate to="/news" />
     }
     
     return (

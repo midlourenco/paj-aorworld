@@ -1,0 +1,27 @@
+body {
+  font-family: 'Segoe UI',  sans-serif;
+}
+
+h1 {
+  font-family: 'Helvetica Neue';
+}
+
+
+
+@media only screen and (min-width: 960px) {
+  .base-page {
+    margin: 0;
+  }
+}
+
+.App{
+  text-align: center;
+}
+
+main > :first-child {
+  margin-top: 10px;
+}
+
+main > :last-child {
+  margin-bottom:10px;
+}
