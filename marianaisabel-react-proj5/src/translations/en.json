@@ -1,0 +1,13 @@
+{
+    "welcome":"Welcome",
+    "email":"email address",
+    "password":"password",
+    "sign_up":"Sing up",
+    "login":"Login",
+    "forgot_password":"forgot password?",
+    "create_new_account":"create a new account?",
+    "home":"Home",
+    "news":"News",
+    "projects":"Projects",
+    "about_us":"About Us"
+}

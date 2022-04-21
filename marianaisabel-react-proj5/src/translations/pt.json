@@ -1,0 +1,13 @@
+{
+    "welcome":"Bem-vindo",
+    "email":"endereço de email",
+    "password":"palavra-passe",
+    "sign_up":"Registar",
+    "login":"Entrar",
+    "forgot_password":"Esqueceu-se da palavra-passe?",
+    "create_new_account":"Registar uma conta nova?",
+    "home":"Início",
+    "news":"Notícias",
+    "projects":"Projectos",
+    "about_us":"Acerca de nós"
+}

@@ -1,9 +1,11 @@
+import React from "react"
+import { useState } from "react";
 //Redirect replace by Naviagate
 import {Navigate} from 'react-router-dom'
-
-import { useState } from "react";
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
+import messages from '../translations';
+import {IntlProvider, FormattedMessage} from "react-intl";
 
 import {
     Flex,
@@ -27,17 +29,18 @@ import {
 //https://react-icons.github.io/react-icons
 import { FaUserAlt, FaLock,FaEyeSlash, FaEye} from "react-icons/fa";
 
-const UserSymbol = chakra(FaUserAlt);
-const LockSymbol = chakra(FaLock);
-const EyeSymbol = chakra(FaEye);
-const EyeSlashSymbol = chakra(FaEyeSlash);
+
 
 //InputGroup-> cada input pode ter 3 elementos
 //1. um simbolo ilucidativo do que é para colocar em cada campo (à esquerda)
 //2. caixa de texto propriamente dtia com o tipo de dados com placeholder e a variável do resultado
 //3. algum elemento à direita (por exemplo o botão para ver/esconder a password)
 
-const Login = () =>{
+function Login () {
+    const UserSymbol = chakra(FaUserAlt);
+    const LockSymbol = chakra(FaLock);
+    const EyeSymbol = chakra(FaEye);
+    const EyeSlashSymbol = chakra(FaEyeSlash);
    // console.log(props);
    // props.history
    //exemplo para redireccionar para uma página dada uma dada condição:
@@ -53,8 +56,14 @@ const Login = () =>{
     const [showPassword, setShowPassword] = useState(false);
     //função que chamamos ao clicar em "show"/"hide" password - altera o state de false para true e vice-versa
     const handleShowClick = () => setShowPassword(!showPassword);
+    const [locale, setLocale] = useState("en")
+    const handleSelect= e => (
+      setLocale(e.target.value)
+    )
 
     return (
+        <IntlProvider locale={locale} messages ={messages[locale]}>
+
         <Flex
             flexDirection="column"
             width="100wh"
@@ -142,6 +151,7 @@ const Login = () =>{
                 </Link>
             </Box>
         </Flex>
+        </IntlProvider>
     );
 };
     

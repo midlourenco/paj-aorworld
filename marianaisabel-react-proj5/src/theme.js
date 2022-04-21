@@ -210,8 +210,7 @@ const customTheme = extendTheme({
   colors,
   styles,
   zIndices,
-  components,
-  breakpoints
+  components
 });
 
 export default customTheme;

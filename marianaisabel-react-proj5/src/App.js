@@ -1,5 +1,7 @@
 import React from "react";
 import './style.css';
+import bannerLogo from './images/bannerLogo.png'
+
 //In react-router-dom v6, "Switch" is replaced by routes "Routes".
 //https://stackoverflow.com/questions/63124161/attempted-import-error-switch-is-not-exported-from-react-router-dom
 import { 
@@ -9,7 +11,7 @@ import {
     Link,
     useParams
 } from 'react-router-dom';
-
+import { useState } from "react";
 import {
   ChakraProvider,
   Flex,
@@ -17,9 +19,15 @@ import {
   Link as ChakraLink,
   Box,
   Grid,
+  Image,
   HStack,
+  Select,
+  Button,
+  Spacer,
   StackDivider
 } from "@chakra-ui/react";
+import messages from './translations'
+import {IntlProvider, FormattedMessage} from "react-intl";
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -41,13 +49,26 @@ export const myThemeProvider = ({ children }) => {
 };
 
 function App() {
-
+  //regarding languages switching
+  const [locale, setLocale] = useState("en")
+  const handleSelect= e => (
+    setLocale(e.target.value)
+  )
+  const langArray = ["en", "pt"];
+  const flagArray = ["🇬🇧 ","🇵🇹"];
+  function flag(lang){
+    switch(lang){
+      case "en": return "🇬🇧 "; break;
+      case "pt": return "🇵🇹 "; break;
+    }
+  }
 
   const NavLink = ({ path, text }) => (
     <ChakraLink as={Link} to ={path} >
-      <Text fontSize="xl" >{text}</Text>
+      <Text fontSize="xl" > <FormattedMessage id={text} ></FormattedMessage></Text>
     </ChakraLink>
   );
+
 
 
   // <NavLink text="Home"/> 
@@ -57,30 +78,38 @@ function App() {
   // <NavLink text="About Us" to= "/about"/>
   
   const NavBar = () => (
-    <HStack spacing={3} divider={<StackDivider />} as="nav">
-      {/* <Link >  */}
-        <NavLink text="Home"  path= "/"  /> 
-      {/* </Link> */}
-      {/* <Link >  */}
-        <NavLink text="Login" path= "/login" />
-      {/* </Link> */}
-      {/* <Link >  */}
-      <NavLink text="News" path= "/news" />
-      {/* </Link> */}
-      {/* <Link >  */}
-      <NavLink text="Projects" path= "/projects" />
-      {/* </Link> */}
-      {/* <Link to= "/about">  */}
-        <NavLink text="About Us" path= "/about"/>
-      {/* </Link> */}
-    </HStack>
+    <Box backgroundColor="teal.400" color={"white"}>  
+      <Flex>
+        <HStack spacing={6} divider={<StackDivider />} as="nav" >
+         
+       
+          <NavLink text="home"  path= "/"  /> 
+          <NavLink text="news" path= "/news" />
+          <NavLink text="projects" path= "/projects" />
+          <NavLink text="about_us" path= "/about"/>
+        </HStack>
+        <Spacer />
+        
+        <HStack spacing={3}>
+          <Select onChange={handleSelect} defaultValue={locale} variant='unstyled' size='md'  width={20}>
+            {langArray.map(l => (
+              <option key={l} value={l}>{flag(l)}{l}</option>
+            ))}
+          </Select>
+          <Button colorScheme='teal' mr='4'><FormattedMessage id="sign_up" /></Button>
+          <Button colorScheme='teal'><NavLink text="login" path= "/login" /></Button>
+      </HStack>
+    </Flex>
+  
+  </Box>
+    
+   
   );
   return (
-   
+    <IntlProvider locale={locale} messages ={messages[locale]}>
+
       <Router>
         <div className="App">
-          <h1> Teste de react Router </h1>
-          <Header />
           <NavBar />
 
           <Routes>
@@ -96,7 +125,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-  
+    </IntlProvider>
   );
 }
 

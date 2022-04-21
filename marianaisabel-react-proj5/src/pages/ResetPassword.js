@@ -3,7 +3,7 @@ const ResetPassword = ()=>{
     return (
         <div   
         >
-            news element
+          reset password
         </div>
     )
     
