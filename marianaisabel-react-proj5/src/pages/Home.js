@@ -32,21 +32,22 @@ import {IntlProvider, FormattedMessage} from "react-intl";
 const Home = ()=>{
     
 return (
-
+<Box>
+<Image width="100%" objectFit='cover' src={bannerLogo} alt="Logo" />
     <Flex
         flexDirection="column"
         width="100wh"
-        height="100vh"
+        height="60vh"
         backgroundColor="gray.200"
         justifyContent="center"
         alignItems="center"
     >
-    <Image width="100%" objectFit='cover' src={bannerLogo} alt="Logo" />
-    <Box>
+    
+    
     <Text> A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.</Text>
-    </Box>
+    
     </Flex>
-        
+    </Box> 
             
            
     )

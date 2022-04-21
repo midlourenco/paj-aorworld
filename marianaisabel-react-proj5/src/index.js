@@ -13,7 +13,9 @@ import customTheme from "./theme.js";
 
 
 const rootElement = document.getElementById("root");
-
+export const myThemeProvider = ({ children }) => {
+  return <ChakraProvider>{children}</ChakraProvider>;
+};
 ReactDOM.render(
   <ChakraProvider theme={customTheme}>
     <Provider store={store}>

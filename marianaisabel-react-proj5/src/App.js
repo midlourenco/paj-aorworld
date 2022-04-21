@@ -39,14 +39,13 @@ import AboutUs from './pages/AboutUs';
 import Header from "./components/sections/Header";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
+import Footer from "./components/sections/Footer";
 
 //se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
 // import {Home, Login, News, Projects, AboutUs} from './pages'
 
 
-export const myThemeProvider = ({ children }) => {
-  return <ChakraProvider>{children}</ChakraProvider>;
-};
+
 
 function App() {
   //regarding languages switching
@@ -55,7 +54,6 @@ function App() {
     setLocale(e.target.value)
   )
   const langArray = ["en", "pt"];
-  const flagArray = ["🇬🇧 ","🇵🇹"];
   function flag(lang){
     switch(lang){
       case "en": return "🇬🇧 "; break;
@@ -69,20 +67,10 @@ function App() {
     </ChakraLink>
   );
 
-
-
-  // <NavLink text="Home"/> 
-  // <NavLink text="Login" to= "/login"/>
-  // <NavLink text="News" to= "/news" />
-  // <NavLink text="Projects" to= "/projects"/>
-  // <NavLink text="About Us" to= "/about"/>
-  
   const NavBar = () => (
     <Box backgroundColor="teal.400" color={"white"}>  
       <Flex>
         <HStack spacing={6} divider={<StackDivider />} as="nav" >
-         
-       
           <NavLink text="home"  path= "/"  /> 
           <NavLink text="news" path= "/news" />
           <NavLink text="projects" path= "/projects" />
@@ -102,13 +90,13 @@ function App() {
     </Flex>
   
   </Box>
-    
-   
   );
+
+
   return (
     <IntlProvider locale={locale} messages ={messages[locale]}>
 
-      <Router>
+      <Router >
         <div className="App">
           <NavBar />
 
@@ -125,7 +113,10 @@ function App() {
           </Routes>
         </div>
       </Router>
+      <Footer />
     </IntlProvider>
+
+    
   );
 }
 
