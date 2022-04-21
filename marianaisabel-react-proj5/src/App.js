@@ -1,7 +1,5 @@
 import React from "react";
 import './style.css';
-import bannerLogo from './images/bannerLogo.png'
-
 //In react-router-dom v6, "Switch" is replaced by routes "Routes".
 //https://stackoverflow.com/questions/63124161/attempted-import-error-switch-is-not-exported-from-react-router-dom
 import { 
@@ -26,8 +24,8 @@ import {
   Spacer,
   StackDivider
 } from "@chakra-ui/react";
-import messages from './translations'
-import {IntlProvider, FormattedMessage} from "react-intl";
+// import messages from './translations'
+// import {IntlProvider, FormattedMessage} from "react-intl";
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -48,57 +46,14 @@ import Footer from "./components/sections/Footer";
 
 
 function App() {
-  //regarding languages switching
-  const [locale, setLocale] = useState("en")
-  const handleSelect= e => (
-    setLocale(e.target.value)
-  )
-  const langArray = ["en", "pt"];
-  function flag(lang){
-    switch(lang){
-      case "en": return "🇬🇧 "; break;
-      case "pt": return "🇵🇹 "; break;
-    }
-  }
-
-  const NavLink = ({ path, text }) => (
-    <ChakraLink as={Link} to ={path} >
-      <Text fontSize="xl" > <FormattedMessage id={text} ></FormattedMessage></Text>
-    </ChakraLink>
-  );
-
-  const NavBar = () => (
-    <Box backgroundColor="teal.400" color={"white"}>  
-      <Flex>
-        <HStack spacing={6} divider={<StackDivider />} as="nav" >
-          <NavLink text="home"  path= "/"  /> 
-          <NavLink text="news" path= "/news" />
-          <NavLink text="projects" path= "/projects" />
-          <NavLink text="about_us" path= "/about"/>
-        </HStack>
-        <Spacer />
-        
-        <HStack spacing={3}>
-          <Select onChange={handleSelect} defaultValue={locale} variant='unstyled' size='md'  width={20}>
-            {langArray.map(l => (
-              <option key={l} value={l}>{flag(l)}{l}</option>
-            ))}
-          </Select>
-          <Button colorScheme='teal' mr='4'><FormattedMessage id="sign_up" /></Button>
-          <Button colorScheme='teal'><NavLink text="login" path= "/login" /></Button>
-      </HStack>
-    </Flex>
-  
-  </Box>
-  );
+ 
 
 
   return (
-    <IntlProvider locale={locale} messages ={messages[locale]}>
-
+    <Box>
       <Router >
         <div className="App">
-          <NavBar />
+          <Header />
 
           <Routes>
               <Route path= "/" exact element ={<Home />} />
@@ -114,9 +69,7 @@ function App() {
         </div>
       </Router>
       <Footer />
-    </IntlProvider>
-
-    
+    </Box>
   );
 }
 

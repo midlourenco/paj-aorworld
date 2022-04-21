@@ -11,17 +11,22 @@ import store from './redux/store'
 import { ChakraProvider } from "@chakra-ui/react";
 import customTheme from "./theme.js";
 
+import messages from './translations';
+import {IntlProvider, FormattedMessage} from "react-intl";
 
 const rootElement = document.getElementById("root");
-export const myThemeProvider = ({ children }) => {
-  return <ChakraProvider>{children}</ChakraProvider>;
-};
+// export const myThemeProvider = ({ children }) => {
+//   return <ChakraProvider>{children}</ChakraProvider>;
+// };
+const locale = "en";
 ReactDOM.render(
-  <ChakraProvider theme={customTheme}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </ChakraProvider>, rootElement
+  <IntlProvider locale={locale} messages ={messages[locale]}>
+    <ChakraProvider theme={customTheme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ChakraProvider>
+  </IntlProvider>, rootElement
 );
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

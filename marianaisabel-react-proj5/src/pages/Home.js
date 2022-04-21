@@ -43,9 +43,12 @@ return (
         alignItems="center"
     >
     
-    
+    <Box minW={{ base: "90%", md: "468px" }}>
     <Text> A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.</Text>
+      
+    </Box>
     
+   
     </Flex>
     </Box> 
             

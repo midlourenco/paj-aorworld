@@ -67,7 +67,7 @@ function Login () {
         <Flex
             flexDirection="column"
             width="100wh"
-            height="100vh"
+            height="90vh"
             backgroundColor="gray.200"
             justifyContent="center"
             alignItems="center"

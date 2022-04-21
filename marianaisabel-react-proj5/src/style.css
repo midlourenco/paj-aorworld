@@ -22,6 +22,10 @@ h1 {
   color: red;
   font-size:12px;
 }
+.blackText{
+  color: black;
+}
+
 
 /* main > :first-child {
   margin-top: 10px;

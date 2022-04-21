@@ -134,45 +134,47 @@ import { mode, Styles, createBreakpoints } from "@chakra-ui/theme-tools";
 //   }
 // };
 
-// const components = {
-//   Heading: {
-//     baseStyle: props => ({
-//       fontWeight: "600",
-//       color: mode("fenzodark.400", "whiteAlpha.900")(props)
-//     })
-//   },
-//   Link: {
-//     baseStyle: {
-//       fontWeight: "inherit",
-//       // _hover: {
-//       //   textDecoration: "none"
-//       // },
-//       _focus: {
-//         boxShadow: "none"
-//       }
-//     }
-//   },
-//   Button: { // TODO https://chakra-ui-git-fix-typescript-autocomplete.chakra-ui.vercel.app/docs/theming/component-style
-//     //estilo que todos os botões vão ter em comum
-//     baseStyle: {
-//       fontWeight: "600",
-//       rounded: "4px",
-//       _focus: {
-//         outline: "none",
-//         boxShadow: "none"
-//       }
-//     }
-//   },
-//   Switch: {
-//     baseStyle: {
-//       track: {
-//         _focus: {
-//           boxShadow: "none"
-//         }
-//       }
-//     }
-//   }
-// };
+const components = {
+  Heading: {
+    baseStyle: props => ({
+      fontWeight: "600",
+      // color: mode("teal.400", "whiteAlpha.900")(props)
+       color:"teal.500",
+       margin:"30px"
+    })
+  },
+  // Link: {
+  //   baseStyle: {
+  //     fontWeight: "inherit",
+  //     // _hover: {
+  //     //   textDecoration: "none"
+  //     // },
+  //     _focus: {
+  //       boxShadow: "none"
+  //     }
+  //   }
+  // },
+  // Button: { // TODO https://chakra-ui-git-fix-typescript-autocomplete.chakra-ui.vercel.app/docs/theming/component-style
+  //   //estilo que todos os botões vão ter em comum
+  //   baseStyle: {
+  //     fontWeight: "600",
+  //     rounded: "4px",
+  //     _focus: {
+  //       outline: "none",
+  //       boxShadow: "none"
+  //     }
+  //   }
+  // },
+  // // Switch: {
+  //   baseStyle: {
+  //     track: {
+  //       _focus: {
+  //         boxShadow: "none"
+  //       }
+  //     }
+  //   }
+  // }
+};
 
 // // const zIndices = {
 // //   hide: -1,
@@ -210,7 +212,7 @@ const customTheme = extendTheme({
 //   colors,
 //   styles,
 //   // zIndices,
-//   components
+   components
 });
 
 export default customTheme;

@@ -59,18 +59,20 @@ function  ProjectCard ({projectElem, ...props}){
         lastModifDate:  projectElem.lastModifDate,
     }
 
+    const LastModifBySymbol = chakra(BiEraser);
+    const CreateBySymbol = chakra(RiNewspaperLine);
     //
     return (
-        <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white"> 
+        <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
             <HStack display='flex' justifyContent="center"  alignItems="center">
             <Image src={project.imageUrl} alt={project.title.slice(0,10)} />
             </HStack>
             <Box p='6'>
-                <Box display='flex' alignItems='baseline'>
+                <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'row']} >
                     <HStack >
                     {project.keywords.map(n => (
-                        <Badge borderRadius='full' px='2' colorScheme='teal' >{n}</Badge>
+                        <Badge borderRadius='full' px='2' colorScheme='teal' key={n} >{n}</Badge>
                     ))}
                     </HStack>
                     <Box
@@ -99,10 +101,10 @@ function  ProjectCard ({projectElem, ...props}){
                     {project.description}
                 </Box>
 
-                <Box display='flex' justifyContent="right" mt='2' alignItems='center'>
+                <Box display='flex' flexDirection={"row"} justifyContent="right" mt='2' alignItems='center'>
                 {project.lastModifBy && project.lastModifBy!="" 
-                ?   <Text  as='i' fontSize='sm'> {<lastModifBySymbol color="gray.200" />} Atualizado por: {project.lastModifBy}, em {project.lastModifDate} </Text>
-                :   <Text  as='i' fontSize='sm' >{<createBySymbol color="gray.200" />} Escrito por: {project.createdBy}, em {project.createdDate} </Text>
+                ?   <Text  as='i' fontSize='sm'> {<LastModifBySymbol color="gray.200" />} Atualizado por: {project.lastModifBy}, em {project.lastModifDate} </Text>
+                :   <Text  as='i' fontSize='sm' >{<CreateBySymbol color="gray.200" />} Escrito por: {project.createdBy}, em {project.createdDate} </Text>
                 }
                 </Box>
             </Box>

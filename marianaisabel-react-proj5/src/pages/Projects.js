@@ -1,10 +1,11 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
-  useParams
+  useLocation,
+  NavLink,
+  useParams,
+  Outlet,
+  useSearchParams
 } from "react-router-dom";
 
 import { useState } from "react";
@@ -23,6 +24,7 @@ import {
     InputLeftElement,
     chakra,
     Grid,
+    GridItem,
     Box,
     Image,
     Badge,
@@ -40,18 +42,24 @@ import ProjectCard from "../components/ProjectCard";
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons
 import { RiNewspaperLine} from "react-icons/ri";
-import { BiEraser} from "react-icons/bi";
+import { BiBox, BiEraser} from "react-icons/bi";
+
+function QueryNavLink({ to, ...props }) {
+    let location = useLocation();
+    return <NavLink to={to + location.search} {...props} />;
+}
 
 
 function  Projects (){
-
+    let [searchParams, setSearchParams] = useSearchParams({ replace: true });
     let { id } = useParams();
+    const keywordsArray = ["java","ReactJS","Swing", "Rest",'Objectos'];
 
     const p1 = {
         imageUrl: 'https://rockcontent.com/br/wp-content/uploads/sites/2/2020/02/projeto-pessoal.png',
         title: 'AoR - Lista de Atividades',
         description: 'Projecto PAJ - aplicação web desenvolvido em Java, com uma API REST, persistência de dados em base de dados em mySQL e frontend em ReactJS, javaScript, CSS e HTML.',
-        keywords: ['Java', 'HTML & CSS', 'Swing'],
+        keywords: ['Java', 'ReactJS', 'Rest'],
         users: ['Ricardo', 'Mariana', 'Tiago', 'Inês', 'Anna', 'Mariana'],
         news: ['HTML/CSS', 'REST',  'mySQL','Websockets'],
         createdBy: 'Mariana',
@@ -78,7 +86,39 @@ function  Projects (){
     return (
         <Stack spacing={20} backgroundColor="gray.200">
         <Heading as='h1' size='3xl'  >Projects</Heading>
-        <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={10}>
+
+        <Flex  flexDirection="column" justifyContent="center" alignItems="center"  border={"teal"} >
+   
+        <Input type="text" 
+            placeholder="search keyword" 
+            width={"70%"}
+            value={searchParams.get('filter') || ''}
+            _placeholder={{ color: 'teal' }}
+            onChange={(event) => {
+                let filter = event.target.value;
+                if (filter) {
+                setSearchParams({ filter }, { replace: true });
+                } else {
+                setSearchParams({}, { replace: true });
+                }
+            }}
+        />
+         <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px'>
+       { keywordsArray.filter((keyword)=>{
+            let filter = searchParams.get('filter');
+            if(!filter) return true;
+            let name = keyword.toLowerCase();
+            return name.startsWith(filter.toLowerCase());
+
+       }).map((k)=>{
+          
+           return <Link  to="#" key={k}>{k}</Link>
+        }
+       )}
+       
+        </Stack>
+        </Flex>
+        <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={3} >
         <ProjectCard projectElem={p1}/>
         <ProjectCard projectElem={p2}/>
 

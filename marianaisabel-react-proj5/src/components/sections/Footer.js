@@ -14,8 +14,7 @@ function Footer(){
                 
                 >
                 
-            
-            © 2022 Mariana Lourenço | PAJ - Proj5
+            <Text  fontSize='sm' padding="10px"> © 2022 Mariana Lourenço | PAJ - Proj5</Text>
             </Flex>
         </Box>
 
