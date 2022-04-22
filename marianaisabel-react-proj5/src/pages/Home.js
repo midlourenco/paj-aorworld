@@ -19,6 +19,7 @@ import {
   Box,
   Grid,
   Image,
+  Stack,
   HStack,
   Select,
   Button,
@@ -44,8 +45,16 @@ return (
     >
     
     <Box minW={{ base: "90%", md: "468px" }}>
+    <Stack
+        spacing={4}
+        padding="5rem"
+        backgroundColor="whiteAlpha.900"
+        boxShadow="md"
+        width={"70%"}
+        margin="auto"
+    >
     <Text> A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.</Text>
-      
+    </Stack>
     </Box>
     
    
