@@ -41,7 +41,6 @@ import {
 import { RiNewspaperLine} from "react-icons/ri";
 import { BiEraser} from "react-icons/bi";
 
-
 function  ProjectCard ({projectElem, ...props}){
 
     let { id } = useParams();
@@ -61,7 +60,8 @@ function  ProjectCard ({projectElem, ...props}){
 
     const LastModifBySymbol = chakra(BiEraser);
     const CreateBySymbol = chakra(RiNewspaperLine);
-    //
+
+   
     return (
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 

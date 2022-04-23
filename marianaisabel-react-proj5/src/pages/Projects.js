@@ -28,6 +28,9 @@ import {
     Box,
     Image,
     Badge,
+    Tag,
+    TagLeftIcon,
+    TagLabel,
     Text,
     Avatar,
     FormControl,
@@ -37,23 +40,39 @@ import {
     HStack,
     Spacer
 } from "@chakra-ui/react";
+import{SearchIcon } from '@chakra-ui/icons';
 
 import ProjectCard from "../components/ProjectCard";
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons
-import { RiNewspaperLine} from "react-icons/ri";
-import { BiBox, BiEraser} from "react-icons/bi";
+import {FaSearch } from "react-icons/fa";
+import {MdOutlineManageSearch , MdOutlineClose} from "react-icons/md";
 
-function QueryNavLink({ to, ...props }) {
-    let location = useLocation();
-    return <NavLink to={to + location.search} {...props} />;
-}
-
+// function QueryNavLink({ to, ...props }) {
+//     let location = useLocation();
+//     return <NavLink to={to + location.search} {...props} />;
+// }
 
 function  Projects (){
-    let [searchParams, setSearchParams] = useSearchParams({ replace: true });
+    //let [searchParams, setSearchParams] = useSearchParams({ replace: true });
+    let [searchParams, setSearchParams] = useState("");
+    let [selectedKeyword, setSelectedKeyword] = useState("");
+
+
     let { id } = useParams();
+    const SearchSymbol = chakra(FaSearch);
+    const ClearSearchSymbol = chakra(MdOutlineClose);
     const keywordsArray = ["java","ReactJS","Swing", "Rest",'Objectos'];
+    
+
+    const handleSearchClick = (keyword)=>{
+        console.log( keyword);
+        setSelectedKeyword(keyword);
+    }
+    const handleClearSearchClick=()=>{
+        setSelectedKeyword("");
+    }
+    
 
     const p1 = {
         imageUrl: 'https://rockcontent.com/br/wp-content/uploads/sites/2/2020/02/projeto-pessoal.png',
@@ -84,39 +103,58 @@ function  Projects (){
 
     //
     return (
-        <Stack spacing={20} backgroundColor="gray.200">
+        <Stack spacing={10} backgroundColor="gray.200">
         <Heading as='h1' size='3xl'  >Projects</Heading>
 
-        <Flex  flexDirection="column" justifyContent="center" alignItems="center"  border={"teal"} >
-   
+        <Flex  flexDirection="column" justifyContent="center" alignItems="start"  mr={5}>
+        <InputGroup mx={5}>
+        <InputLeftElement> <SearchSymbol /></InputLeftElement>
         <Input type="text" 
             placeholder="search keyword" 
-            width={"70%"}
-            value={searchParams.get('filter') || ''}
+            width={"25%"}
+            value={searchParams || ''}
             _placeholder={{ color: 'teal' }}
             onChange={(event) => {
                 let filter = event.target.value;
                 if (filter) {
-                setSearchParams({ filter }, { replace: true });
+                //setSearchParams({ filter }, { replace: true });
+                setSearchParams(filter);
                 } else {
-                setSearchParams({}, { replace: true });
+                //setSearchParams({}, { replace: true });
+                setSearchParams("");
                 }
             }}
         />
-         <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px'>
+        </InputGroup>
+       
+
+         <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={4}>
+   
        { keywordsArray.filter((keyword)=>{
-            let filter = searchParams.get('filter');
+            let filter = searchParams;
             if(!filter) return true;
             let name = keyword.toLowerCase();
             return name.startsWith(filter.toLowerCase());
 
        }).map((k)=>{
           
-           return <Link  to="#" key={k}>{k}</Link>
+           return   selectedKeyword && selectedKeyword==k?
+                     <Tag key={k} background="teal.400" color={"white"}>
+                    <TagLeftIcon boxSize='12px' as={SearchIcon} />
+                    <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
+                    </Tag>
+                    : <Tag key={k} >
+                    <TagLeftIcon boxSize='12px' as={SearchIcon} />
+                    <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
+                    </Tag>
+                
         }
        )}
-       
         </Stack>
+        {selectedKeyword && selectedKeyword!=""?
+        <Button leftIcon={<ClearSearchSymbol color={"red"}/> } variant='outline' colorScheme='red' size='sm' ml={5} onClick={handleClearSearchClick}>Clear search </Button>
+        : null
+        }
         </Flex>
         <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={3} >
         <ProjectCard projectElem={p1}/>
