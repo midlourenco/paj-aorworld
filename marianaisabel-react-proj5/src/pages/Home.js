@@ -1,5 +1,5 @@
 import React from "react"
-import bannerLogo from '../images/bannerLogo.png'
+//import bannerLogo from '../images/bannerLogo.png'
 
 //In react-router-dom v6, "Switch" is replaced by routes "Routes".
 //https://stackoverflow.com/questions/63124161/attempted-import-error-switch-is-not-exported-from-react-router-dom
@@ -34,7 +34,7 @@ const Home = ()=>{
     
 return (
 <Box>
-<Image width="100%" objectFit='cover' src={bannerLogo} alt="Logo" />
+<Image width="100%" objectFit='cover' src="/images/bannerLogo.png" alt="Logo" />
     <Flex
         flexDirection="column"
         width="100wh"

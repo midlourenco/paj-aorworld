@@ -1,2 +1,3 @@
 
 export const APP_ERROR= "APP_ERROR";
+export const CHANGE_LANGUAGE = "CHANGE_LANGUAGE";

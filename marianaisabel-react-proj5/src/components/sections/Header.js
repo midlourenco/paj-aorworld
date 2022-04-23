@@ -15,10 +15,10 @@ import {
   Spacer,
   StackDivider
 } from "@chakra-ui/react";
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
+import { setSelectedLanguage} from '../../redux/actions'
+import { connect } from "react-redux";
 
-// import {bannerLogo as Banner} from '../../images';
-
-//  import { CloseIcon, MenuIcon } from ".../Icons"
 
 // const MenuItems = (props) => {
 //   const { children, isLast, to = "/", ...rest } = props
@@ -34,44 +34,6 @@ import {
 //   )
 // }
 
- 
-
-
-//  const NavBar = () => (
-//    <Box backgroundColor="teal.400" color={"white"}>  
-//      <Flex>
-//        <HStack spacing={6} divider={<StackDivider />} as="nav" margin={4}>
-//          <NavLink text="home"  path= "/" /> 
-//          <NavLink text="news" path= "/news" />
-//          <NavLink text="projects" path= "/projects" />
-//          <NavLink text="about_us" path= "/about"/>
-//        </HStack>
-//        <Spacer />
-       
-//        <HStack spacing={3} margin={4}>
-//          <Select 
-//          onChange={handleSelect} 
-//          defaultValue={locale} 
-//          variant='unstyled' 
-//          bg="teal.400"
-//          borderColor="teal.400"
-//          size='md'  
-//          h={10} 
-//          width={20} 
-//          cursor="pointer" 
-//          _hover={{ bg: "teal.600" }}
-//          >
-//            {langArray.map(l => (
-//              <option key={l} value={l} className= "blackText" >{flag(l)}{l}</option>
-//            ))}
-//          </Select>
-//          {/* <Button colorScheme='teal' mr='4'><FormattedMessage id="sign_up" /></Button> */}
-//          <Button colorScheme='teal'><NavLink text="login" path= "/login"  /></Button>
-//      </HStack>
-//    </Flex>
- 
-//  </Box>
-//  );
 
 
 
@@ -79,15 +41,20 @@ import {
 
 
 
-
-const Header = (props) => {
+function Header ({setSelectedLanguage,language,...props}) {
   const [show, setShow] = React.useState(false)
   const toggleMenu = () => setShow(!show)
   //regarding languages switchingi 
-  const [locale, setLocale] = useState("en")
-  const handleSelect= e => (
-    setLocale(e.target.value)
-  )
+  const [locale, setLocale] = useState(language)
+  const handleSelect= e => {
+    setLocale(e.target.value);
+    setSelectedLanguage(e.target.value);
+    localStorage.setItem("selectedLang",e.target.value );
+    let langLS= localStorage.getItem("selectedLang");
+    console.log("lang do browser" + navigator.language)
+  }
+  
+
   const langArray = ["en", "pt"];
   function flag(lang){
     switch(lang){
@@ -204,4 +171,9 @@ const Header = (props) => {
   
 }
 
-export default Header;
+
+const mapStateToProps = state => {
+  return { language: state.selectedLanguage.language };
+};
+
+export default  connect(mapStateToProps, {setSelectedLanguage}) (Header);
