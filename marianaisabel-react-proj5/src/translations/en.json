@@ -37,5 +37,6 @@
     "error_missing_first_name":"First name is required",
     "error_missing_last_name":"Last name is required",
     "error_wrong_credencials":"Email and/or password are not correct",
-    "error_wrong_password":"Passwords don't match "
+    "error_wrong_password":"Passwords don't match ",
+    "error_pageNotFound_404":"This page does not exist"
 }

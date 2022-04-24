@@ -37,5 +37,6 @@
     "error_missing_first_name":"Nome é obrigatório",
     "error_missing_last_name":"Apelido é obrigatório",
     "error_wrong_credencials":"Email e/ou palavra-passe não está correcto ",
-    "error_wrong_password":"Palavras-passe não coincidem "
+    "error_wrong_password":"Palavras-passe não coincidem ",
+    "error_pageNotFound_404":"Esta página não exsite"
 }
