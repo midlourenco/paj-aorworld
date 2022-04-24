@@ -42,7 +42,8 @@ import { connect } from "react-redux";
 
 
 function Header ({setSelectedLanguage,language,...props}) {
-  const [show, setShow] = React.useState(false)
+  const [login, setLogin]= useState(false);
+  const [show, setShow] = React.useState(false);
   const toggleMenu = () => setShow(!show)
   //regarding languages switchingi 
   //const [locale, setLocale] = useState(language)
@@ -99,7 +100,12 @@ function Header ({setSelectedLanguage,language,...props}) {
           ))}
         </Select>
         {/* <Button colorScheme='teal' mr='4'><FormattedMessage id="sign_up" /></Button> */}
-        <Button colorScheme='teal'><NavLink text="login" path= "/login"  /></Button>
+        <Button colorScheme='teal' onClick={()=>setLogin(!login)}>
+          {login ?
+            <NavLink text="login" path= "/login"  />
+          : <NavLink text="logout" path= "/logout"  />
+          }
+        </Button>
     </HStack>
   </Flex>
 

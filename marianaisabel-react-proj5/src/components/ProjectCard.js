@@ -7,11 +7,8 @@ import {
   useParams
 } from "react-router-dom";
 
-import { useState } from "react";
-//https://react-hook-form.com/
-import { useForm } from "react-hook-form";
-import messages from '../translations';
-import {IntlProvider, FormattedMessage} from "react-intl";
+
+import {FormattedMessage} from "react-intl";
 
 import {
     Flex,
@@ -23,6 +20,7 @@ import {
     InputLeftElement,
     chakra,
     Grid,
+    Link as ChakraLink,
     Box,
     Image,
     Badge,
@@ -43,9 +41,8 @@ import { BiEraser} from "react-icons/bi";
 
 function  ProjectCard ({projectElem, ...props}){
 
-    let { id } = useParams();
-
     const project = {
+        id: projectElem.id,
         imageUrl: projectElem.imageUrl,
         title:  projectElem.title,
         description:  projectElem.description,
@@ -57,11 +54,12 @@ function  ProjectCard ({projectElem, ...props}){
         lastModifBy:  projectElem.lastModifBy,
         lastModifDate:  projectElem.lastModifDate,
     }
-
+    //let { id } = useParams(project.id);
     const LastModifBySymbol = chakra(BiEraser);
     const CreateBySymbol = chakra(RiNewspaperLine);
-
-    console.log( new Date((project.lastModifDate)));
+    let id = project.id;
+    console.log("O id do use params " + project.id);
+   // console.log( new Date((project.lastModifDate)));
     return (
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
@@ -88,18 +86,19 @@ function  ProjectCard ({projectElem, ...props}){
                     ))}
                     </HStack>
                 </Box>
-        
-                <Box
-                    mt='1'
+
+                <ChakraLink as={Link} to ={`/projects/${id}`}  >
+                    <Text fontSize="md"  mt='1'
                     fontWeight='semibold'
                     as='h4'
                     lineHeight='tight'
                     mb='1'
                     isTruncated
-                >
-                    {project.title}
-                </Box>
-        
+                    > 
+                        {project.title} 
+                    </Text>
+                </ChakraLink>
+
                 <Box  isTruncated>
                     {project.description}
                 </Box>

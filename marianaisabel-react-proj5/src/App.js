@@ -26,25 +26,33 @@ import {
 } from "@chakra-ui/react";
 import messages from './translations'
 import {IntlProvider, FormattedMessage} from "react-intl";
+import { connect } from "react-redux";
 
 import Home from './pages/Home';
 import Login from './pages/Login';
 import News from './pages/News';
-import NewsElem from "./pages/NewsElem";
+import SingleNews from "./pages/SingleNews";
 import Projects from './pages/Projects';
-import Project from './pages/Projects';
+import Project from './pages/Project';
+import NewProject from './pages/NewProject';
 import AboutUs from './pages/AboutUs';
 import Header from "./components/sections/Header";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import Footer from "./components/sections/Footer";
-
-
-import { connect } from "react-redux";
+import ErrorPage404 from "./pages/ErrorPage404";
+import Logout from "./pages/Logout";
 
 //se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
 // import {Home, Login, News, Projects, AboutUs} from './pages'
 
+//https://reactrouter.com/docs/en/v6/api :
+function ProjectPage() {
+  // Get the projectId param from the URL.
+  let { id } = useParams();
+  return <Route path= {"/projects?id:"+{id} } element ={<Project id={id} />} />
+  // ...
+}
 
 /**
  * Para o provider IntlProvider ter acesso ao locale, vamos usar o redux para ir bucar esta informação 
@@ -64,13 +72,16 @@ function App({language = "en",...props}) {
             <Routes>
                 <Route path= "/" exact element ={<Home />} />
                 <Route path= "/login" element ={<Login />}/>
+                <Route path= "/logout" element ={<Logout />}/>
                 <Route path= "/reset_password"  element ={<ResetPassword />} />
                 <Route path= "/register" element ={<Register />} />
                 <Route path= "/news" element ={<News />} />
-                <Route path= "/news/:id" element ={<NewsElem />} />
-                <Route path= "/projects" exact element ={<Projects />} />
-                <Route path= "/projects/:id" element ={<Project />} />
+                <Route path= "/news/:id" element ={<SingleNews />} />
+                <Route path= "/projects/new" element ={<NewProject />} /> 
+                <Route path= "/projects/:id" element ={<Project />} /> 
+                <Route path= "/projects" element ={<Projects />} > </Route>
                 <Route path= "/about" element ={<AboutUs />} />
+                <Route path= "*" element ={<ErrorPage404 />} />
             </Routes>
           </div>
         </Router>

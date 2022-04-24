@@ -24,32 +24,33 @@ import { FormattedMessage} from "react-intl";
 const Home = ()=>{
     
 return (
-<Box>
-<Image width="100%" objectFit='cover' src="/images/bannerLogo.png" alt="Logo" />
-    <Flex
-        flexDirection="column"
-        width="100wh"
-        height="60vh"
-        backgroundColor="gray.200"
-        justifyContent="center"
-        alignItems="center"
-    >
+    <Box >
+    <Image width="100%" objectFit='cover' src="/images/bannerLogo.png" alt="Logo" />
+        <Flex
+            flexDirection="column"
+            width="100wh"
+            minHeight="60vh"
+            backgroundColor="gray.200"
+            justifyContent="center"
+            alignItems="center"
+            
+        >
+        
+        <Box minW={{ base: "90%", md: "468px" }} my={30}>
+        <Stack
+            spacing={4}
+            padding="5rem"
+            backgroundColor="whiteAlpha.900"
+            boxShadow="md"
+            width={"70%"}
+            margin="auto"
+        >
+        <FormattedMessage id= "intro_home" />
+        </Stack>
+        </Box>
+        
     
-    <Box minW={{ base: "90%", md: "468px" }}>
-    <Stack
-        spacing={4}
-        padding="5rem"
-        backgroundColor="whiteAlpha.900"
-        boxShadow="md"
-        width={"70%"}
-        margin="auto"
-    >
-    <FormattedMessage id= "intro_home" />
-    </Stack>
-    </Box>
-    
-   
-    </Flex>
+        </Flex>
     </Box> 
             
            

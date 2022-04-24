@@ -4,8 +4,8 @@ import { useState } from "react";
 import {Navigate} from 'react-router-dom'
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
-import messages from '../translations';
-import {IntlProvider, FormattedMessage ,useIntl} from "react-intl";
+
+import { FormattedMessage ,useIntl} from "react-intl";
 
 import {
     Flex,
@@ -41,35 +41,26 @@ function Login () {
     const LockSymbol = chakra(FaLock);
     const EyeSymbol = chakra(FaEye);
     const EyeSlashSymbol = chakra(FaEyeSlash);
-   // console.log(props);
-   // props.history
-   //exemplo para redireccionar para uma página dada uma dada condição:
-    // if(true){
-    //     return <Navigate to="/news" />
-    // }
+ 
 
     const {register, handleSubmit, formState: {errors}}= useForm();
-    //const onSubmit = values => console.log(values);
-   //const handleSubmitForm = ()=> handleSubmit((data)=>setData(data), console.log(data) );
+    const onSubmit = (data, e) => console.log(data, e);
+    const onError = (errors, e) => console.log(errors, e);
+  
     const [data, setData]= useState("");
     //mostrar e esconder a password
     const [showPassword, setShowPassword] = useState(false);
     //função que chamamos ao clicar em "show"/"hide" password - altera o state de false para true e vice-versa
     const handleShowClick = () => setShowPassword(!showPassword);
-    const [locale, setLocale] = useState("en")
-    const handleSelect= e => (
-      setLocale(e.target.value)
-    )
+ 
     //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
     const intl = useIntl();
 
     return (
-        <IntlProvider locale={locale} messages ={messages[locale]}>
-
         <Flex
             flexDirection="column"
             width="100wh"
-            height="90vh"
+            minHeight="90vh"
             backgroundColor="gray.200"
             justifyContent="center"
             alignItems="center"
@@ -80,10 +71,10 @@ function Login () {
                 justifyContent="center"
                 alignItems="center"
             >
-            <Avatar bg="teal.500" />
+            <Avatar bg="teal.500" mt={20}/>
             <Heading color="teal.400"> {intl.formatMessage({id: 'welcome'})}</Heading>
             <Box minW={{ base: "90%", md: "468px" }}>
-                <form onSubmit={ handleSubmit((data)=>setData(data), console.log(data) )}>
+                <form onSubmit={ handleSubmit(onSubmit,onError )}>
                     <Stack
                         spacing={4}
                         p="1rem"
@@ -96,10 +87,10 @@ function Login () {
                                 pointerEvents="none"
                                 children={<UserSymbol color="gray.300" />}
                             />
-                            <Input {...register("email", {required: true})} type="email" placeholder={intl.formatMessage({id: 'email'})} />
+                            <Input {...register("email", {required: true})} type="email" placeholder={intl.formatMessage({id: 'form_field_email'})} />
                         </InputGroup>
                         {(errors.email)? 
-                        (<FormErrorMessage>Email is required.</FormErrorMessage>)
+                        (<FormErrorMessage><FormattedMessage id={"error_missing_email"}  ></FormattedMessage></FormErrorMessage>)
                         : null 
                         }
                     </FormControl>
@@ -113,7 +104,7 @@ function Login () {
                             <Input
                                 {...register("password", {required: true})}
                                 type={showPassword ? "text" : "password"}
-                                placeholder={intl.formatMessage({id: 'password'})}
+                                placeholder={intl.formatMessage({id: 'form_field_password'})}
                             />
                             <InputRightElement width="4.5rem">
                                 <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -123,7 +114,7 @@ function Login () {
                             </InputRightElement>
                         </InputGroup>
                         {(errors.password)? 
-                        (<FormErrorMessage>Password is required.</FormErrorMessage>)
+                        (<FormErrorMessage><FormattedMessage id={"error_missing_password"}  ></FormattedMessage></FormErrorMessage>)
                         : null 
                         }
                         <FormHelperText textAlign="right">
@@ -146,14 +137,13 @@ function Login () {
                 </form>
                 </Box>
             </Stack>
-            <Box>
+            <Box mb={20}>
                 {intl.formatMessage({id: 'create_new_account'})}{" "}
                 <Link color="teal.500" href="/register">
                 {intl.formatMessage({id: 'sign_up'})}
                 </Link>
             </Box>
         </Flex>
-        </IntlProvider>
     );
 };
     
