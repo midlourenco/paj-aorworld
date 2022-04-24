@@ -42,6 +42,8 @@ import ResetPassword from "./pages/ResetPassword";
 import Footer from "./components/sections/Footer";
 import ErrorPage404 from "./pages/ErrorPage404";
 import Logout from "./pages/Logout";
+import Profile from "./pages/Profile";
+import Notification from "./pages/Notification";
 
 //se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
 // import {Home, Login, News, Projects, AboutUs} from './pages'
@@ -81,6 +83,8 @@ function App({language = "en",...props}) {
                 <Route path= "/projects/:id" element ={<Project />} /> 
                 <Route path= "/projects" element ={<Projects />} > </Route>
                 <Route path= "/about" element ={<AboutUs />} />
+                <Route path= "/profile" element ={<Profile />} />
+                <Route path= "/notification" element ={<Notification />} />
                 <Route path= "*" element ={<ErrorPage404 />} />
             </Routes>
           </div>

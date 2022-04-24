@@ -7,15 +7,17 @@ import {
   Text,
   Link as ChakraLink,
   Box,
-  Grid,
-  Image,
   HStack,
   Select,
   Button,
   Spacer,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   StackDivider
 } from "@chakra-ui/react";
-import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
+import { CloseIcon, HamburgerIcon , ChevronDownIcon} from '@chakra-ui/icons'
 import { setSelectedLanguage} from '../../redux/actions'
 import { connect } from "react-redux";
 
@@ -71,6 +73,21 @@ function Header ({setSelectedLanguage,language,...props}) {
   );
 
 
+const MenuLoggedUser=()=>{
+  return (
+    <Menu>
+      <MenuButton as={Button} colorScheme="teal" rightIcon={<ChevronDownIcon />}  >
+        Nome
+      </MenuButton>
+      <MenuList color={"teal"}>
+        <MenuItem><NavLink text="profile" path= "/profile"  /></MenuItem>
+        <MenuItem><NavLink text="notifications" path= "/notification"  /></MenuItem>
+        <MenuItem> <NavLink text="logout" path= "/logout"  /></MenuItem>
+      </MenuList>
+    </Menu>
+  )
+}
+
   return(
     <Box backgroundColor="teal.400" color={"white"}>  
     <Flex>
@@ -100,12 +117,12 @@ function Header ({setSelectedLanguage,language,...props}) {
           ))}
         </Select>
         {/* <Button colorScheme='teal' mr='4'><FormattedMessage id="sign_up" /></Button> */}
-        <Button colorScheme='teal' onClick={()=>setLogin(!login)}>
-          {login ?
+        {login ?
+          <Button colorScheme='teal' onClick={()=>setLogin(!login)}>
             <NavLink text="login" path= "/login"  />
-          : <NavLink text="logout" path= "/logout"  />
-          }
-        </Button>
+          </Button>
+          : <MenuLoggedUser />
+        }
     </HStack>
   </Flex>
 

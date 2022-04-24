@@ -60,7 +60,7 @@ function Login () {
         <Flex
             flexDirection="column"
             width="100wh"
-            minHeight="90vh"
+            minHeight="83vh"
             backgroundColor="gray.200"
             justifyContent="center"
             alignItems="center"

@@ -26,6 +26,9 @@ h1 {
   color: black;
 }
 
+.editable-rm-margin{
+  margin-top: 0px !important;
+}
 
 /* main > :first-child {
   margin-top: 10px;

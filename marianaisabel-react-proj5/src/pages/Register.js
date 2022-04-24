@@ -13,6 +13,7 @@ import {
     Button,
     InputGroup,
     Stack,
+    HStack,
     InputLeftElement,
     chakra,
     Box,
@@ -134,6 +135,24 @@ const Register = ()=>{
               </FormControl>
 
               <Textarea backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_biography'})}  />
+              
+
+              <FormControl isInvalid = {errors.imageURL}>
+              <HStack>
+                <Input
+                    {...register("imageURL")}
+                    type= "url"
+                    placeholder={intl.formatMessage({id: 'form_field_imageURL'})}
+                />
+                <Avatar name={register.firstName & " " & register.lastName} src={register.imageURL} />
+
+                {(errors.password)? 
+                  (<FormErrorMessage><FormattedMessage id={"error_wrong_imageURL"}  ></FormattedMessage></FormErrorMessage>)
+                  : null 
+                }
+              </HStack>  
+              </FormControl>
+
               <Button
                   borderRadius={0}
                   type="submit"

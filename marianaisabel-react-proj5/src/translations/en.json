@@ -3,6 +3,8 @@
     "news":"News",
     "projects":"Projects",
     "about_us":"About Us",
+    "profile":"My account",
+    "notifications": "Notifications",
 
     "welcome":"Welcome",
     "form_field_first_name":"First Name",
@@ -10,6 +12,7 @@
     "form_field_email":"Email address",
     "form_field_password":"Password",
     "form_field_repeat_password":"Repeat password",
+    "form_field_imageURL":"image URL of your avatar",
     "form_field_last_biography":"Biography",
 
     "sign_up":"Sing up",
@@ -19,8 +22,10 @@
     "create_new_account":"Create a new account?",
     "create_account":"Create account",
     "login_existent_account":"Login with existent account",
+    "reset_password":"Reset password",
 
     "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge.",
+    
     "new_project": " New Project",
     "search_keyword":"Search keyword",
     "clear_search":"Clear search",
@@ -30,13 +35,16 @@
     "update_by":"Update by",
     "create_by":"Create by",
     "date":"on {d, date}",
+    
     "our_team": "Our team", 
     "where_are_we": "Where are we?",
+    
     "error_missing_password":"Password is required",
     "error_missing_email":"Email is required",
     "error_missing_first_name":"First name is required",
     "error_missing_last_name":"Last name is required",
     "error_wrong_credencials":"Email and/or password are not correct",
-    "error_wrong_password":"Passwords don't match ",
-    "error_pageNotFound_404":"This page does not exist"
+    "error_wrong_password":"The passwords don't match ",
+    "error_pageNotFound_404":"This page does not exist",
+    "error_wrong_imageURL": "This URL is not from an image"
 }

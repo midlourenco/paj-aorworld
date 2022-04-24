@@ -1,4 +1,4 @@
-import { APP_ERROR,CHANGE_LANGUAGE} from "./actionTypes";
+import { APP_ERROR,CHANGE_LANGUAGE,LOGIN_OK, LOGOUT_OK} from "./actionTypes";
 
 //função que cria um objecto cujo o tipo é xxxx, e o payload é um objecto (ex: username:username)
 /**
@@ -19,4 +19,15 @@ export const setAppError = (error) => ({
 export const setSelectedLanguage = (language) => ({
   type: CHANGE_LANGUAGE,
   payload: { language }
+});
+
+/**
+ * função que guarda info do utilizador logado
+ * @param {*}  
+ * @returns 
+ */
+ export const setLoginOK = (name,privileges) => ({
+  type: LOGIN_OK,
+  payload: { name },
+  payload: { privileges }
 });
