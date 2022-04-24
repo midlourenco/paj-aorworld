@@ -5,6 +5,8 @@
     "about_us":"Sobre nós",
     "profile":"A minha conta",
     "notifications": "Notificações",
+    "news_article": "Notícia",
+    "project":"Projecto",
 
     "welcome":"Bem-vindo",
     "form_field_first_name":"Nome",
@@ -12,8 +14,14 @@
     "form_field_email":"Email",
     "form_field_password":"Palavra-passe",
     "form_field_repeat_password":"Repetir palavra-passe",
-    "form_field_imageURL":"URL da imagem do seu avatar",
+    "form_field_imageURL":"URL de imagem",
     "form_field_biography":"Biografia",
+
+    "form_field_title": "Título",
+    "form_field_description": "Descrição",
+    "form_field_keywords": "Keywords",
+    "form_field_users": "Utilizadores",
+    "form_field_news": "News",
 
     "sign_up":"Registar",
     "login":"Entrar",
@@ -24,6 +32,8 @@
     "login_existent_account":"Entrar com conta existente",
     "reset_password":"Repor palavra-passe",
 
+    "create_project":"Criar projecto",
+    "create_article":"Criar notícia",
 
     "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.",
     

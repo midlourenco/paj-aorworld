@@ -4,6 +4,7 @@
 
 import { extendTheme } from "@chakra-ui/react";
 import { mode, Styles, createBreakpoints } from "@chakra-ui/theme-tools";
+import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 
 // // const breakpoints = createBreakpoints({
 // //   sm: "320px",
@@ -143,6 +144,7 @@ const components = {
        margin:"30px"
     })
   },
+  Steps
   // Link: {
   //   baseStyle: {
   //     fontWeight: "inherit",

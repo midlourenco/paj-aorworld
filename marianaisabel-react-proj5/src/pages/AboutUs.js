@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from "react";
 
 import {
@@ -17,46 +18,47 @@ import {
     Spacer,
     StackDivider
   } from "@chakra-ui/react";
-  import ButtonExemple from "../components/ButtonExemple";
+
   import {FormattedMessage} from "react-intl";
+  import UserCard from "../components/UserCard"
 
 const AboutUs = ()=>{
+    const user1={
+        firstName:  "Carlos",
+        lastName: "Pita",
+        email:  "carlospita@aorprojects.pt",
+        biography:  "uieyish ashdjkho  ewhiorh whro iwo3",
+        imageURL: "https://bit.ly/dan-abramov",
+        role: "MEMBER"
+    }
+
+
+    const user2={
+        firstName:  "Manuel",
+        lastName: "Shoarma",
+        email:  "manuelshoarma@aorprojects.pt",
+        biography:  "uieyish ashdjkho  ewhiorh whro iwo3",
+        imageURL: "https://bit.ly/sage-adebayo",
+        role: "ADMIN"
+
+
+    }
+
+
     return (
         <Box>
-            <Box>
-                <ButtonExemple />
-            </Box>
             <Heading> <FormattedMessage id={"our_team"} /> </Heading>
             
-            <Image
-            borderRadius='full'
-            boxSize='150px'
-            src='https://bit.ly/dan-abramov'
-            alt='nome do membro'
-            />
-             <Text>
-                Nome:  Carlos Pita
-                Email:  carlospita@aorprojects.pt
-                Biografia:  uieyish ashdjkho  ewhiorh whro iwo3
-            </Text>
-             <Image
-            borderRadius='full'
-            boxSize='150px'
-            src='https://bit.ly/dan-abramov'
-            alt='nome do membro'
-            />
-             <Image
-            borderRadius='full'
-            boxSize='150px'
-            src='https://bit.ly/dan-abramov'
-            alt='nome do membro'
-            />
-             <Image
-            borderRadius='full'
-            boxSize='150px'
-            src='https://bit.ly/dan-abramov'
-            alt='nome do membro'
-            />
+            <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={8} mx={5}>
+                <UserCard user ={user1} ></UserCard>
+                <UserCard user ={user2} ></UserCard>
+                <UserCard user ={user1} ></UserCard>
+                <UserCard user ={user2} ></UserCard>
+                <UserCard user ={user1} ></UserCard>
+                <UserCard user ={user1} ></UserCard>
+                <UserCard user ={user1} ></UserCard>
+                <UserCard user ={user1} ></UserCard>
+            </Grid>
 
             <Heading> <FormattedMessage id={"where_are_we"} /> </Heading>
             <AspectRatio ratio={21 / 9} maxW='60%' alignContent={"center"} justifyContent="center" margin={"auto"} marginBottom={20}>

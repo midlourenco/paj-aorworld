@@ -79,7 +79,7 @@ const Register = ()=>{
             >
               <FormControl isInvalid = {errors.firstName}>
                 <Input {...register("firstName", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_first_name'})} />
-                {(errors.email)? 
+                {(errors.firstName)? 
                   (<FormErrorMessage><FormattedMessage id={"error_missing_first_name"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
                 }
@@ -87,7 +87,7 @@ const Register = ()=>{
 
               <FormControl isInvalid = {errors.lastName}>
                 <Input {...register("lastName", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_last_name'})} />
-                {(errors.email)? 
+                {(errors.lastName)? 
                   (<FormErrorMessage><FormattedMessage id={"error_missing_last_name"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
                 }
@@ -121,22 +121,23 @@ const Register = ()=>{
                   }
               </FormControl>
               
-              <FormControl isInvalid = {errors.password}>
+               {/* TODO validar se as 2 passwords sao iguais */}
+              <FormControl isInvalid = {errors.password2}>
                 <Input
                     {...register("password", {required: true})}
                     type= "password"
                     placeholder={intl.formatMessage({id: 'form_field_repeat_password'})}
                 />
               
-                {(errors.password)? 
+                {(errors.password2)? 
                   (<FormErrorMessage><FormattedMessage id={"error_missing_password"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
                 }
               </FormControl>
 
-              <Textarea backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_biography'})}  />
+              <Textarea {...register("biography", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_biography'})}  />
               
-
+              {/* TODO validar uma imagem*/}
               <FormControl isInvalid = {errors.imageURL}>
               <HStack>
                 <Input
@@ -146,7 +147,7 @@ const Register = ()=>{
                 />
                 <Avatar name={register.firstName & " " & register.lastName} src={register.imageURL} />
 
-                {(errors.password)? 
+                {(errors.imageURL)? 
                   (<FormErrorMessage><FormattedMessage id={"error_wrong_imageURL"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
                 }

@@ -5,6 +5,8 @@
     "about_us":"About Us",
     "profile":"My account",
     "notifications": "Notifications",
+    "news_article": "Article",
+    "project":"Project",
 
     "welcome":"Welcome",
     "form_field_first_name":"First Name",
@@ -12,7 +14,7 @@
     "form_field_email":"Email address",
     "form_field_password":"Password",
     "form_field_repeat_password":"Repeat password",
-    "form_field_imageURL":"image URL of your avatar",
+    "form_field_imageURL":"image URL",
     "form_field_last_biography":"Biography",
 
     "sign_up":"Sing up",
@@ -23,6 +25,9 @@
     "create_account":"Create account",
     "login_existent_account":"Login with existent account",
     "reset_password":"Reset password",
+
+    "create_project":"Create project",
+    "create_article":"Create article",
 
     "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge.",
     
