@@ -9,7 +9,6 @@ function selectedLang(){
           return langLS;
     }else {
         let browserLang =navigator.language;
-        
         if(browserLang =="pt-PT" || browserLang =="pt" || browserLang =="pt-BR" ){
             return "pt";
         }else{
@@ -19,7 +18,7 @@ function selectedLang(){
 }
 
 const initialState = {
-    language: selectedLang,
+    language: selectedLang(),
   };
 
 

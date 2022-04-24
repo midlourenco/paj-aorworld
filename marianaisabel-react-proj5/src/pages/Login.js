@@ -5,7 +5,7 @@ import {Navigate} from 'react-router-dom'
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
 import messages from '../translations';
-import {IntlProvider, FormattedMessage} from "react-intl";
+import {IntlProvider, FormattedMessage ,useIntl} from "react-intl";
 
 import {
     Flex,
@@ -60,6 +60,8 @@ function Login () {
     const handleSelect= e => (
       setLocale(e.target.value)
     )
+    //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
+    const intl = useIntl();
 
     return (
         <IntlProvider locale={locale} messages ={messages[locale]}>
@@ -79,7 +81,7 @@ function Login () {
                 alignItems="center"
             >
             <Avatar bg="teal.500" />
-            <Heading color="teal.400">Welcome</Heading>
+            <Heading color="teal.400"> {intl.formatMessage({id: 'welcome'})}</Heading>
             <Box minW={{ base: "90%", md: "468px" }}>
                 <form onSubmit={ handleSubmit((data)=>setData(data), console.log(data) )}>
                     <Stack
@@ -94,7 +96,7 @@ function Login () {
                                 pointerEvents="none"
                                 children={<UserSymbol color="gray.300" />}
                             />
-                            <Input {...register("email", {required: true})} type="email" placeholder="email address" />
+                            <Input {...register("email", {required: true})} type="email" placeholder={intl.formatMessage({id: 'email'})} />
                         </InputGroup>
                         {(errors.email)? 
                         (<FormErrorMessage>Email is required.</FormErrorMessage>)
@@ -111,7 +113,7 @@ function Login () {
                             <Input
                                 {...register("password", {required: true})}
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Password"
+                                placeholder={intl.formatMessage({id: 'password'})}
                             />
                             <InputRightElement width="4.5rem">
                                 <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -125,7 +127,7 @@ function Login () {
                         : null 
                         }
                         <FormHelperText textAlign="right">
-                            <Link>forgot password?</Link>
+                            <Link href="/reset_password">{intl.formatMessage({id: 'forgot_password'})}</Link>
                         </FormHelperText>
 
                     </FormControl>
@@ -137,7 +139,7 @@ function Login () {
                         width="full"
                         // onClick={console.log("carreguei em login")}
                     >
-                        Login
+                        {intl.formatMessage({id: 'login'})} 
                     </Button>
               
                     </Stack>
@@ -145,9 +147,9 @@ function Login () {
                 </Box>
             </Stack>
             <Box>
-                Create a new account?{" "}
+                {intl.formatMessage({id: 'create_new_account'})}{" "}
                 <Link color="teal.500" href="/register">
-                Sign Up
+                {intl.formatMessage({id: 'sign_up'})}
                 </Link>
             </Box>
         </Flex>

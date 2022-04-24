@@ -45,9 +45,9 @@ function Header ({setSelectedLanguage,language,...props}) {
   const [show, setShow] = React.useState(false)
   const toggleMenu = () => setShow(!show)
   //regarding languages switchingi 
-  const [locale, setLocale] = useState(language)
+  //const [locale, setLocale] = useState(language)
   const handleSelect= e => {
-    setLocale(e.target.value);
+    //setLocale(e.target.value);
     setSelectedLanguage(e.target.value);
     localStorage.setItem("selectedLang",e.target.value );
     let langLS= localStorage.getItem("selectedLang");
@@ -65,7 +65,7 @@ function Header ({setSelectedLanguage,language,...props}) {
 
   const NavLink = ({ path, text }) => (
     <ChakraLink as={Link} to ={path} >
-      <Text fontSize="xl" > <FormattedMessage id={text} ></FormattedMessage></Text>
+      <Text fontSize="xl" > <FormattedMessage id={text} /></Text>
     </ChakraLink>
   );
 
@@ -84,7 +84,7 @@ function Header ({setSelectedLanguage,language,...props}) {
       <HStack spacing={3} margin={4}>
         <Select 
         onChange={handleSelect} 
-        defaultValue={locale} 
+        defaultValue={language} 
         variant='unstyled' 
         bg="teal.400"
         borderColor="teal.400"

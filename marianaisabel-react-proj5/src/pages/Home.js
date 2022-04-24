@@ -12,22 +12,13 @@ import {
 } from 'react-router-dom';
 import { useState } from "react";
 import {
-  ChakraProvider,
   Flex,
-  Text,
   Link as ChakraLink,
   Box,
-  Grid,
   Image,
-  Stack,
-  HStack,
-  Select,
-  Button,
-  Spacer,
-  StackDivider
+  Stack
 } from "@chakra-ui/react";
-import messages from '../translations'
-import {IntlProvider, FormattedMessage} from "react-intl";
+import { FormattedMessage} from "react-intl";
 
 
 const Home = ()=>{
@@ -53,7 +44,7 @@ return (
         width={"70%"}
         margin="auto"
     >
-    <Text> A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.</Text>
+    <FormattedMessage id= "intro_home" />
     </Stack>
     </Box>
     

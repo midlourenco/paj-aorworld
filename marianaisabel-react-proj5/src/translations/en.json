@@ -1,7 +1,7 @@
 {
     "welcome":"Welcome",
-    "email":"email address",
-    "password":"password",
+    "email":"Email address",
+    "password":"Password",
     "sign_up":"Sing up",
     "login":"Login",
     "forgot_password":"forgot password?",
@@ -9,5 +9,6 @@
     "home":"Home",
     "news":"News",
     "projects":"Projects",
-    "about_us":"About Us"
+    "about_us":"About Us",
+    "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge."
 }

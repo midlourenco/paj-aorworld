@@ -1,7 +1,7 @@
 {
     "welcome":"Bem-vindo",
-    "email":"endereço de email",
-    "password":"palavra-passe",
+    "email":"Email",
+    "password":"Palavra-passe",
     "sign_up":"Registar",
     "login":"Entrar",
     "forgot_password":"Esqueceu-se da palavra-passe?",
@@ -9,5 +9,6 @@
     "home":"Início",
     "news":"Notícias",
     "projects":"Projectos",
-    "about_us":"Sobre de nós"
+    "about_us":"Sobre nós",
+    "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio."
 }

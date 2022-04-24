@@ -50,9 +50,9 @@ import { connect } from "react-redux";
  * Para o provider IntlProvider ter acesso ao locale, vamos usar o redux para ir bucar esta informação 
  */
 
-function App({language="en",...props}) {
+function App({language = "en",...props}) {
  
-  console.log(language)
+  console.log("language in app " + language)
   const locale=language;
   return (
     <IntlProvider locale={locale} messages ={messages[locale]}>
