@@ -10,5 +10,13 @@
     "news":"News",
     "projects":"Projects",
     "about_us":"About Us",
-    "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge."
+    "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge.",
+    "search_keyword":"Search keyword",
+    "clear_search":"Clear search",
+    "members":"Members",
+    "member":"Member",
+    "admin":"Admin",
+    "update_by":"Update by",
+    "create_by":"Create by",
+    "date":"on {d, date}"
 }

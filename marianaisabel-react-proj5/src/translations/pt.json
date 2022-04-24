@@ -8,7 +8,15 @@
     "create_new_account":"Registar uma conta nova?",
     "home":"Início",
     "news":"Notícias",
-    "projects":"Projectos",
+    "projects":"Projetos",
     "about_us":"Sobre nós",
-    "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio."
+    "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.",
+    "search_keyword":"Pesquisar por palavra-chave",
+    "clear_search":"Limpar pesquisa",
+    "members":"Membros",
+    "member":"Membro",
+    "admin":"Administrador",
+    "update_by":"Atualizado por",
+    "create_by":"Criado por",
+    "date":"em {d, date}"
 }

@@ -12,7 +12,7 @@ import { useState } from "react";
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
 import messages from '../translations';
-import {IntlProvider, FormattedMessage} from "react-intl";
+import {IntlProvider, FormattedMessage,useIntl} from "react-intl";
 
 import {
     Flex,
@@ -73,6 +73,8 @@ function  Projects (){
         setSelectedKeyword("");
     }
     
+    const intl = useIntl();
+
 
     const p1 = {
         imageUrl: 'https://rockcontent.com/br/wp-content/uploads/sites/2/2020/02/projeto-pessoal.png',
@@ -82,9 +84,9 @@ function  Projects (){
         users: ['Ricardo', 'Mariana', 'Tiago', 'Inês', 'Anna', 'Mariana'],
         news: ['HTML/CSS', 'REST',  'mySQL','Websockets'],
         createdBy: 'Mariana',
-        createdDate: '15-04-2022',
+        createdDate: '2022-04-15',
         lastModifBy: 'Isabel',
-        lastModifDate: '21-04-2022'
+        lastModifDate: '2022-04-21'
     }
 
 
@@ -96,82 +98,81 @@ function  Projects (){
         users: ['Mariana', 'Goncalo'],
         news: ['Java', 'Programar',  'Programar','React'],
         createdBy: 'Mariana',
-        createdDate: '15-04-2022',
+        createdDate: '2022-04-15',
         lastModifBy: '',
         lastModifDate: ''
     }
 
     //
     return (
-        <Stack spacing={10} backgroundColor="gray.200">
-        <Heading as='h1' size='3xl'  >Projects</Heading>
+        <Stack spacing={10} backgroundColor="gray.200" pb={20}>
+            <Heading as='h1' size='3xl'  ><FormattedMessage id={"projects"} /> </Heading>
 
-        <Flex  flexDirection="column" justifyContent="center" alignItems="start"  mr={5}>
-        <InputGroup mx={5}>
-        <InputLeftElement> <SearchSymbol /></InputLeftElement>
-        <Input type="text" 
-            placeholder="search keyword" 
-            width={"25%"}
-            value={searchParams || ''}
-            _placeholder={{ color: 'teal' }}
-            onChange={(event) => {
-                let filter = event.target.value;
-                if (filter) {
-                //setSearchParams({ filter }, { replace: true });
-                setSearchParams(filter);
-                } else {
-                //setSearchParams({}, { replace: true });
-                setSearchParams("");
-                }
-            }}
-        />
-        </InputGroup>
-       
+            <Flex  flexDirection="column" justifyContent="center" alignItems="start"  mr={5}>
+            <InputGroup mx={5}>
+            <InputLeftElement> <SearchSymbol /></InputLeftElement>
+            <Input type="text" 
+                placeholder={intl.formatMessage({id: 'search_keyword'})}
+                width={"25%"}
+                value={searchParams || ''}
+                _placeholder={{ color: 'teal' }}
+                onChange={(event) => {
+                    let filter = event.target.value;
+                    if (filter) {
+                    //setSearchParams({ filter }, { replace: true });
+                    setSearchParams(filter);
+                    } else {
+                    //setSearchParams({}, { replace: true });
+                    setSearchParams("");
+                    }
+                }}
+            />
+            </InputGroup>
+        
 
-         <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={4}>
-   
-       { keywordsArray.filter((keyword)=>{
-            let filter = searchParams;
-            if(!filter) return true;
-            let name = keyword.toLowerCase();
-            return name.startsWith(filter.toLowerCase());
+            <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={5}>
+    
+                { keywordsArray.filter((keyword)=>{
+                        let filter = searchParams;
+                        if(!filter) return true;
+                        let name = keyword.toLowerCase();
+                        return name.startsWith(filter.toLowerCase());
 
-       }).map((k)=>{
-          
-           return   selectedKeyword && selectedKeyword==k?
-                     <Tag key={k} background="teal.400" color={"white"}>
-                    <TagLeftIcon boxSize='12px' as={SearchIcon} />
-                    <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
-                    </Tag>
-                    : <Tag key={k} >
-                    <TagLeftIcon boxSize='12px' as={SearchIcon} />
-                    <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
-                    </Tag>
-                
-        }
-       )}
-        </Stack>
-        {selectedKeyword && selectedKeyword!=""?
-        <Button leftIcon={<ClearSearchSymbol color={"red"}/> } variant='outline' colorScheme='red' size='sm' ml={5} onClick={handleClearSearchClick}>Clear search </Button>
-        : null
-        }
-        </Flex>
-        <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={3} >
-        <ProjectCard projectElem={p1}/>
-        <ProjectCard projectElem={p2}/>
+                }).map((k)=>{
+                    
+                    return   selectedKeyword && selectedKeyword==k?
+                                <Tag key={k} background="teal.400" color={"white"}>
+                                <TagLeftIcon boxSize='12px' as={SearchIcon} />
+                                <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
+                                </Tag>
+                                : <Tag key={k} >
+                                <TagLeftIcon boxSize='12px' as={SearchIcon} />
+                                <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
+                                </Tag>
+                            
+                    }
+                )}
+            </Stack >
+            {selectedKeyword && selectedKeyword!=""?
+            <Button leftIcon={<ClearSearchSymbol color={"red"}/> } variant='outline' colorScheme='red' size='sm' ml={5} onClick={handleClearSearchClick}><FormattedMessage id={"clear_search"} /></Button>
+            : null
+            }
+            </Flex>
+            <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={3}>
+                <ProjectCard projectElem={p1}/>
+                <ProjectCard projectElem={p2}/>
 
-        <ProjectCard projectElem={p2}/>
-        <ProjectCard projectElem={p2}/>
-        <ProjectCard projectElem={p2}/>
-        <ProjectCard projectElem={p2}/>
-        <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
 
-        <ProjectCard projectElem={p1}/>
-        <ProjectCard projectElem={p1}/>
-        <ProjectCard projectElem={p1}/>
-        <ProjectCard projectElem={p1}/>
-
-        </Grid>
+                <ProjectCard projectElem={p1}/>
+                <ProjectCard projectElem={p1}/>
+                <ProjectCard projectElem={p1}/>
+                <ProjectCard projectElem={p1}/>
+            </Grid>
         </Stack>
     )
     

@@ -61,30 +61,32 @@ function  ProjectCard ({projectElem, ...props}){
     const LastModifBySymbol = chakra(BiEraser);
     const CreateBySymbol = chakra(RiNewspaperLine);
 
-   
+    console.log( new Date((project.lastModifDate)));
     return (
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
             <HStack display='flex' justifyContent="center"  alignItems="center">
-            <Image src={project.imageUrl} alt={project.title.slice(0,10)} />
+            <Image src={project.imageUrl} alt={project.title.slice(0,10)} h='255px' />
             </HStack>
             <Box p='6'>
-                <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'row']} >
-                    <HStack >
-                    {project.keywords.map(n => (
-                        <Badge borderRadius='full' px='2' colorScheme='teal' key={n} >{n}</Badge>
-                    ))}
-                    </HStack>
+                <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'column']} >
+                    
                     <Box
                         color='gray.500'
                         fontWeight='semibold'
                         letterSpacing='wide'
                         fontSize='xs'
                         textTransform='uppercase'
-                        ml='2'
+                        mb='3'
+                        alignSelf={"center"}
                         >
-                        {project.users.length} membros &bull; {project.news.length} news
+                        {project.users.length} <FormattedMessage id={"members"} />   &bull; {project.news.length} <FormattedMessage id={"news"} />  
                     </Box>
+                    <HStack  mb='5' alignSelf={"center"}>
+                    {project.keywords.map(n => (
+                        <Badge borderRadius='full' px='2' colorScheme='teal' key={n} >{n}</Badge>
+                    ))}
+                    </HStack>
                 </Box>
         
                 <Box
@@ -92,6 +94,7 @@ function  ProjectCard ({projectElem, ...props}){
                     fontWeight='semibold'
                     as='h4'
                     lineHeight='tight'
+                    mb='1'
                     isTruncated
                 >
                     {project.title}
@@ -101,10 +104,10 @@ function  ProjectCard ({projectElem, ...props}){
                     {project.description}
                 </Box>
 
-                <Box display='flex' flexDirection={"row"} justifyContent="right" mt='2' alignItems='center'>
+                <Box display='flex' flexDirection={"row"} justifyContent="right" mt='6' alignItems='center' >
                 {project.lastModifBy && project.lastModifBy!="" 
-                ?   <Text  as='i' fontSize='sm'> {<LastModifBySymbol color="gray.200" />} Atualizado por: {project.lastModifBy}, em {project.lastModifDate} </Text>
-                :   <Text  as='i' fontSize='sm' >{<CreateBySymbol color="gray.200" />} Escrito por: {project.createdBy}, em {project.createdDate} </Text>
+                ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {project.lastModifBy}, <FormattedMessage id={"date"} values={{d:  new Date(project.lastModifDate)}} />   </Text> </>
+                : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {project.createdBy}, <FormattedMessage id={"date"} values={{d:  new Date(project.createdDate)}} />  </Text> </>
                 }
                 </Box>
             </Box>
@@ -118,3 +121,5 @@ function  ProjectCard ({projectElem, ...props}){
     
     }
     export default ProjectCard;
+
+    //project.lastModifDate
