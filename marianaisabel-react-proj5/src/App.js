@@ -84,6 +84,7 @@ function App({language = "en",...props}) {
                 <Route path= "/projects" element ={<Projects />} > </Route>
                 <Route path= "/about" element ={<AboutUs />} />
                 <Route path= "/profile" element ={<Profile />} />
+                <Route path= "/profile/:id" element ={<Profile />} />
                 <Route path= "/notification" element ={<Notification />} />
                 <Route path= "*" element ={<ErrorPage404 />} />
             </Routes>

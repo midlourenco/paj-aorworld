@@ -40,8 +40,9 @@ import { BiEraser} from "react-icons/bi";
 
 function Project( ...props){
     const { id } = useParams();
-    const queryString = new URLSearchParams(useLocation().search);
-    console.log(queryString.get("id"))
+    console.log(id)
+   // const queryString = new URLSearchParams(useLocation().search);
+   // console.log(queryString.get("id"))
 
     return (
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'>

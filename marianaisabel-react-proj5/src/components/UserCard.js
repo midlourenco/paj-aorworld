@@ -1,4 +1,6 @@
 import React from 'react'
+import {  Link, useParams } from "react-router-dom";
+
 import {
     Flex,
     Heading,
@@ -34,17 +36,31 @@ function UserCard({user, ...props}) {
             return "gray"
         }
     }
+    let id = user.id;
 
     return (
         <Flex>
         <Avatar src={user.imageURL} />
         <Box ml='3'>
-        <Text fontWeight='bold'>
+        <ChakraLink as={Link} to ={`/profile/${id}`}  >
+            <Text fontSize="md"  mt='1'
+            fontWeight='bold'
+            mb='1'
+            isTruncated
+            > 
+                {user.firstName + " " +user.lastName }
+                <Badge ml='1' colorScheme={setColorBadgeRole()}>
+                {user.role}
+                </Badge>
+            </Text>
+        </ChakraLink>
+
+        {/* <Text fontWeight='bold'>
             {user.firstName + " " +user.lastName }
             <Badge ml='1' colorScheme={setColorBadgeRole()}>
             {user.role}
             </Badge>
-        </Text>
+        </Text> */}
         <Text fontSize='sm'>{user.email}</Text>
         <Text fontSize='sm' isTruncated>{user.biography}</Text>
         </Box>

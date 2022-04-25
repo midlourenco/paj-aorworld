@@ -24,6 +24,7 @@ import {
 
 const AboutUs = ()=>{
     const user1={
+        id: "1",
         firstName:  "Carlos",
         lastName: "Pita",
         email:  "carlospita@aorprojects.pt",
@@ -34,6 +35,7 @@ const AboutUs = ()=>{
 
 
     const user2={
+        id: "2",
         firstName:  "Manuel",
         lastName: "Shoarma",
         email:  "manuelshoarma@aorprojects.pt",
