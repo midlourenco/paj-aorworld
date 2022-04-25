@@ -9,6 +9,8 @@ function Logout() {
     //     return <Navigate to="/news" />
     // }
 
+    
+
   return (
     <Navigate to="/" />
   )

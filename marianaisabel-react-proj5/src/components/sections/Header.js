@@ -15,7 +15,9 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  StackDivider
+  StackDivider,
+  useMediaQuery,
+  IconButton
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon , ChevronDownIcon} from '@chakra-ui/icons'
 import { setSelectedLanguage} from '../../redux/actions'
@@ -36,17 +38,59 @@ import { connect } from "react-redux";
 //   )
 // }
 
+const NavLink = ({ path, text }) => (
+  <ChakraLink as={Link} to ={path} >
+    <Text fontSize="xl" > <FormattedMessage id={text} /></Text>
+  </ChakraLink>
+);
 
 
+const MenuLoggedUser=()=>{
+  return (
+    <Menu>
+      <MenuButton as={Button} colorScheme="teal" rightIcon={<ChevronDownIcon />}  >
+        Nome
+      </MenuButton>
+      <MenuList color={"teal"}>
+        <MenuItem><NavLink text="profile" path= "/profile"  /></MenuItem>
+        <MenuItem><NavLink text="notifications" path= "/notification"  /></MenuItem>
+        <MenuItem> <NavLink text="logout" path= "/logout"  /></MenuItem>
+      </MenuList>
+    </Menu>
+  )
+}
 
 
+const HorizontalMenuBar=()=>{
+  return(<HStack spacing={6} divider={<StackDivider />} as="nav" margin={4}>
+    <NavLink text="home"  path= "/" /> 
+    <NavLink text="news" path= "/news" />
+    <NavLink text="projects" path= "/projects" />
+    <NavLink text="about_us" path= "/about"/>
+  </HStack>)
+}
 
+const VerticalMenuBar= ()=>{
+
+  return(<Menu m={5} >
+      <MenuButton as={IconButton} colorScheme="teal" icon={<HamburgerIcon />} m={5}  />
+      <MenuList color={"teal"}>
+        <MenuItem key="home"><NavLink text="home"  path= "/" /> </MenuItem>
+        <MenuItem key="news"><NavLink text="news" path= "/news" /></MenuItem>
+        <MenuItem key="projects"><NavLink text="projects" path= "/projects" /></MenuItem>
+        <MenuItem key="aboutus"> <NavLink text="about_us" path= "/about"/> </MenuItem>
+      </MenuList>
+    </Menu>
+
+  )
+
+
+}
 
 
 function Header ({setSelectedLanguage,language,...props}) {
   const [login, setLogin]= useState(false);
-  const [show, setShow] = React.useState(false);
-  const toggleMenu = () => setShow(!show)
+
   //regarding languages switchingi 
   //const [locale, setLocale] = useState(language)
   const handleSelect= e => {
@@ -66,38 +110,14 @@ function Header ({setSelectedLanguage,language,...props}) {
     }
   }
 
-  const NavLink = ({ path, text }) => (
-    <ChakraLink as={Link} to ={path} >
-      <Text fontSize="xl" > <FormattedMessage id={text} /></Text>
-    </ChakraLink>
-  );
+  const [isMobile] = useMediaQuery("(max-width: 768px)") 
 
-
-const MenuLoggedUser=()=>{
-  return (
-    <Menu>
-      <MenuButton as={Button} colorScheme="teal" rightIcon={<ChevronDownIcon />}  >
-        Nome
-      </MenuButton>
-      <MenuList color={"teal"}>
-        <MenuItem><NavLink text="profile" path= "/profile"  /></MenuItem>
-        <MenuItem><NavLink text="notifications" path= "/notification"  /></MenuItem>
-        <MenuItem> <NavLink text="logout" path= "/logout"  /></MenuItem>
-      </MenuList>
-    </Menu>
-  )
-}
 
   return(
     <Box backgroundColor="teal.400" color={"white"}>  
-    <Flex>
-      <HStack spacing={6} divider={<StackDivider />} as="nav" margin={4}>
-        <NavLink text="home"  path= "/" /> 
-        <NavLink text="news" path= "/news" />
-        <NavLink text="projects" path= "/projects" />
-        <NavLink text="about_us" path= "/about"/>
-      </HStack>
-      <Spacer />
+    <Flex display="flex" verticalAlign={"middle"} justifyContent={"center"}>
+    {isMobile ? <VerticalMenuBar />  : <HorizontalMenuBar />}
+    <Spacer />
       
       <HStack spacing={3} margin={4}>
         <Select 
