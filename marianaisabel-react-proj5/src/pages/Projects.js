@@ -11,8 +11,8 @@ import {
 import { useState } from "react";
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
-import messages from '../translations';
-import {IntlProvider, FormattedMessage,useIntl} from "react-intl";
+
+import { FormattedMessage,useIntl} from "react-intl";
 
 import {
     Flex,
