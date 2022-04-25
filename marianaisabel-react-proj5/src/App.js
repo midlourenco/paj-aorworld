@@ -32,6 +32,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import News from './pages/News';
 import NewsArticle from "./pages/NewsArticle";
+import NewNews from './pages/NewNews';
 import Projects from './pages/Projects';
 import Project from './pages/Project';
 import NewProject from './pages/NewProject';
@@ -78,6 +79,7 @@ function App({language = "en",...props}) {
                 <Route path= "/reset_password"  element ={<ResetPassword />} />
                 <Route path= "/register" element ={<Register />} />
                 <Route path= "/news" element ={<News />} />
+                <Route path= "/news/new" element ={<NewNews />} />
                 <Route path= "/news/:id" element ={<NewsArticle />} />
                 <Route path= "/projects/new" element ={<NewProject />} /> 
                 <Route path= "/projects/:id" element ={<Project />} /> 

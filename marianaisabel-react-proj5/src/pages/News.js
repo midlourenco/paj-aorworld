@@ -169,7 +169,7 @@ function  News (){
                         px={[12,8,6]}
                         mr={5}
                     >
-                        <Link to="/projects/new"><FormattedMessage id="new_news"></FormattedMessage></Link>
+                        <Link to="/news/new"><FormattedMessage id="new_news"></FormattedMessage></Link>
                     </Button>
                 </Flex>
 
