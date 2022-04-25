@@ -152,7 +152,7 @@ function Profile() {
                 alignItems="center"
                 >
                 
-                <Box minW={{ base: "90%", md: "468px" }}>
+                <Box minW={{ base: "90%", md: "468px" }} mb={20}>
                     <Stack
                         spacing={4}
                         p="1rem"

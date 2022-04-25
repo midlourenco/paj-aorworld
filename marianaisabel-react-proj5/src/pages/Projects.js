@@ -119,7 +119,7 @@ function  Projects (){
                         <InputLeftElement> <SearchSymbol /></InputLeftElement>
                         <Input type="text" 
                             placeholder={intl.formatMessage({id: 'search_keyword'})}
-                            width={"25%"}
+                            width={["90%","75%","45%"]}
                             value={searchParams || ''}
                             _placeholder={{ color: 'teal' }}
                             onChange={(event) => {
@@ -138,6 +138,7 @@ function  Projects (){
                         leftIcon={<AddIcon />} 
                         colorScheme='teal' 
                         variant='outline' 
+                        px={[12,8,6]}
                         mr={5}
                     >
                         <Link to="/projects/new"><FormattedMessage id="new_project"></FormattedMessage></Link>
