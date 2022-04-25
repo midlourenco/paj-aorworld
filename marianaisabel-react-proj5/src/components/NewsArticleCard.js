@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {  Link, useParams } from "react-router-dom";
 
 
@@ -11,6 +12,7 @@ import {
     Button,
     InputGroup,
     Stack,
+    VStack,
     InputLeftElement,
     chakra,
     Grid,
@@ -21,19 +23,27 @@ import {
     Square,
     Badge,
     Text,
-    Avatar,
-    FormControl,
-    FormHelperText,
-    FormErrorMessage,
-    InputRightElement,
     HStack,
-    Spacer
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+    UnorderedList,
+    ListItem
 } from "@chakra-ui/react";
 
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons
 import { RiNewspaperLine} from "react-icons/ri";
 import { BiEraser} from "react-icons/bi";
+
+
+
+
 
 function  NewsArticleCard ({newsElem, ...props}){
 
@@ -56,20 +66,28 @@ function  NewsArticleCard ({newsElem, ...props}){
     let id = news.id;
     console.log("O id do use params " + news.id);
    // console.log( new Date((news.lastModifDate)));
+ 
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [overlay, setOverlay] = useState("")
+
+
+       
+    
+  
     return (
-        <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
-            <Flex >
+        <Box  borderWidth='1px' borderRadius='lg' backgroundColor="white" margin={5}> 
+            <Flex display='flex' justifyContent="center"  alignItems="center" >
             {/* <GridItem colSpan={1}> */}
-            <Square size='200px'>            
-                <HStack display='flex' justifyContent="center"  alignItems="center">
-                <Image src={news.imageUrl} alt={news.title.slice(0,10)} h='255px' />
-                </HStack>
+            <Square size={["100px","250px","250px"]} >            
+                <VStack display='flex' justifyContent="center"  alignItems="center"  >
+                    <Image src={news.imageUrl} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} />
+                </VStack>
             </Square>
 
             {/* </GridItem>
             <GridItem colSpan={2}> */}
-            <Square minWidth={"80%"}>
-            <Box p='6'  >
+           
+            <Box p='6' >
                 <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'column']} >
                     
                     <Box
@@ -79,9 +97,51 @@ function  NewsArticleCard ({newsElem, ...props}){
                         fontSize='xs'
                         textTransform='uppercase'
                         mb='3'
+                        mx='3'
                         alignSelf={"center"}
                         >
-                        {news.users.length} <FormattedMessage id={"members"} />   &bull; {news.projects.length} <FormattedMessage id={"projects"} />  
+                        <Button size='xs' variant='link' onClick={() => {
+                            setOverlay("members") 
+                            onOpen()
+                        }}> 
+                            {news.users.length} <FormattedMessage id={"members"} /> 
+                        </Button>  &bull;  
+                        <Button size='xs' variant='link' onClick={() => {
+                            setOverlay("projects") 
+                            onOpen()
+                        }}> 
+                            {news.projects.length} <FormattedMessage id={"projects"} />  
+                        </Button>
+                        <>
+                            <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                            <ModalOverlay />
+                            <ModalContent>
+                            {overlay=="members" ?
+                                <ModalHeader>Utilizadores Associados</ModalHeader>
+                                :<ModalHeader>Projectos Associados</ModalHeader>
+                            }
+                                <ModalCloseButton />
+                                <ModalBody>
+                                <UnorderedList>
+                                {overlay=="members" ?
+                                news.users.map(u => (
+                                    <ListItem borderRadius='full' px='2' key={u.id} ><Link to={`/profile/${u.id}`} >{u.firstName}</Link></ListItem>
+                                ))
+                                :  news.projects.map(t => (
+                                    <ListItem borderRadius='full' px='2' key={t.id} ><Link to={`/projects/${t.id}`} >{t.title}</Link></ListItem>
+                                ))
+                                }
+                                </UnorderedList>
+                                </ModalBody>
+                                <ModalFooter>
+                                <Button onClick={onClose}>Close</Button>
+                                </ModalFooter>
+                            </ModalContent>
+                            </Modal>
+                        </>
+                    
+                    
+                    
                     </Box>
                     <HStack  mb='5' alignSelf={"center"}>
                     {news.keywords.map(n => (
@@ -90,30 +150,30 @@ function  NewsArticleCard ({newsElem, ...props}){
                     </HStack>
                 </Box>
 
-                <ChakraLink as={Link} to ={`/projects/${id}`}  >
+                <ChakraLink as={Link} to ={`/news/${id}`}  >
                     <Text fontSize="md"  mt='1'
                     fontWeight='semibold'
                     as='h4'
                     lineHeight='tight'
                     mb='1'
-                    isTruncated
+                    
                     > 
                         {news.title} 
                     </Text>
                 </ChakraLink>
 
-                <Box  isTruncated>
+                <Box  >
                     {news.description}
                 </Box>
 
-                <Box display='flex' flexDirection={"row"} justifyContent="right" mt='6' alignItems='center' >
+                <Box display='flex' flexDirection={"row"} justifyContent="center" mt='6' alignItems='center' >
                 {news.lastModifBy && news.lastModifBy!="" 
                 ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {news.lastModifBy}, <FormattedMessage id={"date"} values={{d:  new Date(news.lastModifDate)}} />   </Text> </>
                 : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {news.createdBy}, <FormattedMessage id={"date"} values={{d:  new Date(news.createdDate)}} />  </Text> </>
                 }
                 </Box>
             </Box>
-            </Square>
+            
             {/* </GridItem> */}
             </Flex>
         </Box>

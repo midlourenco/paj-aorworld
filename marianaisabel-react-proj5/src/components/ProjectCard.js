@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {  Link, useParams } from "react-router-dom";
 
 
@@ -24,6 +25,16 @@ import {
     FormHelperText,
     FormErrorMessage,
     InputRightElement,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+    UnorderedList,
+    ListItem,
     HStack,
     Spacer
 } from "@chakra-ui/react";
@@ -54,6 +65,9 @@ function  ProjectCard ({projectElem, ...props}){
     let id = project.id;
     console.log("O id do use params " + project.id);
    // console.log( new Date((project.lastModifDate)));
+   const { isOpen, onOpen, onClose } = useDisclosure()
+   const [overlay, setOverlay] = useState("")
+
     return (
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
@@ -72,7 +86,47 @@ function  ProjectCard ({projectElem, ...props}){
                         mb='3'
                         alignSelf={"center"}
                         >
-                        {project.users.length} <FormattedMessage id={"members"} />   &bull; {project.news.length} <FormattedMessage id={"news"} />  
+                        {/* {project.users.length} <FormattedMessage id={"members"} />   &bull; {project.news.length} <FormattedMessage id={"news"} />   */}
+                        <Button size='xs' variant='link' onClick={() => {
+                            setOverlay("members") 
+                            onOpen()
+                        }}> 
+                            {project.users.length} <FormattedMessage id={"members"} /> 
+                        </Button>  &bull;  
+                        <Button size='xs' variant='link' onClick={() => {
+                            setOverlay("news") 
+                            onOpen()
+                        }}> 
+                            {project.news.length} <FormattedMessage id={"news"} />  
+                        </Button>
+                        <>
+                            <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                            <ModalOverlay />
+                            <ModalContent>
+                            {overlay=="members" ?
+                                <ModalHeader>Utilizadores Associados</ModalHeader>
+                                :<ModalHeader>Notícias Associadass</ModalHeader>
+                            }
+                                <ModalCloseButton />
+                                <ModalBody>
+                                <UnorderedList>
+                                {overlay=="members" ?
+                                project.users.map(u => (
+                                    <ListItem borderRadius='full' px='2' key={u.id} ><Link to={`/profile/${u.id}`} >{u.firstName}</Link></ListItem>
+                                ))
+                                :  project.news.map(t => (
+                                    <ListItem borderRadius='full' px='2' key={t.id} ><Link to={`/projects/${t.id}`} >{t.title}</Link></ListItem>
+                                ))
+                                }
+                                </UnorderedList>
+                                </ModalBody>
+                                <ModalFooter>
+                                <Button onClick={onClose}>Close</Button>
+                                </ModalFooter>
+                            </ModalContent>
+                            </Modal>
+                        </>
+                    
                     </Box>
                     <HStack  mb='5' alignSelf={"center"}>
                     {project.keywords.map(n => (
