@@ -33,7 +33,9 @@ import {
     ListItem,
     InputRightElement
 } from "@chakra-ui/react";
-import { FaEyeSlash, FaEye} from "react-icons/fa";
+import {  AddIcon } from '@chakra-ui/icons'
+
+
 import ButtonExemple from "../components/ButtonExemple";
 
 
@@ -81,10 +83,7 @@ function NewProject() {
 
 
   const [data, setData]= useState("");
-  //mostrar e esconder a password
-  const [showPassword, setShowPassword] = useState(false);
-  //função que chamamos ao clicar em "show"/"hide" password - altera o state de false para true e vice-versa
-  const handleShowClick = () => setShowPassword(!showPassword);
+
 
   //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
   const intl = useIntl();
@@ -93,6 +92,10 @@ function NewProject() {
     initialStep: 0,
   });
 
+  const [keywords, setKeywords] = useState([]);
+  const handleAddKeyword =(keyword)=>{
+    setKeywords(keyword);
+  }
 
   const content1 = (
     <Flex justifyContent={"center"} py={4}>
@@ -115,8 +118,23 @@ function NewProject() {
         <Textarea {...register("description", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_description'})}  />
         
         <FormControl isInvalid = {errors.keyword}>
+        <InputGroup>
           <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})} />
-          {(errors.keyword)? 
+
+          <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={()=>handleAddKeyword("ola")}>
+                  {/* {showPassword ? "Hide" : "Show"} */}
+                <AddIcon color = "gray.400" />
+              </Button>
+          </InputRightElement>
+      </InputGroup>
+      {keywords && keywords.length?
+       (<HStack> {keywords.map(k => ( <Box key={k}>{k}</Box>))} </HStack>)
+       :null
+      }
+
+
+        {(errors.keyword)? 
             (<FormErrorMessage><FormattedMessage id={"error_missing_keyword"}  ></FormattedMessage></FormErrorMessage>)
             : null 
           }
