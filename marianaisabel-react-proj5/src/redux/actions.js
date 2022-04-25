@@ -26,8 +26,9 @@ export const setSelectedLanguage = (language) => ({
  * @param {*}  
  * @returns 
  */
- export const setLoginOK = (name,privileges) => ({
+ export const setLoginOK = (name,privileges,token) => ({
   type: LOGIN_OK,
   payload: { name },
-  payload: { privileges }
+  payload: { privileges },
+  payload: { token }
 });

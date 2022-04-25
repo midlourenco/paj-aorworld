@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './style.css';
 //In react-router-dom v6, "Switch" is replaced by routes "Routes".
 //https://stackoverflow.com/questions/63124161/attempted-import-error-switch-is-not-exported-from-react-router-dom
@@ -28,6 +28,7 @@ import messages from './translations'
 import {IntlProvider, FormattedMessage} from "react-intl";
 import { connect } from "react-redux";
 
+import ErrorMsg from "./components/ErrorMsgTopBar";
 import Home from './pages/Home';
 import Login from './pages/Login';
 import News from './pages/News';
@@ -50,28 +51,31 @@ import Notification from "./pages/Notification";
 // import {Home, Login, News, Projects, AboutUs} from './pages'
 
 //https://reactrouter.com/docs/en/v6/api :
-function ProjectPage() {
-  // Get the projectId param from the URL.
-  let { id } = useParams();
-  return <Route path= {"/projects?id:"+{id} } element ={<Project id={id} />} />
-  // ...
-}
 
+//alternativa para erros no intl:
+//onError={myCustomErrorFunction} 
 /**
  * Para o provider IntlProvider ter acesso ao locale, vamos usar o redux para ir bucar esta informação 
  */
+function App({language = "en",error="",...props}) {
+ useEffect(()=>{
 
-function App({language = "en",...props}) {
- 
+ },[error]);
+ console.log("o erro no App é "+ error)
   console.log("language in app " + language)
   const locale=language;
   return (
-    <IntlProvider locale={locale} messages ={messages[locale]}>
+    <IntlProvider locale={locale} messages ={messages[locale]}   >
       <Box>
+      
         <Router >
           <div className="App">
             <Header />
-
+            <ErrorMsg />
+            {/* {error && error!=""
+            ? <ErrorMsg />
+            : null
+            } */}
             <Routes>
                 <Route path= "/" exact element ={<Home />} />
                 <Route path= "/login" element ={<Login />}/>

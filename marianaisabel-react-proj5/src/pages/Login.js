@@ -1,7 +1,7 @@
-import React from "react"
-import { useState } from "react";
+import React, { useEffect, useState } from "react"
+// import { useState } from "react";
 //Redirect replace by Naviagate
-import {Navigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
 
@@ -28,26 +28,79 @@ import {
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons
 import { FaUserAlt, FaLock,FaEyeSlash, FaEye} from "react-icons/fa";
-
-
+import config from "../config";
+import useFetch from 'use-http';
+import { setLoginOK, setAppError } from '../redux/actions'
+import { connect } from 'react-redux'
 
 //InputGroup-> cada input pode ter 3 elementos
 //1. um simbolo ilucidativo do que é para colocar em cada campo (à esquerda)
 //2. caixa de texto propriamente dtia com o tipo de dados com placeholder e a variável do resultado
 //3. algum elemento à direita (por exemplo o botão para ver/esconder a password)
 
-function Login () {
+function Login ({setLoginOK,setAppError,...props}) {
+    //simboloas usados na pagina de login
     const UserSymbol = chakra(FaUserAlt);
     const LockSymbol = chakra(FaLock);
     const EyeSymbol = chakra(FaEye);
     const EyeSlashSymbol = chakra(FaEyeSlash);
- 
 
+    const navigate = useNavigate();
+
+
+    useEffect(()=>{
+        const authString = localStorage.getItem("Authorization")
+        if (authString && authString!=""){
+           navigate("/");
+           console.log("está logado e tenho que arranjar maneira de redireccionar daqui")
+        }
+        setAppError("");
+
+    },[])
+
+
+
+
+    //função para fazer o request ao serividor
+    const { post, response, loading, error } = useFetch(config.API_URL);
+
+    //funções onSubmit e onError são usadas para o useForm, que lê os dados introduzidos nas caixas de input e os coloca num objecto 
     const {register, handleSubmit, formState: {errors}}= useForm();
-    const onSubmit = (data, e) => console.log(data, e);
+
+    async function onSubmit (data, e) {
+        console.log(data, e);
+        // const options ={
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     accept: "application/json",
+        //     body: JSON.stringify(data),
+        // }
+        const authString = await post('users/login', data)
+        if (response.ok) {
+            localStorage.setItem("Authorization", authString);
+            setLoginOK(authString.Authorization);
+            console.log(authString.Authorization);
+            setAppError("");
+            navigate("/");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+            setAppError(  error );
+            }else{
+                setAppError(  "error_fetch_generic" );
+            }
+        }
+    }
+
+    
     const onError = (errors, e) => console.log(errors, e);
-  
-    const [data, setData]= useState("");
+
+    // const [data, setData]= useState("");
     //mostrar e esconder a password
     const [showPassword, setShowPassword] = useState(false);
     //função que chamamos ao clicar em "show"/"hide" password - altera o state de false para true e vice-versa
@@ -147,6 +200,9 @@ function Login () {
     );
 };
     
+const mapStateToProps = state => {
+    return { error: state.errorMsg.error, // fazemos a logica se ele existir mostra mensagem de erro
+    };
+};
     
-    
-export default Login;
+export default connect(mapStateToProps, { setLoginOK,setAppError })(Login);

@@ -78,7 +78,8 @@ public class UserController {
 			// ObjectMapper mapper = new ObjectMapper();
 			// String json = mapper.writeValueAsString();
 			a_resposta = Response.ok().entity(tokenJson.toString()).build();
-
+//			UserDTOResp user = userService.getUserDTORespByToken(token);
+//			a_resposta = Response.ok(user).build();
 		} else {
 			System.out.println(GestaoErros.getMsg(7));
 			a_resposta = Response.status(401).entity(GestaoErros.getMsg(7)).build();

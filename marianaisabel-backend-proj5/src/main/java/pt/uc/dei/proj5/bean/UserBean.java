@@ -71,7 +71,23 @@ public class UserBean implements Serializable {
 			return null;
 		}
 	}
-	
+	/**
+	 * Devolve um UserDTOResp válido (não marcado como eliminado) recebendo um token
+	 * @param authString
+	 * @return
+	 */
+	public UserDTOResp getUserDTORespByToken(String authString) {
+		// System.out.println("entrei no get user by token");
+		try {
+			User user = userDao.findUserByToken(authString);
+			// System.out.println("getUserbytoken:" + user);
+			return UserDao.convertEntitytoDTOResp(user);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	/**
 	 * Devolve um utilizador a partir do seu id quer  esteja marcado para eliminar ou não

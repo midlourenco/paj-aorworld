@@ -58,5 +58,8 @@
     "error_wrong_credencials":"Email e/ou palavra-passe não está correcto ",
     "error_wrong_password":"As palavras-passe não coincidem ",
     "error_pageNotFound_404":"Esta página não exsite",
-    "error_wrong_imageURL": "Este URL não é de uma imagem"
+    "error_wrong_imageURL": "Este URL não é de uma imagem",
+
+    "error_fetch_generic":"Houver um problema, por favor tente mais tarde",
+    "error_fetch_login_401": "Ocorreu um problema ao tentar fazer login. Por favor, verifique as suas credênciais e tente novamente."
 }

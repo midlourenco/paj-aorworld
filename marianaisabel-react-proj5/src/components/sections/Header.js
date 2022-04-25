@@ -24,20 +24,6 @@ import { setSelectedLanguage} from '../../redux/actions'
 import { connect } from "react-redux";
 
 
-// const MenuItems = (props) => {
-//   const { children, isLast, to = "/", ...rest } = props
-//   return (
-//     <Text
-//       mb={{ base: isLast ? 0 : 8, sm: 0 }}
-//       mr={{ base: 0, sm: isLast ? 0 : 8 }}
-//       display="block"
-//       {...rest}
-//     >
-//       <Link to={to}>{children}</Link>
-//     </Text>
-//   )
-// }
-
 const NavLink = ({ path, text }) => (
   <ChakraLink as={Link} to ={path} >
     <Text fontSize="xl" > <FormattedMessage id={text} /></Text>
@@ -89,7 +75,7 @@ const VerticalMenuBar= ()=>{
 
 
 function Header ({setSelectedLanguage,language,...props}) {
-  const [login, setLogin]= useState(false);
+  const [login, setLogin]= useState(true);
 
   //regarding languages switchingi 
   //const [locale, setLocale] = useState(language)
