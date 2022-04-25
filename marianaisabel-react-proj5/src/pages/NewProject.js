@@ -24,7 +24,13 @@ import {
     FormControl,
     FormHelperText,
     FormErrorMessage,
+    Checkbox,
     Textarea,
+    Tag,
+    TagLabel,
+    Grid,
+    UnorderedList,
+    ListItem,
     InputRightElement
 } from "@chakra-ui/react";
 import { FaEyeSlash, FaEye} from "react-icons/fa";
@@ -33,11 +39,37 @@ import ButtonExemple from "../components/ButtonExemple";
 
 function NewProject() {
   const users = [
-    { firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-    { firstName: 'Isabel', imageURL: "https://bit.ly/dan-abramov"  },
-    { firstName: 'José', imageURL: "https://bit.ly/dan-abramov"  },
-    { firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+    {id:"1", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
+    {id:"2",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"3",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"4",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+    {id:"5", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
+    {id:"6",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"7",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"8",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+    {id:"9", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
+    {id:"10",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"11",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"12",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+
   ];
+
+  const newslist=[
+    {id:"1", title: 'hgjk', imageURL: "https://bit.ly/dan-abramov" },
+    {id:"2",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"3",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"4",title: '5r6tu', imageURL: "https://bit.ly/dan-abramov"  },
+    {id:"5", title: '6tuhkl', imageURL: "https://bit.ly/dan-abramov" },
+    {id:"6",title: 'hfgvb ', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"7",title: ' nbm', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"8",title: 'cnmjh', imageURL: "https://bit.ly/dan-abramov"  },
+    {id:"9", title: 'htfjgkhl', imageURL: "https://bit.ly/dan-abramov" },
+    {id:"10",title: 'chjgh', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"11",title: 'chjk', imageURL: "https://bit.ly/sage-adebayo"  },
+    {id:"12",title: 'fgjhk', imageURL: "https://bit.ly/dan-abramov"  },
+
+  ];
+
 
   const {register, handleSubmit, formState: {errors}}= useForm();
   //const onSubmit = values => console.log(values); 
@@ -66,75 +98,128 @@ function NewProject() {
     <Flex justifyContent={"center"} py={4}>
       {/* <Text p={1} >step 1 texto </Text> */}
       {/* <form onSubmit={ handleSubmit (onSubmit, onError)}> */}
-              <Stack
-                  spacing={4}
-                  p="1rem"
-                  backgroundColor="whiteAlpha.900"
-                  boxShadow="md"
-              >
-                <FormControl isInvalid = {errors.title}>
-                  <Input {...register("title", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
-                  {(errors.title)? 
-                    (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
-                    : null 
-                  }
-                </FormControl>
+      <Stack
+          spacing={4}
+          p="1rem"
+          backgroundColor="whiteAlpha.900"
+          boxShadow="md"
+      >
+        <FormControl isInvalid = {errors.title}>
+          <Input {...register("title", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
+          {(errors.title)? 
+            (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
+            : null 
+          }
+        </FormControl>
 
-                <Textarea {...register("description", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_description'})}  />
-                
-                <FormControl isInvalid = {errors.keyword}>
-                  <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})} />
-                  {(errors.keyword)? 
-                    (<FormErrorMessage><FormattedMessage id={"error_missing_keyword"}  ></FormattedMessage></FormErrorMessage>)
-                    : null 
-                  }
-                </FormControl>
-  
-                <FormControl isInvalid = {errors.imageURL}>
+        <Textarea {...register("description", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_description'})}  />
+        
+        <FormControl isInvalid = {errors.keyword}>
+          <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})} />
+          {(errors.keyword)? 
+            (<FormErrorMessage><FormattedMessage id={"error_missing_keyword"}  ></FormattedMessage></FormErrorMessage>)
+            : null 
+          }
+        </FormControl>
 
-                  <Input {...register("imageURL")} type= "url" placeholder={intl.formatMessage({id: 'form_field_imageURL'})} />
-                  
-                  {/* TODO previsualizar imagem
-                  <Image
-                    boxSize='100px'
-                    objectFit='cover'
-                    src={register.imageURL}
-                    alt='project_Image'
-                  /> */}
-  
-                  {(errors.password)? 
-                    (<FormErrorMessage><FormattedMessage id={"error_wrong_imageURL"}  ></FormattedMessage></FormErrorMessage>)
-                    : null 
-                  }
-                
-                </FormControl>
-  
-                {/* <Button
-                    borderRadius={0}
-                    type="submit"
-                    variant="solid"
-                    colorScheme="teal"
-                    width="full"
-                    // onClick={console.log("carreguei em login")}
-                >
-                    {intl.formatMessage({id: 'create_project'})} 
-                </Button> */}
+        <FormControl isInvalid = {errors.imageURL}>
+
+          <Input {...register("imageURL")} type= "url" placeholder={intl.formatMessage({id: 'form_field_imageURL'})} />
           
-              </Stack>
-            {/* </form> */}
+          {/* TODO previsualizar imagem
+          <Image
+            boxSize='100px'
+            objectFit='cover'
+            src={register.imageURL}
+            alt='project_Image'
+          /> */}
+
+          {(errors.password)? 
+            (<FormErrorMessage><FormattedMessage id={"error_wrong_imageURL"}  ></FormattedMessage></FormErrorMessage>)
+            : null 
+          }
+        
+        </FormControl>
+
+        {/* <Button
+            borderRadius={0}
+            type="submit"
+            variant="solid"
+            colorScheme="teal"
+            width="full"
+            // onClick={console.log("carreguei em login")}
+        >
+            {intl.formatMessage({id: 'create_project'})} 
+        </Button> */}
+
+      </Stack>
+    {/* </form> */}
     </Flex>
   );
   const content2 = (
-    <Flex py={4}>
-      {/* <Text p={1} >step 2 texto </Text> */}
-
-
-
+    <Flex justifyContent={"center"} py={4}>
+      <Stack
+          spacing={4}
+          p="1rem"
+          backgroundColor="whiteAlpha.900"
+          boxShadow="md"
+         
+      >
+        <FormControl isInvalid = {errors.title}>
+        {users.map(u => (
+        <Stack>
+        <Checkbox colorScheme='teal' key={u.id} m={3} >
+          <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
+            <Avatar
+              src={u.imageURL}
+              size='xs'
+              name={u.firstName}
+              ml={-1}
+              mr={2}
+            />
+            <TagLabel>{u.firstName}</TagLabel>
+          </Tag>
+          </Checkbox>
+          </Stack>
+        ))}          
+          
+          {(errors.title)? 
+            (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
+            : null 
+          }
+        </FormControl>
+      </Stack>
     </Flex>
   );
+
+
+
   const content3 = (
-    <Flex py={4}>
-      <Text p={1} >step 3 texto </Text>
+    <Flex justifyContent={"center"} py={4}>
+      <Stack
+          spacing={4}
+          p="1rem"
+          backgroundColor="whiteAlpha.900"
+          boxShadow="md"
+          minH={"300px"}
+          width={"40%"}
+      >
+        <FormControl isInvalid = {errors.title}>
+        {newslist.map(n => (
+          <Stack>
+        <Checkbox colorScheme='teal' key={n.id} m={3} >
+            {n.title}
+          </Checkbox>
+          </Stack>         
+        ))}          
+          
+          {(errors.title)? 
+            (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
+            : null 
+          }
+        </FormControl>
+      </Stack>
+     
     </Flex>
   );
   const steps = [
@@ -158,10 +243,11 @@ function NewProject() {
           mb="2"
           justifyContent="center"
           alignItems="center"
+         
       >
     
         <Heading mt={20}  color="teal.400"> {intl.formatMessage({id: 'create_project'})}</Heading>
-        <Box minW={{ base: "90%", md: "468px" }}>
+        <Box  minW={{ base: "90%", md: "468px" }}>
           <Flex flexDir="column" width="100%">
           <form onSubmit={ handleSubmit (onSubmit, onError)}>
             <Steps activeStep={activeStep}>
