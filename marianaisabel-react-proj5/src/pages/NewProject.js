@@ -26,6 +26,7 @@ import {
     FormErrorMessage,
     Checkbox,
     Textarea,
+    Badge,
     Tag,
     TagLabel,
     Grid,
@@ -92,20 +93,29 @@ function NewProject() {
     initialStep: 0,
   });
 
+  const [input, setInput] = useState([]);
+  const saveInputKeyword = e => {
+    setInput(e.target.value);
+  };
   const [keywords, setKeywords] = useState([]);
-  const handleAddKeyword =(keyword)=>{
-    setKeywords(keyword);
+  const handleAddNewKeyword = ()=>{
+    if(!keywords.includes(input)){
+      setKeywords(prevState=>[...prevState, input]);
+      setInput("")
+    }
   }
 
+
   const content1 = (
-    <Flex justifyContent={"center"} py={4}>
+    <Flex justifyContent={"center"} py={4} width={"100%"}>
       {/* <Text p={1} >step 1 texto </Text> */}
       {/* <form onSubmit={ handleSubmit (onSubmit, onError)}> */}
       <Stack
           spacing={4}
-          p="1rem"
+          p={4}
           backgroundColor="whiteAlpha.900"
           boxShadow="md"
+          width={"100%"}
       >
         <FormControl isInvalid = {errors.title}>
           <Input {...register("title", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
@@ -119,19 +129,20 @@ function NewProject() {
         
         <FormControl isInvalid = {errors.keyword}>
         <InputGroup>
-          <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})} />
+          <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})}  onChange={saveInputKeyword} value={input} />
 
           <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={()=>handleAddKeyword("ola")}>
+              <Button h="1.75rem" size="sm" onClick={handleAddNewKeyword}>
                   {/* {showPassword ? "Hide" : "Show"} */}
                 <AddIcon color = "gray.400" />
               </Button>
           </InputRightElement>
       </InputGroup>
-      {keywords && keywords.length?
-       (<HStack> {keywords.map(k => ( <Box key={k}>{k}</Box>))} </HStack>)
+      {keywords && keywords.length ?
+       (<Box width={"l"} mr={3}> {keywords.map(k => ( <Badge key={k} display="inline-block" mx={1}>{k}</Badge>))} </Box>)
        :null
       }
+       {console.log(keywords) }
 
 
         {(errors.keyword)? 
@@ -175,36 +186,31 @@ function NewProject() {
     </Flex>
   );
   const content2 = (
-    <Flex justifyContent={"center"} py={4}>
+    <Flex justifyContent={"center"} py={4}  width={"100%"}>
       <Stack
-          spacing={4}
-          p="1rem"
-          backgroundColor="whiteAlpha.900"
-          boxShadow="md"
-         
+      spacing={4}
+      p={4}
+      backgroundColor="whiteAlpha.900"
+      boxShadow="md"
+      width={"100%"}
       >
-        <FormControl isInvalid = {errors.title}>
-        {users.map(u => (
-        <Stack>
-        <Checkbox colorScheme='teal' key={u.id} m={3} >
-          <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
-            <Avatar
-              src={u.imageURL}
-              size='xs'
-              name={u.firstName}
-              ml={-1}
-              mr={2}
-            />
-            <TagLabel>{u.firstName}</TagLabel>
-          </Tag>
-          </Checkbox>
-          </Stack>
-        ))}          
-          
-          {(errors.title)? 
-            (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
+        <FormControl >
+          <Grid  templateColumns='repeat(2, 1fr)' >
+            {users.map(u => (
+              <Checkbox key={u.id} colorScheme='teal' m={3} >
+                <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
+                  <Avatar
+                    src={u.imageURL}
+                    size='xs'
+                    name={u.firstName}
+                    ml={-1}
+                    mr={2}
+                  />
+                  <TagLabel>{u.firstName}</TagLabel>
+                </Tag>
+              </Checkbox>
+            ))}  
+          </Grid>        
         </FormControl>
       </Stack>
     </Flex>
@@ -215,29 +221,23 @@ function NewProject() {
   const content3 = (
     <Flex justifyContent={"center"} py={4}>
       <Stack
-          spacing={4}
-          p="1rem"
-          backgroundColor="whiteAlpha.900"
-          boxShadow="md"
-          minH={"300px"}
-          width={"40%"}
+      spacing={4}
+      p="1rem"
+      backgroundColor="whiteAlpha.900"
+      boxShadow="md"
+      minH={"300px"}
+      width={"100%"}
       >
-        <FormControl isInvalid = {errors.title}>
-        {newslist.map(n => (
-          <Stack>
-        <Checkbox colorScheme='teal' key={n.id} m={3} >
-            {n.title}
-          </Checkbox>
-          </Stack>         
-        ))}          
-          
-          {(errors.title)? 
-            (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
+        <FormControl>
+        <Grid  templateColumns='repeat(2, 1fr)' >
+          {newslist.map(n => (
+            <Checkbox colorScheme='teal' m={3} >
+              {n.title}
+            </Checkbox>        
+          ))}          
+        </Grid>
         </FormControl>
       </Stack>
-     
     </Flex>
   );
   const steps = [
@@ -255,6 +255,7 @@ function NewProject() {
         backgroundColor="gray.200"
         justifyContent="center"
         alignItems="center"
+        
     >
       <Stack
           flexDir="column"
@@ -262,15 +263,17 @@ function NewProject() {
           justifyContent="center"
           alignItems="center"
          
+         
       >
     
         <Heading mt={20}  color="teal.400"> {intl.formatMessage({id: 'create_project'})}</Heading>
-        <Box  minW={{ base: "90%", md: "468px" }}>
+        <Box  minW={{ base: "90%", md: "468px" }} width={"xl"}
+        maxWidth={"xl"}>
           <Flex flexDir="column" width="100%">
           <form onSubmit={ handleSubmit (onSubmit, onError)}>
             <Steps activeStep={activeStep}>
               {steps.map(({ label, content }) => (
-                <Step label={label} key={label}>
+                <Step label={label} key={label} >
                   {content}
                 </Step>
               ))}
@@ -301,7 +304,7 @@ function NewProject() {
           </form>
           </Flex>
           <Box>
-                <ButtonExemple path="/projects" description="Back to Projects" />
+                <ButtonExemple path="/projects" description="< Back to Projects" />
             </Box>
         </Box>
       </Stack>
