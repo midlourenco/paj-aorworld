@@ -1,5 +1,4 @@
-import React from "react"
-import { useState } from "react";
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { FormattedMessage} from "react-intl";
 import {
@@ -20,31 +19,18 @@ import {
   IconButton
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon , ChevronDownIcon} from '@chakra-ui/icons'
-import { setSelectedLanguage} from '../../redux/actions'
+import config from "../../config";
+import useFetch from 'use-http';
+import { setSelectedLanguage, setLoggedUser, setAppError} from '../../redux/actions'
 import { connect } from "react-redux";
 
-
+const firstName="";
 const NavLink = ({ path, text }) => (
   <ChakraLink as={Link} to ={path} >
     <Text fontSize="xl" > <FormattedMessage id={text} /></Text>
   </ChakraLink>
 );
 
-
-const MenuLoggedUser=()=>{
-  return (
-    <Menu>
-      <MenuButton as={Button} colorScheme="teal" rightIcon={<ChevronDownIcon />}  >
-        Nome
-      </MenuButton>
-      <MenuList color={"teal"}>
-        <MenuItem><NavLink text="profile" path= "/profile"  /></MenuItem>
-        <MenuItem><NavLink text="notifications" path= "/notification"  /></MenuItem>
-        <MenuItem> <NavLink text="logout" path= "/logout"  /></MenuItem>
-      </MenuList>
-    </Menu>
-  )
-}
 
 
 const HorizontalMenuBar=()=>{
@@ -74,8 +60,46 @@ const VerticalMenuBar= ()=>{
 }
 
 
-function Header ({setSelectedLanguage,language,...props}) {
-  const [login, setLogin]= useState(true);
+function Header ({setSelectedLanguage,language,token, firstName, setLoggedUser,setAppError,...props}) {
+  const [login, setLogin]= useState(false);
+    
+
+  useEffect( () => {
+    if(token && token!=""){
+      console.log("dentro da navbar vou fazer o fetch do get user");    
+      setLogin(true);
+     
+    }else{
+      setLogin(false);
+    }
+    
+  }, [token])
+
+  const MenuLoggedUser=()=>{
+    return (
+      <Menu>
+        <MenuButton as={Button} colorScheme="teal" rightIcon={<ChevronDownIcon />}  >
+        {/* {loading && "Loading..."}
+          {!loading && response.data && (
+            response.data.firstName
+          )} */}
+          {firstName && firstName!=null?
+          firstName
+          :"User_Name"}
+        
+        </MenuButton>
+        <MenuList color={"teal"}>
+          <MenuItem><NavLink text="profile" path= "/profile"  /></MenuItem>
+          <MenuItem><NavLink text="notifications" path= "/notification"  /></MenuItem>
+          <MenuItem> <NavLink text="logout" path= "/logout"  /></MenuItem>
+        </MenuList>
+      </Menu>
+    )
+  }
+  
+
+
+
 
   //regarding languages switchingi 
   //const [locale, setLocale] = useState(language)
@@ -83,7 +107,7 @@ function Header ({setSelectedLanguage,language,...props}) {
     //setLocale(e.target.value);
     setSelectedLanguage(e.target.value);
     localStorage.setItem("selectedLang",e.target.value );
-    let langLS= localStorage.getItem("selectedLang");
+   // let langLS= localStorage.getItem("selectedLang");
     console.log("lang do browser" + navigator.language)
   }
   
@@ -123,18 +147,31 @@ function Header ({setSelectedLanguage,language,...props}) {
           ))}
         </Select>
         {/* <Button colorScheme='teal' mr='4'><FormattedMessage id="sign_up" /></Button> */}
-        {login ?
-          <Button colorScheme='teal' onClick={()=>setLogin(!login)}>
+        { login ?
+         <MenuLoggedUser />
+        :  <Button colorScheme='teal' onClick={()=>setLogin(!login)}>
             <NavLink text="login" path= "/login"  />
           </Button>
-          : <MenuLoggedUser />
+          
         }
     </HStack>
   </Flex>
 
 </Box>
   )
+}
 
+
+const mapStateToProps = state => {
+  return { language: state.selectedLanguage.language ,
+          token:state.loginOK.token,
+          firstName: state.loginOK.firstName,
+          error: state.errorMsg.error
+  };
+};
+
+
+export default  connect(mapStateToProps, {setSelectedLanguage, setLoggedUser,setAppError}) (Header);
 
 
 
@@ -198,11 +235,3 @@ function Header ({setSelectedLanguage,language,...props}) {
   //     </Box>
   //   </Flex>
   
-}
-
-
-const mapStateToProps = state => {
-  return { language: state.selectedLanguage.language };
-};
-
-export default  connect(mapStateToProps, {setSelectedLanguage}) (Header);

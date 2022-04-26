@@ -1,9 +1,40 @@
-import { LOGIN_OK, LOGOUT_OK} from "../actionTypes";
+import { LOGIN_OK, LOGOUT_OK,GET_LOGGED_USER} from "../actionTypes";
+
+function getfirstName(){
+    let firstNameLS= localStorage.getItem("firstName");
+    console.log("name da LS " + firstNameLS)
+    if (firstNameLS!=null){
+        return firstNameLS;
+    }else {  
+        return ""
+    }
+}
+
+function getPrivileges(){
+    let privLS= localStorage.getItem("privileges");
+    console.log("privileges da LS " + privLS)
+    if (privLS!=null){
+        return privLS;
+    }else {  
+        return "VIEWER"
+    }
+}
+
+function getToken(){
+    let tokenLS= localStorage.getItem("Authorization");
+    console.log("name da LS " + tokenLS)
+    if (tokenLS!=null){
+        return tokenLS;
+    }else {  
+        return ""
+    }
+}
+
 
 const initialState = {
-    firstname: "",
-    adminPriv:false,
-    token:"",
+    firstName: getfirstName(),
+    userPriv:getPrivileges(),
+    token:getToken(),
   };
 
   /**
@@ -17,15 +48,18 @@ export default function(state = initialState, action) {
     switch (action.type) {
         case LOGIN_OK: {
             return {...state, 
-                firstname: action.payload.firstname,
-                adminPriv: action.payload.adminPriv,
                 token:action.payload.token}
+        }
+        case GET_LOGGED_USER:{
+            return {...state, 
+            firstName: action.payload.firstName,
+            userPriv: action.payload.userPriv}
         }
         case LOGOUT_OK: {
             return {...state, 
-                firstname: "",
-                adminPriv: false,
-                token:""}   
+                firstName: action.payload.firstName,
+                userPriv: action.payload.userPriv,
+                token:action.payload.token}   
         }
         default: {
             return state;

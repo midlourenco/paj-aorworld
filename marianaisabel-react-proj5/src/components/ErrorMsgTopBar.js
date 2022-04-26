@@ -41,9 +41,9 @@ function ErrorMsg ({error="",...props}) {
     );
         
 }
-//export default ErrorMsg;
+
 const mapStateToProps = state => {
     return { error: state.errorMsg.error };
   };
-//export default UserFilter;
+
 export default connect(mapStateToProps,{})(ErrorMsg);

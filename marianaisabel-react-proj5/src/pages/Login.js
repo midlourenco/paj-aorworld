@@ -30,7 +30,7 @@ import {
 import { FaUserAlt, FaLock,FaEyeSlash, FaEye} from "react-icons/fa";
 import config from "../config";
 import useFetch from 'use-http';
-import { setLoginOK, setAppError } from '../redux/actions'
+import { setLoginOK, setAppError,setLoggedUser } from '../redux/actions'
 import { connect } from 'react-redux'
 
 //InputGroup-> cada input pode ter 3 elementos
@@ -38,7 +38,9 @@ import { connect } from 'react-redux'
 //2. caixa de texto propriamente dtia com o tipo de dados com placeholder e a variável do resultado
 //3. algum elemento à direita (por exemplo o botão para ver/esconder a password)
 
-function Login ({setLoginOK,setAppError,...props}) {
+function Login ({setLoginOK,setAppError,setLoggedUser,...props}) {
+    const [firstName, setFirstName] = useState("User_Name");
+    const [myPrivileges, setMyPrivileges] = useState("VIEWER");
     //simboloas usados na pagina de login
     const UserSymbol = chakra(FaUserAlt);
     const LockSymbol = chakra(FaLock);
@@ -52,23 +54,31 @@ function Login ({setLoginOK,setAppError,...props}) {
         const authString = localStorage.getItem("Authorization")
         if (authString && authString!=""){
            navigate("/");
-           console.log("está logado e tenho que arranjar maneira de redireccionar daqui")
+        //    console.log("está logado e tenho que arranjar maneira de redireccionar daqui")
         }
         setAppError("");
 
     },[])
 
 
+    const option={
+        method: "GET",
+        headers: {
+            Authorization: localStorage.getItem("Authorization"),
+            Accept: "application/json",
+            "Content-Type": "application/json"
+        }
+    }
+    //config.API_URL
 
-
-    //função para fazer o request ao serividor
-    const { post, response, loading, error } = useFetch(config.API_URL);
+    //função para fazer o request ao servidor
+    const { get, post, response, loading, error } = useFetch();
 
     //funções onSubmit e onError são usadas para o useForm, que lê os dados introduzidos nas caixas de input e os coloca num objecto 
     const {register, handleSubmit, formState: {errors}}= useForm();
 
     async function onSubmit (data, e) {
-        console.log(data, e);
+        //console.log(data, e);
         // const options ={
         //     method: "POST",
         //     headers: {
@@ -79,10 +89,35 @@ function Login ({setLoginOK,setAppError,...props}) {
         // }
         const authString = await post('users/login', data)
         if (response.ok) {
-            localStorage.setItem("Authorization", authString);
+            localStorage.setItem("Authorization", authString.Authorization);
             setLoginOK(authString.Authorization);
             console.log(authString.Authorization);
             setAppError("");
+           
+
+            const myProfile = await get('/users/myProfile');
+            if (response.ok) {
+            //const myProfile =response.data;
+                localStorage.setItem("firstName", myProfile.firstName);
+                localStorage.setItem("privileges", myProfile.privileges);
+                //setLoginOK(authString.Authorization);
+                setFirstName(myProfile.firstName);
+                setMyPrivileges(myProfile.privileges);
+                setLoggedUser(myProfile.firstName, myProfile.privileges)
+                console.log(myProfile);
+                setAppError("");
+                //setLogin(true);
+            } else if(response.status==401) {
+                console.log("credenciais erradas? " + error)
+                setAppError('error_fetch_generic');
+            }else{
+                console.log("houve um erro no fetch " + error)
+                if(error && error!=""){
+                setAppError(  error);
+                }else{
+                    setAppError(  "error_fetch_generic" );
+                }
+            }
             navigate("/");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -95,6 +130,10 @@ function Login ({setLoginOK,setAppError,...props}) {
                 setAppError(  "error_fetch_generic" );
             }
         }
+      
+       
+
+
     }
 
     
@@ -124,6 +163,7 @@ function Login ({setLoginOK,setAppError,...props}) {
                 justifyContent="center"
                 alignItems="center"
             >
+                 
             <Avatar bg="teal.500" mt={20}/>
             <Heading color="teal.400"> {intl.formatMessage({id: 'welcome'})}</Heading>
             <Box minW={{ base: "90%", md: "468px" }}>
@@ -205,4 +245,4 @@ const mapStateToProps = state => {
     };
 };
     
-export default connect(mapStateToProps, { setLoginOK,setAppError })(Login);
+export default connect(mapStateToProps, { setLoginOK,setAppError ,setLoggedUser})(Login);

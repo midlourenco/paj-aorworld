@@ -303,8 +303,31 @@ public class UserController {
 
 	}
 
+
+		// Get loggeduser profile
+		@GET
+		@Path("/myProfile")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response getMyProfile(@HeaderParam("Authorization") String authString) {
+			try {
+				System.out.println("dentro do getMyProfile no controller:  " + authString);
+				
+				if (authString.equals("") || authString.isEmpty() || authString == null
+						|| !userService.isValidToken(authString)) {// está logado mas o token não é válido
+					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+				} 
+				UserDTOResp user = userService.getUserDTORespByToken(authString);
+				return Response.ok(user).build();
+				
+
+			} catch (NullPointerException e) { // caso não tenha Authorization no header
+				e.printStackTrace();
+				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+			}
+		}
+	
 	//não vamos mandar a password junto com o perfil
-	// Get user profile
+	// Get an user profile
 	@GET
 	@Path("{userId: [0-9]+}")
 	@Produces(MediaType.APPLICATION_JSON)

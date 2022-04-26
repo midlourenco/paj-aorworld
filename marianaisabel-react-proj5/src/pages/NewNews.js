@@ -231,7 +231,7 @@ function NewNews() {
         <FormControl>
         <Grid  templateColumns='repeat(2, 1fr)' >
           {projectslist.map(n => (
-            <Checkbox colorScheme='teal' m={3} >
+            <Checkbox colorScheme='teal' m={3} key={n} >
               {n.title}
             </Checkbox>        
           ))}          

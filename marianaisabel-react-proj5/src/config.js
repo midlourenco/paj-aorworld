@@ -5,6 +5,13 @@ const config ={
 
 export default config;
 
+/**
+ * indice da localStorage:
+ */
 //localStorage variables:
 //Authorization:
 //*guarado no login
+
+
+//selectedLang
+//*guardado no Header na navbar, qdo se selecciona lingua na combobox

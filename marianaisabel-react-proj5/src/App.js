@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,Suspense } from "react";
 import './style.css';
 //In react-router-dom v6, "Switch" is replaced by routes "Routes".
 //https://stackoverflow.com/questions/63124161/attempted-import-error-switch-is-not-exported-from-react-router-dom
@@ -46,11 +46,16 @@ import ErrorPage404 from "./pages/ErrorPage404";
 import Logout from "./pages/Logout";
 import Profile from "./pages/Profile";
 import Notification from "./pages/Notification";
-
+import config from "./config";
+import useFetch, {Provider} from 'use-http';
 //se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
 // import {Home, Login, News, Projects, AboutUs} from './pages'
 
 //https://reactrouter.com/docs/en/v6/api :
+
+
+
+
 
 //alternativa para erros no intl:
 //onError={myCustomErrorFunction} 
@@ -58,6 +63,29 @@ import Notification from "./pages/Notification";
  * Para o provider IntlProvider ter acesso ao locale, vamos usar o redux para ir bucar esta informação 
  */
 function App({language = "en",error="",...props}) {
+  const options = {
+    suspense: true ,// B. can put `suspense: true` here too
+  }
+
+
+  const globalOptions = {
+		interceptors: {
+      request: ({ options }) => {
+        options.headers = {
+					Authorization: localStorage.getItem("Authorization"),
+          Accept: "application/json",
+          "Content-Type": "application/json"
+				}
+        return options
+      },
+      response: ({ response }) => {
+				console.log('initial resopnse.data', response.data)
+				
+        return response 
+      }
+    }
+  }
+
  useEffect(()=>{
 
  },[error]);
@@ -66,6 +94,7 @@ function App({language = "en",error="",...props}) {
   const locale=language;
   return (
     <IntlProvider locale={locale} messages ={messages[locale]}   >
+      <Provider url={config.API_URL} options={globalOptions}>
       <Box>
       
         <Router >
@@ -76,6 +105,8 @@ function App({language = "en",error="",...props}) {
             ? <ErrorMsg />
             : null
             } */}
+            <Suspense fallback='Loading...' />
+    
             <Routes>
                 <Route path= "/" exact element ={<Home />} />
                 <Route path= "/login" element ={<Login />}/>
@@ -98,12 +129,15 @@ function App({language = "en",error="",...props}) {
         </Router>
         <Footer />
       </Box>
+      </Provider>
     </IntlProvider>
   );
 }
 
 const mapStateToProps = state => {
-  return { language: state.selectedLanguage.language };
+  return { language: state.selectedLanguage.language, 
+          
+  };
 };
 export default connect(mapStateToProps, {}) (App);
 
