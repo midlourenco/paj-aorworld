@@ -225,7 +225,6 @@ function Login ({setLoginOK,setAppError,setLoggedUser,...props}) {
                     >
                         {intl.formatMessage({id: 'login'})} 
                     </Button>
-              
                     </Stack>
                 </form>
                 </Box>

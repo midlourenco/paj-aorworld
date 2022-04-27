@@ -5,6 +5,7 @@
     "about_us":"Sobre nós",
     "profile":"A minha conta",
     "notifications": "Notificações",
+    "dashboard":"Dashboard",
     "news_article": "Notícia",
     "project":"Projecto",
 
@@ -31,6 +32,9 @@
     "create_account":"Criar conta",
     "login_existent_account":"Entrar com conta existente",
     "reset_password":"Repor palavra-passe",
+    "edit":"Editar",
+    "update":"Atualizar",
+    "cancel":"Cancelar",
 
     "create_project":"Criar projecto",
     "create_article":"Criar notícia",
@@ -41,6 +45,9 @@
     "new_project": "Novo Projecto",
     "search_keyword":"Pesquisar por palavra-chave",
     "clear_search":"Limpar pesquisa",
+    "MEMBER":"MEMBRO",
+    "ADMIN":"ADMINASTRADOR",
+    "VIEWER":"VISITANTE",
     "members":"Membros",
     "member":"Membro",
     "admin":"Administrador",
@@ -61,5 +68,6 @@
     "error_wrong_imageURL": "Este URL não é de uma imagem",
 
     "error_fetch_generic":"Houve um problema, por favor tente mais tarde",
-    "error_fetch_login_401": "Ocorreu um problema ao tentar fazer login. Por favor, verifique as suas credênciais e tente novamente."
+    "error_fetch_login_401": "Ocorreu um problema ao tentar fazer login. Por favor, verifique as suas credênciais e tente novamente.",
+    "-":"-"
 }

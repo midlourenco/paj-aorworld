@@ -4,33 +4,22 @@ import {  Link, useParams } from "react-router-dom";
 import {
     Flex,
     Heading,
-    Input,
-    Button,
-    InputGroup,
-    Stack,
-    InputLeftElement,
-    chakra,
     Grid,
     Link as ChakraLink,
     Box,
     Image,
     Badge,
     Text,
-    Avatar,
-    FormControl,
-    FormHelperText,
-    FormErrorMessage,
-    InputRightElement,
-    HStack,
-    Spacer
+    Avatar
 } from "@chakra-ui/react";
+import { FormattedMessage ,useIntl} from "react-intl";
 
 
 function UserCard({user, ...props}) {
     const setColorBadgeRole = ()=>{
-        if(user.role =="MEMBER"){
+        if(user.privileges =="MEMBER"){
             return "teal"
-        }else if(user.role =="ADMIN"){
+        }else if(user.privileges =="ADMIN"){
             return "yellow"
         }else{
             return "gray"
@@ -39,30 +28,31 @@ function UserCard({user, ...props}) {
     let id = user.id;
 
     return (
-        <Flex>
-        <Avatar src={user.imageURL} />
-        <Box ml='3'>
-        <ChakraLink as={Link} to ={`/profile/${id}`}  >
-            <Text fontSize="md"  mt='1'
-            fontWeight='bold'
-            mb='1'
-            isTruncated
-            > 
+        <Flex  >
+        <Avatar src={user.image} my={'auto'}/>
+        <Box  height={"80px"}  mx={3} minW={"200px"}>
+            <ChakraLink as={Link} to ={`/profile/${id}`} >
+                <Text fontSize="md" 
+                fontWeight='bold'
+                my='0'
+                isTruncated
+            
+                > 
+                    {user.firstName + " " +user.lastName }
+                    <Badge ml='1' colorScheme={setColorBadgeRole()}>
+                    <FormattedMessage id={user.privileges} />
+                    </Badge>
+                </Text>
+            </ChakraLink>
+
+            {/* <Text fontWeight='bold'>
                 {user.firstName + " " +user.lastName }
                 <Badge ml='1' colorScheme={setColorBadgeRole()}>
                 {user.role}
                 </Badge>
-            </Text>
-        </ChakraLink>
-
-        {/* <Text fontWeight='bold'>
-            {user.firstName + " " +user.lastName }
-            <Badge ml='1' colorScheme={setColorBadgeRole()}>
-            {user.role}
-            </Badge>
-        </Text> */}
-        <Text fontSize='sm'>{user.email}</Text>
-        <Text fontSize='sm' isTruncated>{user.biography}</Text>
+            </Text> */}
+            <Text fontSize='sm'>{user.email}</Text>
+            <Text fontSize='sm' isTruncated>{user.biography}</Text>
         </Box>
     </Flex>
     )

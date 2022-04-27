@@ -24,49 +24,17 @@ import useFetch from 'use-http';
 import { setSelectedLanguage, setLoggedUser, setAppError} from '../../redux/actions'
 import { connect } from "react-redux";
 
-const firstName="";
-const NavLink = ({ path, text }) => (
-  <ChakraLink as={Link} to ={path} >
-    <Text fontSize="xl" > <FormattedMessage id={text} /></Text>
-  </ChakraLink>
-);
 
 
 
-const HorizontalMenuBar=()=>{
-  return(<HStack spacing={6} divider={<StackDivider />} as="nav" margin={4}>
-    <NavLink text="home"  path= "/" /> 
-    <NavLink text="news" path= "/news" />
-    <NavLink text="projects" path= "/projects" />
-    <NavLink text="about_us" path= "/about"/>
-  </HStack>)
-}
 
-const VerticalMenuBar= ()=>{
-
-  return(<Menu m={5} >
-      <MenuButton as={IconButton} colorScheme="teal" icon={<HamburgerIcon />} m={5}  />
-      <MenuList color={"teal"}>
-        <MenuItem key="home"><NavLink text="home"  path= "/" /> </MenuItem>
-        <MenuItem key="news"><NavLink text="news" path= "/news" /></MenuItem>
-        <MenuItem key="projects"><NavLink text="projects" path= "/projects" /></MenuItem>
-        <MenuItem key="aboutus"> <NavLink text="about_us" path= "/about"/> </MenuItem>
-      </MenuList>
-    </Menu>
-
-  )
-
-
-}
-
-
-function Header ({setSelectedLanguage,language,token, firstName, setLoggedUser,setAppError,...props}) {
-  const [login, setLogin]= useState(false);
+function Header ({setSelectedLanguage,language,token="", firstName, userPriv, setLoggedUser,setAppError,...props}) {
+  const [isloginDone, setLogin]= useState(false);
     
 
   useEffect( () => {
-    if(token && token!=""){
-      console.log("dentro da navbar vou fazer o fetch do get user");    
+    if(token && (token!="" ||token.length)){
+      console.log("dentro da navbar existe um token vou alterar para login");    
       setLogin(true);
      
     }else{
@@ -97,7 +65,41 @@ function Header ({setSelectedLanguage,language,token, firstName, setLoggedUser,s
     )
   }
   
-
+  const NavLink = ({ path, text }) => (
+    <ChakraLink as={Link} to ={path} >
+      <Text fontSize="xl" > <FormattedMessage id={text} /></Text>
+    </ChakraLink>
+  );
+  
+  const HorizontalMenuBar=()=>{
+    return(<HStack spacing={6} divider={<StackDivider />} as="nav" margin={4}>
+      <NavLink text="home"  path= "/" /> 
+      <NavLink text="news" path= "/news" />
+      <NavLink text="projects" path= "/projects" />
+      {userPriv && userPriv=="ADMIN"?
+           <NavLink text="dashboard" path= "/dashboard" />
+          :null}
+      <NavLink text="about_us" path= "/about"/>
+    </HStack>)
+  }
+  
+  const VerticalMenuBar= ()=>{
+  
+    return(<Menu m={5} >
+        <MenuButton as={IconButton} colorScheme="teal" icon={<HamburgerIcon />} m={5}  />
+        <MenuList color={"teal"}>
+          <MenuItem key="home"><NavLink text="home"  path= "/" /> </MenuItem>
+          <MenuItem key="news"><NavLink text="news" path= "/news" /></MenuItem>
+          <MenuItem key="projects"><NavLink text="projects" path= "/projects" /></MenuItem>
+          {userPriv && userPriv=="ADMIN"?
+          <MenuItem key="dashboard"><NavLink text="dashboard" path= "/dashboard" /></MenuItem>
+          :null}
+          <MenuItem key="aboutus"> <NavLink text="about_us" path= "/about"/> </MenuItem>
+        </MenuList>
+      </Menu>
+  
+    )
+  }
 
 
 
@@ -147,9 +149,9 @@ function Header ({setSelectedLanguage,language,token, firstName, setLoggedUser,s
           ))}
         </Select>
         {/* <Button colorScheme='teal' mr='4'><FormattedMessage id="sign_up" /></Button> */}
-        { login ?
+        { isloginDone ?
          <MenuLoggedUser />
-        :  <Button colorScheme='teal' onClick={()=>setLogin(!login)}>
+        :  <Button colorScheme='teal' >
             <NavLink text="login" path= "/login"  />
           </Button>
           
@@ -166,6 +168,7 @@ const mapStateToProps = state => {
   return { language: state.selectedLanguage.language ,
           token:state.loginOK.token,
           firstName: state.loginOK.firstName,
+          userPriv: state.loginOK.userPriv,
           error: state.errorMsg.error
   };
 };
