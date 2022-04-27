@@ -70,6 +70,7 @@ function App({language = "en",error="",...props}) {
 
 
   const globalOptions = {
+    cachePolicy: 'no-cache',
 		interceptors: {
       request: ({ options }) => {
         options.headers = {

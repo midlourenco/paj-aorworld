@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-  Link,
-  NavLink,
-  useParams,
-  useLocation,
-  Outlet,
-  useSearchParams
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
@@ -24,21 +17,10 @@ import {
     InputLeftElement,
     chakra,
     Grid,
-    GridItem,
-    Box,
-    Image,
-    Badge,
     Tag,
     TagLeftIcon,
     TagLabel,
     Text,
-    Avatar,
-    FormControl,
-    FormHelperText,
-    FormErrorMessage,
-    InputRightElement,
-    HStack,
-    Spacer
 } from "@chakra-ui/react";
 
 import{SearchIcon , WarningTwoIcon, AddIcon} from '@chakra-ui/icons';
@@ -62,25 +44,25 @@ const p1 = {
     description: 'Projecto PAJ - aplicação web desenvolvido em Java, com uma API REST, persistência de dados em base de dados em mySQL e frontend em ReactJS, javaScript, CSS e HTML.',
     keywords: ['Java', 'ReactJS', 'Rest'],
     associatedUsers: [{id:"1",
-            firstName:'Mariana'},
-            {id:"3",
-            firstName:'Ricardo'},
-            {id:"5",
-            firstName:'Mariana'},
-            {id:"4",
-            firstName:'Tiago'},
-            {id:"6",
-            firstName:'Inês'},
-            {id:"7",
-            firstName:'Anna'}],
-            associatedNews: [{id:"4",
-                title:'HTML/CSS'},
-                { id:"5",
-                title:'REST'},
-                { id:"6",
-                title:'Websockets'},
-                { id:"7",
-                title:'mySQL'}],
+        firstName:'Mariana'},
+        {id:"3",
+        firstName:'Ricardo'},
+        {id:"5",
+        firstName:'Mariana'},
+        {id:"4",
+        firstName:'Tiago'},
+        {id:"6",
+        firstName:'Inês'},
+        {id:"7",
+        firstName:'Anna'}],
+    associatedNews: [{id:"4",
+        title:'HTML/CSS'},
+        { id:"5",
+        title:'REST'},
+        { id:"6",
+        title:'Websockets'},
+        { id:"7",
+        title:'mySQL'}],
     createdBy: [{id:"1",
     firstName:'Mariana'}],
     createdDate: '2022-04-15',

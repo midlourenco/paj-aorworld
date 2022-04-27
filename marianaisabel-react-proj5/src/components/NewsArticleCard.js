@@ -45,21 +45,8 @@ import { BiEraser} from "react-icons/bi";
 
 
 
-function  NewsArticleCard ({newsElem, ...props}){
+function  NewsArticleCard ({news, ...props}){
 
-    const news = {
-        id: newsElem.id,
-        imageUrl: newsElem.imageUrl,
-        title:  newsElem.title,
-        description:  newsElem.description,
-        keywords:  newsElem.keywords,
-        users: newsElem.users,
-        projects:  newsElem.projects,
-        createdBy:  newsElem.createdBy,
-        createdDate:  newsElem.createdDate,
-        lastModifBy:  newsElem.lastModifBy,
-        lastModifDate:  newsElem.lastModifDate,
-    }
     //let { id } = useParams(news.id);
     const LastModifBySymbol = chakra(BiEraser);
     const CreateBySymbol = chakra(RiNewspaperLine);
@@ -80,7 +67,7 @@ function  NewsArticleCard ({newsElem, ...props}){
             {/* <GridItem colSpan={1}> */}
             <Square size={["100px","250px","250px"]} >            
                 <VStack display='flex' justifyContent="center"  alignItems="center"  >
-                    <Image src={news.imageUrl} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} />
+                    <Image src={news.image} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} />
                 </VStack>
             </Square>
 
@@ -124,7 +111,7 @@ function  NewsArticleCard ({newsElem, ...props}){
                                 <ModalBody>
                                 <UnorderedList>
                                 {overlay=="members" ?
-                                news.users.map(u => (
+                                news.userss.map(u => (
                                     <ListItem borderRadius='full' px='2' key={u.id} ><Link to={`/profile/${u.id}`} >{u.firstName}</Link></ListItem>
                                 ))
                                 :  news.projects.map(t => (
@@ -168,8 +155,8 @@ function  NewsArticleCard ({newsElem, ...props}){
 
                 <Box display='flex' flexDirection={"row"} justifyContent="center" mt='6' alignItems='center' >
                 {news.lastModifBy && news.lastModifBy!="" 
-                ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {news.lastModifBy}, <FormattedMessage id={"date"} values={{d:  new Date(news.lastModifDate)}} />   </Text> </>
-                : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {news.createdBy}, <FormattedMessage id={"date"} values={{d:  new Date(news.createdDate)}} />  </Text> </>
+                ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {news.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.lastModifDate)}} />   </Text> </>
+                : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {news.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.createdDate)}} />  </Text> </>
                 }
                 </Box>
             </Box>
