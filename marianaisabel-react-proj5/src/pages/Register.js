@@ -138,17 +138,17 @@ const Register = ()=>{
               <Textarea {...register("biography", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_biography'})}  />
               
               {/* TODO validar uma imagem*/}
-              <FormControl isInvalid = {errors.imageURL}>
+              <FormControl isInvalid = {errors.image}>
               <HStack>
                 <Input
-                    {...register("imageURL")}
+                    {...register("image")}
                     type= "url"
-                    placeholder={intl.formatMessage({id: 'form_field_imageURL'})}
+                    placeholder={intl.formatMessage({id: 'form_field_image'})}
                 />
-                <Avatar name={register.firstName & " " & register.lastName} src={register.imageURL} />
+                <Avatar name={register.firstName & " " & register.lastName} src={register.image} />
 
-                {(errors.imageURL)? 
-                  (<FormErrorMessage><FormattedMessage id={"error_wrong_imageURL"}  ></FormattedMessage></FormErrorMessage>)
+                {(errors.image)? 
+                  (<FormErrorMessage><FormattedMessage id={"error_wrong_image"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
                 }
               </HStack>  
