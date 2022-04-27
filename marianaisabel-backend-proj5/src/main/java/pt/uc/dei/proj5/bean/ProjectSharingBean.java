@@ -109,6 +109,7 @@ public class ProjectSharingBean implements Serializable{
 	//TODO !!! ideia:  Map<String,  ArrayList<UserDTOResp>> ===>>> Map<funçao do user no projecto, Lista de users>
 	
 	public ArrayList<UserDTOResp> getUserAssocToProject(int projectId){
+		try {
 		Project project = projectDao.findEntityIfNonDelete(projectId);
 		ArrayList<UserDTOResp> usersDTOResp =new ArrayList<>();
 		
@@ -119,6 +120,10 @@ public class ProjectSharingBean implements Serializable{
 		}
 		
 		return usersDTOResp;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public ArrayList<ProjectDTOResp> getNonDeletedAssocProjectFromUser(User user){

@@ -21,6 +21,7 @@ import pt.uc.dei.proj5.dao.UserDao;
 import pt.uc.dei.proj5.dto.ProjectDTO;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.dto.UserDTO;
+import pt.uc.dei.proj5.dto.UserDTOResp;
 
 @RequestScoped
 public class ProjectBean implements Serializable {
@@ -36,7 +37,8 @@ public class ProjectBean implements Serializable {
 	private NewsDao newsDao;
 	@Inject
 	private ProjectSharingDao projectSharingDao;
-	
+	@Inject
+	private ProjectSharingBean projectSharingService;
 	
 	///////////////////////////////
 	//GET DE PROJECTOS
@@ -352,7 +354,13 @@ public class ProjectBean implements Serializable {
 		List<Project> projects =  projectDao.getOnlyPublicProjectsNonDeleted();
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			if(assocUsers!=null) {
+			projectDTOResp.setAssociatedUsers(assocUsers);
+			}
+			projectsDTOResp.add(projectDTOResp);
 		}
 		
 		return projectsDTOResp;
@@ -364,7 +372,13 @@ public class ProjectBean implements Serializable {
 		List<Project> projects =  projectDao.getOnlyPublicProjectsMarkedAsDeleted();
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			if(assocUsers!=null) {
+			projectDTOResp.setAssociatedUsers(assocUsers);
+			}
+			projectsDTOResp.add(projectDTOResp);
 		}
 		
 		return projectsDTOResp;
@@ -376,7 +390,13 @@ public class ProjectBean implements Serializable {
 		List<Project> projects =  projectDao.getAllProjectsNonDeleted();
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			if(assocUsers!=null) {
+			projectDTOResp.setAssociatedUsers(assocUsers);
+			}
+			projectsDTOResp.add(projectDTOResp);
 		}
 		
 		return projectsDTOResp;
@@ -388,7 +408,13 @@ public class ProjectBean implements Serializable {
 		List<Project> projects =  projectDao.getAllProjectsMarkedAsDeleted();
 		
 		for (Project project : projects) {
-			projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
+			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			if(assocUsers!=null) {
+			projectDTOResp.setAssociatedUsers(assocUsers);
+			}
+			projectsDTOResp.add(projectDTOResp);
 		}
 		
 		return projectsDTOResp;
