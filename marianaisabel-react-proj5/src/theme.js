@@ -157,6 +157,10 @@ const components = {
             },
           },
           'input:not(:placeholder-shown) + label, .chakra-select__wrapper + label':
+          {
+              ...activeLabelStyles,
+            },
+            'textarea:not(:placeholder-shown) + label, .chakra-select__wrapper + label':
             {
               ...activeLabelStyles,
             },

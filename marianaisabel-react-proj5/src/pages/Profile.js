@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from "react";
 //Redirect replace by Naviagate
-import {Navigate, useParams} from 'react-router-dom'
+import {Navigate, useParams, useNavigate} from 'react-router-dom'
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
 import {FormattedMessage ,useIntl} from "react-intl";
@@ -15,6 +15,7 @@ import {
     Stack,
     Box,
     Link,
+    Select,
     Avatar,
     Badge,
     FormControl,
@@ -34,16 +35,25 @@ import {
     useEditableControls,
     InputRightElement
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, EditIcon} from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
-import { current } from '@reduxjs/toolkit';
+import { connect } from 'react-redux'
+
+
   //TODO: 
   function setAppError(error){
     console.log(error)
 }
+const defaultUser=  {"id": "",
+        "firstName": "",
+        "lastName": "",
+        "email": "",
+        "image": "",
+        "deleted": false,
+        "privileges": "VIEWER",
+        "biography": " "}
 
-
-const ProfileViewMode=({currentUser,editMode,handleEditClick,handleCancelClick})=>{
+const ProfileViewMode=({isAdmin, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
     const intl = useIntl();
     return (<Box>
         <Stack
@@ -74,7 +84,7 @@ const ProfileViewMode=({currentUser,editMode,handleEditClick,handleCancelClick})
                 </Box>
                 <Box>
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
-                    <EditableControls editMode={editMode}  handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} />
+                    <EditableControls isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
                 </Box>
             </Flex>
             
@@ -84,7 +94,8 @@ const ProfileViewMode=({currentUser,editMode,handleEditClick,handleCancelClick})
     )
 }
 
-const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handleSubmit, onSubmit, onError, errors, register})=>{
+const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCancelClick, handleDeleteClick, handleSubmit, onSubmit, onError, errors, register})=>{
+    
     const intl = useIntl();
     return (<Box>
         <Stack
@@ -111,57 +122,74 @@ const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handle
                 >
                 {/* <Heading color="teal.400"> {intl.formatMessage({id: 'welcome'})}</Heading> */}
 
-                <FormControl variant='floating' id='first-name' >                        
-                    <Input  type="text"  fontWeight={"bold"}  id={"firstname"} defaultValue =  {currentUser.firstName}  name="firstName" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
+                <FormControl variant='floating' id='first-name' isInvalid = {errors.firstName} >                        
+                    <Input  {...register("firstName", {required: true})} type="text"  fontWeight={"bold"}  id={"firstname"} defaultValue =  {currentUser.firstName}  name="firstName" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
                     {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.firstName}  /> */}
-                    <FormLabel >{intl.formatMessage({id: 'form_field_first_name'})}</FormLabel>
+                    <FormLabel color={"teal.500"} >{intl.formatMessage({id: 'form_field_first_name'})}</FormLabel>
                 </FormControl>  
-                <FormControl mt={6} variant='floating' id='last-name' >                        
-                    <Input type="text" fontWeight={"bold"}   defaultValue =  {currentUser.lastName}  name="lastName" placeholder={intl.formatMessage({id: 'form_field_last_name'})}  />
+                {(errors.firstName)? 
+                (<FormErrorMessage><FormattedMessage id={"error_missing_first_name"}  ></FormattedMessage></FormErrorMessage>)
+                : null 
+                }
+                <FormControl mt={6} variant='floating' id='last-name' isInvalid = {errors.lastName} >                        
+                    <Input {...register("lastName", {required: true})}type="text" fontWeight={"bold"}   defaultValue =  {currentUser.lastName}  name="lastName" placeholder={intl.formatMessage({id: 'form_field_last_name'})}  />
                     {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.lastName} />
                  */}
-                <FormLabel >{intl.formatMessage({id: 'form_field_last_name'})}</FormLabel>
+                <FormLabel color={"teal.500"} >{intl.formatMessage({id: 'form_field_last_name'})}</FormLabel>
+                {(errors.lastName)? 
+                (<FormErrorMessage><FormattedMessage id={"error_missing_last_name"}  ></FormattedMessage></FormErrorMessage>)
+                : null 
+                }
                 </FormControl>  
                 <FormControl  mt={6} variant='floating' id='email' isInvalid = {errors.email}>     
                     <Input {...register("email", {required: true})}  type="email"  defaultValue =  {currentUser.email}  name="email"  placeholder={intl.formatMessage({id: 'form_field_email'})}/>
                     {/* value  = {currentUser.email }  onChange={handleInputChange} name="email"
                     <Input type="email" as="i" fontSize='md'mt={1} palceHolder  = {currentUser.email }  /> */}
-                <FormLabel > {intl.formatMessage({id: 'form_field_email'})}</FormLabel>
+                <FormLabel color={"teal.500"} > {intl.formatMessage({id: 'form_field_email'})}</FormLabel>
                 {(errors.email)? 
                 (<FormErrorMessage><FormattedMessage id={"error_missing_email"}  ></FormattedMessage></FormErrorMessage>)
                 : null 
                 }
                 </FormControl>  
-                <FormControl  mt={6} variant='floating' id='image' isInvalid = {errors.image}>
-                <Input {...register("image")} type= "text" defaultValue={currentUser.image}  name="imaage" placeholder={intl.formatMessage({id: 'form_field_image'})}/>
-                {console.log(currentUser.image)}
-                <FormLabel mt={6}> {intl.formatMessage({id: 'form_field_image'})}</FormLabel>
-                {(errors.image)? 
-                (<FormErrorMessage><FormattedMessage id={"error_wrong_image"}  ></FormattedMessage></FormErrorMessage>)
-                : null 
-                } 
+                <FormControl  mt={6} variant='floating' id='image' >
+                <Input {...register("image")}  type="url"  defaultValue = {currentUser.image}  name="image"  placeholder={intl.formatMessage({id: 'form_field_image'})}/>
+                {/* {currentUser.image}   */}
+                <FormLabel color={"teal.500"} > {intl.formatMessage({id: 'form_field_image'})}</FormLabel>
                 </FormControl>
                     <br />
-                    <Badge  my={3} mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentUser.privileges || "-"}  defaultMessage={"-"} /></Badge>
-                
+                {isAdmin?
+                // (<ButtonGroup mt={4} mb={6} size='sm' isAttached variant='outline' >
+                // <Button isDisabled={true}  mr='-px'><FormattedMessage id={currentUser.privileges || "-"}  defaultMessage={"-"} /></Button>
+                // <IconButton aria-label='EditRole' icon={<EditIcon />} />
+                // </ButtonGroup>)
+                (currentUser.privileges =="ADMIN" ?
+                    (<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } >
+                        <option value='ADMIN'>{intl.formatMessage({id: 'MEMBER'})}</option>
+                    </Select>)
+                    :(<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } >
+                        <option value='MEMBER'>{intl.formatMessage({id: 'ADMIN'})}</option>
+                    </Select>)
+                )
+               : <Badge  mt={4} mb={6} mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentUser.privileges || "-"}  defaultMessage={"-"} /></Badge>
+                }
                 <FormControl variant='floating' id='biography' > 
-                <Textarea  pt={10} defaultValue =  {currentUser.biography} name="biography" placeholder={intl.formatMessage({id: 'form_field_biography'})} /> 
+                <Textarea {...register("biography")}  defaultValue =  {currentUser.biography} name="biography" placeholder={intl.formatMessage({id: 'form_field_biography'})} /> 
                     {/* <Textarea fontSize='lg' placeholder= {currentUser.biography} /> 
                  */}
-                 <FormLabel  >{intl.formatMessage({id: 'form_field_biography'})}</FormLabel>
+                 <FormLabel color={"teal.500"}  >{intl.formatMessage({id: 'form_field_biography'})}</FormLabel>
                 </FormControl>
                 
-                <Box>
+                <Box mt={6}>
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
-                    {/* <EditableControls editMode={editMode} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} handleOnSubmit={handleOnSubmit} /> */}
-                    <SubmitButton  />
+                    <EditableControls isAdmin={isAdmin} editMode={editMode} handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
+                    {/* <SubmitButton type={ "submit"} /> */}
                 </Box>
                
                 </Flex>
             
                 </form>
                 
-                <CancelButton handleCancelClick={handleCancelClick} />
+                {/* <CancelButton handleCancelClick={handleCancelClick} /> */}
            
         </Box>
     </Stack>
@@ -170,27 +198,41 @@ const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handle
 }
 
 
-function EditableControls({editMode,handleEditClick,handleCancelClick}) {
+function EditableControls({isAdmin,editMode,handleEditClick,handleCancelClick, handleDeleteClick}) {
     const intl = useIntl();
+    
+
     return editMode ? (
         <ButtonGroup justifyContent='center' size='sm' >
-           <CancelButton handleCancelClick={handleCancelClick} intl={intl}/>
-            <SubmitButton intl={intl} />
+            <Tooltip label= {intl.formatMessage({id: 'cancel'})} aria-label='A tooltip'>
+                <IconButton icon={<CloseIcon />}  onClick={handleCancelClick} mx={3} />
+            </Tooltip>
+            <Tooltip label= {intl.formatMessage({id: 'update'})} aria-label='A tooltip' >
+                <IconButton  type="submit" icon={<CheckIcon />}  mx={3}/>
+            </Tooltip>
+            {isAdmin?
+            (<Tooltip label= {intl.formatMessage({id: 'update'})} aria-label='A tooltip' >
+                <IconButton  icon={<DeleteIcon />}  mx={3} onClick={handleDeleteClick}/>
+            </Tooltip>)
+            :null
+            }
+           {/* <CancelButton handleCancelClick={handleCancelClick} intl={intl}/>
+            <SubmitButton intl={intl} /> */}
             
         </ButtonGroup>
-        ) : (
+         ): (
         <Flex justifyContent='center'>
             <Button size='sm' rightIcon={<EditIcon />} background="whiteAlpha.900"  onClick={handleEditClick} > <FormattedMessage id={"edit"} defaultMessage={"-"}/></Button>
         </Flex>
         )
     }
 
-function SubmitButton(){
+function SubmitButton({type}){
     const intl = useIntl();
     return(
-            <Tooltip label= {intl.formatMessage({id: 'update'})} aria-label='A tooltip' >
-                <IconButton icon={<CheckIcon />}  mx={3}/>
-            </Tooltip>
+        <Tooltip type={type} label= {intl.formatMessage({id: 'update'})} aria-label='A tooltip' >
+            <IconButton  type="submit" icon={<CheckIcon />}  mx={3}/>
+        </Tooltip>
     )
 }
 
@@ -206,59 +248,85 @@ function CancelButton({handleCancelClick} ){
 }
 
 
-function Profile() {
+function Profile({userPriv}) {
+    const { get, post, del, response, loading, error } = useFetch();
+    const intl = useIntl();
+    let navigate = useNavigate();
     //const [currentId, setCurrentId]=useState("");
     const { id } = useParams();
     console.log(id)
    // setCurrentId(id)
 
-    const defaultUser=  {"id": "",
-        "firstName": "",
-        "lastName": "",
-        "email": "",
-        "image": "",
-        "deleted": false,
-        "privileges": "VIEWER",
-        "biography": " "}
-    const [refreshNow, setRefreshNow]=useState(false);
+    /**** *******************************************STATE******************************************************** */
+
+    const [isAdmin, setAdminPriv]=useState(false);
     const [currentUser, setCurrentUser]=useState(defaultUser);
+    //modo ediçao / visualizaçao
+    const [editMode, setEditClick] = useState(false);
+
+
+    /**** ****************************************FORM*********************************************************** */
+    //fuções que chamos ao submeter o formulário de edição
     const {register, handleSubmit, formState: {errors}}= useForm();
     //const onSubmit = values => console.log(values); 
     //const handleSubmit(data){setData(data), console.log(data) )};
 
-    const onSubmit = (data, e) => console.log(data, e);
+    //const onSubmit = (data, e) => console.log(data, e);
+    async function onSubmit (data, e) {
+        const updateUser = await post('users/'+currentUser.id, data)
+        if (response.ok) {
+            console.log("user atualizado com sucesso ", updateUser);
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+            }else{
+                setAppError(  "error_fetch_generic" );
+            }
+        }
+    }
+    
     const onError = (errors, e) => console.log(errors, e);
-    const intl = useIntl();
+
+    /**** ******************************************OTHER BUTTONS********************************************************* */
    
-    //modo ediçao / visualizaçao
-    const [editMode, setEditClick] = useState(false);
     //função que chamamos ao clicar em "edit"/"hide" edit mode - altera o state de false para true e vice-versa
     const handleEditClick = () => setEditClick(!editMode);
 
     //função que chamamos ao clicar em cancelar 
     const handleCancelClick = () => setEditClick(!editMode);
-   
-
-    const [data, setData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        biography: '',
-    })
-
-    const handleInputChange = (event) => {
-        setData({
-            ...data,
-            [event.target.name] : event.target.value
-        })
+    //função que chamamos ao clicar em eliminar 
+    const handleDeleteClick= async()=>  {
+        setEditClick(!editMode);
+        const deletedUser = await del('users/'+currentUser.id)
+        if (response.ok) {
+            console.log("user eliminado/bloqueado com sucesso ", deletedUser);
+            setAppError("");
+            navigate("/aboutUs");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+            setAppError(  error );
+            }else{
+                setAppError(  "error_fetch_generic" );
+            }
+        }
     }
 
-    
+
+    /**** ******************************************USE EFFECT********************************************************* */
+ 
     // let currentUser=getUserToShow(id);
     // console.log(currentUser)
     
-    const { get, post, response, loading, error } = useFetch();
-    useEffect(async()=>{
+ useEffect(async()=>{
         console.log("dentro do userEffect");
         setEditClick(false);
         if(!id){
@@ -266,7 +334,9 @@ function Profile() {
             if (response.ok) {
                 console.log(getUserProfile)
                 setCurrentUser(getUserProfile);
-                setRefreshNow(true);
+                if(userPriv =="ADMIN"){
+                    setAdminPriv(true);
+                }
                 setAppError("");
             } else if(response.status==401) {
                 console.log("credenciais erradas? " + error)
@@ -285,7 +355,9 @@ function Profile() {
         if (response.ok) {
             console.log(getUserProfile)
             setCurrentUser(getUserProfile);
-            setRefreshNow(true);
+            if(userPriv =="ADMIN"){
+                setAdminPriv(true);
+            }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -308,6 +380,9 @@ function Profile() {
     },[currentUser,editMode])
     
     
+/**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
+ 
+
     return (
     <Box>
         <Flex 
@@ -323,18 +398,43 @@ function Profile() {
         justifyContent="start"
         alignItems="center"
         >
-        {error && 'Error!'}
-        {loading && 'Loading...'}
-        
-       
+
         { editMode==false?
         (<Box>
         <Avatar size='2xl' bg="teal.500" mt={"-50%"} mb={10} name={currentUser.firstName + " " + currentUser.lastName} src={currentUser.image} />
         </Box>
         ):null}
-        {editMode==false?
-        <ProfileViewMode  currentUser= {currentUser} editMode={editMode} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick}/>
-        : <ProfileEditMode currentUser= {currentUser} handleInputChange={handleInputChange} handleCancelClick={handleCancelClick} onError={onError} onSubmit={onSubmit} handleSubmit={handleSubmit} register={register}  errors={errors}/>
+
+        {error && 'Error!'}
+        {loading && 'Loading...'}
+
+        {error?
+            <WarningTwoIcon />
+        
+        :    (editMode==false?
+            <ProfileViewMode  
+            isAdmin={isAdmin}
+            currentUser= {currentUser} 
+            editMode={editMode} 
+            handleEditClick={handleEditClick} 
+            handleDeleteClick={handleDeleteClick}
+            handleCancelClick={handleCancelClick}
+            />
+
+            : <ProfileEditMode 
+            isAdmin={isAdmin} 
+            currentUser= {currentUser}  
+            editMode={editMode}
+            handleEditClick={handleEditClick}
+            handleDeleteClick={handleDeleteClick}
+            handleCancelClick={handleCancelClick} 
+            onError={onError} 
+            onSubmit={onSubmit} 
+            handleSubmit={handleSubmit} 
+            register={register}  
+            errors={errors}
+            />
+            )
         }
         {/* <Avatar name={register.firstName & " " & register.lastName} src={register.image} /> */}
         </Flex>
@@ -342,7 +442,20 @@ function Profile() {
     );
 }
 
-export default Profile;
+const mapStateToProps = state => {
+    return { userPriv: state.loginOK.userPriv,
+            error: state.errorMsg.error
+    };
+  };
+export default connect(mapStateToProps,{})(Profile);
+
+
+
+
+
+
+
+
 
 //INFO HARD CODED PARA TESTES
 // function getUserToShow(id){
@@ -467,3 +580,17 @@ export default Profile;
                             <Input as={EditableInput} />
                             <EditableControls />
                         </Editable> */}
+
+    //     const [data, setData] = useState({
+    //     firstName: '',
+    //     lastName: '',
+    //     email: '',
+    //     biography: '',
+    // })
+
+    // const handleInputChange = (event) => {
+    //     setData({
+    //         ...data,
+    //         [event.target.name] : event.target.value
+    //     })
+    //}
