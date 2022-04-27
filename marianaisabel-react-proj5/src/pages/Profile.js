@@ -42,7 +42,7 @@ import { current } from '@reduxjs/toolkit';
 }
 
 
-const ProfileViewMode=({currentUser,editMode,handleEditClick,handleCancelClick})=>{
+const ProfileViewMode=({currentUser,editMode,handleEditClick,handleCancelClick,intl})=>{
     return (<Box>
         <Stack
     flexDir="column"
@@ -72,7 +72,7 @@ const ProfileViewMode=({currentUser,editMode,handleEditClick,handleCancelClick})
                 </Box>
                 <Box>
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
-                    <EditableControls editMode={editMode} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} />
+                    <EditableControls editMode={editMode} intl={intl} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick} />
                 </Box>
             </Flex>
             
@@ -82,8 +82,8 @@ const ProfileViewMode=({currentUser,editMode,handleEditClick,handleCancelClick})
     )
 }
 
-const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handleSubmit, onSubmit, onError})=>{
-    const intl = useIntl();
+const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handleSubmit, onSubmit, onError,intl})=>{
+
     return (<Box>
         <Stack
     flexDir="column"
@@ -103,19 +103,24 @@ const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handle
             >
             <form onSubmit={ handleSubmit(onSubmit,onError )}>
                 <FormControl>                        
-                    <Input type="text" fontSize='2xl' fontWeight={"bold"}  id={"firstname"} value  = {currentUser.firstName} onChange={handleInputChange} name="firstName" />
+                    {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  id={"firstname"} value  = {currentUser.firstName} onChange={handleInputChange} name="firstName" /> */}
+                    <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.firstName}  />
+
                 </FormControl>  
                 <FormControl>                        
-                    <Input type="text" fontSize='2xl' fontWeight={"bold"}  value  = {currentUser.lastName} onChange={handleInputChange} name="lastName" />
+                    {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  value  = {currentUser.lastName} onChange={handleInputChange} name="lastName" /> */}
+                    <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.lastName} />
                 </FormControl>  
                 <FormControl>     
-                    <Input type="email" as="i" fontSize='md'mt={1} value  = {currentUser.email }  onChange={handleInputChange} name="email"/>
+                    {/* <Input type="email" as="i" fontSize='md'mt={1} value  = {currentUser.email }  onChange={handleInputChange} name="email"/> */}
+                    <Input type="email" as="i" fontSize='md'mt={1} palceHolder  = {currentUser.email }  />
                 </FormControl>  
                     <br />
                     <Badge mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentUser.privileges} defaultMessage={"-"} /></Badge>
                 
                 <FormControl>
-                    <Textarea fontSize='lg' value = {currentUser.biography} onChange={handleInputChange} name="biography"/> 
+                {/* <Textarea fontSize='lg' value = {currentUser.biography} onChange={handleInputChange} name="biography"/>  */}
+                    <Textarea fontSize='lg' placeholder= {currentUser.biography} intl={intl}/> 
                 </FormControl>
                 <Box>
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
@@ -123,7 +128,7 @@ const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handle
                     <SubmitButton />
                 </Box>
                 </form>
-                <CancelButton handleCancelClick={handleCancelClick} />
+                <CancelButton handleCancelClick={handleCancelClick} intl={intl}/>
             </Flex>
             
         </Box>
@@ -133,12 +138,12 @@ const ProfileEditMode=({currentUser,handleInputChange, handleCancelClick, handle
 }
 
 
-function EditableControls({editMode,handleEditClick,handleCancelClick}) {
-    const intl = useIntl();
+function EditableControls({editMode,handleEditClick,handleCancelClick,intl}) {
+    
     return editMode ? (
         <ButtonGroup justifyContent='center' size='sm' >
-           <CancelButton handleCancelClick={handleCancelClick} />
-            <SubmitButton />
+           <CancelButton handleCancelClick={handleCancelClick} intl={intl}/>
+            <SubmitButton intl={intl} />
             
         </ButtonGroup>
         ) : (
@@ -148,8 +153,7 @@ function EditableControls({editMode,handleEditClick,handleCancelClick}) {
         )
     }
 
-function SubmitButton(){
-    const intl = useIntl();
+function SubmitButton({intl}){
     return(
             <Tooltip label= {intl.formatMessage({id: 'update'})} aria-label='A tooltip' >
                 <IconButton icon={<CheckIcon />}  mx={3}/>
@@ -158,8 +162,8 @@ function SubmitButton(){
 }
 
 
-function CancelButton({handleCancelClick} ){
-    const intl = useIntl();
+function CancelButton({handleCancelClick,intl} ){
+
     return(
         <Tooltip label= {intl.formatMessage({id: 'cancel'})} aria-label='A tooltip'>
             <IconButton icon={<CloseIcon />}  onClick={handleCancelClick} mx={3} />
@@ -295,8 +299,8 @@ function Profile() {
         </Box>
         ):null}
         {editMode==false?
-        <ProfileViewMode  currentUser= {currentUser} editMode={editMode} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick}/>
-        : <ProfileEditMode currentUser= {currentUser} handleInputChange={handleInputChange} handleCancelClick={handleCancelClick} onError={onError} onSubmit={onSubmit} handleSubmit={handleSubmit} />
+        <ProfileViewMode  currentUser= {currentUser} intl={intl} editMode={editMode} handleEditClick={handleEditClick} handleCancelClick={handleCancelClick}/>
+        : <ProfileEditMode currentUser= {currentUser} intl={intl} handleInputChange={handleInputChange} handleCancelClick={handleCancelClick} onError={onError} onSubmit={onSubmit} handleSubmit={handleSubmit} />
         }
         {/* <Avatar name={register.firstName & " " & register.lastName} src={register.imageURL} /> */}
         </Flex>

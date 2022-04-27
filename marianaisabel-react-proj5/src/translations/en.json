@@ -9,6 +9,8 @@
     "news_article": "Article",
     "project":"Project",
 
+    "associatedNews":"Associated News",
+
     "welcome":"Welcome",
     "form_field_first_name":"First Name",
     "form_field_last_name":"Last Name",

@@ -48,12 +48,12 @@ function  ProjectCard ({projectElem, ...props}){
 
     const project = {
         id: projectElem.id,
-        imageUrl: projectElem.imageUrl,
+        image: projectElem.image,
         title:  projectElem.title,
         description:  projectElem.description,
         keywords:  projectElem.keywords,
-        users: projectElem.users,
-        news:  projectElem.news,
+        associatedUsers: projectElem.associatedUsers,
+        associatedNews:  projectElem.associatedNews,
         createdBy:  projectElem.createdBy,
         createdDate:  projectElem.createdDate,
         lastModifBy:  projectElem.lastModifBy,
@@ -72,7 +72,7 @@ function  ProjectCard ({projectElem, ...props}){
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
             <HStack display='flex' justifyContent="center"  alignItems="center">
-            <Image src={project.imageUrl} alt={project.title.slice(0,10)} h='255px' />
+            <Image src={project.image} alt={project.title.slice(0,10)} h='255px' />
             </HStack>
             <Box p='6'>
                 <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'column']} >
@@ -86,18 +86,18 @@ function  ProjectCard ({projectElem, ...props}){
                         mb='3'
                         alignSelf={"center"}
                         >
-                        {/* {project.users.length} <FormattedMessage id={"members"} />   &bull; {project.news.length} <FormattedMessage id={"news"} />   */}
+                        {/* {project.associatedUsers.length} <FormattedMessage id={"members"} />   &bull; {project.associatedNews.length} <FormattedMessage id={"associatedNews"} />   */}
                         <Button size='xs' variant='link' onClick={() => {
                             setOverlay("members") 
                             onOpen()
                         }}> 
-                            {project.users.length} <FormattedMessage id={"members"} /> 
+                            {project.associatedUsers.length} <FormattedMessage id={"members"} /> 
                         </Button>  &bull;  
                         <Button size='xs' variant='link' onClick={() => {
-                            setOverlay("news") 
+                            setOverlay("associatedNews") 
                             onOpen()
                         }}> 
-                            {project.news.length} <FormattedMessage id={"news"} />  
+                            {project.associatedNews.length} <FormattedMessage id={"associatedNews"} />  
                         </Button>
                         <>
                             <Modal onClose={onClose} isOpen={isOpen} isCentered>
@@ -111,10 +111,10 @@ function  ProjectCard ({projectElem, ...props}){
                                 <ModalBody>
                                 <UnorderedList>
                                 {overlay=="members" ?
-                                project.users.map(u => (
+                                project.associatedUsers.map(u => (
                                     <ListItem borderRadius='full' px='2' key={u.id} ><Link to={`/profile/${u.id}`} >{u.firstName}</Link></ListItem>
                                 ))
-                                :  project.news.map(t => (
+                                :  project.associatedNews.map(t => (
                                     <ListItem borderRadius='full' px='2' key={t.id} ><Link to={`/projects/${t.id}`} >{t.title}</Link></ListItem>
                                 ))
                                 }
