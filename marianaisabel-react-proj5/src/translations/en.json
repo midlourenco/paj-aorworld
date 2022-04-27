@@ -32,6 +32,7 @@
     "update":"Update",
     "cancel":"Cancel",
     "edit_profile":"Edit Profile",
+    "delete": "Delete",
 
     "create_project":"Create project",
     "create_article":"Create article",

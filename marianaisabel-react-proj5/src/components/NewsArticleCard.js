@@ -7,16 +7,9 @@ import {FormattedMessage} from "react-intl";
 
 import {
     Flex,
-    Heading,
-    Input,
     Button,
-    InputGroup,
-    Stack,
     VStack,
-    InputLeftElement,
     chakra,
-    Grid,
-    GridItem,
     Link as ChakraLink,
     Box,
     Image,
@@ -53,14 +46,12 @@ function  NewsArticleCard ({news, ...props}){
     let id = news.id;
     console.log("O id do use params " + news.id);
    // console.log( new Date((news.lastModifDate)));
- 
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [overlay, setOverlay] = useState("")
 
 
-       
-    
-  
+
     return (
         <Box  borderWidth='1px' borderRadius='lg' backgroundColor="white" margin={5}> 
             <Flex display='flex' justifyContent="center"  alignItems="center" >

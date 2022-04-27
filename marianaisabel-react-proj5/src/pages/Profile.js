@@ -123,7 +123,7 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
                 {/* <Heading color="teal.400"> {intl.formatMessage({id: 'welcome'})}</Heading> */}
 
                 <FormControl variant='floating' id='first-name' isInvalid = {errors.firstName} >                        
-                    <Input  {...register("firstName", {required: true})} type="text"  fontWeight={"bold"}  id={"firstname"} defaultValue =  {currentUser.firstName}  name="firstName" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
+                    <Input  {...register("firstName", {required: true})} type="text" id={"firstname"} defaultValue =  {currentUser.firstName}  name="firstName" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
                     {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.firstName}  /> */}
                     <FormLabel color={"teal.500"} >{intl.formatMessage({id: 'form_field_first_name'})}</FormLabel>
                 </FormControl>  
@@ -132,7 +132,7 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
                 : null 
                 }
                 <FormControl mt={6} variant='floating' id='last-name' isInvalid = {errors.lastName} >                        
-                    <Input {...register("lastName", {required: true})}type="text" fontWeight={"bold"}   defaultValue =  {currentUser.lastName}  name="lastName" placeholder={intl.formatMessage({id: 'form_field_last_name'})}  />
+                    <Input {...register("lastName", {required: true})}type="text" defaultValue =  {currentUser.lastName}  name="lastName" placeholder={intl.formatMessage({id: 'form_field_last_name'})}  />
                     {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.lastName} />
                  */}
                 <FormLabel color={"teal.500"} >{intl.formatMessage({id: 'form_field_last_name'})}</FormLabel>
@@ -163,14 +163,15 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
                 // <IconButton aria-label='EditRole' icon={<EditIcon />} />
                 // </ButtonGroup>)
                 (currentUser.privileges =="ADMIN" ?
-                    (<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } >
-                        <option value='ADMIN'>{intl.formatMessage({id: 'MEMBER'})}</option>
+                    (<Select {...register("privileges", {value: currentUser.privileges})} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } defaultValue={currentUser.privileges }   >
+                        <option value='MEMBER'>{intl.formatMessage({id: 'MEMBER'})}</option>
                     </Select>)
-                    :(<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } >
-                        <option value='MEMBER'>{intl.formatMessage({id: 'ADMIN'})}</option>
+                    :(<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } defaultValue={currentUser.privileges }  >
+                        <option value='ADMIN'>{intl.formatMessage({id: 'ADMIN'})}</option>
                     </Select>)
                 )
-               : <Badge  mt={4} mb={6} mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentUser.privileges || "-"}  defaultMessage={"-"} /></Badge>
+                :<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } defaultValue={currentUser.privileges } isDisabled={true} ></Select>
+            //    : <Badge  mt={4} mb={6} mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentUser.privileges || "-"}  defaultMessage={"-"} /></Badge>
                 }
                 <FormControl variant='floating' id='biography' > 
                 <Textarea {...register("biography")}  defaultValue =  {currentUser.biography} name="biography" placeholder={intl.formatMessage({id: 'form_field_biography'})} /> 
@@ -211,7 +212,7 @@ function EditableControls({isAdmin,editMode,handleEditClick,handleCancelClick, h
                 <IconButton  type="submit" icon={<CheckIcon />}  mx={3}/>
             </Tooltip>
             {isAdmin?
-            (<Tooltip label= {intl.formatMessage({id: 'update'})} aria-label='A tooltip' >
+            (<Tooltip label= {intl.formatMessage({id: 'delete'})} aria-label='A tooltip' >
                 <IconButton  icon={<DeleteIcon />}  mx={3} onClick={handleDeleteClick}/>
             </Tooltip>)
             :null
