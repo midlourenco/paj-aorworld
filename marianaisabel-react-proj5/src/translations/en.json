@@ -34,6 +34,10 @@
     "edit_profile":"Edit Profile",
     "delete": "Delete",
 
+    "_back_to_projects": "< Back to Projects",
+    "_back_to_news": "< Back to News",
+    "_back_to_team": "< Back to Team",
+
     "create_project":"Create project",
     "create_article":"Create article",
 

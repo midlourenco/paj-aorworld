@@ -1,7 +1,7 @@
 import {useNavigate} from 'react-router-dom'
 //useHistory replace by useNavigate : history.push ->navigate("/home");
 
-function ButtonExemple({path, description, ...props}){
+function RedirectButton({path, description, ...props}){
     let navigate = useNavigate();
     function handleClick() {
       navigate(path);
@@ -17,4 +17,4 @@ function ButtonExemple({path, description, ...props}){
 
 };
 
-export default ButtonExemple;
+export default RedirectButton;

@@ -7,6 +7,9 @@ h1 {
 }
 
 
+html {
+  scroll-behavior: smooth;
+}
 
 @media only screen and (min-width: 960px) {
   .base-page {

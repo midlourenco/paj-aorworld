@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from "react";
+import { useState, useEffect, } from "react";
 //Redirect replace by Naviagate
 import {Navigate, useParams, useNavigate} from 'react-router-dom'
 //https://react-hook-form.com/
@@ -38,7 +38,7 @@ import {
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
-
+import RedirectButton from "../components/RedirectButton"
 
   //TODO: 
   function setAppError(error){
@@ -62,7 +62,7 @@ const ProfileViewMode=({isAdmin, currentUser,editMode,handleEditClick,handleCanc
     justifyContent="center"
     alignItems="center"
     >
-        <Box minW={{ base: "90%", md: "468px" }} mb={20}>
+        <Box minW={{ base: "90%", md: "468px" }} mb={5}>
             <Flex
             spacing={2}
             backgroundColor="whiteAlpha.900"
@@ -104,7 +104,7 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
     justifyContent="center"
     alignItems="center"
     >
-        <Box minW={{ base: "90%", md: "468px" }} mb={20}>
+        <Box minW={{ base: "90%", md: "468px" }} mb={5}>
             
             <form onSubmit={ handleSubmit(onSubmit,onError )} >
                 <Box>
@@ -249,6 +249,8 @@ function CancelButton({handleCancelClick} ){
 }
 
 
+  //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
+
 function Profile({userPriv}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
@@ -264,7 +266,8 @@ function Profile({userPriv}) {
     const [currentUser, setCurrentUser]=useState(defaultUser);
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
-
+    const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
+    const [scrollDown, setScrollDown]=useState(false)
 
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
@@ -277,15 +280,24 @@ function Profile({userPriv}) {
         const updateUser = await post('users/'+currentUser.id, data)
         if (response.ok) {
             console.log("user atualizado com sucesso ", updateUser);
+            setRestResponse("OK");
+            setScrollDown(true);
             setAppError("");
+           
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setScrollDown(true);
             setAppError('error_fetch_login_401');
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
+                setRestResponse("NOK");
+                setScrollDown(true);
                 setAppError(  error );
             }else{
+                setRestResponse("NOK");
+                setScrollDown(true);
                 setAppError(  "error_fetch_generic" );
             }
         }
@@ -307,16 +319,19 @@ function Profile({userPriv}) {
         if (response.ok) {
             console.log("user eliminado/bloqueado com sucesso ", deletedUser);
             setAppError("");
-            navigate("/aboutUs");
+            navigate("/about");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setAppError('error_fetch_login_401');
+            setRestResponse("NOK");
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
-            setAppError(  error );
+                setAppError(  error );
+                setRestResponse("NOK");
             }else{
-                setAppError(  "error_fetch_generic" );
+                setAppError(  "error_fetch_generic" )
+                setRestResponse("NOK");
             }
         }
     }
@@ -329,7 +344,7 @@ function Profile({userPriv}) {
     
  useEffect(async()=>{
         console.log("dentro do userEffect");
-        setEditClick(false);
+        setRestResponse("");
         if(!id){
             const getUserProfile = await get("users/myProfile")
             if (response.ok) {
@@ -341,13 +356,16 @@ function Profile({userPriv}) {
                 setAppError("");
             } else if(response.status==401) {
                 console.log("credenciais erradas? " + error)
+                 setRestResponse("NOK");
                 setAppError('error_fetch_login_401');
             }else{
                 console.log("houve um erro no fetch " + error)
                 if(error && error!=""){
                     setAppError(  error );
+                    setRestResponse("NOK");
                 }else{
                     setAppError(  "error_fetch_generic" );
+                     setRestResponse("NOK");
                 }
             }
         }
@@ -363,24 +381,40 @@ function Profile({userPriv}) {
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setAppError('error_fetch_login_401');
+            setRestResponse("NOK");
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
                 setAppError(  error );
+                setRestResponse("NOK");
             }else{
                 setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
             }
         }
         
         
     },[])
+    /**
+     * use Effect à escuta de variaveis para fazer trigger do render
+     */
     useEffect(()=>{
         console.log("dentro do segundo  userEffect");
         console.log(editMode);
+        setRestResponse("");
     
     },[currentUser,editMode])
     
-    
+    /**
+     * use effect À escuta da variável que obriga ao scroll down
+     */
+    useEffect(() => {
+        window.scrollTo(0,document.body.scrollHeight);
+      },[scrollDown])
+       
+
+
+
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
  
 
@@ -411,8 +445,9 @@ function Profile({userPriv}) {
 
         {error?
             <WarningTwoIcon />
-        
-        :    (editMode==false?
+    
+        :(editMode==false?
+
             <ProfileViewMode  
             isAdmin={isAdmin}
             currentUser= {currentUser} 
@@ -437,6 +472,15 @@ function Profile({userPriv}) {
             />
             )
         }
+        {restResponse=="OK"?
+        <Text my={5} color="green"> Informação guardada com sucesso </Text>
+        : restResponse=="NOK"?
+        <Text my={5} color="red"> Houve um problema ao guardar a informação </Text>
+        :null
+        }
+        <Box mb={30}>
+            <RedirectButton path="/about" description={intl.formatMessage({id: "_back_to_team" })} />
+        </Box >
         {/* <Avatar name={register.firstName & " " & register.lastName} src={register.image} /> */}
         </Flex>
     </Box>

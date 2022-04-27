@@ -37,44 +37,54 @@ import {
 import {  AddIcon } from '@chakra-ui/icons'
 
 
-import ButtonExemple from "../components/ButtonExemple";
+import RedirectButton from "../components/RedirectButton";
 
+
+const users = [
+  {id:"1", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
+  {id:"2",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"3",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"4",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+  {id:"5", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
+  {id:"6",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"7",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"8",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+  {id:"9", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
+  {id:"10",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"11",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"12",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+
+];
+
+const projectslist=[
+  {id:"1", title: 'hgjk', imageURL: "https://bit.ly/dan-abramov" },
+  {id:"2",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"3",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"4",title: '5r6tu', imageURL: "https://bit.ly/dan-abramov"  },
+  {id:"5", title: '6tuhkl', imageURL: "https://bit.ly/dan-abramov" },
+  {id:"6",title: 'hfgvb ', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"7",title: ' nbm', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"8",title: 'cnmjh', imageURL: "https://bit.ly/dan-abramov"  },
+  {id:"9", title: 'htfjgkhl', imageURL: "https://bit.ly/dan-abramov" },
+  {id:"10",title: 'chjgh', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"11",title: 'chjk', imageURL: "https://bit.ly/sage-adebayo"  },
+  {id:"12",title: 'fgjhk', imageURL: "https://bit.ly/dan-abramov"  },
+
+];
+
+  //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
 function NewNews() {
-  const users = [
-    {id:"1", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-    {id:"2",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"3",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"4",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
-    {id:"5", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-    {id:"6",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"7",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"8",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
-    {id:"9", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-    {id:"10",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"11",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"12",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+    //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
+    const intl = useIntl();
 
-  ];
-
-  const projectslist=[
-    {id:"1", title: 'hgjk', imageURL: "https://bit.ly/dan-abramov" },
-    {id:"2",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"3",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"4",title: '5r6tu', imageURL: "https://bit.ly/dan-abramov"  },
-    {id:"5", title: '6tuhkl', imageURL: "https://bit.ly/dan-abramov" },
-    {id:"6",title: 'hfgvb ', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"7",title: ' nbm', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"8",title: 'cnmjh', imageURL: "https://bit.ly/dan-abramov"  },
-    {id:"9", title: 'htfjgkhl', imageURL: "https://bit.ly/dan-abramov" },
-    {id:"10",title: 'chjgh', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"11",title: 'chjk', imageURL: "https://bit.ly/sage-adebayo"  },
-    {id:"12",title: 'fgjhk', imageURL: "https://bit.ly/dan-abramov"  },
-
-  ];
 
 
   const {register, handleSubmit, formState: {errors}}= useForm();
+  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
+    initialStep: 0,
+  });
+
   //const onSubmit = values => console.log(values); 
   //const handleSubmit(data){setData(data), console.log(data) )};
 
@@ -84,15 +94,15 @@ function NewNews() {
 
 
   const [data, setData]= useState("");
+  const [restResponse, setRestResponse]=useState("");
+  const [scrollDown, setScrollDown]=useState(false)
 
 
-  //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
-  const intl = useIntl();
 
-  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
-    initialStep: 0,
-  });
 
+
+  //**********************************************PESQUISA KEYWORDS*************************************************************************** */
+ 
   const [input, setInput] = useState([]);
   const saveInputKeyword = e => {
     setInput(e.target.value);
@@ -105,6 +115,15 @@ function NewNews() {
     }
   }
 
+  //**********************************************USE EFFECT*************************************************************************** */
+ 
+  /**
+     * use effect À escuta da variável que obriga ao scroll down
+     */
+   useEffect(() => {
+    window.scrollTo(0,document.body.scrollHeight);
+  },[scrollDown])
+   
 
   const content1 = (
     <Flex justifyContent={"center"} py={4} width={"100%"}>
@@ -247,6 +266,10 @@ function NewNews() {
   ];
 
 
+
+
+  //**********************************************RENDER RETURN FUNCÇAO PRINCIPAL*************************************************************************** */
+ 
   return (
     <Flex
         flexDirection="column"
@@ -303,8 +326,14 @@ function NewNews() {
             )}
           </form>
           </Flex>
+          {restResponse=="OK"?
+        <Text my={5} color="green"> Informação guardada com sucesso </Text>
+        : restResponse=="NOK"?
+        <Text my={5} color="red"> Houve um problema ao guardar a informação </Text>
+        :null
+        }
           <Box>
-                <ButtonExemple path="/news" description="< Back to News" />
+                <RedirectButton path="/news" description="_back_to_news" />
             </Box>
         </Box>
       </Stack>
