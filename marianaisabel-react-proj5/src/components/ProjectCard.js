@@ -44,21 +44,23 @@ import {
 import { RiNewspaperLine} from "react-icons/ri";
 import { BiEraser} from "react-icons/bi";
 
-function  ProjectCard ({projectElem, ...props}){
+function  ProjectCard ({project, ...props}){
 
-    const project = {
-        id: projectElem.id,
-        image: projectElem.image,
-        title:  projectElem.title,
-        description:  projectElem.description,
-        keywords:  projectElem.keywords,
-        associatedUsers: projectElem.associatedUsers,
-        associatedNews:  projectElem.associatedNews,
-        createdBy:  projectElem.createdBy,
-        createdDate:  projectElem.createdDate,
-        lastModifBy:  projectElem.lastModifBy,
-        lastModifDate:  projectElem.lastModifDate,
-    }
+    // const project = {
+    //     id: projectElem.id,
+    //     image: projectElem.image,
+    //     title:  projectElem.title,
+    //     description:  projectElem.description,
+    //     keywords:  projectElem.keywords,
+    //     associatedUsers: projectElem.associatedUsers,
+    //     associatedNews:  projectElem.associatedNews,
+    //     createdBy:  projectElem.createdBy,
+    //     createdDate:  projectElem.createdDate,
+    //     lastModifBy:  projectElem.lastModifBy,
+    //     lastModifDate:  projectElem.lastModifDate,
+    //     visibility:  projectElem.visibility,
+    //     deleted:  projectElem.deleted,
+    // }
     //let { id } = useParams(project.id);
     const LastModifBySymbol = chakra(BiEraser);
     const CreateBySymbol = chakra(RiNewspaperLine);
@@ -72,7 +74,7 @@ function  ProjectCard ({projectElem, ...props}){
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
             <HStack display='flex' justifyContent="center"  alignItems="center">
-            <Image src={project.image} alt={project.title.slice(0,10)} h='255px' />
+            <Image src={project.image} alt="project_image" h='255px' />
             </HStack>
             <Box p='6'>
                 <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'column']} >
@@ -153,8 +155,8 @@ function  ProjectCard ({projectElem, ...props}){
 
                 <Box display='flex' flexDirection={"row"} justifyContent="right" mt='6' alignItems='center' >
                 {project.lastModifBy && project.lastModifBy!="" 
-                ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {project.lastModifBy}, <FormattedMessage id={"date"} values={{d:  new Date(project.lastModifDate)}} />   </Text> </>
-                : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {project.createdBy}, <FormattedMessage id={"date"} values={{d:  new Date(project.createdDate)}} />  </Text> </>
+                ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {project.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(project.lastModifDate)}} />   </Text> </>
+                : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {project.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(project.createdDate)}} />  </Text> </>
                 }
                 </Box>
             </Box>
