@@ -40,7 +40,8 @@ import {
     HStack,
     Spacer
 } from "@chakra-ui/react";
-import{SearchIcon , ArrowForwardIcon, AddIcon} from '@chakra-ui/icons';
+
+import{SearchIcon , WarningTwoIcon, AddIcon} from '@chakra-ui/icons';
 
 import ProjectCard from "../components/ProjectCard";
 //simbolos dentro da caixa de texto do login
@@ -123,48 +124,55 @@ const p2 = {
 function  Projects (){
     const intl = useIntl();
     const { get, post, response, loading, error } = useFetch();
-
     //const [searchParams, setSearchParams] = useSearchParams({ replace: true });
     const [searchParams, setSearchParams] = useState("");
     const [selectedKeyword, setSelectedKeyword] = useState("");
     const [projects, setProjects]=useState([]);
     const [keywordsList, setKeywordsList]=useState([]);
+    //const keywordsArray = ["java","ReactJS","Swing", "Rest",'Objectos'];
+    
     // const { id } = useParams();
     // const queryString = new URLSearchParams(useLocation().search);
     // console.log(queryString.get("id"))
-
     const SearchSymbol = chakra(FaSearch);
     const ClearSearchSymbol = chakra(MdOutlineClose);
-    const keywordsArray = ["java","ReactJS","Swing", "Rest",'Objectos'];
     
 
-    const handleSearchClick = (keyword)=>{
+    /**
+     * seleccionar Keyword para filtrar projectos
+     * @param {} keyword 
+     */
+    const handleSearchClick = async(keyword)=>{
         console.log( keyword);
         setSelectedKeyword(keyword);
+
     }
+    
+    /**
+     * limpar a pesquisa/filtro das keywords
+     */
     const handleClearSearchClick=()=>{
         setSelectedKeyword("");
     }
     
-  
-
     
-
-    
+    /**
+     * ao carregar a pagina carregamos os projectos e keywords existentes
+     */
     useEffect(async()=>{
         console.log("dentro do useEffect async")
-         /**
-  * Get all existing projects
-  */   
+        /**
+        * Get all existing projects
+        */
+    if(selectedKeyword==""){
         await get('projects')
         const getProjects = await response.json();
         if (response.ok) {
             console.log(getProjects)
             setProjects(getProjects)
-            console.log(projects)
-            for(let i=0; i<projects.length;i++){
-                console.log(projects[i]);
-            }
+            // for(let i=0; i<projects.length;i++){
+            //     console.log(projects[i]);
+            // }
             setProjects(prevState=>[...prevState, p1]);
             setProjects(prevState=>[...prevState, p2]);
             setAppError("");
@@ -179,20 +187,13 @@ function  Projects (){
                 setAppError(  "error_fetch_generic" );
             }
         }
-
-
- /**
-  * Get all existing keywords among projects and news
-  */       
- await get('keywords')
-        const getKeywords = await response.json();
+    }else{
+        await get('keywords/'+selectedKeyword+'/projects')
+        const getFilterProjects = await response.json();
         if (response.ok) {
-            console.log(getKeywords)
-            setKeywordsList(getKeywords)
-            console.log(projects)
-            for(let i=0; i<projects.length;i++){
-                console.log(projects[i]);
-            }
+            console.log(getFilterProjects)
+            setProjects(getFilterProjects)
+            
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -207,18 +208,49 @@ function  Projects (){
         }
 
 
+    }
 
-    },[])
+        /**
+         * Get all existing keywords among projects and news
+         */       
+        await get('keywords')
+        const getKeywords = await response.json();
+        if (response.ok) {
+            console.log(getKeywords)
+            setKeywordsList(getKeywords)
+            
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+            }else{
+                setAppError(  "error_fetch_generic" );
+            }
+        }
+
+    },[selectedKeyword])
+
+
+
   //TODO: 
   function setAppError(error){
     console.log(error)
 }
 
-   
+
 
     //
     return (
-        <Stack spacing={10} backgroundColor="gray.200" pb={20}>
+        <Stack 
+        spacing={10} 
+        backgroundColor="gray.200" 
+        pb={20}
+        minHeight="83vh"
+        >
             <Heading as='h1' size='3xl'  ><FormattedMessage id={"projects"} /> </Heading>
             
             <Flex  flexDirection="column" justifyContent="center" alignItems="start"  mr={5}>
@@ -255,14 +287,14 @@ function  Projects (){
 
                 <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={5}>
         
-                    { keywordsArray.filter((keyword)=>{
+                    { keywordsList.filter((keyword)=>{
                             let filter = searchParams;
                             if(!filter) return true;
                             let name = keyword.toLowerCase();
                             return name.startsWith(filter.toLowerCase());
-
+                            //filtramos as keywords que começam pelo mesmo que está na pesquisa
                     }).map((k)=>{
-                        
+                        //colocamos a keyword seleccionada a verde:
                         return   selectedKeyword && selectedKeyword==k?
                                     <Tag key={k} background="teal.400" color={"white"}>
                                     <TagLeftIcon boxSize='12px' as={SearchIcon} />
@@ -283,6 +315,10 @@ function  Projects (){
             </Flex>
             {error && 'Error!'}
             {loading && 'Loading...'}
+
+
+            {projects && projects.length?    
+
             <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={3}>
                 {console.log("antes do map")}
             {projects.map(p =>(<ProjectCard project={p} key={p.id} ></ProjectCard>))}
@@ -300,6 +336,13 @@ function  Projects (){
                 <ProjectCard projectElem={p1}/>
                 <ProjectCard projectElem={p1}/> */}
             </Grid>
+            : !loading?
+                (<Text><WarningTwoIcon w={8} h={8} /> <FormattedMessage id={"error_noResults_projects"} /> </Text> )
+                :'Loading...'
+            }
+            
+
+
         </Stack>
     )
     

@@ -82,7 +82,12 @@ const AboutUs = ()=>{
 
 
     return (
-        <Box>
+        <Stack 
+        spacing={10} 
+        backgroundColor="gray.200" 
+        pb={20}
+        minHeight="83vh"
+        >
             <Heading> <FormattedMessage id={"our_team"} /> </Heading>
             {error && 'Error!'}
             {loading && 'Loading...'}
@@ -100,7 +105,7 @@ const AboutUs = ()=>{
             alt="localizacao"
             ></iframe>
             </AspectRatio>
-        </Box>
+        </Stack>
     )
     
 }
