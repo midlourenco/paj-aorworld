@@ -108,6 +108,7 @@ public class KeywordDao extends AbstractDao<Keyword> {
 		Join<Keyword, News> news = keyword.join("news");
 		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
 				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr),
+				em.getCriteriaBuilder().equal(news.get("deleted"), false),
 				em.getCriteriaBuilder().equal(news.get("visibility"), true)));
 
 		try{
@@ -127,7 +128,9 @@ public class KeywordDao extends AbstractDao<Keyword> {
 		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
 		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
 		Join<Keyword, News> news = keyword.join("news");
-		criteriaQuery.select(news).where(em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr));
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(news.get("deleted"), false),
+				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr)));
 			
 		try{
 			List<News> result = em.createQuery(criteriaQuery.select(news)).getResultList();
@@ -138,12 +141,63 @@ public class KeywordDao extends AbstractDao<Keyword> {
 		}
 	}
 	
+	
+	public List<News> getOnlyPublicMardkedAsDeletedNewsAssocToKeyword(String keywordStr) {
+//		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+//		Root<Keyword> keywordRoot = criteriaQuery.from(Keyword.class);
+//		Join<Keyword,News> joinNewsKeywords = keywordRoot.join("keywords");
+//		criteriaQuery.where(em.getCriteriaBuilder().equal(keywordRoot.get("keywords"), keywordStr));
+//				final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
+		Join<Keyword, News> news = keyword.join("news");
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr),
+				em.getCriteriaBuilder().equal(news.get("deleted"), true),
+				em.getCriteriaBuilder().equal(news.get("visibility"), true)));
+
+		try{
+			List<News> resultado= em.createQuery(criteriaQuery.select(news)).getResultList();
+			return resultado;
+
+
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	public List<News> getAllMardkedAsDeletedNewsAssocToKeyword(String keywordStr) {
+		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
+		Join<Keyword, News> news = keyword.join("news");
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(news.get("deleted"), true),
+				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr)));
+			
+		try{
+			List<News> result = em.createQuery(criteriaQuery.select(news)).getResultList();
+			return result;
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * devolve todos os projectos que estejam associados a determinada keyword apenas com visibilidade publica
+	 * @param keywordStr
+	 * @return
+	 */
 	public List<Project> getOnlyPublicProjectsAssocToKeyword(String keywordStr) {
 		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
 		Join<Keyword, Project> project = keyword.join("projects");
 		criteriaQuery.select(project).where(em.getCriteriaBuilder().and(
 				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr),
+				em.getCriteriaBuilder().equal(project.get("deleted"), false),
 				em.getCriteriaBuilder().equal(project.get("visibility"), true)));
 		
 		try{
@@ -172,7 +226,66 @@ public class KeywordDao extends AbstractDao<Keyword> {
 		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
 		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
 		Join<Keyword, Project> project = keyword.join("projects");
-		criteriaQuery.select(project).where(em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr));
+		criteriaQuery.select(project).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(project.get("deleted"), false),
+				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr)));
+					
+		try{
+			//List<Project> resultado= em.createQuery(criteriaQuery.select(joinProjectKeywords)).getResultList();
+			List<Project> result = em.createQuery(criteriaQuery.select(project)).getResultList();
+
+			return result;
+
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * devolve todos os projectos que estejam associados a determinada keyword marcados para apagar com visbilidade apenas publica
+	 * @param keywordStr
+	 * @return
+	 */
+	public List<Project> getOnlyPublicMardkedAsDeletedProjectsAssocToKeyword(String keywordStr) {
+		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
+		Join<Keyword, Project> project = keyword.join("projects");
+		criteriaQuery.select(project).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr),
+				em.getCriteriaBuilder().equal(project.get("deleted"), true),
+				em.getCriteriaBuilder().equal(project.get("visibility"), true)));
+		
+		try{
+			List<Project> resultado= em.createQuery(criteriaQuery.select(project)).getResultList();
+			return resultado;
+
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * devolve todos os projectos que estejam associados a determinada keyword marcados para apagar
+	 * @param keywordStr
+	 * @return
+	 */
+	public List<Project> getAllMardkedAsDeletedProjectsAssocToKeyword(String keywordStr) {
+//		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		//Root<Keyword> keywordRoot = criteriaQuery.from(Keyword.class);
+		//Join<Keyword,Project> joinProjectKeywords = keywordRoot.join("projects");
+		//criteriaQuery.where(em.getCriteriaBuilder().equal(keywordRoot.get("keywords"), keywordStr));
+
+		
+		final CriteriaQuery<Project> criteriaQuery = em.getCriteriaBuilder().createQuery(Project.class);
+		Root<Keyword> keyword = criteriaQuery.from(Keyword.class);
+		Join<Keyword, Project> project = keyword.join("projects");
+		criteriaQuery.select(project).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(project.get("deleted"), true),
+				em.getCriteriaBuilder().equal(keyword.get("keyword"), keywordStr)));
 					
 		try{
 			//List<Project> resultado= em.createQuery(criteriaQuery.select(joinProjectKeywords)).getResultList();

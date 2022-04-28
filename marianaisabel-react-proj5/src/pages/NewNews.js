@@ -1,5 +1,5 @@
 import React from "react"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //Redirect replace by Naviagate
 import {Navigate} from 'react-router-dom'
 //https://react-hook-form.com/
@@ -41,34 +41,34 @@ import RedirectButton from "../components/RedirectButton";
 
 
 const users = [
-  {id:"1", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"2",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"3",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"4",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"5", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"6",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"7",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"8",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"9", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"10",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"11",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"12",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+  {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+  {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+  {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+  {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+  {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+  {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+  {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+  {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+  {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+  {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+  {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+  {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
 
 ];
 
 const projectslist=[
-  {id:"1", title: 'hgjk', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"2",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"3",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"4",title: '5r6tu', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"5", title: '6tuhkl', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"6",title: 'hfgvb ', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"7",title: ' nbm', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"8",title: 'cnmjh', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"9", title: 'htfjgkhl', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"10",title: 'chjgh', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"11",title: 'chjk', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"12",title: 'fgjhk', imageURL: "https://bit.ly/dan-abramov"  },
+  {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
+  {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+  {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+  {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
+  {id:"555555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
+  {id:"66666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
+  {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
+  {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
+  {id:"99999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
+  {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
+  {id:"133331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
+  {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
 
 ];
 
@@ -170,20 +170,20 @@ function NewNews() {
           }
         </FormControl>
 
-        <FormControl isInvalid = {errors.imageURL}>
+        <FormControl isInvalid = {errors.image}>
 
-          <Input {...register("imageURL")} type= "url" placeholder={intl.formatMessage({id: 'form_field_imageURL'})} />
+          <Input {...register("image")} type= "url" placeholder={intl.formatMessage({id: 'form_field_image'})} />
           
           {/* TODO previsualizar imagem
           <Image
             boxSize='100px'
             objectFit='cover'
-            src={register.imageURL}
+            src={register.image}
             alt='project_Image'
           /> */}
 
           {(errors.password)? 
-            (<FormErrorMessage><FormattedMessage id={"error_wrong_imageURL"}  ></FormattedMessage></FormErrorMessage>)
+            (<FormErrorMessage><FormattedMessage id={"error_wrong_image"}  ></FormattedMessage></FormErrorMessage>)
             : null 
           }
         
@@ -216,10 +216,10 @@ function NewNews() {
         <FormControl >
           <Grid  templateColumns='repeat(2, 1fr)' >
             {users.map(u => (
-              <Checkbox key={u.id} colorScheme='teal' m={3} >
+              <Checkbox key={u.id} colorScheme='teal' m={3} key={u} >
                 <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
                   <Avatar
-                    src={u.imageURL}
+                    src={u.image}
                     size='xs'
                     name={u.firstName}
                     ml={-1}

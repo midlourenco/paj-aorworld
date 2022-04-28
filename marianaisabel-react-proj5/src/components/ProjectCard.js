@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {  Link, useParams } from "react-router-dom";
 
@@ -69,16 +69,33 @@ function  ProjectCard ({project, ...props}){
    // console.log( new Date((project.lastModifDate)));
    const { isOpen, onOpen, onClose } = useDisclosure()
    const [overlay, setOverlay] = useState("")
+    const [textColor, setTextColor]=useState("black");
+
+    useEffect(()=>{
+        if(project.deleted){
+            setTextColor("gray")
+        }else{
+            setTextColor("black")
+        }
+    },[])
+
 
     return (
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
             <HStack display='flex' justifyContent="center"  alignItems="center">
-            <Image src={project.image} alt="project_image" h='255px' />
+            {project.deleted?
+            (<Box>
+            <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
+            <Image src={project.image} alt="project_image" h='255px' style={{opacity: 0.2}} />
+            </Box>)
+            : <Image src={project.image} alt="project_image" h='255px'  />
+            }
             </HStack>
+            
             <Box p='6'>
                 <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'column']} >
-                    
+                {/* <Badge colorScheme='red'><FormattedMessage id={"deleted"} />  */}
                     <Box
                         color='gray.500'
                         fontWeight='semibold'
@@ -130,13 +147,21 @@ function  ProjectCard ({project, ...props}){
                         </>
                     
                     </Box>
+                    
                     <HStack  mb='5' alignSelf={"center"}>
-                    {project.keywords.map(n => (
+                    {project.deleted?
+                        project.keywords.map(n => (
+                        <Badge borderRadius='full' px='2' color='grey' key={n} >{n}</Badge>
+                        ))
+                    : project.keywords.map(n => (
                         <Badge borderRadius='full' px='2' colorScheme='teal' key={n} >{n}</Badge>
-                    ))}
+                        ))
+                    }
                     </HStack>
+                {/* </Badge> */}
                 </Box>
 
+                <Box color={textColor}>
                 <ChakraLink as={Link} to ={`/projects/${id}`}  >
                     <Text fontSize="md"  mt='1'
                     fontWeight='semibold'
@@ -158,6 +183,7 @@ function  ProjectCard ({project, ...props}){
                 ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {project.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(project.lastModifDate)}} />   </Text> </>
                 : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {project.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(project.createdDate)}} />  </Text> </>
                 }
+                </Box>
                 </Box>
             </Box>
         </Box>

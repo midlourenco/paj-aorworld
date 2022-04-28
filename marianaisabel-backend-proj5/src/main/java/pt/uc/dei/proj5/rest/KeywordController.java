@@ -71,6 +71,45 @@ public class KeywordController {
 
 	}
 	
+	
+	// Get All project associated to a keyword
+		@GET
+		@Path("{keyword}/projects/deletedList")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response getAllMarkedAsDeletedProjectAssociatedToKeyword (@PathParam("keyword") String keyword, @HeaderParam("Authorization") String authString) {
+			
+			System.out.println("Entrei em getAllProjectAssociatedToKeyword no controller com token? : " + authString);
+			try {
+				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+					ArrayList<ProjectDTOResp> resultado = keywordService.getOnlyPublicMardkedAsDeletedProjectsAssocToKeyword(keyword);
+					if (resultado != null) {
+						return Response.ok(resultado).build();
+					} else {
+						return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+					}			
+				}
+				
+				ArrayList<ProjectDTOResp>  resultado = keywordService.getAllMardkedAsDeletedProjectsAssocToKeyword(keyword);
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				}
+
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+				ArrayList<ProjectDTOResp> resultado = keywordService.getOnlyPublicMardkedAsDeletedProjectsAssocToKeyword(keyword);
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				}
+			} catch (Exception e) {
+				return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+			}
+
+		}
+	
 	// Get All project associated to a keyword
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -133,6 +172,42 @@ public class KeywordController {
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			ArrayList<NewsDTOResp> resultado = keywordService.getOnlyPublicNewsAssocToKeyword(keyword);
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
+	@GET
+	@Path("{keyword}/news/deletedNews")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllMardkedAsDeletedNewsAssociatedToKeyword (@PathParam("keyword") String keyword, @HeaderParam("Authorization") String authString) {
+		
+		System.out.println("Entrei em getAllProjectAssociatedToKeyword no controller com token? : " + authString);
+		try {
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+				ArrayList<NewsDTOResp> resultado = keywordService.getOnlyPublicMardkedAsDeletedNewsAssocToKeyword(keyword);
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+				}			
+			}
+			
+			ArrayList<NewsDTOResp>  resultado = keywordService.getAllMardkedAsDeletedNewsAssocToKeyword(keyword);
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(6))).build();
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			ArrayList<NewsDTOResp> resultado = keywordService.getOnlyPublicMardkedAsDeletedNewsAssocToKeyword(keyword);
 			if (resultado != null) {
 				return Response.ok(resultado).build();
 			} else {

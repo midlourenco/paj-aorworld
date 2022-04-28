@@ -21,6 +21,7 @@ import {
     TagLeftIcon,
     TagLabel,
     Text,
+    Divider,
 } from "@chakra-ui/react";
 
 import{SearchIcon , WarningTwoIcon, AddIcon} from '@chakra-ui/icons';
@@ -110,6 +111,7 @@ function  Projects (){
     const [searchParams, setSearchParams] = useState("");
     const [selectedKeyword, setSelectedKeyword] = useState("");
     const [projects, setProjects]=useState([]);
+    const [deletedProjects, setDeletedProjects]=useState([]);
     const [keywordsList, setKeywordsList]=useState([]);
     //const keywordsArray = ["java","ReactJS","Swing", "Rest",'Objectos'];
     
@@ -152,10 +154,6 @@ function  Projects (){
         if (response.ok) {
             console.log(getProjects)
             setProjects(getProjects)
-            // for(let i=0; i<projects.length;i++){
-            //     console.log(projects[i]);
-            // }
-            setProjects(prevState=>[...prevState, p1]);
             setProjects(prevState=>[...prevState, p2]);
             setAppError("");
         } else if(response.status==401) {
@@ -200,7 +198,6 @@ function  Projects (){
         if (response.ok) {
             console.log(getKeywords)
             setKeywordsList(getKeywords)
-            
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -214,6 +211,48 @@ function  Projects (){
             }
         }
 
+        /**
+         * Get all existing deleted projects 
+         */      
+         if(selectedKeyword==""){ 
+         await get('projects/deletedList')
+         const deletedProjects = await response.json();
+         if (response.ok) {
+             console.log(deletedProjects)
+             setDeletedProjects(deletedProjects)
+             setDeletedProjects(prevState=>[...prevState, p1]);
+             setAppError("");
+         } else if(response.status==401) {
+             console.log("credenciais erradas? " + error)
+             setAppError('error_fetch_login_401');
+         }else{
+             console.log("houve um erro no fetch " + error)
+             if(error && error!=""){
+                 setAppError(  error );
+             }else{
+                 setAppError(  "error_fetch_generic" );
+             }
+         }
+        }else{
+            await get('keywords/'+selectedKeyword+'/projects/deletedList')
+            const deletedProjects = await response.json();
+            if (response.ok) {
+                console.log(deletedProjects)
+                setDeletedProjects(deletedProjects)
+                setDeletedProjects(prevState=>[...prevState, p1]);
+                setAppError("");
+            } else if(response.status==401) {
+                console.log("credenciais erradas? " + error)
+                setAppError('error_fetch_login_401');
+            }else{
+                console.log("houve um erro no fetch " + error)
+                if(error && error!=""){
+                    setAppError(  error );
+                }else{
+                    setAppError(  "error_fetch_generic" );
+                }
+            }
+        }
     },[selectedKeyword])
 
 
@@ -322,7 +361,12 @@ function  Projects (){
                 (<Text><WarningTwoIcon w={8} h={8} /> <FormattedMessage id={"error_noResults_projects"} /> </Text> )
                 :'Loading...'
             }
-            
+            <Divider width={"60%"} alignSelf={"center"} orientation='horizontal' borderColor="teal.200" borderWidth={1} />
+            <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={3}>
+                {console.log("antes do map dos apagados")}
+                {deletedProjects.map(p =>(<ProjectCard project={p} key={p.id} ></ProjectCard>))}
+                
+            </Grid>
 
 
         </Stack>

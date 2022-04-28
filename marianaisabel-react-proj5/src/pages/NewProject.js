@@ -1,5 +1,5 @@
 import React from "react"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //Redirect replace by Naviagate
 import {Navigate} from 'react-router-dom'
 //https://react-hook-form.com/
@@ -32,44 +32,48 @@ import {
     Grid,
     UnorderedList,
     ListItem,
-    InputRightElement
+    InputRightElement,
+    TagCloseButton
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
-
-
 import RedirectButton from "../components/RedirectButton";
+import ContentStep1 from "../components/sections/StepsCreateProjNews/ContentStep1"
+import ContentStep2 from "../components/sections/StepsCreateProjNews/ContentStep2"
+import ContentStep3 from "../components/sections/StepsCreateProjNews/ContentStep3"
+import useFetch from 'use-http';
+import { setAppError } from '../redux/actions'
+import { connect } from 'react-redux'
+
 const users = [
-  {id:"1", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"2",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"3",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"4",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"5", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"6",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"7",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"8",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"9", firstName: 'Mariana', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"10",firstName: 'Isabel', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"11",firstName: 'José', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"12",firstName: 'Ricardo', imageURL: "https://bit.ly/dan-abramov"  },
+  {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+  {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+  {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+  {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+  {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+  {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+  {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+  {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+  {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+  {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+  {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+  {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
 
 ];
 
 const newslist=[
-  {id:"1", title: 'hgjk', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"2",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"3",title: 'jk', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"4",title: '5r6tu', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"5", title: '6tuhkl', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"6",title: 'hfgvb ', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"7",title: ' nbm', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"8",title: 'cnmjh', imageURL: "https://bit.ly/dan-abramov"  },
-  {id:"9", title: 'htfjgkhl', imageURL: "https://bit.ly/dan-abramov" },
-  {id:"10",title: 'chjgh', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"11",title: 'chjk', imageURL: "https://bit.ly/sage-adebayo"  },
-  {id:"12",title: 'fgjhk', imageURL: "https://bit.ly/dan-abramov"  },
-
+  {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
+  {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+  {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+  {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
+  {id:"5555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
+  {id:"6666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
+  {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
+  {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
+  {id:"9999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
+  {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
+  {id:"1331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
+  {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
 ];
-
 
 
 
@@ -78,18 +82,25 @@ const newslist=[
 function NewProject() {
     //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
   const intl = useIntl();
-  const {register, handleSubmit, formState: {errors}}= useForm();
-  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
-    initialStep: 0,
-  });
 
+ //função para fazer o request ao servidor
+ const { get, post, response, loading, error } = useFetch();
+
+ //função para o stepper
+ const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
+  initialStep: 0,
+});
+  //**********************************************FORMULARIO*************************************************************************** */
+
+  //função de gestão dos dados do formulário
+  const {register, handleSubmit, formState: {errors}}= useForm();
   //const onSubmit = values => console.log(values); 
   //const handleSubmit(data){setData(data), console.log(data) )};
-
   const onSubmit = (data, e) => console.log(data, e);
   const onError = (errors, e) => console.log(errors, e);
 
 
+  //**********************************************others UseStates*************************************************************************** */
 
   const [data, setData]= useState("");
   const [restResponse, setRestResponse]=useState("");
@@ -109,6 +120,13 @@ function NewProject() {
     }
   }
 
+    //**********************************************FUNÇOES AUXIliares*************************************************************************** */
+
+
+  const handleDeleteTag = ()=>{
+
+
+  }
 
   //**********************************************USE FETCH*************************************************************************** */
 
@@ -118,142 +136,30 @@ function NewProject() {
   useEffect(() => {
     window.scrollTo(0,document.body.scrollHeight);
   },[scrollDown])
-   
-
-  const content1 = (
-    <Flex justifyContent={"center"} py={4} width={"100%"}>
-      {/* <Text p={1} >step 1 texto </Text> */}
-      {/* <form onSubmit={ handleSubmit (onSubmit, onError)}> */}
-      <Stack
-          spacing={4}
-          p={4}
-          backgroundColor="whiteAlpha.900"
-          boxShadow="md"
-          width={"100%"}
-      >
-        <FormControl isInvalid = {errors.title}>
-          <Input {...register("title", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
-          {(errors.title)? 
-            (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
-        </FormControl>
-
-        <Textarea {...register("description", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_description'})}  />
-        
-        <FormControl isInvalid = {errors.keyword}>
-        <InputGroup>
-          <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})}  onChange={saveInputKeyword} value={input} />
-
-          <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleAddNewKeyword}>
-                  {/* {showPassword ? "Hide" : "Show"} */}
-                <AddIcon color = "gray.400" />
-              </Button>
-          </InputRightElement>
-      </InputGroup>
-      {keywords && keywords.length ?
-       (<Box width={"l"} mr={3}> {keywords.map(k => ( <Badge key={k} display="inline-block" mx={1}>{k}</Badge>))} </Box>)
-       :null
-      }
-       {console.log(keywords) }
 
 
-        {(errors.keyword)? 
-            (<FormErrorMessage><FormattedMessage id={"error_missing_keyword"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
-        </FormControl>
+   //**********************************************GESTAO DOS STEPPERS *************************************************************************** */
 
-        <FormControl isInvalid = {errors.imageURL}>
-
-          <Input {...register("imageURL")} type= "url" placeholder={intl.formatMessage({id: 'form_field_imageURL'})} />
-          
-          {/* TODO previsualizar imagem
-          <Image
-            boxSize='100px'
-            objectFit='cover'
-            src={register.imageURL}
-            alt='project_Image'
-          /> */}
-
-          {(errors.password)? 
-            (<FormErrorMessage><FormattedMessage id={"error_wrong_imageURL"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
-        
-        </FormControl>
-
-        {/* <Button
-            borderRadius={0}
-            type="submit"
-            variant="solid"
-            colorScheme="teal"
-            width="full"
-            // onClick={console.log("carreguei em login")}
-        >
-            {intl.formatMessage({id: 'create_project'})} 
-        </Button> */}
-
-      </Stack>
-    {/* </form> */}
-    </Flex>
-  );
+  const content1 =(
+    <ContentStep1 
+    errors ={errors} 
+    register={register} 
+    input={input}
+    keywords={keywords}
+    saveInputKeyword={saveInputKeyword}
+    handleAddNewKeyword={handleAddNewKeyword}
+    handleDeleteTag={handleDeleteTag}
+    ></ContentStep1>
+  )
+  
   const content2 = (
-    <Flex justifyContent={"center"} py={4}  width={"100%"}>
-      <Stack
-      spacing={4}
-      p={4}
-      backgroundColor="whiteAlpha.900"
-      boxShadow="md"
-      width={"100%"}
-      >
-        <FormControl >
-          <Grid  templateColumns='repeat(2, 1fr)' >
-            {users.map(u => (
-              <Checkbox key={u.id} colorScheme='teal' m={3} >
-                <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
-                  <Avatar
-                    src={u.imageURL}
-                    size='xs'
-                    name={u.firstName}
-                    ml={-1}
-                    mr={2}
-                  />
-                  <TagLabel>{u.firstName}</TagLabel>
-                </Tag>
-              </Checkbox>
-            ))}  
-          </Grid>        
-        </FormControl>
-      </Stack>
-    </Flex>
+    <ContentStep2 users={users} />
   );
-
-
 
   const content3 = (
-    <Flex justifyContent={"center"} py={4}>
-      <Stack
-      spacing={4}
-      p="1rem"
-      backgroundColor="whiteAlpha.900"
-      boxShadow="md"
-      minH={"300px"}
-      width={"100%"}
-      >
-        <FormControl>
-        <Grid  templateColumns='repeat(2, 1fr)' >
-          {newslist.map(n => (
-            <Checkbox colorScheme='teal' m={3} >
-              {n.title}
-            </Checkbox>        
-          ))}          
-        </Grid>
-        </FormControl>
-      </Stack>
-    </Flex>
+    <ContentStep3 newslist={newslist} />
   );
+
   const steps = [
     { label: 'Project Details', content: content1 },
     { label: 'Associate Users', content: content2 },

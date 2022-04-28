@@ -40,6 +40,26 @@ public class KeywordBean {
 		}
 		return projDTOResp;
 	}
+	public ArrayList<ProjectDTOResp> getOnlyPublicMardkedAsDeletedProjectsAssocToKeyword(String keyword){
+		ArrayList<ProjectDTOResp>  projDTOResp= new ArrayList<>();
+		List<Project> projects= keywordDao.getOnlyPublicMardkedAsDeletedProjectsAssocToKeyword(keyword);
+		
+		for (Project project : projects) {
+			projDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+		}
+		return projDTOResp;
+	}
+	
+	public ArrayList<ProjectDTOResp> getAllMardkedAsDeletedProjectsAssocToKeyword(String keyword){
+		ArrayList<ProjectDTOResp>  projDTOResp= new ArrayList<>();
+		List<Project> projects= keywordDao.getAllMardkedAsDeletedProjectsAssocToKeyword(keyword);
+		
+		for (Project project : projects) {
+			projDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
+		}
+		return projDTOResp;
+	}
+	
 	
 	public ArrayList<NewsDTOResp> getOnlyPublicNewsAssocToKeyword(String keyword){
 		ArrayList<NewsDTOResp>  newsDTOResp= new ArrayList<>();
@@ -60,7 +80,25 @@ public class KeywordBean {
 		}
 		return newsDTOResp;
 	}
+	public ArrayList<NewsDTOResp> getOnlyPublicMardkedAsDeletedNewsAssocToKeyword(String keyword){
+		ArrayList<NewsDTOResp>  newsDTOResp= new ArrayList<>();
+		List<News> news= keywordDao.getOnlyPublicMardkedAsDeletedNewsAssocToKeyword(keyword);
+		
+		for (News n : news) {
+			newsDTOResp.add(NewsDao.convertEntityToDTOResp(n));
+		}
+		return newsDTOResp;
+	}
 	
+	public ArrayList<NewsDTOResp> getAllMardkedAsDeletedNewsAssocToKeyword(String keyword){
+		ArrayList<NewsDTOResp>  newsDTOResp= new ArrayList<>();
+		List<News> news= keywordDao.getAllMardkedAsDeletedNewsAssocToKeyword(keyword);
+		
+		for (News n : news) {
+			newsDTOResp.add(NewsDao.convertEntityToDTOResp(n));
+		}
+		return newsDTOResp;
+	}
 	
 	public ArrayList<String> getAllKeywords() {
 		try {

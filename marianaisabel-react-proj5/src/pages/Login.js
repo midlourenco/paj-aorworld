@@ -61,14 +61,14 @@ function Login ({setLoginOK,setAppError,setLoggedUser,...props}) {
     },[])
 
 
-    const option={
-        method: "GET",
-        headers: {
-            Authorization: localStorage.getItem("Authorization"),
-            Accept: "application/json",
-            "Content-Type": "application/json"
-        }
-    }
+    // const option={
+    //     method: "GET",
+    //     headers: {
+    //         Authorization: localStorage.getItem("Authorization"),
+    //         Accept: "application/json",
+    //         "Content-Type": "application/json"
+    //     }
+    // }
     //config.API_URL
 
     //função para fazer o request ao servidor
