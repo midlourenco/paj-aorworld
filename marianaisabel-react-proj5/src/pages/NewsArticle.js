@@ -280,7 +280,9 @@ function SingleNews( {userPriv,...props}){
             <RedirectButton path="/news" description={intl.formatMessage({id: "_back_to_news" })} />
         </Box >
         {/* <Avatar name={register.firstName & " " & register.lastName} src={register.image} /> */}
+    
         </Flex>
+       
     </Box>
     );
 }

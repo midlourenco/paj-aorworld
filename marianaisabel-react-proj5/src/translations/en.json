@@ -60,6 +60,9 @@
     
     "news_details": "News Details",
     "project_details": "Project Details",
+    "associated_projects": "Associated Projects",
+    "associated_news": "Associated News",
+    "associated_users": "Associated Users",
     "our_team": "Our team", 
     "where_are_we": "Where are we?",
     

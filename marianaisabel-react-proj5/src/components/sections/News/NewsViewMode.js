@@ -34,7 +34,16 @@ import {
     ButtonGroup,
     IconButton,
     useEditableControls,
-    InputRightElement
+    InputRightElement,
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
@@ -79,6 +88,48 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
                     <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
                 </Box>
+                <Heading as="h3" ><FormattedMessage id={"associated_projects"} />:</Heading>
+
+                <TableContainer>
+                <Table >
+                    <Thead>
+                    <Tr>
+                        <Th>Titulo</Th>
+                        <Th>Criado por:</Th>
+                    </Tr>
+                    </Thead>
+                    <Tbody>
+                    {currentNews.projects.map((p)=>(
+                        <Tr key={p}>
+                        <Td>{p.title}</Td>
+                        <Td>{p.createdBy.firstName}</Td>
+                    </Tr>
+                    ))}  
+                    </Tbody>
+                </Table>
+                </TableContainer>
+            
+
+            <Heading as="h3" ><FormattedMessage id={"associated_users"} />:</Heading>
+
+            <TableContainer>
+            <Table >
+                <Thead>
+                <Tr>
+                    <Th>Nome</Th>
+                    <Th>Email:</Th>
+                </Tr>
+                </Thead>
+                <Tbody>
+                {currentNews.users.map((u)=>(
+                    <Tr key={u}>
+                    <Td>{u.firstName + " " + u.lastName}</Td>
+                    <Td>{u.email}</Td>
+                </Tr>
+                ))}  
+                </Tbody>
+            </Table>
+            </TableContainer>
             </Flex>
             
         </Box>
