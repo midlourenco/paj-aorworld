@@ -60,7 +60,7 @@ function UsersToApprove({userPriv, ...props}) {
     let navigate = useNavigate();
     const { id } = useParams();
     console.log(id)
-
+    const scroll = { x: 1600, y: 300 };
     // const BlockedUserSymbol = chakra(FaUserTimes);
     // const CheckedUserSymbol = chakra(FaUserCheck);
     /**** *******************************************STATE******************************************************** */
@@ -112,16 +112,17 @@ function UsersToApprove({userPriv, ...props}) {
     backgroundColor="whiteAlpha.900"
     boxShadow="md"
     minHeight={"300px"}
-    p={10}
+    p={[5,5,10]}
     flexDirection={"column"}
     justifyContent={"space-between"}
     mt={5}
+
     
     > 
-    <Heading as='h3' size='lg' color="black"><FormattedMessage id={"users_to_approve"} /> </Heading>
+    <Heading as='h3' size='lg' color="black" mt={3}><FormattedMessage id={"users_to_approve"}  /> </Heading>
     {error && 'Error!'}
     {loading && 'Loading...'}
-    <TableContainer >
+    <TableContainer maxW={["280px","450px","100%"]} scroll={scroll} fontSize={["sm","sm","md"]} mx={2} >
         <Table >
             <Thead>
             <Tr>

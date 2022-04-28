@@ -42,7 +42,8 @@ import {
     TableCaption,
     TableContainer,
     Button, 
-    ButtonGroup 
+    ButtonGroup, 
+    Checkbox
 } from "@chakra-ui/react";
 import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
 import { MdBlock} from 'react-icons/md';
@@ -54,14 +55,13 @@ function setAppError(error){
     console.log(error)
 }
 
-function UsersToUnblock({userPriv, ...props}) {
+function AllNotifications({userPriv, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
     const { id } = useParams();
     console.log(id)
     const scroll = { x: 1600, y: 300 };
-
     // const BlockedUserSymbol = chakra(FaUserTimes);
     // const CheckedUserSymbol = chakra(FaUserCheck);
     /**** *******************************************STATE******************************************************** */
@@ -69,7 +69,7 @@ function UsersToUnblock({userPriv, ...props}) {
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
     const [scrollDown, setScrollDown]=useState(false);
-    const [usersToUnblock, setUsersToUnblock] = useState([]);
+    const [notifications, setNotifications] = useState([]);
 
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
@@ -82,10 +82,10 @@ function UsersToUnblock({userPriv, ...props}) {
         console.log("dentro do userEffect");
         setRestResponse("");
 
-        const getUsersToUnblock = await get("users/deletedList")
+        const getNotifications = await get("notifications")
         if (response.ok) {
-            console.log(getUsersToUnblock)
-            setUsersToUnblock(getUsersToUnblock);
+            console.log(getNotifications)
+            setNotifications(getNotifications);
             if(userPriv =="ADMIN"){
                 setAdminPriv(true);
             }
@@ -107,7 +107,7 @@ function UsersToUnblock({userPriv, ...props}) {
     },[])
 
   return (
-    <Box minW={{ base: "90%", md: "468px" }} mb={0} >
+    <Box minW={{ base: "90%", md: "468px" }} mb={10} >
     <Flex
     spacing={2}
     backgroundColor="whiteAlpha.900"
@@ -117,42 +117,26 @@ function UsersToUnblock({userPriv, ...props}) {
     flexDirection={"column"}
     justifyContent={"space-between"}
     mt={5}
-        
+    
     > 
-    <Heading as='h3' size='lg' mt={3} color={"black"} ><FormattedMessage id={"users_blocked"} /> </Heading>
+    <Heading as='h3' size='lg' color="black"><FormattedMessage id={"all_notifications"} /> </Heading>
     {error && 'Error!'}
     {loading && 'Loading...'}
-    <TableContainer  maxW={["280px","450px","100%"]} scroll={scroll} fontSize={["sm","sm","md"]} mx={2}>
+    <TableContainer maxW={["280px","450px","100%"]} scroll={scroll} fontSize={["sm","sm","md"]} mx={2} >
         <Table >
             <Thead>
             <Tr>
-                <Th><FormattedMessage id={"form_field_first_name"}/></Th>
-                <Th><FormattedMessage id={"form_field_last_name"}/></Th>
-                <Th><FormattedMessage id={"form_field_email"}/></Th>
-                <Th><FormattedMessage id={"form_field_biography"}/></Th>
-                <Th textAlign={"center"}><FormattedMessage id={"Actions"}/></Th>
+                <Th><FormattedMessage id={"form_field_title"}/></Th>
+                <Th><FormattedMessage id={"form_field_create_date"}/></Th>
+                <Th><FormattedMessage id={"form_field_read"}/></Th>
             </Tr>
             </Thead>
             <Tbody>
-            {usersToUnblock.map((u)=>(
-                <Tr key={u}>
-                <Td>{u.firstName}</Td>
-                <Td>{u.lastName}</Td>
-                <Td>{u.email}</Td>
-                
-                <Td minW="100px" maxW="200px"  isTruncated>
-                    <Tooltip label={u.biography}>
-                        {u.biography}
-                    </Tooltip>
-                </Td>
-                <Td>
-                    <ButtonGroup>
-                        <Tooltip label={intl.formatMessage({id: 'tooltip_unblock_user'})}>
-                        <Button maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserCheck />} > <FormattedMessage id={"unblock"}/></Button>
-                        </Tooltip>
-                    
-                    </ButtonGroup>
-                </Td>
+            {notifications.map((n)=>(
+                <Tr key={n}>
+                <Td>{n.title}</Td>
+                <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
+                <Td textAlign={"center"}><Checkbox /></Td>
             </Tr>
             ))}  
             </Tbody>
@@ -175,4 +159,4 @@ function UsersToUnblock({userPriv, ...props}) {
   )
 }
 
-export default UsersToUnblock;
+export default AllNotifications;

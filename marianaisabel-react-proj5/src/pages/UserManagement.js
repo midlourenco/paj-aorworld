@@ -42,7 +42,8 @@ import {
     TableCaption,
     TableContainer,
     Button, 
-    ButtonGroup 
+    ButtonGroup, 
+    VStack
 } from "@chakra-ui/react";
 import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
 import { MdBlock} from 'react-icons/md';
@@ -118,16 +119,16 @@ function UserManagement({userPriv, ...props}) {
         backgroundColor="gray.200"
         justifyContent="center"
         alignItems="center"
-        overflowX="scroll"
         pb={20}
-        mb={0}
+        
         >
             <Heading><FormattedMessage id={"user_mangement"} /> </Heading>
             {error && 'Error!'}
             {loading && 'Loading...'}
+            <Flex flexDirection={"column"}  >
             <UsersToApprove />
             <UsersToUnblock />                
-
+            </Flex>
            
         </Flex>
     </Box>

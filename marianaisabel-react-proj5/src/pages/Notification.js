@@ -39,7 +39,8 @@ import {
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import RedirectButton from "../components/RedirectButton"
-
+import RecentNotifications from "../components/sections/Notification/RecentNotifications"
+import AllNotifications from "../components/sections/Notification/AllNotifications"
 //TODO: 
 function setAppError(error){
     console.log(error)
@@ -107,22 +108,14 @@ function Notification({userPriv, ...props}) {
         alignItems="center"
         >
 
-      <Heading><FormattedMessage id={"notifications"} /> </Heading>
+        <Heading><FormattedMessage id={"user_mangement"} /> </Heading>
+            {error && 'Error!'}
+            {loading && 'Loading...'}
+            <Flex flexDirection={"column"}  >
+            <RecentNotifications />
+            <AllNotifications />  
+            </Flex>   
 
-        {error && 'Error!'}
-        {loading && 'Loading...'}
-
-
-        {restResponse=="OK"?
-        <Text my={5} color="green"><FormattedMessage id={"sucess_on_updating"} /> </Text>
-        : restResponse=="NOK"?
-        <Text my={5} color="red"> <FormattedMessage id={"error_on_updating"} />  </Text>
-        :null
-        }
-        {/* <Box mb={30}>
-            <RedirectButton path="/about" description={intl.formatMessage({id: "_back_to_team" })} />
-        </Box > */}
-        {/* <Avatar name={register.firstName & " " & register.lastName} src={register.image} /> */}
         </Flex>
     </Box>
     );

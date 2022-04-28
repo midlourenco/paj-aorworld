@@ -25,6 +25,9 @@
     "form_field_users": "Users",
     "form_field_news": "News",
 
+    "form_field_create_date":"Create date",
+    "form_field_read":"Mark as read",
+  
     "sign_up":"Sing up",
     "login":"Login",
     "logout": "Logout",
@@ -69,7 +72,10 @@
     "update_by":"Update by",
     "create_by":"Create by",
     "date":"on {d, date}",
+    "only_date":"{d, date}",
     
+    "last_notifications": "Notifications since your last visit:",
+    "all_notifications": "All notifications:",
     "users_to_approve": "Users to approve:",
     "users_blocked": "Blocked users:",
     "news_details": "News Details",

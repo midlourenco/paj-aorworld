@@ -55,7 +55,7 @@ const ProfileViewMode=({isAdmin, currentUser,editMode,handleEditClick,handleCanc
             backgroundColor="whiteAlpha.900"
             boxShadow="md"
             minHeight={"300px"}
-            p={10}
+            p={[5,5,10]}
             flexDirection={"column"}
             justifyContent={"space-between"}
             >
