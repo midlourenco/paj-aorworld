@@ -37,6 +37,7 @@ import {
 } from "@chakra-ui/react";
 
 import useFetch from 'use-http';
+import { setNotifNumber} from '../redux/actions'
 import { connect } from 'react-redux'
 import RedirectButton from "../components/RedirectButton"
 import RecentNotifications from "../components/sections/Notification/RecentNotifications"
@@ -46,12 +47,10 @@ function setAppError(error){
     console.log(error)
 }
 
-function Notification({userPriv, ...props}) {
+function Notification({setNotifNumber, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
-    const { id } = useParams();
-    console.log(id)
 
 
     /**** *******************************************STATE******************************************************** */
@@ -71,13 +70,14 @@ function Notification({userPriv, ...props}) {
         console.log("dentro do userEffect");
         setRestResponse("");
 
-        //const xxxx = await get("xxx")
+        const unreadNotif = await get("notifications/unreadNumber")
         if (response.ok) {
-           // console.log(xxx)
-           // setXX(xxx);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
+           console.log(unreadNotif)
+           setNotifNumber(unreadNotif);
+           setAppError("");
+            // if(userPriv =="ADMIN"){
+            //     setAdminPriv(true);
+            // }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -122,9 +122,8 @@ function Notification({userPriv, ...props}) {
 }
 
 const mapStateToProps = state => {
-    return { userPriv: state.loginOK.userPriv,
-            error: state.errorMsg.error
+    return { error: state.errorMsg.error
     };
 };
 
-export default connect(mapStateToProps,{})(Notification)
+export default connect(mapStateToProps,{setNotifNumber})(Notification)

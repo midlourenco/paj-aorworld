@@ -45,10 +45,9 @@ public class NotificationBean implements Serializable {
 		return notificationDTOResp;
 	}
 	
-	public int getNumberUnreadNotifFromUser(User user) {
-		ArrayList<NotificationDTO> notificationDTOResp =new ArrayList<> ();
-		
-		int unreadNotifications =  notificationDao.getNumberUnreadNotifFromUser(user);
+	public Long getNumberUnreadNotifFromUser(User user) {
+
+		Long unreadNotifications =  notificationDao.getNumberUnreadNotifFromUser(user);
 		
 		return unreadNotifications;
 	}

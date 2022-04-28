@@ -1,4 +1,4 @@
-import { APP_ERROR,CHANGE_LANGUAGE,LOGIN_OK, GET_LOGGED_USER, LOGOUT_OK} from "./actionTypes";
+import { APP_ERROR,CHANGE_LANGUAGE,LOGIN_OK, GET_LOGGED_USER, LOGOUT_OK, UNREAD_NOTIFICATION} from "./actionTypes";
 
 //função que cria um objecto cujo o tipo é xxxx, e o payload é um objecto (ex: username:username)
 /**
@@ -49,5 +49,16 @@ export const setSelectedLanguage = (language) => ({
  export const setLogout = (firstName, userPriv,token) => ({
   type: LOGOUT_OK,
   payload: { firstName ,userPriv,token },
+
+});
+
+/**
+ * função que guarda info do utilizador logado
+ * @param {*}  
+ * @returns 
+ */
+ export const setNotifNumber = (unreadNotif) => ({
+  type: UNREAD_NOTIFICATION,
+  payload: { unreadNotif },
 
 });

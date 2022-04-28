@@ -15,7 +15,7 @@ import {
   MenuList,
   MenuItem,
   StackDivider,
-  useMediaQuery,
+  useMediaQuery,Badge,
   IconButton
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon , ChevronDownIcon} from '@chakra-ui/icons'
@@ -28,9 +28,9 @@ import { connect } from "react-redux";
 
 
 
-function Header ({setSelectedLanguage,language,token="", firstName, userPriv, setLoggedUser,setAppError,...props}) {
+function Header ({setSelectedLanguage,language,token="", firstName, userPriv, unreadNotif, setLoggedUser,setAppError,...props}) {
   const [isloginDone, setLogin]= useState(false);
-    
+
 
   useEffect( () => {
     if(token && (token!="" ||token.length)){
@@ -42,6 +42,10 @@ function Header ({setSelectedLanguage,language,token="", firstName, userPriv, se
     }
     
   }, [token])
+  useEffect( () => {
+      console.log("houve alteraçoes no num de notificaçoes faz re-render " + unreadNotif);    
+ 
+  }, [unreadNotif])
 
   const MenuLoggedUser=()=>{
     return (
@@ -52,14 +56,14 @@ function Header ({setSelectedLanguage,language,token="", firstName, userPriv, se
             response.data.firstName
           )} */}
           {firstName && firstName!=null?
-          firstName
+          <Flex>{firstName}<Badge  ml={1} colorScheme={"red"} borderRadius={"50%"} height={"50%"}>{unreadNotif}</Badge></Flex>
           :"User_Name"}
         
         </MenuButton>
         <MenuList color={"teal"}>
           <MenuItem><NavLink text="profile" path= "/profile"  /></MenuItem>
-          <MenuItem><NavLink text="notifications" path= "/notification"  /></MenuItem>
-          <MenuItem> <NavLink text="logout" path= "/logout"  /></MenuItem>
+          <MenuItem><NavLink text="notifications" path= "/notification"  /><Badge  ml={1} colorScheme={"red"} borderRadius={"50%"} height={"50%"}>{unreadNotif}</Badge></MenuItem>
+          <MenuItem><NavLink text="logout" path= "/logout"  /></MenuItem>
         </MenuList>
       </Menu>
     )
@@ -175,7 +179,8 @@ const mapStateToProps = state => {
           token:state.loginOK.token,
           firstName: state.loginOK.firstName,
           userPriv: state.loginOK.userPriv,
-          error: state.errorMsg.error
+          error: state.errorMsg.error,
+          unreadNotif:state.unreadNotif.unreadNotif
   };
 };
 

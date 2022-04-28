@@ -135,7 +135,7 @@ function UsersToApprove({userPriv, ...props}) {
             </Thead>
             <Tbody>
             {usersToAprove.map((u)=>(
-                <Tr key={u}>
+                <Tr key={u.id}>
                 <Td>{u.firstName}</Td>
                 <Td>{u.lastName}</Td>
                 <Td>{u.email}</Td>

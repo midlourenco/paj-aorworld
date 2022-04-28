@@ -30,7 +30,7 @@ import {
 import { FaUserAlt, FaLock,FaEyeSlash, FaEye} from "react-icons/fa";
 import config from "../config";
 import useFetch from 'use-http';
-import { setLoginOK, setAppError,setLoggedUser } from '../redux/actions'
+import { setLoginOK, setAppError,setLoggedUser, setNotifNumber} from '../redux/actions'
 import { connect } from 'react-redux'
 
 //InputGroup-> cada input pode ter 3 elementos
@@ -38,9 +38,11 @@ import { connect } from 'react-redux'
 //2. caixa de texto propriamente dtia com o tipo de dados com placeholder e a variável do resultado
 //3. algum elemento à direita (por exemplo o botão para ver/esconder a password)
 
-function Login ({setLoginOK,setAppError,setLoggedUser,...props}) {
+function Login ({setLoginOK,setAppError,setLoggedUser,setNotifNumber,...props}) {
     const [firstName, setFirstName] = useState("User_Name");
     const [myPrivileges, setMyPrivileges] = useState("VIEWER");
+ 
+
     //simboloas usados na pagina de login
     const UserSymbol = chakra(FaUserAlt);
     const LockSymbol = chakra(FaLock);
@@ -104,9 +106,7 @@ function Login ({setLoginOK,setAppError,setLoggedUser,...props}) {
                 setFirstName(myProfile.firstName);
                 setMyPrivileges(myProfile.privileges);
                 setLoggedUser(myProfile.firstName, myProfile.privileges)
-                console.log(myProfile);
                 setAppError("");
-                //setLogin(true);
             } else if(response.status==401) {
                 console.log("credenciais erradas? " + error)
                 setAppError('error_fetch_generic');
@@ -118,6 +118,24 @@ function Login ({setLoginOK,setAppError,setLoggedUser,...props}) {
                     setAppError(  "error_fetch_generic" );
                 }
             }
+
+            const numNotif = await get('notifications/unreadNumber');
+            if (response.ok) {
+                setNotifNumber(numNotif);
+                setAppError("");
+            } else if(response.status==401) {
+                console.log("credenciais erradas? " + error)
+                setAppError('error_fetch_generic');
+            }else{
+                console.log("houve um erro no fetch " + error)
+                if(error && error!=""){
+                    setAppError(  error);
+                }else{
+                    setAppError(  "error_fetch_generic" );
+                }
+            }
+
+
             navigate("/");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -244,4 +262,4 @@ const mapStateToProps = state => {
     };
 };
     
-export default connect(mapStateToProps, { setLoginOK,setAppError ,setLoggedUser})(Login);
+export default connect(mapStateToProps, { setLoginOK,setAppError ,setLoggedUser,setNotifNumber})(Login);

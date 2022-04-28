@@ -25,6 +25,10 @@
     "form_field_users": "Utilizadores",
     "form_field_news": "Notícias",
 
+    "form_field_create_date":"Data de criação",
+    "form_field_read":"Marcar como lida",
+  
+
     "sign_up":"Registar",
     "login":"Entrar",
     "logout": "Terminar Sessão",

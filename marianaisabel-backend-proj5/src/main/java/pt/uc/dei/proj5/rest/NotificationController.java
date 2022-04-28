@@ -101,7 +101,7 @@ public class NotificationController {
 
 		try {
 			User user = userService.getNonDeletedEntityByToken(authString); // utilizador dono das notificações 
-			int resultado = notificationService.getNumberUnreadNotifFromUser(user);
+			Long resultado = notificationService.getNumberUnreadNotifFromUser(user);
 			return Response.ok(resultado).build();
 					
 		} catch (Exception e) {

@@ -59,8 +59,6 @@ function AllNotifications({userPriv, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
-    const { id } = useParams();
-    console.log(id)
     const scroll = { x: 1600, y: 300 };
     // const BlockedUserSymbol = chakra(FaUserTimes);
     // const CheckedUserSymbol = chakra(FaUserCheck);
@@ -133,7 +131,7 @@ function AllNotifications({userPriv, ...props}) {
             </Thead>
             <Tbody>
             {notifications.map((n)=>(
-                <Tr key={n}>
+                <Tr key={n.id}>
                 <Td>{n.title}</Td>
                 <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
                 <Td textAlign={"center"}><Checkbox /></Td>

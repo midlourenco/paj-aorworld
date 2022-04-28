@@ -135,7 +135,7 @@ function UsersToUnblock({userPriv, ...props}) {
             </Thead>
             <Tbody>
             {usersToUnblock.map((u)=>(
-                <Tr key={u}>
+                <Tr key={u.id}>
                 <Td>{u.firstName}</Td>
                 <Td>{u.lastName}</Td>
                 <Td>{u.email}</Td>

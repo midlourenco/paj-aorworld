@@ -172,18 +172,22 @@ public class NotificationDao extends AbstractDao<Notification> {
 	 * @return
 	 */
 	////////////////////////////////////////////////////////////////////////
-	public int getNumberUnreadNotifFromUser(User user) {
-		final CriteriaQuery<Notification> criteriaQuery = em.getCriteriaBuilder().createQuery(Notification.class);
+	public Long getNumberUnreadNotifFromUser(User user) {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
 		Root<Notification> c = criteriaQuery.from(Notification.class);
-		criteriaQuery.select(c).where(em.getCriteriaBuilder().and(
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
 				em.getCriteriaBuilder().equal(c.get("user"), user),
 				em.getCriteriaBuilder().equal(c.get("alreadyRead"), false)));
 		try {
-			return em.createQuery(criteriaQuery).getResultList().size();
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		
 		
 		} catch (EJBException e) {
 			e.printStackTrace();
-			return 0;
+			return null ;
 		}
 	}
 	
