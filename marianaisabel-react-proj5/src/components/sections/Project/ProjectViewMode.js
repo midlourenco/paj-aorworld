@@ -74,9 +74,15 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
             >
                 <Box  alignSelf={"center"}>
                 {console.log(currentProject)}
-                    <Image boxSize='200px' name={currentProject.title} src={currentProject.image} ></Image>            
-                  
-                    
+                    {/* <Image boxSize='200px' name={currentProject.title} src={currentProject.image} ></Image>            
+                   */}
+                    {currentProject.deleted?
+                (<Box>
+                <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
+                <Image boxSize='200px' name={currentProject.title} src={currentProject.image} style={{opacity: 0.2}} ></Image> 
+                </Box>)
+                :  <Image boxSize='200px' name={currentProject.title} src={currentProject.image} ></Image> 
+                }
 
                     {/* <Badge mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentProject.privileges || "-"} defaultMessage={"-"} /></Badge> */}
                 </Box>

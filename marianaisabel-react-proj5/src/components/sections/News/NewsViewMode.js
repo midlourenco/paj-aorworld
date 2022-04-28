@@ -74,9 +74,15 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
             >
                 <Box  alignSelf={"center"}>
                 {console.log(currentNews)}
-                    <Image boxSize='200px' name={currentNews.title} src={currentNews.image} ></Image>            
-                  
-                    
+                    {/* <Image boxSize='200px' name={currentNews.title} src={currentNews.image} ></Image>            
+                   */}
+                    {currentNews.deleted?
+                (<Box>
+                <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
+                <Image boxSize='200px' name={currentNews.title} src={currentNews.image} style={{opacity: 0.2}} ></Image> 
+                </Box>)
+                :  <Image boxSize='200px' name={currentNews.title} src={currentNews.image} ></Image> 
+                }
 
                     {/* <Badge mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentNews.privileges || "-"} defaultMessage={"-"} /></Badge> */}
                 </Box>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import {  Link, useParams } from "react-router-dom";
 
 
@@ -50,7 +50,15 @@ function  NewsArticleCard ({news, ...props}){
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [overlay, setOverlay] = useState("")
 
+    const [textColor, setTextColor]=useState("black");
 
+    useEffect(()=>{
+        if(news.deleted){
+            setTextColor("gray")
+        }else{
+            setTextColor("black")
+        }
+    },[])
 
     return (
         <Box  borderWidth='1px' borderRadius='lg' backgroundColor="white" margin={5}> 
@@ -58,7 +66,14 @@ function  NewsArticleCard ({news, ...props}){
             {/* <GridItem colSpan={1}> */}
             <Square size={["100px","250px","250px"]} >            
                 <VStack display='flex' justifyContent="center"  alignItems="center"  >
-                    <Image src={news.image} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} />
+                {news.deleted?
+                (<Box>
+                <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
+                <Image src={news.image} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} style={{opacity: 0.2}} />
+                </Box>)
+                : <Image src={news.image} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} />
+                }
+                   
                 </VStack>
             </Square>
 
@@ -122,33 +137,39 @@ function  NewsArticleCard ({news, ...props}){
                     
                     </Box>
                     <HStack  mb='5' alignSelf={"center"}>
-                    {news.keywords.map(n => (
+                     {news.deleted?
+                        news.keywords.map(n => (
+                        <Badge borderRadius='full' px='2' color='grey' key={n} >{n}</Badge>
+                        ))
+                    : news.keywords.map(n => (
                         <Badge borderRadius='full' px='2' colorScheme='teal' key={n} >{n}</Badge>
-                    ))}
+                        ))
+                    }
                     </HStack>
                 </Box>
+                <Box color={textColor}>
+                    <ChakraLink as={Link} to ={`/news/${id}`}  >
+                        <Text fontSize="md"  mt='1'
+                        fontWeight='semibold'
+                        as='h4'
+                        lineHeight='tight'
+                        mb='1'
+                        
+                        > 
+                            {news.title} 
+                        </Text>
+                    </ChakraLink>
 
-                <ChakraLink as={Link} to ={`/news/${id}`}  >
-                    <Text fontSize="md"  mt='1'
-                    fontWeight='semibold'
-                    as='h4'
-                    lineHeight='tight'
-                    mb='1'
-                    
-                    > 
-                        {news.title} 
-                    </Text>
-                </ChakraLink>
+                    <Box  >
+                        {news.description}
+                    </Box>
 
-                <Box  >
-                    {news.description}
-                </Box>
-
-                <Box display='flex' flexDirection={"row"} justifyContent="center" mt='6' alignItems='center' >
-                {news.lastModifBy && news.lastModifBy!="" 
-                ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {news.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.lastModifDate)}} />   </Text> </>
-                : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {news.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.createdDate)}} />  </Text> </>
-                }
+                    <Box display='flex' flexDirection={"row"} justifyContent="center" mt='6' alignItems='center' >
+                    {news.lastModifBy && news.lastModifBy!="" 
+                    ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {news.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.lastModifDate)}} />   </Text> </>
+                    : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {news.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.createdDate)}} />  </Text> </>
+                    }
+                    </Box>
                 </Box>
             </Box>
             

@@ -21,6 +21,7 @@ import {
     TagLabel,
     Text,
     VStack,
+    Divider,
     StackDivider,
 } from "@chakra-ui/react";
 
@@ -111,6 +112,7 @@ function  News (){
     const [searchParams, setSearchParams] = useState("");
     const [selectedKeyword, setSelectedKeyword] = useState("");
     const [news, setNews]=useState([]);
+    const [deletedNews, setDeletedNews]=useState([]);
     const [keywordsList, setKeywordsList]=useState([]);
     //const keywordsArray = ["java","ReactJS","Swing", "Rest",'Objectos'];
     
@@ -137,7 +139,7 @@ function  News (){
     const handleClearSearchClick=()=>{
         setSelectedKeyword("");
     }
-    
+ 
     
     /**
      * ao carregar a pagina carregamos os noticias e keywords existentes
@@ -156,7 +158,7 @@ function  News (){
             // for(let i=0; i<projects.length;i++){
             //     console.log(projects[i]);
             // }
-            setNews(prevState=>[...prevState, n1]);
+     
             setNews(prevState=>[...prevState, n2]);
             setAppError("");
         } else if(response.status==401) {
@@ -176,7 +178,7 @@ function  News (){
         if (response.ok) {
             console.log(getFilterNews)
             setNews(getFilterNews)
-            
+          
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -215,6 +217,49 @@ function  News (){
             }
         }
 
+        /**
+         * Get all existing deleted projects 
+         */      
+         if(selectedKeyword==""){ 
+            await get('news/deletedList')
+            const deletedNews = await response.json();
+            if (response.ok) {
+                console.log(deletedNews)
+                setDeletedNews(deletedNews)
+                setNews(prevState=>[...prevState, n1]);
+                setAppError("");
+            } else if(response.status==401) {
+                console.log("credenciais erradas? " + error)
+                setAppError('error_fetch_login_401');
+            }else{
+                console.log("houve um erro no fetch " + error)
+                if(error && error!=""){
+                    setAppError(  error );
+                }else{
+                    setAppError(  "error_fetch_generic" );
+                }
+            }
+            }else{
+            await get('keywords/'+selectedKeyword+'/news/deletedList')
+                const deletedNews = await response.json();
+                if (response.ok) {
+                    console.log(deletedNews)
+                    setDeletedNews(deletedNews)
+                    setNews(prevState=>[...prevState, n1]);
+                    setAppError("");
+                } else if(response.status==401) {
+                    console.log("credenciais erradas? " + error)
+                    setAppError('error_fetch_login_401');
+                }else{
+                    console.log("houve um erro no fetch " + error)
+                    if(error && error!=""){
+                        setAppError(  error );
+                    }else{
+                        setAppError(  "error_fetch_generic" );
+                    }
+                }
+            }
+
     },[selectedKeyword])
 
 
@@ -223,6 +268,7 @@ function  News (){
   function setAppError(error){
     console.log(error)
 }
+
 
 
 
@@ -317,7 +363,17 @@ function  News (){
                 :'Loading...'
             }
             
-
+            <Divider width={"60%"} alignSelf={"center"} orientation='horizontal' borderColor="teal.200" borderWidth={1} />
+            <VStack
+            divider={<StackDivider borderColor='teal.400' variant="dashed" />}
+            spacing={4}
+            align='stretch'
+            width={"100%"}
+            >
+                {console.log("antes do map dos apagados")}
+                {deletedNews.map(n =>(<NewsArticleCard news={n} key={n.id} ></NewsArticleCard>))}
+                
+            </VStack>
 
         </Stack>
     )
