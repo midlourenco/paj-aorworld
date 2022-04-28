@@ -58,6 +58,8 @@
     "create_by":"Create by",
     "date":"on {d, date}",
     
+    "news_details": "News Details",
+    "project_details": "Project Details",
     "our_team": "Our team", 
     "where_are_we": "Where are we?",
     
@@ -71,6 +73,9 @@
     "error_wrong_image": "This URL is not from an image",
     "error_noResults_projects": "There are not any project associated to this keyword",
     "error_noResults_news": "There are not any news associated to this keyword",
+    "error_on_updating":"There was a problem during updating information ",
+    "sucess_on_updating":"Information updated with success",
+
 
     "error_fetch_generic":"There was a problem, please try again later",
     "error_fetch_login_401": "There was one problem during login. Please check your email and password, and try again",

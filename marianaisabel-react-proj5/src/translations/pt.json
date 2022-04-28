@@ -50,6 +50,8 @@
 
     "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.",
     
+    "news_details": "Detalhes da Notícia",
+    "project_details": "Detalhes do Project",
     "new_news":"Nova Notícia",
     "new_project": "Novo Projecto",
     "search_keyword":"Pesquisar por palavra-chave",
@@ -77,7 +79,9 @@
     "error_wrong_image": "Este URL não é de uma imagem",
     "error_noResults_projects": "Não existem projectos associados a esta keyword",
     "error_noResults_news": "Não existem notícias associados a esta keyword",
-    
+    "error_on_updating":"Houve um problema ao guardar a informação ",
+    "sucess_on_updating":"Informação guardada com sucesso",
+
     "error_fetch_generic":"Houve um problema, por favor tente mais tarde",
     "error_fetch_login_401": "Ocorreu um problema ao tentar fazer login. Por favor, verifique as suas credênciais e tente novamente.",
     "-":"-"

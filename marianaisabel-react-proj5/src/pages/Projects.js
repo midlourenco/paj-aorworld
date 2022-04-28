@@ -214,27 +214,27 @@ function  Projects (){
         /**
          * Get all existing deleted projects 
          */      
-         if(selectedKeyword==""){ 
-         await get('projects/deletedList')
-         const deletedProjects = await response.json();
-         if (response.ok) {
-             console.log(deletedProjects)
-             setDeletedProjects(deletedProjects)
-             setDeletedProjects(prevState=>[...prevState, p1]);
-             setAppError("");
-         } else if(response.status==401) {
-             console.log("credenciais erradas? " + error)
-             setAppError('error_fetch_login_401');
-         }else{
-             console.log("houve um erro no fetch " + error)
-             if(error && error!=""){
-                 setAppError(  error );
-             }else{
-                 setAppError(  "error_fetch_generic" );
-             }
-         }
+        if(selectedKeyword==""){ 
+        await get('projects/deletedList')
+        const deletedProjects = await response.json();
+        if (response.ok) {
+            console.log(deletedProjects)
+            setDeletedProjects(deletedProjects)
+            setDeletedProjects(prevState=>[...prevState, p1]);
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_login_401');
         }else{
-            await get('keywords/'+selectedKeyword+'/projects/deletedList')
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+            }else{
+                setAppError(  "error_fetch_generic" );
+            }
+        }
+        }else{
+        await get('keywords/'+selectedKeyword+'/projects/deletedList')
             const deletedProjects = await response.json();
             if (response.ok) {
                 console.log(deletedProjects)

@@ -62,7 +62,7 @@ const defaultUser=  {"id": "",
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function Profile({userPriv}) {
+function Profile({userPriv,...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
@@ -73,7 +73,7 @@ function Profile({userPriv}) {
 
     /**** *******************************************STATE******************************************************** */
 
-    const [isAdmin, setAdminPriv]=useState(false);
+    const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [currentUser, setCurrentUser]=useState(defaultUser);
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
@@ -284,9 +284,9 @@ function Profile({userPriv}) {
             )
         }
         {restResponse=="OK"?
-        <Text my={5} color="green"> Informação guardada com sucesso </Text>
+        <Text my={5} color="green"><FormattedMessage id={"sucess_on_updating"} /> </Text>
         : restResponse=="NOK"?
-        <Text my={5} color="red"> Houve um problema ao guardar a informação </Text>
+        <Text my={5} color="red"> <FormattedMessage id={"error_on_updating"} />  </Text>
         :null
         }
         <Box mb={30}>
