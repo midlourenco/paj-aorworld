@@ -90,10 +90,7 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                 <Text fontSize='2xl' fontWeight={"bold"}> {currentNews.title }</Text>
                     <Text fontSize='lg'> {currentNews.description }</Text>
                 </Box>
-                <Box >
-                    {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
-                    <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
-                </Box>
+                
                 <Heading as="h3" ><FormattedMessage id={"associated_projects"} />:</Heading>
 
                 <TableContainer>
@@ -136,6 +133,15 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                 </Tbody>
             </Table>
             </TableContainer>
+
+            {!currentNews.deleted?
+                    (<Box >
+                    {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
+                    <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
+                    </Box>)
+                    :null
+                    //TODO: adicionar botao de recuperar
+                }
             </Flex>
             
         </Box>

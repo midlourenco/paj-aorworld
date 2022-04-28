@@ -90,10 +90,7 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
                 <Text fontSize='2xl' fontWeight={"bold"}> {currentProject.title }</Text>
                     <Text fontSize='lg'> {currentProject.description }</Text>
                 </Box>
-                <Box >
-                    {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
-                    <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
-                </Box>
+                
                 <Heading as="h3" ><FormattedMessage id={"associated_projects"} />:</Heading>
 
                     <TableContainer>
@@ -136,6 +133,15 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
                     </Tbody>
                     </Table>
                     </TableContainer>
+
+                    {!currentProject.deleted?
+                    (<Box >
+                    {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
+                    <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
+                    </Box>)
+                    :null
+                    //TODO: adicionar botao de recuperar
+                }
                 </Flex>
                 
             </Box>
