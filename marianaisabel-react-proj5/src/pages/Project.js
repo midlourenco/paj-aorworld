@@ -41,7 +41,7 @@ import { connect } from 'react-redux'
 import RedirectButton from "../components/RedirectButton"
 import ProjectViewMode from "../components/sections/Project/ProjectViewMode.js"
 import ProjectEditMode from "../components/sections/Project/ProjectEditMode.js"
-import EditableControls from "../components/sections/Profile/EditableControls"
+import EditableControls from "../components/EditableControls"
 
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons

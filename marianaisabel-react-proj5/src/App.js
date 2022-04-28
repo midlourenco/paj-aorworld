@@ -47,6 +47,8 @@ import Logout from "./pages/Logout";
 import Profile from "./pages/Profile";
 import Notification from "./pages/Notification";
 import Dashboard from "./pages/Dashboard";
+import UserManagement from "./pages/UserManagement";
+
 import config from "./config";
 import useFetch, {Provider} from 'use-http';
 //se dentro da pasta pages eu colocar um index com o export das outras páginas devo poder fazer o seguinte:
@@ -126,6 +128,7 @@ function App({language = "en",error="",...props}) {
                 <Route path= "/profile/:id" element ={<Profile />} />
                 <Route path= "/notification" element ={<Notification />} />
                 <Route path= "/dashboard" element ={<Dashboard />} />
+                <Route path= "/usermangement" element ={<UserManagement />} />
                 <Route path= "*" element ={<ErrorPage404 />} />
             </Routes>
           </div>

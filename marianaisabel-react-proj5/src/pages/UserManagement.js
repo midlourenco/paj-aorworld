@@ -10,7 +10,6 @@ import {
     Flex,
     Heading,
     Input,
-    Button,
     InputGroup,
     Stack,
     Box,
@@ -30,34 +29,48 @@ import {
     EditableInput,
     EditableTextarea,
     EditablePreview,
-    ButtonGroup,
     IconButton,
     useEditableControls,
-    InputRightElement
+    InputRightElement,  
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
+    Button, 
+    ButtonGroup 
 } from "@chakra-ui/react";
-
+import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
+import { MdBlock} from 'react-icons/md';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import RedirectButton from "../components/RedirectButton"
-
+import UsersToApprove from "../components/sections/UsersManagment/UsersToApprove"
+import UsersToUnblock from "../components/sections/UsersManagment/UsersToUnblock"
 //TODO: 
 function setAppError(error){
     console.log(error)
 }
 
-function Dashboard({userPriv, ...props}) {
+function UserManagement({userPriv, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
     const { id } = useParams();
     console.log(id)
 
-
+    // const BlockedUserSymbol = chakra(FaUserTimes);
+    // const CheckedUserSymbol = chakra(FaUserCheck);
     /**** *******************************************STATE******************************************************** */
 
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false)
+    const [scrollDown, setScrollDown]=useState(false);
+    const [usersToAprove, setUsersToAprove] = useState([]);
 
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
@@ -70,10 +83,10 @@ function Dashboard({userPriv, ...props}) {
         console.log("dentro do userEffect");
         setRestResponse("");
 
-        //const xxxx = await get("xxx")
+        const getUsersToAprove = await get("users/viwersList")
         if (response.ok) {
-           // console.log(xxx)
-           // setXX(xxx);
+            console.log(getUsersToAprove)
+            setUsersToAprove(getUsersToAprove);
             if(userPriv =="ADMIN"){
                 setAdminPriv(true);
             }
@@ -97,7 +110,7 @@ function Dashboard({userPriv, ...props}) {
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
 
     return (
-    <Box>
+    <Box  mb={0}>
           <Flex
         flexDirection="column"
         width="100wh"
@@ -105,26 +118,20 @@ function Dashboard({userPriv, ...props}) {
         backgroundColor="gray.200"
         justifyContent="center"
         alignItems="center"
+        overflowX="scroll"
+        pb={20}
+        mb={0}
         >
+            <Heading><FormattedMessage id={"user_mangement"} /> </Heading>
+            {error && 'Error!'}
+            {loading && 'Loading...'}
+            <UsersToApprove />
+            <UsersToUnblock />                
 
-        <Heading><FormattedMessage id={"dashboard"} /> </Heading>
-
-        {error && 'Error!'}
-        {loading && 'Loading...'}
-
-
-        {restResponse=="OK"?
-        <Text my={5} color="green"><FormattedMessage id={"sucess_on_updating"} /> </Text>
-        : restResponse=="NOK"?
-        <Text my={5} color="red"> <FormattedMessage id={"error_on_updating"} />  </Text>
-        :null
-        }
-        {/* <Box mb={30}>
-            <RedirectButton path="/about" description={intl.formatMessage({id: "_back_to_team" })} />
-        </Box > */}
-        {/* <Avatar name={register.firstName & " " & register.lastName} src={register.image} /> */}
+           
         </Flex>
     </Box>
+
     );
 }
 
@@ -134,4 +141,5 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps,{})(Dashboard)
+export default connect(mapStateToProps,{})(UserManagement)
+

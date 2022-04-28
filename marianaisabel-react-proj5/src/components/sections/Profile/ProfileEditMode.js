@@ -38,9 +38,7 @@ import {
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
-import EditableControls from "./EditableControls"
-
-
+import EditableControls from "../../EditableControls"
 const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCancelClick, handleDeleteClick, handleSubmit, onSubmit, onError, errors, register})=>{
     
     const intl = useIntl();

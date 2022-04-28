@@ -77,8 +77,11 @@ function Header ({setSelectedLanguage,language,token="", firstName, userPriv, se
       <NavLink text="news" path= "/news" />
       <NavLink text="projects" path= "/projects" />
       {userPriv && userPriv=="ADMIN"?
-           <NavLink text="dashboard" path= "/dashboard" />
-          :null}
+      <NavLink text="dashboard" path= "/dashboard" />
+      :null}
+      {userPriv && userPriv=="ADMIN"?
+      <NavLink text="user_mangement" path= "/usermangement" />
+      :null}
       <NavLink text="about_us" path= "/about"/>
     </HStack>)
   }
@@ -93,6 +96,9 @@ function Header ({setSelectedLanguage,language,token="", firstName, userPriv, se
           <MenuItem key="projects"><NavLink text="projects" path= "/projects" /></MenuItem>
           {userPriv && userPriv=="ADMIN"?
           <MenuItem key="dashboard"><NavLink text="dashboard" path= "/dashboard" /></MenuItem>
+          :null}
+          {userPriv && userPriv=="ADMIN"?
+          <MenuItem key="usermangement"><NavLink text="user_mangement" path= "/usermangement" /></MenuItem>
           :null}
           <MenuItem key="aboutus"> <NavLink text="about_us" path= "/about"/> </MenuItem>
         </MenuList>

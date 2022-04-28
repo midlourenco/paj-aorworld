@@ -41,8 +41,7 @@ import { connect } from 'react-redux'
 import RedirectButton from "../components/RedirectButton"
 import NewsViewMode from "../components/sections/News/NewsViewMode.js"
 import NewsEditMode from "../components/sections/News/NewsEditMode.js"
-import EditableControls from "../components/sections/Profile/EditableControls"
-
+import EditableControls from "../components/EditableControls"
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons
 import { RiNewspaperLine} from "react-icons/ri";

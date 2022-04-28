@@ -6,8 +6,7 @@
     "profile":"My account",
     "notifications": "Notifications",
     "dashboard": "Dashboard",
-    "news_article": "Article",
-    "project":"Project",
+    "user_mangement":"Users Management",
 
     "associatedNews":"Associated News",
 
@@ -19,6 +18,12 @@
     "form_field_repeat_password":"Repeat password",
     "form_field_image":"image URL",
     "form_field_last_biography":"Biography",
+
+    "form_field_title": "Title",
+    "form_field_description": "Description",
+    "form_field_keywords": "Keywords",
+    "form_field_users": "Users",
+    "form_field_news": "News",
 
     "sign_up":"Sing up",
     "login":"Login",
@@ -34,6 +39,15 @@
     "edit_profile":"Edit Profile",
     "delete": "Delete",
     "deleted": "Removed",
+    "news_article": "Article",
+    "project":"Project",
+    "block":"Block",
+    "unblock":"Unblock",
+
+    "tooltip_block":"Block register request",
+    "tooltip_aprove_as_member":"Aprove register as MEMBER",
+    "tooltip_aprove_as_admin":"Aprove register as ADMIN",
+    "tooltip_unblock_user":"Unblock user (user will go to approval list)",
 
     "_back_to_projects": "< Back to Projects",
     "_back_to_news": "< Back to News",
@@ -42,8 +56,6 @@
     "create_project":"Create project",
     "create_article":"Create article",
 
-    "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge.",
-    
     "new_news":"New Article",
     "new_project": " New Project",
     "search_keyword":"Search keyword",
@@ -58,6 +70,8 @@
     "create_by":"Create by",
     "date":"on {d, date}",
     
+    "users_to_approve": "Users to approve:",
+    "users_blocked": "Blocked users:",
     "news_details": "News Details",
     "project_details": "Project Details",
     "associated_projects": "Associated Projects",
@@ -82,6 +96,9 @@
 
     "error_fetch_generic":"There was a problem, please try again later",
     "error_fetch_login_401": "There was one problem during login. Please check your email and password, and try again",
-    "-":"-"
+   
     
+    "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge.",
+    "-":"-",
+    "":""
 }

@@ -6,8 +6,7 @@
     "profile":"A minha conta",
     "notifications": "Notificações",
     "dashboard":"Dashboard",
-    "news_article": "Notícia",
-    "project":"Projecto",
+    "user_mangement":"Gestão de Utilizadores",
 
     "associatedNews":"Notícias Associadas",
 
@@ -22,9 +21,9 @@
 
     "form_field_title": "Título",
     "form_field_description": "Descrição",
-    "form_field_keywords": "Keywords",
+    "form_field_keywords": "Palavras-chave",
     "form_field_users": "Utilizadores",
-    "form_field_news": "News",
+    "form_field_news": "Notícias",
 
     "sign_up":"Registar",
     "login":"Entrar",
@@ -40,6 +39,15 @@
     "edit_profile":"Editar Perfil",
     "delete": "Apagar",
     "deleted": "Eliminado",
+    "news_article": "Notícia",
+    "project":"Projecto",
+    "block":"Bloquear",
+    "unblock":"Desbloquear",
+
+    "tooltip_block":"Bloquear pedido de registo",
+    "tooltip_aprove_as_member":"Aprovar registo como MEMBRO",
+    "tooltip_aprove_as_admin":"Aprovar registo como ADMIN",
+    "tooltip_unblock_user":"Desbloquear utilizador (utilizador irá para lista de aprovação)",
 
     "_back_to_projects": "< Voltar aos Projectos",
     "_back_to_news": "< Voltar às Notícias",
@@ -48,8 +56,8 @@
     "create_project":"Criar projecto",
     "create_article":"Criar notícia",
 
-    "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.",
-    
+    "users_to_approve": "Utilizadores para aprovar:",
+    "users_blocked": "Utilizadores bloqueados:",
     "news_details": "Detalhes da Notícia",
     "project_details": "Detalhes do Projeto",
     "associated_projects": "Projetos associados ",
@@ -60,7 +68,7 @@
     "search_keyword":"Pesquisar por palavra-chave",
     "clear_search":"Limpar pesquisa",
     "MEMBER":"MEMBRO",
-    "ADMIN":"ADMINASTRADOR",
+    "ADMIN":"ADMIN",
     "VIEWER":"VISITANTE",
     "members":"Membros",
     "member":"Membro",
@@ -87,5 +95,9 @@
 
     "error_fetch_generic":"Houve um problema, por favor tente mais tarde",
     "error_fetch_login_401": "Ocorreu um problema ao tentar fazer login. Por favor, verifique as suas credênciais e tente novamente.",
-    "-":"-"
+
+
+    "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.",
+    "-":"-",
+    "":""
 }

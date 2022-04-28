@@ -41,8 +41,7 @@ import { connect } from 'react-redux'
 import RedirectButton from "../components/RedirectButton"
 import ProfileViewMode from "../components/sections/Profile/ProfileViewMode"
 import ProfileEditMode from "../components/sections/Profile/ProfileEditMode"
-import EditableControls from "../components/sections/Profile/EditableControls"
-
+import EditableControls from "../components/EditableControls"
   //TODO: 
   function setAppError(error){
     console.log(error)
@@ -156,7 +155,7 @@ function Profile({userPriv,...props}) {
  useEffect(async()=>{
         console.log("dentro do userEffect");
         setRestResponse("");
-        if(!id){
+        if(!id || id==undefined || id==""){
             const getUserProfile = await get("users/myProfile")
             if (response.ok) {
                 console.log(getUserProfile)
@@ -179,7 +178,7 @@ function Profile({userPriv,...props}) {
                      setRestResponse("NOK");
                 }
             }
-        }
+        }else{
         
         const getUserProfile = await get("users/"+id)
         if (response.ok) {
@@ -203,7 +202,7 @@ function Profile({userPriv,...props}) {
                 setRestResponse("NOK");
             }
         }
-        
+    }
         
     },[])
     /**
@@ -221,8 +220,8 @@ function Profile({userPriv,...props}) {
      */
     useEffect(() => {
         window.scrollTo(0,document.body.scrollHeight);
-      },[scrollDown])
-       
+    },[scrollDown])
+
 
 
 
