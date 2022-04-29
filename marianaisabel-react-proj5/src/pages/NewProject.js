@@ -44,36 +44,36 @@ import useFetch from 'use-http';
 import { setAppError } from '../redux/actions'
 import { connect } from 'react-redux'
 
-const users = [
-  {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-  {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-  {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-  {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-  {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-  {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-  {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-  {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-  {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-  {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-  {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-  {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+// const users = [
+//   {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+//   {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+//   {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
 
-];
+// ];
 
-const newslist=[
-  {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
-  {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-  {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-  {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
-  {id:"5555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
-  {id:"6666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
-  {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
-  {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
-  {id:"9999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
-  {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
-  {id:"1331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
-  {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
-];
+// const newslist=[
+//   {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
+//   {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
+//   {id:"5555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
+//   {id:"6666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
+//   {id:"9999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
+//   {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"1331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
+// ];
 
 
 
@@ -122,7 +122,7 @@ function NewProject() {
 
     //**********************************************FUNÇOES AUXIliares*************************************************************************** */
 
-
+//TODO:
   const handleDeleteTag = ()=>{
 
 
@@ -153,11 +153,11 @@ function NewProject() {
   )
   
   const content2 = (
-    <ContentStep2 users={users} />
+    <ContentStep2  />
   );
 
   const content3 = (
-    <ContentStep3 newslist={newslist} />
+    <ContentStep3  />
   );
 
   const steps = [

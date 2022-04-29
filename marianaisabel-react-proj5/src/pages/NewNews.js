@@ -35,42 +35,44 @@ import {
     InputRightElement
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
-
+import ContentStep1 from "../components/sections/StepsCreateProjNews/ContentStep1"
+import ContentStep2 from "../components/sections/StepsCreateProjNews/ContentStep2"
+import ContentStep3 from "../components/sections/StepsCreateProjNews/ContentStep3"
 
 import RedirectButton from "../components/RedirectButton";
 
 
-const users = [
-  {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-  {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-  {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-  {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-  {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-  {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-  {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-  {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-  {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-  {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-  {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-  {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+// const users = [
+//   {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+//   {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+//   {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
 
-];
+// ];
 
-const projectslist=[
-  {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
-  {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-  {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-  {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
-  {id:"555555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
-  {id:"66666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
-  {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
-  {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
-  {id:"99999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
-  {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
-  {id:"133331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
-  {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
+// const projectslist=[
+//   {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
+//   {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
+//   {id:"555555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
+//   {id:"66666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
+//   {id:"99999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
+//   {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"133331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
 
-];
+// ];
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
@@ -115,6 +117,13 @@ function NewNews() {
     }
   }
 
+      //**********************************************FUNÇOES AUXIliares*************************************************************************** */
+
+//TODO:
+      const handleDeleteTag = ()=>{
+
+
+      }
   //**********************************************USE EFFECT*************************************************************************** */
  
   /**
@@ -124,141 +133,26 @@ function NewNews() {
     window.scrollTo(0,document.body.scrollHeight);
   },[scrollDown])
    
-
-  const content1 = (
-    <Flex justifyContent={"center"} py={4} width={"100%"}>
-      {/* <Text p={1} >step 1 texto </Text> */}
-      {/* <form onSubmit={ handleSubmit (onSubmit, onError)}> */}
-      <Stack
-          spacing={4}
-          p={4}
-          backgroundColor="whiteAlpha.900"
-          boxShadow="md"
-          width={"100%"}
-      >
-        <FormControl isInvalid = {errors.title}>
-          <Input {...register("title", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
-          {(errors.title)? 
-            (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
-        </FormControl>
-
-        <Textarea {...register("description", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_description'})}  />
-        
-        <FormControl isInvalid = {errors.keyword}>
-        <InputGroup>
-          <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})}  onChange={saveInputKeyword} value={input} />
-
-          <InputRightElement width="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={handleAddNewKeyword}>
-                  {/* {showPassword ? "Hide" : "Show"} */}
-                <AddIcon color = "gray.400" />
-              </Button>
-          </InputRightElement>
-      </InputGroup>
-      {keywords && keywords.length ?
-       (<Box width={"l"} mr={3}> {keywords.map(k => ( <Badge key={k} display="inline-block" mx={1}>{k}</Badge>))} </Box>)
-       :null
-      }
-       {console.log(keywords) }
-
-
-        {(errors.keyword)? 
-            (<FormErrorMessage><FormattedMessage id={"error_missing_keyword"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
-        </FormControl>
-
-        <FormControl isInvalid = {errors.image}>
-
-          <Input {...register("image")} type= "url" placeholder={intl.formatMessage({id: 'form_field_image'})} />
-          
-          {/* TODO previsualizar imagem
-          <Image
-            boxSize='100px'
-            objectFit='cover'
-            src={register.image}
-            alt='project_Image'
-          /> */}
-
-          {(errors.password)? 
-            (<FormErrorMessage><FormattedMessage id={"error_wrong_image"}  ></FormattedMessage></FormErrorMessage>)
-            : null 
-          }
-        
-        </FormControl>
-
-        {/* <Button
-            borderRadius={0}
-            type="submit"
-            variant="solid"
-            colorScheme="teal"
-            width="full"
-            // onClick={console.log("carreguei em login")}
-        >
-            {intl.formatMessage({id: 'create_project'})} 
-        </Button> */}
-
-      </Stack>
-    {/* </form> */}
-    </Flex>
-  );
+  const content1 =(
+    <ContentStep1 
+    errors ={errors} 
+    register={register} 
+    input={input}
+    keywords={keywords}
+    saveInputKeyword={saveInputKeyword}
+    handleAddNewKeyword={handleAddNewKeyword}
+    handleDeleteTag={handleDeleteTag}
+    ></ContentStep1>
+  )
+  
   const content2 = (
-    <Flex justifyContent={"center"} py={4}  width={"100%"}>
-      <Stack
-      spacing={4}
-      p={4}
-      backgroundColor="whiteAlpha.900"
-      boxShadow="md"
-      width={"100%"}
-      >
-        <FormControl >
-          <Grid  templateColumns='repeat(2, 1fr)' >
-            {users.map(u => (
-              <Checkbox key={u.id} colorScheme='teal' m={3} key={u} >
-                <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
-                  <Avatar
-                    src={u.image}
-                    size='xs'
-                    name={u.firstName}
-                    ml={-1}
-                    mr={2}
-                  />
-                  <TagLabel>{u.firstName}</TagLabel>
-                </Tag>
-              </Checkbox>
-            ))}  
-          </Grid>        
-        </FormControl>
-      </Stack>
-    </Flex>
+    <ContentStep2  />
   );
-
-
 
   const content3 = (
-    <Flex justifyContent={"center"} py={4}>
-      <Stack
-      spacing={4}
-      p="1rem"
-      backgroundColor="whiteAlpha.900"
-      boxShadow="md"
-      minH={"300px"}
-      width={"100%"}
-      >
-        <FormControl>
-        <Grid  templateColumns='repeat(2, 1fr)' >
-          {projectslist.map(n => (
-            <Checkbox colorScheme='teal' m={3} key={n} >
-              {n.title}
-            </Checkbox>        
-          ))}          
-        </Grid>
-        </FormControl>
-      </Stack>
-    </Flex>
+    <ContentStep3  />
   );
+
   const steps = [
     { label: 'Project Details', content: content1 },
     { label: 'Associate Users', content: content2 },
@@ -333,7 +227,7 @@ function NewNews() {
         :null
         }
           <Box>
-                <RedirectButton path="/news" description="_back_to_news" />
+                <RedirectButton path="/news" description="back_to_news" />
             </Box>
         </Box>
       </Stack>
