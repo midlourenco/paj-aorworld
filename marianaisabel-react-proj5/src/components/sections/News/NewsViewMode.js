@@ -97,6 +97,7 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                     }
                 </Box>
                 
+                
                 <Heading mt={10} as="h3" ><FormattedMessage id={"associated_projects"} />:</Heading>
 
                 <TableContainer>
