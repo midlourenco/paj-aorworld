@@ -6,11 +6,14 @@ import javax.validation.constraints.*;
 //import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import pt.uc.dei.proj5.entity.User;
 
 //import org.hibernate.validator.constraints.URL;
 
 @XmlRootElement
+@JsonIgnoreProperties (ignoreUnknown=true)
 public class UserDTORegister implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//implements seriaziable sinaliza que pode mandar dados para ficheiros

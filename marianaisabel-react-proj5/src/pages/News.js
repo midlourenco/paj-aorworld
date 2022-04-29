@@ -150,8 +150,8 @@ function  News (){
         * Get all existing noticias
         */
     if(selectedKeyword==""){
-        await get('news')
-        const getNews = await response.json();
+        
+        const getNews = await get('news');
         if (response.ok) {
             console.log(getNews)
             setNews(getNews)
@@ -173,8 +173,8 @@ function  News (){
             }
         }
     }else{
-        await get('keywords/'+selectedKeyword+'/news')
-        const getFilterNews = await response.json();
+        
+        const getFilterNews = await get('keywords/'+selectedKeyword+'/news')
         if (response.ok) {
             console.log(getFilterNews)
             setNews(getFilterNews)
@@ -195,38 +195,17 @@ function  News (){
 
     }
 
-        /**
-         * Get all existing keywords among projects and news
-         */       
-        await get('keywords')
-        const getKeywords = await response.json();
-        if (response.ok) {
-            console.log(getKeywords)
-            setKeywordsList(getKeywords)
-            
-            setAppError("");
-        } else if(response.status==401) {
-            console.log("credenciais erradas? " + error)
-            setAppError('error_fetch_login_401');
-        }else{
-            console.log("houve um erro no fetch " + error)
-            if(error && error!=""){
-                setAppError(  error );
-            }else{
-                setAppError(  "error_fetch_generic" );
-            }
-        }
 
         /**
          * Get all existing deleted projects 
          */      
          if(selectedKeyword==""){ 
-            await get('news/deletedList')
-            const deletedNews = await response.json();
+           
+            const deletedNews =  await get('news/deletedList')
             if (response.ok) {
                 console.log(deletedNews)
                 setDeletedNews(deletedNews)
-                setNews(prevState=>[...prevState, n1]);
+                setDeletedNews(prevState=>[...prevState, n1]);
                 setAppError("");
             } else if(response.status==401) {
                 console.log("credenciais erradas? " + error)
@@ -240,12 +219,12 @@ function  News (){
                 }
             }
             }else{
-            await get('keywords/'+selectedKeyword+'/news/deletedList')
-                const deletedNews = await response.json();
+           
+                const deletedNews =  await get('keywords/'+selectedKeyword+'/news/deletedList')
                 if (response.ok) {
                     console.log(deletedNews)
                     setDeletedNews(deletedNews)
-                    setNews(prevState=>[...prevState, n1]);
+                    setDeletedNews(prevState=>[...prevState, n1]);
                     setAppError("");
                 } else if(response.status==401) {
                     console.log("credenciais erradas? " + error)
@@ -262,6 +241,29 @@ function  News (){
 
     },[selectedKeyword])
 
+    useEffect(async()=>{
+                /**
+         * Get all existing keywords among projects and news
+         */       
+              
+                const getKeywords =   await get('keywords')
+                if (response.ok) {
+                    console.log(getKeywords)
+                    setKeywordsList(getKeywords)
+                    
+                    setAppError("");
+                } else if(response.status==401) {
+                    console.log("credenciais erradas? " + error)
+                    setAppError('error_fetch_login_401');
+                }else{
+                    console.log("houve um erro no fetch " + error)
+                    if(error && error!=""){
+                        setAppError(  error );
+                    }else{
+                        setAppError(  "error_fetch_generic" );
+                    }
+                }
+    },[])
 
 
   //TODO: 

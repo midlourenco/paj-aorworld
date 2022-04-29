@@ -1,5 +1,5 @@
 import React from "react"
-import { useState } from "react";
+import { useState, useRef } from "react";
 //Redirect replace by Naviagate
 import {Navigate} from 'react-router-dom'
 //https://react-hook-form.com/
@@ -26,31 +26,85 @@ import {
     InputRightElement
 } from "@chakra-ui/react";
 import { FaEyeSlash, FaEye} from "react-icons/fa";
+import useFetch from 'use-http';
+import { connect } from 'react-redux'
 
 
+  //TODO: 
+  function setAppError(error){
+    console.log(error)
+}
 
-
-const Register = ()=>{
+const Register = ({errorTopBar,...props})=>{
+  //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
+  const intl = useIntl();
   const EyeSymbol = chakra(FaEye);
   const EyeSlashSymbol = chakra(FaEyeSlash);
+  const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
+  const [scrollDown, setScrollDown]=useState(false)
 
-  const {register, handleSubmit, formState: {errors}}= useForm();
+  const { post, del, response, loading, error } = useFetch();
+  const {register, handleSubmit, formState: {errors},  watch}= useForm({defaultValues: {
+    autoAcceptInvites: true,
+  }});
+  const password = useRef({});
+  password.current = watch("password", "");
+  const image = useRef({});
+  image.current = watch("image", "");
+
+
   //const onSubmit = values => console.log(values); 
   //const handleSubmit(data){setData(data), console.log(data) )};
-
-  const onSubmit = (data, e) => console.log(data, e);
+   //const onSubmit = (data, e) => console.log(data, e);
+   async function onSubmit (data, e) {
+        
+    const updateUser = await post('users/register', data)
+    if (response.ok) {
+        console.log("user atualizado com sucesso ", updateUser);
+        setRestResponse("OK");
+        setScrollDown(true);
+        setAppError("");
+       
+    } else if(response.status==401) {
+        console.log("credenciais erradas? " + error)
+        setRestResponse("NOK");
+        setScrollDown(true);
+        setAppError('error_fetch_login_401');
+    }else{
+        console.log("houve um erro no fetch " + error)
+        if(error && error!=""){
+            setRestResponse("NOK");
+            setScrollDown(true);
+            setAppError(  error );
+        }else{
+            setRestResponse("NOK");
+            setScrollDown(true);
+            setAppError(  "error_fetch_generic" );
+        }
+    }
+}
   const onError = (errors, e) => console.log(errors, e);
 
 
 
-  const [data, setData]= useState("");
+
+
+
+
+
+
+
+
+
+
+
+  // const [data, setData]= useState("");
   //mostrar e esconder a password
   const [showPassword, setShowPassword] = useState(false);
   //função que chamamos ao clicar em "show"/"hide" password - altera o state de false para true e vice-versa
   const handleShowClick = () => setShowPassword(!showPassword);
 
-  //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
-  const intl = useIntl();
+
 
   return (
     <Flex
@@ -104,7 +158,11 @@ const Register = ()=>{
               <FormControl isInvalid = {errors.password}>
                   <InputGroup>
                       <Input
-                          {...register("password", {required: true})}
+                          {...register("password", {required: true
+                          // minLength: {
+                          //   value: 6,
+                          //   message: "Password must have at least 6 characters"}
+                          })}
                           type={showPassword ? "text" : "password"}
                           placeholder={intl.formatMessage({id: 'form_field_password'})}
                       />
@@ -124,13 +182,15 @@ const Register = ()=>{
                {/* TODO validar se as 2 passwords sao iguais */}
               <FormControl isInvalid = {errors.password2}>
                 <Input
-                    {...register("password", {required: true})}
+                    {...register("passowrd2",{ validate: value =>
+                        value === password.current || intl.formatMessage({id: "error_wrong_password"})
+                    })}
                     type= "password"
                     placeholder={intl.formatMessage({id: 'form_field_repeat_password'})}
                 />
               
                 {(errors.password2)? 
-                  (<FormErrorMessage><FormattedMessage id={"error_missing_password"}  ></FormattedMessage></FormErrorMessage>)
+                  (<FormErrorMessage><FormattedMessage id={"error_wrong_password"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
                 }
               </FormControl>
@@ -145,7 +205,7 @@ const Register = ()=>{
                     type= "url"
                     placeholder={intl.formatMessage({id: 'form_field_image'})}
                 />
-                <Avatar name={register.firstName & " " & register.lastName} src={register.image} />
+                <Avatar name={register.firstName & " " & register.lastName} src={image.current} />
 
                 {(errors.image)? 
                   (<FormErrorMessage><FormattedMessage id={"error_wrong_image"}  ></FormattedMessage></FormErrorMessage>)
@@ -179,4 +239,8 @@ const Register = ()=>{
     
     }
 
-    export default Register;
+    const mapStateToProps = state => {
+      return  {errorTopBar: state.errorMsg.errorTopBar
+      };
+    };
+  export default connect(mapStateToProps,{})(Register);

@@ -106,7 +106,7 @@
     "our_team": "A nossa equipa", 
     "where_are_we": "Onde estamos?",
     
-    "error_missing_password":"Palavra-passe é obrigatória",
+    "error_missing_password":"Deve especificar a sua palavra-passe",
     "error_missing_email":"Email é obrigatório",
     "error_missing_first_name":"Nome é obrigatório",
     "error_missing_last_name":"Apelido é obrigatório",

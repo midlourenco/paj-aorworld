@@ -104,7 +104,7 @@
     "our_team": "Our team", 
     "where_are_we": "Where are we?",
     
-    "error_missing_password":"Password is required",
+    "error_missing_password":"You must specify a password",
     "error_missing_email":"Email is required",
     "error_missing_first_name":"First name is required",
     "error_missing_last_name":"Last name is required",

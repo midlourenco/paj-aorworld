@@ -142,7 +142,7 @@ function  NewsArticleCard ({news, ...props}){
                                     <ModalBody>
                                     <UnorderedList>
                                     {overlay=="members" ?
-                                    news.userss.map(u => (
+                                    news.users.map(u => (
                                         <ListItem borderRadius='full' px='2' key={u.id} ><Link to={`/profile/${u.id}`} >{u.firstName}</Link></ListItem>
                                     ))
                                     :  news.projects.map(t => (
@@ -192,7 +192,7 @@ function  NewsArticleCard ({news, ...props}){
                         </Box>
 
                         <Box display='flex' flexDirection={"row"} justifyContent="center" mt='6' alignItems='center' >
-                        {news.lastModifBy && news.lastModifBy!="" 
+                        {news.lastModifBy  
                         ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {news.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.lastModifDate)}} />   </Text> </>
                         : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {news.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.createdDate)}} />  </Text> </>
                         }

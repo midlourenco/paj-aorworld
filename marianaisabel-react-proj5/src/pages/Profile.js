@@ -245,16 +245,16 @@ function Profile({userPriv,errorTopBar="",...props}) {
     useEffect(()=>{
         console.log("dentro do segundo  userEffect");
         console.log(editMode);
-        setRestResponse("");
+        // setRestResponse("");
     
     },[currentUser,editMode])
     
     /**
      * use effect À escuta da variável que obriga ao scroll down
      */
-    useEffect(() => {
-        window.scrollTo(0,document.body.scrollHeight);
-    },[scrollDown])
+    // useEffect(() => {
+    //     window.scrollTo(0,document.body.scrollHeight);
+    // },[scrollDown])
 
 
 
