@@ -10,6 +10,9 @@ import {
     Heading,
     Text,
     Box,
+    Grid,
+    GridItem,
+    Stack,
 
 } from "@chakra-ui/react";
 import useFetch from 'use-http';
@@ -80,36 +83,59 @@ function Dashboard({errorTopBar,...props}) {
         });
     },[]);
     
+//rowSpan={2} -> para ocupar mais do que uma linha ao alto
+//colSpan={4} -> para ocupar mais do que uma coluna em linha 
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
 
     return (
-    <Box>
+    <Box background={"teal.400"} >
+        <Heading  my={0} py={12} color={"white"} ><FormattedMessage id={"dashboard"} /> </Heading>
           <Flex
         flexDirection="column"
         width="100wh"
         minHeight="83vh"
         backgroundColor="gray.200"
-        justifyContent="center"
+        justifyContent="start"
         alignItems="center"
+        py={10}
         >
 
-        <Heading><FormattedMessage id={"dashboard"} /> </Heading>
+        
   
         {errorTopBar && 'Error!'}
         {errorTopBar && errorTopBar!=""
         ? <ErrorMsgTopBar />
         : null
         }
+        <Stack  >
+                <Grid
+                // h='200px'
+                templateRows='repeat(2, 1fr)'
+                templateColumns='repeat(2, 1fr)'
+                gap={8}
+                >
+                <GridItem  >
+                    <DashboardCard title={intl.formatMessage({id: 'tt_users'})} value={totalUsers}/> 
 
-            <Box >
-                <DashboardCard title={intl.formatMessage({id: 'tt_users'})} value={totalUsers}/> 
-                <DashboardCard title={intl.formatMessage({id: 'tt_news'})} value={totalNews}/> 
-                <DashboardCard title={intl.formatMessage({id: 'tt_projects'})} value={totalProjects}/> 
-                <DashboardCard title={intl.formatMessage({id: 'tt_keywords'})} value={totalKeywords}/> 
-            </Box> 
 
-            {/* <Box >
+                </GridItem>
+                <GridItem  >
+                    <DashboardCard title={intl.formatMessage({id: 'tt_news'})} value={totalNews}/> 
+
+
+                </GridItem>
+                <GridItem  >
+                    <DashboardCard title={intl.formatMessage({id: 'tt_projects'})} value={totalProjects}/> 
+
+
+                </GridItem>
+                <GridItem >
+                    <DashboardCard title={intl.formatMessage({id: 'tt_keywords'})} value={totalKeywords}/> 
+                </GridItem>
+                </Grid>
+</Stack>
+            {/* 
                 <Box >
                     <UserFilter />
                 </Box>
