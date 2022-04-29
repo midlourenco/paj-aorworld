@@ -28,6 +28,11 @@
     "form_field_create_date":"Create date",
     "form_field_read":"Mark as read",
 
+    "tt_users":"Number of registered users",
+    "tt_news": "Number of created news",
+    "tt_projects": "Number of created projects",
+    "tt_keywords":  "Number of existent keywords",
+
     "sign_up":"Sing up",
     "login":"Login",
     "logout": "Logout",

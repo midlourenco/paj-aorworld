@@ -152,7 +152,7 @@ export default function LandingLayout(props) {
 
 // const mapStateToProps = state => {
 //     return { userPriv: state.loginOK.userPriv,
-//             error: state.errorMsg.error
+//             errorTopBar: state.errorMsg.errorTopBar
 //     };
 // };
 

@@ -38,7 +38,7 @@ import { connect } from 'react-redux'
 //2. caixa de texto propriamente dtia com o tipo de dados com placeholder e a variável do resultado
 //3. algum elemento à direita (por exemplo o botão para ver/esconder a password)
 
-function Login ({setLoginOK,setAppError,setLoggedUser,setNotifNumber,...props}) {
+function Login ({setLoginOK,setAppError,setLoggedUser,setNotifNumber,errorTopBar="",...props}) {
     const [firstName, setFirstName] = useState("User_Name");
     const [myPrivileges, setMyPrivileges] = useState("VIEWER");
  
@@ -259,7 +259,7 @@ function Login ({setLoginOK,setAppError,setLoggedUser,setNotifNumber,...props}) 
 };
     
 const mapStateToProps = state => {
-    return { error: state.errorMsg.error, // fazemos a logica se ele existir mostra mensagem de erro
+    return { errorTopBar: state.errorMsg.errorTopBar, // fazemos a logica se ele existir mostra mensagem de erro
     };
 };
     

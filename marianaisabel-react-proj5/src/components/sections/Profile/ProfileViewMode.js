@@ -63,7 +63,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const ProfileViewMode=({isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
+const ProfileViewMode=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick, ...props})=>{
     const intl = useIntl();
     const { get, post, del, response, loading, error } = useFetch();
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
@@ -181,7 +181,7 @@ const ProfileViewMode=({isAdmin, userId, currentUser,editMode,handleEditClick,ha
 const mapStateToProps = state => {
     return {userPriv: state.loginOK.userPriv,
             userId: state.loginOK.userId,
-            error: state.errorMsg.error,
+            errorTopBar: state.errorMsg.errorTopBar,
     };
   };
   

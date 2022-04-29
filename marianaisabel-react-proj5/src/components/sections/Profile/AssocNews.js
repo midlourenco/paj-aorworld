@@ -34,7 +34,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const AssocNews=({isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
+const AssocNews=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
     const intl = useIntl();
     const { get, post, del, response, loading, error } = useFetch();
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
@@ -119,7 +119,7 @@ const AssocNews=({isAdmin, userId, currentUser,editMode,handleEditClick,handleCa
 const mapStateToProps = state => {
     return {userPriv: state.loginOK.userPriv,
             userId: state.loginOK.userId,
-            error: state.errorMsg.error,
+            errorTopBar: state.errorMsg.errorTopBar,
     };
   };
   

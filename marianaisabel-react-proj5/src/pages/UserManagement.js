@@ -57,7 +57,7 @@ function setAppError(error){
     console.log(error)
 }
 
-function UserManagement({userPriv, ...props}) {
+function UserManagement({userPriv,errorTopBar="", ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
@@ -138,7 +138,7 @@ function UserManagement({userPriv, ...props}) {
 
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
-            error: state.errorMsg.error
+            errorTopBar: state.errorMsg.errorTopBar
     };
 };
 

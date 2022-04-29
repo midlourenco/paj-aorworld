@@ -61,7 +61,7 @@ const defaultUser=  {"id": "",
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function Profile({userPriv,...props}) {
+function Profile({userPriv,errorTopBar="",...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
@@ -332,7 +332,7 @@ function Profile({userPriv,...props}) {
 
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
-            error: state.errorMsg.error
+            errorTopBar: state.errorMsg.errorTopBar
     };
   };
 export default connect(mapStateToProps,{})(Profile);

@@ -28,6 +28,12 @@
     "form_field_create_date":"Data de criação",
     "form_field_read":"Marcar como lida",
 
+    "tt_users":"Nº Utilizadores Registados",
+    "tt_news": "Nº Notícias criadas",
+    "tt_projects": "Nº Projects criadas",
+    "tt_keywords": "Nº Keywords existentes",
+
+
     "sign_up":"Registar",
     "login":"Entrar",
     "logout": "Terminar Sessão",

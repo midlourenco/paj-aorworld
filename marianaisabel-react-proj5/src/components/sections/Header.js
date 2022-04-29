@@ -28,7 +28,7 @@ import { connect } from "react-redux";
 
 
 
-function Header ({setSelectedLanguage,setNotifNumber,language,token="", firstName, userPriv, unreadNotif, setLoggedUser,setAppError,...props}) {
+function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,token="", firstName, userPriv, unreadNotif, setLoggedUser,setAppError,...props}) {
   const [isloginDone, setLogin]= useState(false);
   const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
   const { get, post, del, response, loading, error } = useFetch();
@@ -231,7 +231,7 @@ const mapStateToProps = state => {
           token:state.loginOK.token,
           firstName: state.loginOK.firstName,
           userPriv: state.loginOK.userPriv,
-          error: state.errorMsg.error,
+          errorTopBar: state.errorMsg.errorTopBar,
           unreadNotif:state.unreadNotif.unreadNotif
   };
 };

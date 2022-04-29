@@ -71,7 +71,7 @@ const defaultProject = {
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function Project( {userPriv,...props}){
+function Project( {userPriv,errorTopBar="",...props}){
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
@@ -287,7 +287,7 @@ function Project( {userPriv,...props}){
 
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
-            error: state.errorMsg.error
+            errorTopBar: state.errorMsg.errorTopBar
     };
   };
 export default connect(mapStateToProps,{})( Project);

@@ -47,7 +47,7 @@ function setAppError(error){
     console.log(error)
 }
 
-function Notification({setNotifNumber, ...props}) {
+function Notification({setNotifNumber,errorTopBar="", ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
@@ -122,7 +122,7 @@ function Notification({setNotifNumber, ...props}) {
 }
 
 const mapStateToProps = state => {
-    return { error: state.errorMsg.error
+    return { errorTopBar: state.errorMsg.errorTopBar
     };
 };
 

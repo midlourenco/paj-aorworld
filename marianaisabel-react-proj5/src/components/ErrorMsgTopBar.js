@@ -8,24 +8,24 @@ Flex
 import { FormattedMessage ,useIntl} from "react-intl";
 
 //vamos descontruir o props, e retirar o titulo e valor, e manter os restantes caracteristicas do props no props
-function ErrorMsg ({error="",...props}) {
+function ErrorMsg ({errorTopBar="",...props}) {
     const intl = useIntl();
-    console.log("dentro do componente do erro "+ error);
+    console.log("dentro do componente do erro "+ errorTopBar);
     const MsgErro =()=>{
-        if(error && error!=null){
+        if(errorTopBar && errorTopBar!=null){
             return ( <Text > {intl.formatMessage({
-                id: error,
-                defaultMessage: "" + error
+                id: errorTopBar,
+                defaultMessage: "" + errorTopBar
             })} </Text>)
         }else {
-            return ( <Text > {error} </Text>)
+            return ( <Text > {errorTopBar} </Text>)
         }
     } 
     useEffect(() => {
         window.scrollTo(0, 0)
 
 
-    }, [error])
+    }, [errorTopBar])
    
     return (
         <Flex background={"red.600"} 
@@ -43,7 +43,7 @@ function ErrorMsg ({error="",...props}) {
 }
 
 const mapStateToProps = state => {
-    return { error: state.errorMsg.error };
+    return { errorTopBar: state.errorMsg.errorTopBar };
   };
 
 export default connect(mapStateToProps,{})(ErrorMsg);

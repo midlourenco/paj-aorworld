@@ -3,12 +3,12 @@ import { APP_ERROR,CHANGE_LANGUAGE,LOGIN_OK, GET_LOGGED_USER, LOGOUT_OK, UNREAD_
 //função que cria um objecto cujo o tipo é xxxx, e o payload é um objecto (ex: username:username)
 /**
  * função que guarda o erro gerado
- * @param {} error 
+ * @param {} errorTopBar 
  * @returns 
  */
-export const setAppError = (error) => ({
+export const setAppError = (errorTopBar) => ({
   type: APP_ERROR,
-  payload: { error }
+  payload: { errorTopBar }
 });
 
 /**

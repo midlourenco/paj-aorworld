@@ -70,7 +70,7 @@ const defaultNews = {
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function SingleNews( {userPriv,...props}){
+function SingleNews( {userPriv,errorTopBar="",...props}){
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
@@ -288,7 +288,7 @@ function SingleNews( {userPriv,...props}){
 
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
-            error: state.errorMsg.error
+            errorTopBar: state.errorMsg.errorTopBar
     };
   };
 export default connect(mapStateToProps,{})(SingleNews)

@@ -6,7 +6,7 @@ import useFetch from 'use-http';
 import { setLogout, setAppError } from '../redux/actions'
 import { connect } from 'react-redux'
 
-function Logout({setLogout,...props}) {
+function Logout({setLogout,errorTopBar="",...props}) {
      // console.log(props);
    // props.history
    //exemplo para redireccionar para uma página dada uma dada condição:
@@ -31,7 +31,7 @@ function Logout({setLogout,...props}) {
   )
 }
 const mapStateToProps = state => {
-  return { error: state.errorMsg.error, // fazemos a logica se ele existir mostra mensagem de erro
+  return { errorTopBar: state.errorMsg.errorTopBar, // fazemos a logica se ele existir mostra mensagem de erro
           token:state.loginOK.token,
           firstName:state.loginOK.firstName,
           userPriv:state.loginOK.userPriv,

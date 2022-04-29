@@ -32,7 +32,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const MyProjects=({isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
+const MyProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
     const { get, post, del, response, loading, error } = useFetch();
    const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
@@ -109,7 +109,7 @@ const MyProjects=({isAdmin, userId, currentUser,editMode,handleEditClick,handleC
 const mapStateToProps = state => {
     return {userPriv: state.loginOK.userPriv,
             userId: state.loginOK.userId,
-            error: state.errorMsg.error,
+            errorTopBar: state.errorMsg.errorTopBar,
     };
   };
   
