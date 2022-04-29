@@ -36,9 +36,9 @@ export const setSelectedLanguage = (language) => ({
  * @param {*}  
  * @returns 
  */
- export const setLoggedUser = (firstName,userPriv) => ({
+ export const setLoggedUser = (firstName,userPriv,userId) => ({
   type: GET_LOGGED_USER,
-  payload: { firstName,userPriv }
+  payload: { firstName,userPriv,userId }
 });
 
 /**
@@ -46,9 +46,9 @@ export const setSelectedLanguage = (language) => ({
  * @param {*}  
  * @returns 
  */
- export const setLogout = (firstName, userPriv,token) => ({
+ export const setLogout = (firstName, userPriv,token,userId) => ({
   type: LOGOUT_OK,
-  payload: { firstName ,userPriv,token },
+  payload: { firstName ,userPriv,token,userId },
 
 });
 

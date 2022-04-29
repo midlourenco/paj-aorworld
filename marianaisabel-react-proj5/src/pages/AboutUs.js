@@ -91,7 +91,7 @@ const AboutUs = ()=>{
             <Heading> <FormattedMessage id={"our_team"} /> </Heading>
             {error && 'Error!'}
             {loading && 'Loading...'}
-            <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(4, 1fr)']} gap={8} mx={5} >
+            <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={8} mx={5} >
                 {users.map(u =>(<UserCard user ={u} key={u.id} ></UserCard>))}
             </Grid>
 

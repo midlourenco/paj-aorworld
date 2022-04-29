@@ -91,21 +91,25 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
                     <Text fontSize='lg'> {currentProject.description }</Text>
                 </Box>
                 
-                <Heading as="h3" ><FormattedMessage id={"associated_projects"} />:</Heading>
+                <Heading as="h3" ><FormattedMessage id={"associated_news"} />:</Heading>
 
                     <TableContainer>
                     <Table >
                         <Thead>
                         <Tr>
-                            <Th>Titulo</Th>
-                            <Th>Criado por:</Th>
+                            <Th>{intl.formatMessage({id: 'form_field_title'})}</Th>
+                            <Th>{intl.formatMessage({id: 'create_by'})}</Th>
+                            <Th><FormattedMessage id={"form_field_create_date"}/></Th>
+
                         </Tr>
                         </Thead>
                         <Tbody>
-                        {currentProject.associatedNews.map((p)=>(
-                            <Tr key={p}>
-                            <Td>{p.title}</Td>
-                            <Td>{p.createdBy.firstName}</Td>
+                        {currentProject.associatedNews.map((n)=>(
+                            <Tr key={n.id}>
+                            <Td>{n.title}</Td>
+                            <Td>{n.createdBy.firstName}</Td>
+                            <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
+
                         </Tr>
                         ))}  
                         </Tbody>
@@ -119,13 +123,13 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
                     <Table >
                     <Thead>
                     <Tr>
-                        <Th>Nome</Th>
-                        <Th>Email:</Th>
+                        <Th>{intl.formatMessage({id: 'user_name'})}</Th>
+                        <Th>{intl.formatMessage({id: 'form_field_email'})}</Th>
                     </Tr>
                     </Thead>
                     <Tbody>
                     {currentProject.associatedUsers.map((u)=>(
-                        <Tr key={u}>
+                        <Tr key={u.id}>
                         <Td>{u.firstName + " " + u.lastName}</Td>
                         <Td>{u.email}</Td>
                     </Tr>

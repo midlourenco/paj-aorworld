@@ -130,7 +130,7 @@ function UsersToApprove({userPriv, ...props}) {
                 <Th><FormattedMessage id={"form_field_last_name"}/></Th>
                 <Th><FormattedMessage id={"form_field_email"}/></Th>
                 <Th><FormattedMessage id={"form_field_biography"}/></Th>
-                <Th textAlign={"center"}><FormattedMessage id={"Actions"}/></Th>
+                <Th textAlign={"center"}><FormattedMessage id={"actions"}/></Th>
             </Tr>
             </Thead>
             <Tbody>

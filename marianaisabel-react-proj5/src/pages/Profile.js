@@ -67,7 +67,7 @@ function Profile({userPriv,...props}) {
     let navigate = useNavigate();
     //const [currentId, setCurrentId]=useState("");
     const { id } = useParams();
-    console.log(id)
+    console.log("id no url: ", id)
    // setCurrentId(id)
 
     /**** *******************************************STATE******************************************************** */
@@ -78,6 +78,11 @@ function Profile({userPriv,...props}) {
     const [editMode, setEditClick] = useState(false);
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
     const [scrollDown, setScrollDown]=useState(false)
+
+    const [assocProj,setAssocProj]=useState([]);
+    const [assocNews,setAssocNews]=useState([]);
+    const [projCreatedByMe, setProjCreatedByMe]=useState([]);
+
 
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
@@ -202,7 +207,35 @@ function Profile({userPriv,...props}) {
                 setRestResponse("NOK");
             }
         }
+        const getAssocProj = await get("users/"+id)
+        if (response.ok) {
+            console.log(getAssocProj)
+            setAssocProj(getAssocProj);
+            if(userPriv =="ADMIN"){
+                setAdminPriv(true);
+            }
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_login_401');
+            setRestResponse("NOK");
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+                setRestResponse("NOK");
+            }else{
+                setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
+            }
+        }
+        
+
+
+
+
     }
+
         
     },[])
     /**

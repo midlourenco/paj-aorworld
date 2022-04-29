@@ -538,7 +538,7 @@ public class ProjectController {
 	}
 	
 
-
+	//projects/4/assocUsersList
 	/**
 	 * lista de users associados a projecto
 	 * @param projectId
@@ -589,10 +589,10 @@ public class ProjectController {
 	
 
 
+	//projects/projectAssocToUser?user=8
 	
-	//projects/4/assocUsersList?user=8
 	@GET
-	@Path("{projectId: [0-9]+}/projectAssocToUser")
+	@Path("/projectAssocToUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllProjectAssocToUser (@QueryParam("user")  int userId, @HeaderParam("Authorization") String authString) {
 		System.out.println("Entrei em getAllProjectAssocToUser por user no controller com token? : " + authString);
@@ -607,7 +607,7 @@ public class ProjectController {
 				if(userId>0) {
 					resultado = projectSharingService.getOnlyPublicNonDeletedAssocProjectFromUser(user);	
 				}else {
-					resultado = null;
+					resultado = projectSharingService.getOnlyPublicNonDeletedAssocProjectFromUser(authString);;
 
 				}
 				//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
@@ -622,7 +622,7 @@ public class ProjectController {
 			if(userId>0) {
 				resultado = projectSharingService.getNonDeletedAssocProjectFromUser(user);	
 			}else {
-				resultado = null;
+				resultado = projectSharingService.getNonDeletedAssocProjectFromUser(authString);
 
 			}
 			//ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsNonDeleted();
@@ -637,7 +637,7 @@ public class ProjectController {
 			if(userId>0) {
 				resultado = projectSharingService.getOnlyPublicNonDeletedAssocProjectFromUser(user);	
 			}else {
-				resultado = null;
+				resultado = projectSharingService.getOnlyPublicNonDeletedAssocProjectFromUser(authString);;
 
 			}
 	

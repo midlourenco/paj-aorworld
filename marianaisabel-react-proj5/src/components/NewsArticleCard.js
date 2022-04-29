@@ -2,7 +2,7 @@ import React from "react";
 import { useState , useEffect} from "react";
 import {  Link, useParams } from "react-router-dom";
 
-
+import { useForm } from "react-hook-form";
 import {FormattedMessage} from "react-intl";
 
 import {
@@ -28,6 +28,7 @@ import {
     UnorderedList,
     ListItem
 } from "@chakra-ui/react";
+import {isImage} from "../auxiliar"
 
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons
@@ -37,9 +38,8 @@ import { BiEraser} from "react-icons/bi";
 
 
 
-
 function  NewsArticleCard ({news, ...props}){
-
+    const {register, handleSubmit, watch, formState: {errors}}= useForm();
     //let { id } = useParams(news.id);
     const LastModifBySymbol = chakra(BiEraser);
     const CreateBySymbol = chakra(RiNewspaperLine);
@@ -52,6 +52,7 @@ function  NewsArticleCard ({news, ...props}){
 
     const [textColor, setTextColor]=useState("black");
 
+    
     useEffect(()=>{
         if(news.deleted){
             setTextColor("gray")
@@ -66,12 +67,27 @@ function  NewsArticleCard ({news, ...props}){
             {/* <GridItem colSpan={1}> */}
                 <Square size={["100px","250px","250px"]} >            
                     <VStack display='flex' justifyContent="right"  alignItems="right"  >
+                    {console.log(isImage(news.image))}
                     {news.deleted?
                     (<Box>
                     <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
-                    <Image src={news.image} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} style={{opacity: 0.2}} />
+                    {/* <Image src={isImage(news.image)} alt={news.title.slice(0,10)} h={["100px","250px","250px"]}  /> */}
+                    <Image style={{opacity: 0.2}}
+                        alt={news.title.slice(0,10)} 
+                        h={["100px","250px","250px"]} 
+                        src={ watch === undefined || watch.length === 0
+                            ? 'https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg'
+                            : news.image
+                        }                       
+                    />
                     </Box>)
-                    : <Image src={news.image} alt={news.title.slice(0,10)} h={["100px","250px","250px"]} />
+                    : <Image alt={news.title.slice(0,10)} 
+                        h={["100px","250px","250px"]} 
+                        src={ watch === undefined || watch.length === 0
+                            ? 'https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg'
+                            : news.image
+                    }                       
+                    />
                     }
                     
                     </VStack>
@@ -173,7 +189,7 @@ function  NewsArticleCard ({news, ...props}){
                     </Box>
                 </Box>
                 <Box>
-                    
+
                 </Box>
             {/* </GridItem> */}
             </Flex>

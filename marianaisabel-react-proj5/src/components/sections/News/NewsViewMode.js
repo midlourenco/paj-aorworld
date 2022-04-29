@@ -97,15 +97,19 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                 <Table >
                     <Thead>
                     <Tr>
-                        <Th>Titulo</Th>
-                        <Th>Criado por:</Th>
+                        <Th>{intl.formatMessage({id: 'form_field_title'})}</Th>
+                        <Th>{intl.formatMessage({id: 'create_by'})}</Th>
+                        <Th><FormattedMessage id={"form_field_create_date"}/></Th>
+
                     </Tr>
                     </Thead>
                     <Tbody>
                     {currentNews.projects.map((p)=>(
-                        <Tr key={p}>
+                        <Tr key={p.id}>
                         <Td>{p.title}</Td>
                         <Td>{p.createdBy.firstName}</Td>
+                        <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
+
                     </Tr>
                     ))}  
                     </Tbody>
@@ -119,13 +123,13 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
             <Table >
                 <Thead>
                 <Tr>
-                    <Th>Nome</Th>
-                    <Th>Email:</Th>
+                    <Th>{intl.formatMessage({id: 'user_name'})}</Th>
+                    <Th>{intl.formatMessage({id: 'form_field_email'})}</Th>
                 </Tr>
                 </Thead>
                 <Tbody>
                 {currentNews.users.map((u)=>(
-                    <Tr key={u}>
+                    <Tr key={u.id}>
                     <Td>{u.firstName + " " + u.lastName}</Td>
                     <Td>{u.email}</Td>
                 </Tr>

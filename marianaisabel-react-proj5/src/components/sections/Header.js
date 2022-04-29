@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { FormattedMessage} from "react-intl";
+import {FormattedMessage ,useIntl} from "react-intl";
 import {
   Flex,
   Text,
@@ -21,15 +21,67 @@ import {
 import { CloseIcon, HamburgerIcon , ChevronDownIcon} from '@chakra-ui/icons'
 import config from "../../config";
 import useFetch from 'use-http';
-import { setSelectedLanguage, setLoggedUser, setAppError} from '../../redux/actions'
+import { setSelectedLanguage, setLoggedUser, setAppError,setNotifNumber} from '../../redux/actions'
 import { connect } from "react-redux";
 
 
 
 
 
-function Header ({setSelectedLanguage,language,token="", firstName, userPriv, unreadNotif, setLoggedUser,setAppError,...props}) {
+function Header ({setSelectedLanguage,setNotifNumber,language,token="", firstName, userPriv, unreadNotif, setLoggedUser,setAppError,...props}) {
   const [isloginDone, setLogin]= useState(false);
+  const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
+  const { get, post, del, response, loading, error } = useFetch();
+  const intl = useIntl();
+
+    useEffect( async() => {
+      console.log("houve refresh vou buscar notif " );    
+      setRestResponse("");
+
+      const unreadNotif = await get("notifications/unreadNumber")
+      if (response.ok) {
+         console.log(unreadNotif)
+         setNotifNumber(unreadNotif);
+         setAppError("");
+      } else if(response.status==401) {
+          console.log("credenciais erradas? " + error)
+          setRestResponse("NOK");
+          setAppError('error_fetch_login_401');
+      }else{
+          console.log("houve um erro no fetch " + error)
+          if(error && error!=""){
+              setAppError(  error );
+              setRestResponse("NOK");
+          }else{
+              setAppError(  "error_fetch_generic" );
+              setRestResponse("NOK");
+          }
+      }
+
+      const myProfile = await get('/users/myProfile');
+      if (response.ok) {
+          localStorage.setItem("firstName", myProfile.firstName);
+          localStorage.setItem("privileges", myProfile.privileges);
+          setLoggedUser(myProfile.firstName, myProfile.privileges, myProfile.id)
+          setAppError("");
+      } else if(response.status==401) {
+          console.log("credenciais erradas? " + error)
+          setAppError('error_fetch_generic');
+      }else{
+          console.log("houve um erro no fetch " + error)
+          if(error && error!=""){
+          setAppError(  error);
+          }else{
+              setAppError(  "error_fetch_generic" );
+          }
+      }
+
+
+
+
+
+
+  },[])
 
 
   useEffect( () => {
@@ -185,7 +237,7 @@ const mapStateToProps = state => {
 };
 
 
-export default  connect(mapStateToProps, {setSelectedLanguage, setLoggedUser,setAppError}) (Header);
+export default  connect(mapStateToProps, {setSelectedLanguage,setNotifNumber, setLoggedUser,setAppError}) (Header);
 
 
 

@@ -27,7 +27,6 @@
 
     "form_field_create_date":"Data de criação",
     "form_field_read":"Marcar como lida",
-  
 
     "sign_up":"Registar",
     "login":"Entrar",
@@ -47,11 +46,14 @@
     "project":"Projecto",
     "block":"Bloquear",
     "unblock":"Desbloquear",
+    "desassociate":"Desassociar",
+    "actions":"Acções",
 
     "tooltip_block":"Bloquear pedido de registo",
     "tooltip_aprove_as_member":"Aprovar registo como MEMBRO",
     "tooltip_aprove_as_admin":"Aprovar registo como ADMIN",
     "tooltip_unblock_user":"Desbloquear utilizador (utilizador irá para lista de aprovação)",
+    "tooltip_desassociate":"Desassociar-me deste conteúdo",
 
     "_back_to_projects": "< Voltar aos Projectos",
     "_back_to_news": "< Voltar às Notícias",
@@ -83,7 +85,11 @@
     "create_by":"Criado por",
     "date":"em {d, date}",
     "only_date":"{d, date}",
-    
+    "user_name":"Nome do Utilizador",
+    "my_projects":"Projectos criados",
+    "my_news":"Notícias criados",
+    "personal_details": "Destalhes pessoais",
+
     "our_team": "A nossa equipa", 
     "where_are_we": "Onde estamos?",
     

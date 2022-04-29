@@ -434,6 +434,60 @@ public class NewsBean implements Serializable {
 		return newssDTOResp;
 	}
 	
+	/////*******************************************************************************************
+	
+	public ArrayList<NewsDTOResp> getAllNonDeletedAssocNewssFromUser(User createdBy){
+		ArrayList<NewsDTOResp> newssDTOResp =new ArrayList<NewsDTOResp> ();
+		
+		List<News> newss =  newsDao.getAllNonDeletedAssocNewssFromUser(createdBy);
+		
+		for (News news : newss) {
+			newssDTOResp.add(NewsDao.convertEntityToDTOResp(news));
+		}
+		
+		return newssDTOResp;
+	}
+	
+	public ArrayList<NewsDTOResp> getOnlyPublicNonDeletedAssocNewssFromUser(User createdBy){
+		ArrayList<NewsDTOResp> newssDTOResp =new ArrayList<NewsDTOResp> ();
+		
+		List<News> newss =  newsDao.getOnlyPublicNonDeletedAssocNewssFromUser(createdBy);
+		
+		for (News news : newss) {
+			newssDTOResp.add(NewsDao.convertEntityToDTOResp(news));
+		}
+		
+		return newssDTOResp;
+	}
+	
+	
+	
+	
+	
+	public ArrayList<NewsDTOResp> getAllAssocNewssMarkedAsDeletedFromUser(User createdBy){
+		ArrayList<NewsDTOResp> newssDTOResp =new ArrayList<NewsDTOResp> ();
+		
+		List<News> newss =  newsDao.getAllAssocNewssMarkedAsDeletedFromUser(createdBy);
+		
+		for (News news : newss) {
+			newssDTOResp.add(NewsDao.convertEntityToDTOResp(news));
+		}
+		
+		return newssDTOResp;
+	}
+
+	
+	public ArrayList<NewsDTOResp> getOnlyPublicAssocNewssMarkedAsDeletedFromUser(User createdBy){
+		ArrayList<NewsDTOResp> newssDTOResp =new ArrayList<NewsDTOResp> ();
+		
+		List<News> newss =  newsDao.getOnlyPublicAssocNewssMarkedAsDeletedFromUser(createdBy);
+		
+		for (News news : newss) {
+			newssDTOResp.add(NewsDao.convertEntityToDTOResp(news));
+		}
+		
+		return newssDTOResp;
+	}
 	
 	
 	

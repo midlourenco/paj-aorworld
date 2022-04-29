@@ -102,10 +102,11 @@ function Login ({setLoginOK,setAppError,setLoggedUser,setNotifNumber,...props}) 
             //const myProfile =response.data;
                 localStorage.setItem("firstName", myProfile.firstName);
                 localStorage.setItem("privileges", myProfile.privileges);
+                localStorage.setItem("userId", myProfile.id);
                 //setLoginOK(authString.Authorization);
                 setFirstName(myProfile.firstName);
                 setMyPrivileges(myProfile.privileges);
-                setLoggedUser(myProfile.firstName, myProfile.privileges)
+                setLoggedUser(myProfile.firstName, myProfile.privileges, myProfile.id)
                 setAppError("");
             } else if(response.status==401) {
                 console.log("credenciais erradas? " + error)

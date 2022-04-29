@@ -30,11 +30,20 @@ function getToken(){
     }
 }
 
-
+function getUserId(){
+    let userIdLS= localStorage.getItem("userId");
+    console.log("name da LS " + userIdLS)
+    if (userIdLS!=null){
+        return userIdLS;
+    }else {  
+        return ""
+    }
+}
 const initialState = {
     firstName: getfirstName(),
     userPriv:getPrivileges(),
     token:getToken(),
+    userId:getUserId(),
   };
 
   /**
@@ -53,12 +62,14 @@ export default function(state = initialState, action) {
         case GET_LOGGED_USER:{
             return {...state, 
             firstName: action.payload.firstName,
+            userId: action.payload.userId,
             userPriv: action.payload.userPriv}
         }
         case LOGOUT_OK: {
             return {...state, 
                 firstName: action.payload.firstName,
                 userPriv: action.payload.userPriv,
+                userId: action.payload.userId,
                 token:action.payload.token}   
         }
         default: {

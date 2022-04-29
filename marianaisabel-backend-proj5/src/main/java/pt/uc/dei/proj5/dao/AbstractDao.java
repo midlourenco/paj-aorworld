@@ -201,5 +201,25 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 		}
 
 	}
+	
+	public Long countTotalEntity() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<T> c = criteriaQuery.from(clazz);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+//		criteriaQuery.where(em.getCriteriaBuilder().and(
+//				em.getCriteriaBuilder().equal(c.get("user"), user),
+//				em.getCriteriaBuilder().equal(c.get("alreadyRead"), false)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+	
+	
 
 }

@@ -27,7 +27,7 @@
 
     "form_field_create_date":"Create date",
     "form_field_read":"Mark as read",
-  
+
     "sign_up":"Sing up",
     "login":"Login",
     "logout": "Logout",
@@ -46,11 +46,14 @@
     "project":"Project",
     "block":"Block",
     "unblock":"Unblock",
+    "desassociate":"Desassociate",
+    "actions":"Actions",
 
     "tooltip_block":"Block register request",
     "tooltip_aprove_as_member":"Aprove register as MEMBER",
     "tooltip_aprove_as_admin":"Aprove register as ADMIN",
     "tooltip_unblock_user":"Unblock user (user will go to approval list)",
+    "tooltip_desassociate":"Desassociate myself from this publication",
 
     "_back_to_projects": "< Back to Projects",
     "_back_to_news": "< Back to News",
@@ -73,7 +76,12 @@
     "create_by":"Create by",
     "date":"on {d, date}",
     "only_date":"{d, date}",
-    
+    "user_name":"User Name",
+    "my_projects":"Created projects ",
+    "my_news":"Created news",
+    "my_deleted_news":"Deleted news ",
+    "my_deleted_projects":"Deleted projects ",
+    "personal_details": "Personal details",
     "last_notifications": "Notifications since your last visit:",
     "all_notifications": "All notifications:",
     "users_to_approve": "Users to approve:",

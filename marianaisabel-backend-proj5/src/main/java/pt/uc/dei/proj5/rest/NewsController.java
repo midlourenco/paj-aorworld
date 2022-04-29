@@ -290,6 +290,70 @@ public class NewsController {
 	}
 
 	
+	
+	
+	
+	
+	
+	
+	@GET
+	@Path("associatedToUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllNewsAssocToUser (@QueryParam("user")  int userId, @HeaderParam("Authorization") String authString) {
+		System.out.println("Entrei em getAllNews por user no controller com token? : " + authString);
+		System.out.println("vou querer os news do userid " + userId);
+		User user = userService.getUserEntitybyId(userId); //mesmo que um user tenha sido apagado podemos ver os seus news
+		System.out.println(user);
+		ArrayList<NewsDTOResp> resultado=new ArrayList<>();
+		
+		System.out.println("Entrei em getAllNews no controller com token? : " + authString);
+		try {
+			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou não tem token válido																				
+				if(userId>0) {
+					resultado = newsService.getOnlyPublicNonDeletedAssocNewssFromUser(user);	
+				}else {
+					resultado = null;
+				}
+				if (resultado != null) {
+					return Response.ok(resultado).build();
+				} else {
+					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
+				}			
+			}
+			
+			
+			if(userId>0) {
+				resultado = newsService.getAllNonDeletedAssocNewssFromUser(user);	
+			}else {
+				resultado = null;
+
+			}
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
+			}
+
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			if(userId>0) {
+				resultado = newsService.getOnlyPublicNonDeletedAssocNewssFromUser(user);	
+			}else {
+				resultado = null;
+			}
+	
+			if (resultado != null) {
+				return Response.ok(resultado).build();
+			} else {
+				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
+			}
+		} catch (Exception e) {
+			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
+		}
+
+	}
+
+	
 	/**
 	 * Apagar (marcar para apagado, soft delete) de um noticia 
 	 * @param newsId
@@ -385,7 +449,7 @@ public class NewsController {
 	 * @return
 	 */
 	@POST
-	@Path("{newsId: [0-9]+}/associateMySelf")
+	@Path("{newsId: [0-9]+}/associateToMySelf")
 //	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response associateLoggedUserToNews(@PathParam("newsId") int newsId, @HeaderParam("Authorization") String authString) {

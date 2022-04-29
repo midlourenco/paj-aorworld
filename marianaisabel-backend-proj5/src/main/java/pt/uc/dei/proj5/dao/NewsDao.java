@@ -8,12 +8,14 @@ import java.util.Set;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 import pt.uc.dei.proj5.dto.NewsDTO;
 import pt.uc.dei.proj5.dto.NewsDTOResp;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.dto.UserDTOResp;
+import pt.uc.dei.proj5.entity.Keyword;
 import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
@@ -237,6 +239,131 @@ public class NewsDao extends AbstractDao<News> {
 		}
 	}
 
+	
+	
+	/**
+	 * devolve as News de um user que nao estejam marcados para apagar
+	 * (independentemente de terem sido ou nao partilhados)
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<News> getAllNonDeletedAssocNewssFromUser(User assocTo) {
+
+		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+		Root<User> user = criteriaQuery.from(User.class);
+		Join<User, News> news = user.join("news");
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(user.get("id"), assocTo.getId()),
+				em.getCriteriaBuilder().equal(news.get("deleted"), false)));
+
+		try{
+			List<News> resultado= em.createQuery(criteriaQuery.select(news)).getResultList();
+			return resultado;
+
+
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	/**
+	 * devolve as News públicos de um user que nao estejam marcados para apagar
+	 * (independentemente de terem sido ou nao partilhados)
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<News> getOnlyPublicNonDeletedAssocNewssFromUser(User assocTo) {
+		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+		Root<User> user = criteriaQuery.from(User.class);
+		Join<User, News> news = user.join("news");
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(user.get("id"), assocTo.getId()),
+				em.getCriteriaBuilder().equal(news.get("deleted"), false),
+				em.getCriteriaBuilder().equal(news.get("visibility"), true)));
+
+		try{
+			List<News> resultado= em.createQuery(criteriaQuery.select(news)).getResultList();
+			return resultado;
+
+
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * devolve as News de um user que estejam marcados para apagar
+	 * (independentemente de terem sido ou nao partilhados)
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<News> getAllAssocNewssMarkedAsDeletedFromUser(User assocTo) {
+		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+		Root<User> user = criteriaQuery.from(User.class);
+		Join<User, News> news = user.join("news");
+		criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(user.get("id"), assocTo.getId()),
+				em.getCriteriaBuilder().equal(news.get("deleted"), true)));
+
+		try{
+			List<News> resultado= em.createQuery(criteriaQuery.select(news)).getResultList();
+			return resultado;
+
+
+		}catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * devolve as News publicos de um user que estejam marcados para apagar
+	 * (independentemente de terem sido ou nao partilhados)
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<News> getOnlyPublicAssocNewssMarkedAsDeletedFromUser(User assocTo) {
+		
+			final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+			Root<User> user = criteriaQuery.from(User.class);
+			Join<User, News> news = user.join("news");
+			criteriaQuery.select(news).where(em.getCriteriaBuilder().and(
+					em.getCriteriaBuilder().equal(user.get("id"), assocTo.getId()),
+					em.getCriteriaBuilder().equal(news.get("deleted"), true),
+					em.getCriteriaBuilder().equal(news.get("visibility"), true)));
+
+			try{
+				List<News> resultado= em.createQuery(criteriaQuery.select(news)).getResultList();
+				return resultado;
+
+
+			}catch (EJBException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * devolve as News que estejam marcados para apagar de visibilidade publica
 	 * (independentemente de terem sido ou nao partilhados)
