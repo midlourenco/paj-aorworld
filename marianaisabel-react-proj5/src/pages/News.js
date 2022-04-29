@@ -220,7 +220,7 @@ function  News (){
             }
             }else{
            
-                const deletedNews =  await get('keywords/'+selectedKeyword+'/news/deletedList')
+                const deletedNews =  await get('keywords/'+selectedKeyword+'/news/deletedNews')
                 if (response.ok) {
                     console.log(deletedNews)
                     setDeletedNews(deletedNews)
