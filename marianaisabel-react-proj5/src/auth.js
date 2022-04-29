@@ -5,16 +5,16 @@
  */
  export function getAuthString(){
     // return  "49f4110f-4f24-450a-bab7-aae9775e98b4";
-   return sessionStorage.getItem("Authorization");
+   return localStorage.getItem("Authorization");
  }
  
  
  /**
-  * função que devolve informção do username da pessoa logada
+  * função que devolve informção do user ID da pessoa logada
   * @returns 
   */
- export function getMyUsername(){
+ export function getMyUserId(){
    //  return  "admin";
-       return sessionStorage.getItem("username");
+       return localStorage.getItem("userId");
  }
    

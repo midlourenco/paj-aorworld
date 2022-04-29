@@ -35,11 +35,9 @@ function setAppError(error){
 * @returns 
  */
 function Dashboard({errorTopBar,...props}) {
-    const { get, post, del, response, loading, error } = useFetch();
+    //const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     let navigate = useNavigate();
-    const { id } = useParams();
-    console.log(id)
 
 
     /**** *******************************************STATE******************************************************** */
@@ -63,7 +61,7 @@ function Dashboard({errorTopBar,...props}) {
     const [totalKeywords, setTotalKeywords]=useState("--");
 
     
-    console.log(error);
+    console.log(errorTopBar);
     useEffect(()=>{
         connectWSGeneralDashboard((evt)=>{
             console.log("info do ws do dashboard geral" + evt.data)

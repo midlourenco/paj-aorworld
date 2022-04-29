@@ -35,6 +35,7 @@ function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,tok
   const intl = useIntl();
 
     useEffect( async() => {
+      if(token && (token!="" ||token.length)){
       console.log("houve refresh vou buscar notif " );    
       setRestResponse("");
 
@@ -75,15 +76,17 @@ function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,tok
               setAppError(  "error_fetch_generic" );
           }
       }
-
-
-
-
-
+      console.log("dentro da navbar existe um token vou alterar para login");    
+      setLogin(true);
+    }else{
+      setLogin(false);
+    }
 
   },[])
 
-
+/**
+ * A função seguinte está paensada para alterar o botao de entrar para logged user assim que haja um logout e o token altere
+ */
   useEffect( () => {
     if(token && (token!="" ||token.length)){
       console.log("dentro da navbar existe um token vou alterar para login");    
@@ -94,6 +97,10 @@ function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,tok
     }
     
   }, [token])
+
+  /**
+ * A função seguinte está paensada para alterar o número de notificações por ler qdo este é alterado
+ */
   useEffect( () => {
       console.log("houve alteraçoes no num de notificaçoes faz re-render " + unreadNotif);    
  
