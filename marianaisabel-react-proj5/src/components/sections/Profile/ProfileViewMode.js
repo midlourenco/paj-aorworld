@@ -209,7 +209,7 @@ const ProfileViewMode=({isAdmin, userId, currentUser,editMode,handleEditClick,ha
                 </Box>
                 <Box>
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
-                    <EditableControls isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
+                    <EditableControls colorScheme={"teal.500"} isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
                 </Box>
             
             
@@ -272,7 +272,7 @@ const ProfileViewMode=({isAdmin, userId, currentUser,editMode,handleEditClick,ha
                     </Table>
                     </TableContainer>
 
-                    <Heading as="h3" ><FormattedMessage id={"deleted_projects"} />:</Heading>
+                    <Heading as="h3" ><FormattedMessage id={"my_deleted_projects"} />:</Heading>
 
 <TableContainer>
 <Table >

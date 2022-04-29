@@ -60,10 +60,11 @@ function EditableControls({isAdmin,editMode,handleEditClick,handleCancelClick, h
            {/* <CancelButton handleCancelClick={handleCancelClick} intl={intl}/>
             <SubmitButton intl={intl} /> */}
             
+            {/* background="whiteAlpha.900" */}
         </ButtonGroup>
          ): (
         <Flex justifyContent='center'>
-            <Button size='sm' rightIcon={<EditIcon />} background="whiteAlpha.900"  onClick={handleEditClick} > <FormattedMessage id={"edit"} defaultMessage={"-"}/></Button>
+            <Button mt={6} size='md' rightIcon={<EditIcon />}  colorScheme={"teal"} onClick={handleEditClick} > <FormattedMessage id={"edit"} defaultMessage={"-"}/></Button>
         </Flex>
         )
     }
