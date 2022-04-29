@@ -12,7 +12,7 @@ import {
     chakra,
     Link as ChakraLink,
     Box,
-    Image,
+    Image ,
     Square,
     Badge,
     Text,
@@ -28,7 +28,7 @@ import {
     UnorderedList,
     ListItem
 } from "@chakra-ui/react";
-import {isImage} from "../auxiliar"
+// import {isImage} from "../auxiliar"
 
 //simbolos dentro da caixa de texto do login
 //https://react-icons.github.io/react-icons
@@ -67,27 +67,32 @@ function  NewsArticleCard ({news, ...props}){
             {/* <GridItem colSpan={1}> */}
                 <Square size={["100px","250px","250px"]} >            
                     <VStack display='flex' justifyContent="right"  alignItems="right"  >
-                    {console.log(isImage(news.image))}
+                    {/* {console.log(isImage(news.image))} */}
                     {news.deleted?
                     (<Box>
-                    <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
+                    <Image
+                        style={{opacity: 0.2}}
+                        src={news.image}
+                        fallbackSrc="images/logo.png"
+                        h={["100px","250px","250px"]} 
+                        alt={news.title.slice(0,10)} 
+                    />
                     {/* <Image src={isImage(news.image)} alt={news.title.slice(0,10)} h={["100px","250px","250px"]}  /> */}
-                    <Image style={{opacity: 0.2}}
+                    {/* <Image style={{opacity: 0.2}}
                         alt={news.title.slice(0,10)} 
                         h={["100px","250px","250px"]} 
                         src={ watch === undefined || watch.length === 0
                             ? 'https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg'
                             : news.image
                         }                       
-                    />
+                    /> */}
                     </Box>)
-                    : <Image alt={news.title.slice(0,10)} 
-                        h={["100px","250px","250px"]} 
-                        src={ watch === undefined || watch.length === 0
-                            ? 'https://upload.wikimedia.org/wikipedia/commons/7/78/Image.jpg'
-                            : news.image
-                    }                       
-                    />
+                    : <Image
+                            src={news.image}
+                            fallbackSrc="images/logo.png"
+                            h={["100px","250px","250px"]} 
+                            alt={news.title.slice(0,10)} 
+                        />
                     }
                     
                     </VStack>
@@ -95,10 +100,14 @@ function  NewsArticleCard ({news, ...props}){
 
                 {/* </GridItem>
                 <GridItem colSpan={2}> */}
-            
+                
                 <Box p='6' >
+                {news.deleted?
+                <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
+                :null
+                }
                     <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'column']} >
-                        
+                   
                         <Box
                             color='gray.500'
                             fontWeight='semibold'
@@ -177,7 +186,9 @@ function  NewsArticleCard ({news, ...props}){
                         </ChakraLink>
 
                         <Box  >
+                        <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px">
                             {news.description}
+                            </Text>
                         </Box>
 
                         <Box display='flex' flexDirection={"row"} justifyContent="center" mt='6' alignItems='center' >

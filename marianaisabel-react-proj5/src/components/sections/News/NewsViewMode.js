@@ -45,13 +45,14 @@ import {
     TableCaption,
     TableContainer,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
+import { ExternalLinkIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
 
 const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
     const intl = useIntl();
+    const navigate = useNavigate();
     return (<Box>
      
         <Stack
@@ -87,11 +88,16 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                     {/* <Badge mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentNews.privileges || "-"} defaultMessage={"-"} /></Badge> */}
                 </Box>
                 <Box mb={7}>
-                <Text fontSize='2xl' fontWeight={"bold"}> {currentNews.title }</Text>
-                    <Text fontSize='lg'> {currentNews.description }</Text>
+                    <Text fontSize='2xl' my="30px" me="10px" fontWeight={"bold"}> {currentNews.title }</Text>
+                    <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px" > {currentNews.description }</Text>
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentNews.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.createdDate)}} />  </Text> </Text>
+                    {currentNews.lastModifDate!=="" && currentNews.lastModifDate!=null ?
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px">  {currentNews.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.lastModifDate)}} />   </Text>     </Text>                         
+                    :null
+                    }
                 </Box>
                 
-                <Heading as="h3" ><FormattedMessage id={"associated_projects"} />:</Heading>
+                <Heading mt={10} as="h3" ><FormattedMessage id={"associated_projects"} />:</Heading>
 
                 <TableContainer>
                 <Table >
@@ -103,12 +109,13 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
 
                     </Tr>
                     </Thead>
-                    <Tbody>
+                    <Tbody >
                     {currentNews.projects.map((p)=>(
                         <Tr key={p.id}>
-                        <Td>{p.title}</Td>
-                        <Td>{p.createdBy.firstName}</Td>
-                        <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
+                        <Td color="gray.500" fontWeight="400"  >{p.title}</Td>
+                        <Td color="gray.500" fontWeight="400" >{p.createdBy.firstName}</Td>
+                        <Td color="gray.500" fontWeight="400"  textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
+                        <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
 
                     </Tr>
                     ))}  
@@ -117,7 +124,7 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                 </TableContainer>
             
 
-            <Heading as="h3" ><FormattedMessage id={"associated_users"} />:</Heading>
+            <Heading mt={10} as="h3" ><FormattedMessage id={"associated_users"} />:</Heading>
 
             <TableContainer>
             <Table >
@@ -130,8 +137,10 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                 <Tbody>
                 {currentNews.users.map((u)=>(
                     <Tr key={u.id}>
-                    <Td>{u.firstName + " " + u.lastName}</Td>
-                    <Td>{u.email}</Td>
+                    <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
+                    <Td color="gray.500" fontWeight="400" >{u.email}</Td>
+                    <IconButton onClick={()=> navigate("/users/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+
                 </Tr>
                 ))}  
                 </Tbody>

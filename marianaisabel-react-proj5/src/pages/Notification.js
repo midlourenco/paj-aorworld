@@ -50,7 +50,7 @@ function setAppError(error){
 function Notification({setNotifNumber,errorTopBar="", ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
 
     /**** *******************************************STATE******************************************************** */

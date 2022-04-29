@@ -16,13 +16,14 @@ import {
     Table,
     Thead,
     Tbody,
+    IconButton,
     Tfoot,
     Tr,
     Th,
     Td,
     TableContainer,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
@@ -36,6 +37,7 @@ function setAppError(error){
 
 const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
+    const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
     //const [projectsCreatedByMe,setProjectsCreatedByMe]=useState([])
@@ -96,6 +98,9 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                             <Button maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserTimes />} > <FormattedMessage id={"desassociate"}/></Button>
                         </Tooltip>
                     </ButtonGroup>
+                    </Td>
+                    <Td>
+                        <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
                     </Td>
                 </Tr>
                 ))}  

@@ -58,7 +58,7 @@ function setAppError(error){
 function AllNotifications({userPriv, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const scroll = { x: 1600, y: 300 };
     // const BlockedUserSymbol = chakra(FaUserTimes);
     // const CheckedUserSymbol = chakra(FaUserCheck);

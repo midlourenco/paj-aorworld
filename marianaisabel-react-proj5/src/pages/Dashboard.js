@@ -40,7 +40,7 @@ function setAppError(error){
 function Dashboard({errorTopBar,...props}) {
     //const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
 
 
     /**** *******************************************STATE******************************************************** */

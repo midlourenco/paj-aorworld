@@ -45,12 +45,13 @@ import {
     TableCaption,
     TableContainer,
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
+import { ExternalLinkIcon, CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
 
 const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
+    const navigate = useNavigate();
     const intl = useIntl();
     return (<Box>
      
@@ -87,11 +88,16 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
                     {/* <Badge mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentProject.privileges || "-"} defaultMessage={"-"} /></Badge> */}
                 </Box>
                 <Box mb={7}>
-                <Text fontSize='2xl' fontWeight={"bold"}> {currentProject.title }</Text>
-                    <Text fontSize='lg'> {currentProject.description }</Text>
+                    <Text fontSize='2xl' my={"30px"} me="10px" fontWeight={"bold"}> {currentProject.title }</Text>
+                    <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentProject.description }</Text>
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentProject.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.createdDate)}} />  </Text> </Text>
+                    {currentProject.lastModifDate!=="" && currentProject.lastModifDate!=null ?
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px">  {currentProject.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.lastModifDate)}} />   </Text>     </Text>                      
+                    :null
+                    }
                 </Box>
-                
-                <Heading as="h3" ><FormattedMessage id={"associated_news"} />:</Heading>
+
+                <Heading pt={10} as="h3" ><FormattedMessage id={"associated_news"} />:</Heading>
 
                     <TableContainer>
                     <Table >
@@ -106,10 +112,12 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
                         <Tbody>
                         {currentProject.associatedNews.map((n)=>(
                             <Tr key={n.id}>
-                            <Td>{n.title}</Td>
-                            <Td>{n.createdBy.firstName}</Td>
-                            <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
-
+                            <Td color="gray.500" fontWeight="400" >{n.title}</Td>
+                            <Td color="gray.500" fontWeight="400" >{n.createdBy.firstName}</Td>
+                            <Td color="gray.500" fontWeight="400"  textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
+                            <Td>
+                                <IconButton onClick={()=> navigate("/news/"+n.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                            </Td>
                         </Tr>
                         ))}  
                         </Tbody>
@@ -130,8 +138,12 @@ const ProjectViewMode=({isAdmin, currentProject,editMode,handleEditClick,handleC
                     <Tbody>
                     {currentProject.associatedUsers.map((u)=>(
                         <Tr key={u.id}>
-                        <Td>{u.firstName + " " + u.lastName}</Td>
-                        <Td>{u.email}</Td>
+                        <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
+                        <Td color="gray.500" fontWeight="400" >{u.email}</Td>
+                        <Td>
+                            <IconButton onClick={()=> navigate("/users/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                        </Td>
+
                     </Tr>
                     ))}  
                     </Tbody>

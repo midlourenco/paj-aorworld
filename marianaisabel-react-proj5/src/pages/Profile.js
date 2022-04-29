@@ -64,7 +64,7 @@ const defaultUser=  {"id": "",
 function Profile({userPriv,errorTopBar="",...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     //const [currentId, setCurrentId]=useState("");
     const { id } = useParams();
     console.log("id no url: ", id)
@@ -92,6 +92,7 @@ function Profile({userPriv,errorTopBar="",...props}) {
 
     //const onSubmit = (data, e) => console.log(data, e);
     async function onSubmit (data, e) {
+        
         const updateUser = await post('users/'+currentUser.id, data)
         if (response.ok) {
             console.log("user atualizado com sucesso ", updateUser);

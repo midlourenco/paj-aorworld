@@ -87,9 +87,15 @@ function  ProjectCard ({project, ...props}){
             {project.deleted?
             (<Box>
             <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
-            <Image src={project.image} alt="project_image" h='255px' style={{opacity: 0.2}} />
+            <Image 
+            src={project.image} 
+            fallbackSrc="images/logo.png"
+            alt="project_image" 
+            h='255px' 
+            style={{opacity: 0.2}} 
+            />
             </Box>)
-            : <Image src={project.image} alt="project_image" h='255px'  />
+            : <Image src={project.image} alt="project_image" h='255px' fallbackSrc="images/logo.png"  />
             }
             </HStack>
             

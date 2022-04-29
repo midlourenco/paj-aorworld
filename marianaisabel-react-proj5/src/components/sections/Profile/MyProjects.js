@@ -21,7 +21,7 @@ import {
     TableCaption,
     TableContainer,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon, CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
@@ -35,7 +35,7 @@ function setAppError(error){
 
 const MyProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
     const [projectsCreatedByMe,setProjectsCreatedByMe]=useState([])
@@ -93,8 +93,7 @@ const MyProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEd
                     <Td>{p.createdBy.firstName}</Td>
                     <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
                     <Td>
-                    <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
-                    
+                        <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
                     </Td>
                 </Tr>
                 ))}  

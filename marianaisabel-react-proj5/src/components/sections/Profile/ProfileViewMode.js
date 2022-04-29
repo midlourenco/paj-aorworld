@@ -57,6 +57,7 @@ import DeletedProjects from './DeletedProjects';
 import MyNews from './MyNews';
 import AssocNews from './AssocNews';
 import DeletedNews from './DeletedNews';
+import UserDetails from './UserDetails';
 
 //TODO: 
 function setAppError(error){
@@ -65,10 +66,13 @@ function setAppError(error){
 
 const ProfileViewMode=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick, ...props})=>{
     const intl = useIntl();
+    const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
  
-
+// useEffect(()=>{
+//     window.scrollTo(0, 0)
+// },[])
 
 
 
@@ -90,18 +94,7 @@ const ProfileViewMode=({errorTopBar="",isAdmin, userId, currentUser,editMode,han
             flexDirection={"column"}
             justifyContent={"space-between"}
             >
-                <Heading mt={10} as="h3" ><FormattedMessage id={"personal_details"} />:</Heading>
-
-                <Box>
-                {/* {console.log(currentUser)}                             */}
-                    <Text fontSize='2xl' fontWeight={"bold"}> {currentUser.firstName +" "+ currentUser.lastName}</Text>
-                    <Text as="i" fontSize='md'mt={1}  > {currentUser.email }</Text>
-                    <br />
-                    <Badge mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentUser.privileges || "-"} defaultMessage={"-"} /></Badge>
-                </Box>
-                <Box>
-                    <Text fontSize='lg'> {currentUser.biography  }</Text>
-                </Box>
+                <UserDetails currentUser={currentUser} />
                 <Box>
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
                     <EditableControls isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />

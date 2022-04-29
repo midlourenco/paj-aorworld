@@ -29,18 +29,19 @@ import {
     Editable,
     EditableInput,
     EditableTextarea,
+    IconButton,
     EditablePreview,
     ButtonGroup,
-    IconButton,
     useEditableControls,
     InputRightElement
 } from "@chakra-ui/react";
-import { CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
+import { ExternalLinkIcon, EditIcon } from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
+
 const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCancelClick, handleDeleteClick, handleSubmit, onSubmit, onError, errors, register})=>{
-    
+    const navigate = useNavigate();
     const intl = useIntl();
     return (<Box>
         <Stack

@@ -73,7 +73,7 @@ const defaultNews = {
 function SingleNews( {userPriv,errorTopBar="",...props}){
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     //const [currentId, setCurrentId]=useState("");
     const { id } = useParams();
     console.log(id)

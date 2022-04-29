@@ -57,7 +57,7 @@ function setAppError(error){
 function UsersToApprove({userPriv, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     const { id } = useParams();
     console.log(id)
     const scroll = { x: 1600, y: 300 };

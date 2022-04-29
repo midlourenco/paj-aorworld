@@ -3,7 +3,7 @@
 // //
 
 import { extendTheme } from "@chakra-ui/react";
-import { mode, Styles, createBreakpoints } from "@chakra-ui/theme-tools";
+// import { mode, Styles, createBreakpoints } from "@chakra-ui/theme-tools";
 import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 
 // // const breakpoints = createBreakpoints({
