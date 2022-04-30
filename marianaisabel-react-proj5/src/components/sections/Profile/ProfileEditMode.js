@@ -108,12 +108,17 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
                 // <Button isDisabled={true}  mr='-px'><FormattedMessage id={currentUser.privileges || "-"}  defaultMessage={"-"} /></Button>
                 // <IconButton aria-label='EditRole' icon={<EditIcon />} />
                 // </ButtonGroup>)
+
+                //placeholder={currentUser.privileges }
+
                 (currentUser.privileges =="ADMIN" ?
-                    (<Select {...register("privileges", {value: currentUser.privileges})} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } defaultValue={currentUser.privileges }   >
+                    (<Select {...register("privileges", {value: currentUser.privileges})} name="privilegesSelect" mt={4} mb={6} size='sm' icon={<EditIcon />} defaultValue={currentUser.privileges }   >
+                       <option value='ADMIN' selected={true} >{intl.formatMessage({id: 'ADMIN'})}</option>
                         <option value='MEMBER'>{intl.formatMessage({id: 'MEMBER'})}</option>
                     </Select>)
-                    :(<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } defaultValue={currentUser.privileges }  >
+                    :(<Select {...register("privileges",  {value: currentUser.privileges})}  name="privilegesSelect" mt={4} mb={6} size='sm' icon={<EditIcon />}  defaultValue={currentUser.privileges }  >
                         <option value='ADMIN'>{intl.formatMessage({id: 'ADMIN'})}</option>
+                        <option value='MEMBER'  selected={true}>{intl.formatMessage({id: 'MEMBER'})}</option>
                     </Select>)
                 )
                 :<Select {...register("privileges")} mt={4} mb={6} size='sm' icon={<EditIcon />} placeholder={currentUser.privileges } defaultValue={currentUser.privileges } isDisabled={true} ></Select>
