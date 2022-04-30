@@ -3,8 +3,7 @@ import { useState , useEffect} from "react";
 import {  Link, useParams } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
-import {FormattedMessage} from "react-intl";
-
+import {FormattedMessage ,useIntl} from "react-intl";
 import {
     Flex,
     Button,
@@ -39,6 +38,7 @@ import { BiEraser} from "react-icons/bi";
 
 
 function  NewsArticleCard ({news, ...props}){
+    const intl = useIntl();
     const {register, handleSubmit, watch, formState: {errors}}= useForm();
     //let { id } = useParams(news.id);
     const LastModifBySymbol = chakra(BiEraser);
@@ -118,6 +118,8 @@ function  NewsArticleCard ({news, ...props}){
                             mx='3'
                             alignSelf={"center"}
                             >
+                            <Badge borderRadius='full' px='2' color='yellow' > {news.visibility? intl.formatMessage({id: 'public'}) : intl.formatMessage({id: 'private'}) }   </Badge>
+
                             <Button size='xs' variant='link' onClick={() => {
                                 setOverlay("members") 
                                 onOpen()
@@ -171,7 +173,9 @@ function  NewsArticleCard ({news, ...props}){
                             ))
                         }
                         </HStack>
+                    
                     </Box>
+                
                     <Box color={textColor}>
                         <ChakraLink as={Link} to ={`/news/${id}`}  >
                             <Text fontSize="md"  mt='1'
@@ -191,11 +195,13 @@ function  NewsArticleCard ({news, ...props}){
                             </Text>
                         </Box>
 
+                    
                         <Box display='flex' flexDirection={"row"} justifyContent="center" mt='6' alignItems='center' >
                         {news.lastModifBy  
                         ? <><LastModifBySymbol color="gray.500" /><Text  as='i' fontSize='sm' ml={1}> <FormattedMessage id={"update_by"} />  {news.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.lastModifDate)}} />   </Text> </>
                         : <><CreateBySymbol color="gray.500" /> <Text  as='i' fontSize='sm' ml={1} ><FormattedMessage id={"create_by"} />  {news.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(news.createdDate)}} />  </Text> </>
                         }
+                      
                         </Box>
                     </Box>
                 </Box>

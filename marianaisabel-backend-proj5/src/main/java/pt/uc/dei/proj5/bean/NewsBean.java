@@ -229,9 +229,9 @@ public class NewsBean implements Serializable {
 					System.out.println("adicionei a project ao set");
 				}
 			}
-			if(users.size()>0) {
+		//	if(users.size()>0) {
 				news.setUsers(users);
-			}
+		//	}
 		
 			newsDao.merge(news);
 	
@@ -268,9 +268,9 @@ public class NewsBean implements Serializable {
 				System.out.println("adicionei a project ao set");
 			}
 		}
-		if(projects.size()>0) {
+//		if(projects.size()>0) {
 			news.setProjects(projects);
-		}
+//		}
 		Set<User> users = new HashSet<>();
 		ArrayList<Integer> usersId = newsDTO.getUsers();
 		for (Integer userId : usersId) {
@@ -281,9 +281,9 @@ public class NewsBean implements Serializable {
 				System.out.println("adicionei a project ao set");
 			}
 		}
-		if(users.size()>0) {
+//		if(users.size()>0) {
 			news.setUsers(users);
-		}
+	//	}
 	
 
 		newsDao.merge(news);

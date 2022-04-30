@@ -53,6 +53,8 @@
     "unblock":"Unblock",
     "desassociate":"Desassociate",
     "actions":"Actions",
+    "public": "Public",
+    "private": "Private",
 
     "tooltip_block":"Block register request",
     "tooltip_aprove_as_member":"Aprove register as MEMBER",

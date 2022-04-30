@@ -19,9 +19,10 @@ import {
     TagCloseButton
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
+import { set } from 'react-hook-form';
 
 
-function ContentStep1 ({errors,register,saveInputKeyword, input,keywords, handleAddNewKeyword, handleDeleteTag,...props }){
+function ContentStep1 ({errors,register,nextStep, trigger,saveInputKeyword, input,keywords, setShowStepperButtons, showStepperButtons, handleAddNewKeyword, handleDeleteTag,...props }){
     const intl = useIntl();
     return(<Flex justifyContent={"center"} py={4} width={"100%"}>
       {/* <Text p={1} >step 1 texto </Text> */}
@@ -34,18 +35,22 @@ function ContentStep1 ({errors,register,saveInputKeyword, input,keywords, handle
             width={"100%"}
         >
             <FormControl isInvalid = {errors.title}>
-            <Input {...register("title", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
+            <Input {...register("title", {required: true, setValueAs: (v)=> v.trim()})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
             {(errors.title)? 
                 (<FormErrorMessage><FormattedMessage id={"error_missing_title"}  ></FormattedMessage></FormErrorMessage>)
                 : null 
             }
             </FormControl>
-    
-            <Textarea {...register("description", {required: false})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_description'})}  />
-            
+            <FormControl isInvalid = {errors.description}>
+            <Textarea {...register("description", {required: true, setValueAs: (v)=> v.trim()})} backgroundColor="whiteAlpha.950" placeholder={intl.formatMessage({id: 'form_field_description'})}  />
+            {(errors.description)? 
+                (<FormErrorMessage><FormattedMessage id={"error_missing_description"}  ></FormattedMessage></FormErrorMessage>)
+                : null 
+            }
+            </FormControl>
             <FormControl isInvalid = {errors.keyword}>
             <InputGroup>
-            <Input {...register("keywords", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})}  onChange={saveInputKeyword} value={input} />
+            <Input {...register("keywords", {deps: keywords})} type="text" placeholder={intl.formatMessage({id: 'form_field_keywords'})}  onChange={saveInputKeyword} value={input} />
     
             <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={handleAddNewKeyword}>
@@ -59,7 +64,8 @@ function ContentStep1 ({errors,register,saveInputKeyword, input,keywords, handle
             keywords.map(k => ( 
                 <Tag key={k} m={2}  colorScheme='teal'>
                 <TagLabel>{k}</TagLabel>
-                <TagCloseButton onClick={handleDeleteTag} />
+                <TagCloseButton onClick={()=>handleDeleteTag(k)} />
+               {/* z <TagCloseButton onClick={()=>remove(index)} /> */}
                 </Tag>
             ))} 
             </Box>)
@@ -92,7 +98,23 @@ function ContentStep1 ({errors,register,saveInputKeyword, input,keywords, handle
             }
             
             </FormControl>
-    
+            <Flex width="100%" justify="flex-end">
+            <Button
+                type="button"
+                size="sm"
+                
+                onClick={async () => {
+                    setShowStepperButtons(!showStepperButtons)
+                    const result = await trigger(["title", "description","image"]);
+                    // console.log(result)
+                   
+                    if(result){
+                        nextStep();
+                    }
+                }}
+            > {intl.formatMessage({id: 'next'})} 
+            </Button>
+            </Flex>
             {/* <Button
                 borderRadius={0}
                 type="submit"

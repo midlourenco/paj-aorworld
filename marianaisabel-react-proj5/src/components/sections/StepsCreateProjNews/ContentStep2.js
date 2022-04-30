@@ -12,6 +12,7 @@ import {
     Grid,
     Tag,
     TagLabel,
+    Button,
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
 import useFetch from 'use-http';
@@ -20,10 +21,10 @@ import { connect } from 'react-redux'
 
 
 
-function ContentStep2() {
+function ContentStep2({register,nextStep,prevStep,trigger,...props}) {
     //função para fazer o request ao servidor
     const { get, post, response, loading, error } = useFetch();
-  
+    const intl = useIntl();
     //TODO: 
     function setAppError(error){
     console.log(error)
@@ -64,7 +65,17 @@ function ContentStep2() {
         <FormControl >
             <Grid  templateColumns='repeat(2, 1fr)' >
             {users.map(u => (
-                <Checkbox key={u.id} colorScheme='teal' m={3} >
+                // {...register("checkbox")}
+                <Checkbox  
+                {...register("users", {
+                        valueAsNumber: true
+                        //setValueAs: (v)=> parseInt(v)
+                    }) }  
+                    value={parseInt(u.id)}
+                    key={u.id} 
+                    colorScheme='teal' 
+                    m={3} 
+                    >
                 <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
                     <Avatar
                     src={u.image}
@@ -79,6 +90,19 @@ function ContentStep2() {
             ))}  
             </Grid>        
         </FormControl>
+        <Flex width="100%" justify="flex-end">
+            <Button
+                mr={4}
+                onClick={prevStep}
+                size="sm"
+                variant="ghost"
+            >
+                 {intl.formatMessage({id: 'prev'})} 
+            </Button>
+            <Button size="sm" onClick={nextStep}>
+                {intl.formatMessage({id: 'next'})} 
+            </Button>
+         </Flex>
         </Stack>
     </Flex>
     )

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import {Navigate} from 'react-router-dom'
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
+import useFetch from 'use-http';
 import {FormattedMessage ,useIntl} from "react-intl";
 import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import {
@@ -75,30 +76,39 @@ import RedirectButton from "../components/RedirectButton";
 // ];
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
+  //TODO: 
+  function setAppError(error){
+    console.log(error)
+}
 
 function NewNews() {
     //https://stackoverflow.com/questions/39630620/react-intl-how-to-use-formattedmessage-in-input-placeholder
     const intl = useIntl();
 
 
-
-  const {register, handleSubmit, formState: {errors}}= useForm();
+  const { post, del, response, loading, error } = useFetch();
+  const {register, handleSubmit, trigger, watch, getValues,formState: {errors}}= useForm();
   const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
     initialStep: 0,
   });
+  //   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray<
+  //   newKeywords,
+  //   'keywords' 
+  // >({
+  //   control,
+  //   name: 'keywords',
+  // });
 
   //const onSubmit = values => console.log(values); 
   //const handleSubmit(data){setData(data), console.log(data) )};
 
-  const onSubmit = (data, e) => console.log(data, e);
-  const onError = (errors, e) => console.log(errors, e);
 
 
 
   const [data, setData]= useState("");
   const [restResponse, setRestResponse]=useState("");
   const [scrollDown, setScrollDown]=useState(false)
-
+  const [showStepperButtons, setShowStepperButtons]=useState(false);
 
 
 
@@ -111,7 +121,7 @@ function NewNews() {
   };
   const [keywords, setKeywords] = useState([]);
   const handleAddNewKeyword = ()=>{
-    if(!keywords.includes(input)){
+    if(!keywords.includes(input)&&input.trim()!=""){
       setKeywords(prevState=>[...prevState, input]);
       setInput("")
     }
@@ -119,19 +129,72 @@ function NewNews() {
 
       //**********************************************FUNÇOES AUXIliares*************************************************************************** */
 
-//TODO:
-      const handleDeleteTag = ()=>{
 
+      const handleDeleteTag = (keywordToDelete)=>{
+        console.log("carreguei na cruz da keyword... a eliminar "+keywordToDelete )
+        // keywords.pop(keywordToDelete);
+        setKeywords(keywords.filter((k)=>{
+          if(k==keywordToDelete){
+            return false;
+          }
+          return true;
+        }));
+      }
+   //**********************************************FORMULARIO SUBMIT...*************************************************************************** */
+ 
+    
+      const onSubmit = async(data, e) => {
+        console.log(data, e);
+        data.keywords=keywords;
+
+        const createdNews = await post('news', data)
+        if (response.ok) {
+            console.log("noticia criada com sucesso ", createdNews);
+            setRestResponse("OK");
+            setScrollDown(true);
+            setAppError("");
+           
+          } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setScrollDown(true);
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setRestResponse("NOK");
+                setScrollDown(true);
+                setAppError(  error );
+            }else{
+                setRestResponse("NOK");
+                setScrollDown(true);
+                setAppError(  "error_fetch_generic" );
+            }
+        }
+
+        //response.ok
+        //nextStep
+        //<Flex p={4}>
 
       }
+      const onError = (errors, e) => console.log(errors, e);
+    
+      
   //**********************************************USE EFFECT*************************************************************************** */
  
   /**
+     * use effect À escuta da variável keyword vai permitir que a lista seja actualizada visualmente dp de apagar
+     */
+     useEffect(() => {
+    window.scrollTo(0,document.body.scrollHeight);
+  },[keywords])
+   
+  /**
      * use effect À escuta da variável que obriga ao scroll down
      */
-   useEffect(() => {
-    window.scrollTo(0,document.body.scrollHeight);
-  },[scrollDown])
+  //  useEffect(() => {
+  //   window.scrollTo(0,document.body.scrollHeight);
+  // },[scrollDown])
    
   const content1 =(
     <ContentStep1 
@@ -142,26 +205,38 @@ function NewNews() {
     saveInputKeyword={saveInputKeyword}
     handleAddNewKeyword={handleAddNewKeyword}
     handleDeleteTag={handleDeleteTag}
+    setShowStepperButtons={setShowStepperButtons}
+    showStepperButtons={showStepperButtons}
+    trigger={trigger}
+    nextStep={nextStep}
     ></ContentStep1>
   )
   
   const content2 = (
-    <ContentStep2  />
+    <ContentStep2    
+    register={register}   
+    nextStep={nextStep}
+    prevStep={prevStep}
+    trigger={trigger}
+
+
+    />
   );
 
   const content3 = (
-    <ContentStep3  />
+    <ContentStep3  
+    register={register}   
+    nextStep={nextStep}
+    prevStep={prevStep}
+    trigger={trigger}
+    />
   );
 
   const steps = [
     { label: 'Project Details', content: content1 },
     { label: 'Associate Users', content: content2 },
-    { label: 'Associate Projects', content: content3 },
-  ];
-
-
-
-
+    { label: 'Associate Projects', content: content3 }
+  ]
   //**********************************************RENDER RETURN FUNCÇAO PRINCIPAL*************************************************************************** */
  
   return (
@@ -182,7 +257,9 @@ function NewNews() {
          
          
       >
-    
+            {errors && 'Error!'}
+            {loading && 'Loading...'}
+
         <Heading mt={20}  color="teal.400"> {intl.formatMessage({id: 'create_article'})}</Heading>
         <Box  minW={{ base: "90%", md: "468px" }} width={"xl"}
         maxWidth={"xl"}>
@@ -195,40 +272,47 @@ function NewNews() {
                 </Step>
               ))}
             </Steps>
-        
-            {activeStep === steps.length ? (
-              <Flex p={4}>
-                <Button mx="auto" size="sm"  type="submit">
-                  Criar Notícia
-                </Button>
+            <Flex p={4}>
+              
               </Flex>
-            ) : (
-              <Flex width="100%" justify="flex-end">
-                <Button
-                  isDisabled={activeStep === 0}
-                  mr={4}
-                  onClick={prevStep}
-                  size="sm"
-                  variant="ghost"
-                >
-                  Prev
-                </Button>
-                <Button size="sm" onClick={nextStep}>
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-              </Flex>
-            )}
+
+
+
+
+            {/* { activeStep === steps.length ? (
+                <Flex p={4}>
+                  <Button mx="auto" size="sm"  type="submit">
+                    Criar Notícia
+                  </Button>
+                </Flex>
+              ) : (
+                <Flex width="100%" justify="flex-end">
+                  <Button
+                    isDisabled={activeStep === 0}
+                    mr={4}
+                    onClick={prevStep}
+                    size="sm"
+                    variant="ghost"
+                  >
+                    Prev
+                  </Button>
+                  <Button size="sm" onClick={handleNextStep}>
+                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  </Button>
+                </Flex>
+              )
+            } */}
           </form>
           </Flex>
-          {restResponse=="OK"?
+        {restResponse=="OK"?
         <Text my={5} color="green"> Informação guardada com sucesso </Text>
         : restResponse=="NOK"?
         <Text my={5} color="red"> Houve um problema ao guardar a informação </Text>
         :null
         }
           <Box>
-                <RedirectButton path="/news" description="back_to_news" />
-            </Box>
+              <RedirectButton path="/news" description={intl.formatMessage({id: "_back_to_news" })} />
+          </Box>
         </Box>
       </Stack>
     
@@ -237,3 +321,18 @@ function NewNews() {
 }
 
 export default NewNews;
+
+
+// ideia para keywords existentes Multi select combobox
+// <FormControl p={4}>
+// <FormLabel>
+//   Select Colors and Flavours <Code>size="md" (default)</Code>
+// </FormLabel>
+// <Select
+//   isMulti
+//   name="colors"
+//   options={groupedOptions}
+//   placeholder="Select some colors..."
+//   closeMenuOnSelect={false}
+// />
+// </FormControl>

@@ -54,6 +54,8 @@
     "unblock":"Desbloquear",
     "desassociate":"Desassociar",
     "actions":"Acções",
+    "public": "Público",
+    "private": "Privado",
 
     "tooltip_block":"Bloquear pedido de registo",
     "tooltip_aprove_as_member":"Aprovar registo como MEMBRO",

@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {  Link, useParams } from "react-router-dom";
-
-
-import {FormattedMessage} from "react-intl";
-
+import {FormattedMessage ,useIntl} from "react-intl";
 import {
     Flex,
     Heading,
@@ -45,7 +42,7 @@ import { RiNewspaperLine} from "react-icons/ri";
 import { BiEraser} from "react-icons/bi";
 
 function  ProjectCard ({project, ...props}){
-
+    const intl = useIntl();
     // const project = {
     //     id: projectElem.id,
     //     image: projectElem.image,
@@ -84,6 +81,7 @@ function  ProjectCard ({project, ...props}){
         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' backgroundColor="white" margin={5}> 
 
             <HStack display='flex' justifyContent="center"  alignItems="center">
+           
             {project.deleted?
             (<Box>
             <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
@@ -111,6 +109,8 @@ function  ProjectCard ({project, ...props}){
                         mb='3'
                         alignSelf={"center"}
                         >
+                             <Badge borderRadius='full' px='2' color='yellow' > {project.visibility?intl.formatMessage({id: 'public'}) : intl.formatMessage({id: 'private'}) }   </Badge>
+
                         {/* {project.associatedUsers.length} <FormattedMessage id={"members"} />   &bull; {project.associatedNews.length} <FormattedMessage id={"associatedNews"} />   */}
                         <Button size='xs' variant='link' onClick={() => {
                             setOverlay("members") 

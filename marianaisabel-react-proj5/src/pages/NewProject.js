@@ -153,11 +153,15 @@ function NewProject() {
   )
   
   const content2 = (
-    <ContentStep2  />
+    <ContentStep2  
+    register={register}   
+    />
   );
 
   const content3 = (
-    <ContentStep3  />
+    <ContentStep3  
+    register={register}   
+    />
   );
 
   const steps = [

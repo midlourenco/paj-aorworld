@@ -5,6 +5,7 @@ import {
     Stack,
     FormControl,
     Checkbox,
+    Button,
     Grid,
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
@@ -14,10 +15,10 @@ import { connect } from 'react-redux'
 
 
 
-function ContentStep3() {
+function ContentStep3({register,nextStep,prevStep,trigger,...props}) {
     //função para fazer o request ao servidor
     const { get, post, response, loading, error } = useFetch();
-  
+    const intl = useIntl();
     //TODO: 
     function setAppError(error){
     console.log(error)
@@ -58,12 +59,34 @@ function ContentStep3() {
             <FormControl>
                 <Grid  templateColumns='repeat(2, 1fr)' >
                     {news.map(n => (
-                    <Checkbox colorScheme='teal' m={3} key={n.id} >
+                    <Checkbox  
+                    {...register("projects", {
+                        valueAsNumber: true
+                    }) }  
+                    value={n.id}  
+                    colorScheme='teal' 
+                    m={3} 
+                    key={n.id} 
+                    >
                         {n.title}
                     </Checkbox>        
                     ))}          
                 </Grid>
             </FormControl>
+
+            <Flex width="100%" justify="flex-end">
+            <Button
+                mr={4}
+                onClick={prevStep}
+                size="sm"
+                variant="ghost"
+            >
+                 {intl.formatMessage({id: 'prev'})} 
+            </Button>
+            <Button size="sm" type="submit" > 
+                {intl.formatMessage({id: 'create_news'})} 
+            </Button>
+         </Flex>
         </Stack>
     </Flex>
     )

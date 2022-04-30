@@ -305,6 +305,7 @@ function  News (){
                             }}
                         />
                     </InputGroup>
+
                     <Button 
                         leftIcon={<AddIcon />} 
                         colorScheme='teal' 
@@ -314,6 +315,7 @@ function  News (){
                     >
                         <Link to="/news/new"><FormattedMessage id="new_news"></FormattedMessage></Link>
                     </Button>
+                    
                 </Flex>
 
                 <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={5}>
@@ -357,7 +359,7 @@ function  News (){
             width={"100%"}
             >
                 {console.log("antes do map")}
-            {news.map(n =>(<NewsArticleCard news={n} key={n.id} ></NewsArticleCard>))}
+            {news.slice().reverse().map(n =>(<NewsArticleCard news={n} key={n.id} ></NewsArticleCard>))}
                
             </VStack>
             : !loading?
