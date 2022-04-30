@@ -45,6 +45,7 @@
     "edit_profile":"Edit Profile",
     "delete": "Delete",
     "deleted": "Removed",
+    "undelete":"Undelete",
     "news_article": "Article",
     "project":"Project",
     "block":"Block",
@@ -108,8 +109,11 @@
     "associated_projects": "Associated Projects",
     "associated_news": "Associated News",
     "associated_users": "Associated Users",
+    "visibility":"Visibility",
+
     "our_team": "Our team", 
     "where_are_we": "Where are we?",
+  
     
     "error_missing_password":"You must specify a password",
     "error_missing_email":"Email is required",

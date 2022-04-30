@@ -51,10 +51,11 @@ function NewProject() {
   //const onSubmit = values => console.log(values); 
   //const handleSubmit(data){setData(data), console.log(data) )};
   const onSubmit = async(data, e) => {
-    console.log(data, e);
+    
     data.keywords=keywords;
     if(data.visibility=="public")  data.visibility=true;
     if(data.visibility=="private")  data.visibility=false;
+    console.log(data, e);
 
     const createdNews = await post('projects', data)
     if (response.ok) {

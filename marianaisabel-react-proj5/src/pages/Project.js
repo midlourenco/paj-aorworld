@@ -64,14 +64,14 @@ const defaultProject = {
     createdDate: '',
     lastModifBy: [],
     lastModifDate: '',
-    visibility: true,
-    deleted: true
+    visibility: false,
+    deleted: false
 }
 
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function Project( {userPriv,errorTopBar="",...props}){
+function Project( {userPriv,errorTopBar="",userId,...props}){
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
@@ -89,41 +89,7 @@ function Project( {userPriv,errorTopBar="",...props}){
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
     const [scrollDown, setScrollDown]=useState(false)
 
-    /**** ****************************************FORM*********************************************************** */
-    //fuções que chamos ao submeter o formulário de edição
-    const {register, handleSubmit, formState: {errors}}= useForm();
-    //const onSubmit = values => console.log(values); 
-    //const handleSubmit(data){setData(data), console.log(data) )};
 
-    //const onSubmit = (data, e) => console.log(data, e);
-    async function onSubmit (data, e) {
-        const updateUser = await post('users/'+currentProject.id, data)
-        if (response.ok) {
-            console.log("user atualizado com sucesso ", updateUser);
-            setRestResponse("OK");
-            setScrollDown(true);
-            setAppError("");
-           
-        } else if(response.status==401) {
-            console.log("credenciais erradas? " + error)
-            setRestResponse("NOK");
-            setScrollDown(true);
-            setAppError('error_fetch_login_401');
-        }else{
-            console.log("houve um erro no fetch " + error)
-            if(error && error!=""){
-                setRestResponse("NOK");
-                setScrollDown(true);
-                setAppError(  error );
-            }else{
-                setRestResponse("NOK");
-                setScrollDown(true);
-                setAppError(  "error_fetch_generic" );
-            }
-        }
-    }
-    
-    const onError = (errors, e) => console.log(errors, e);
 
     /**** ******************************************OTHER BUTTONS********************************************************* */
    
@@ -204,9 +170,9 @@ function Project( {userPriv,errorTopBar="",...props}){
     /**
      * use effect À escuta da variável que obriga ao scroll down
      */
-    useEffect(() => {
-        window.scrollTo(0,document.body.scrollHeight);
-      },[scrollDown])
+    // useEffect(() => {
+    //     window.scrollTo(0,document.body.scrollHeight);
+    //   },[scrollDown])
        
 
 
@@ -248,6 +214,7 @@ function Project( {userPriv,errorTopBar="",...props}){
 
             <ProjectViewMode  
             isAdmin={isAdmin}
+            userId={userId}
             currentProject= {currentProject} 
             editMode={editMode} 
             handleEditClick={handleEditClick} 
@@ -262,11 +229,8 @@ function Project( {userPriv,errorTopBar="",...props}){
             handleEditClick={handleEditClick}
             handleDeleteClick={handleDeleteClick}
             handleCancelClick={handleCancelClick} 
-            onError={onError} 
-            onSubmit={onSubmit} 
-            handleSubmit={handleSubmit} 
-            register={register}  
-            errors={errors}
+          
+      
             />
             )
         }
@@ -287,6 +251,7 @@ function Project( {userPriv,errorTopBar="",...props}){
 
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
+            userId:state.loginOK.userId,
             errorTopBar: state.errorMsg.errorTopBar
     };
   };

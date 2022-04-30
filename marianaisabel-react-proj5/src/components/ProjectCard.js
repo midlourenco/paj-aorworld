@@ -158,11 +158,11 @@ function  ProjectCard ({project, ...props}){
                     
                     <HStack  mb='5' alignSelf={"center"}>
                     {project.deleted?
-                        project.keywords.map(n => (
-                        <Badge borderRadius='full' px='2' color='grey' key={n} >{n}</Badge>
+                        project.keywords.map(k => (
+                        <Badge borderRadius='full' px='2' color='grey' key={k} >{k}</Badge>
                         ))
-                    : project.keywords.map(n => (
-                        <Badge borderRadius='full' px='2' colorScheme='teal' key={n} >{n}</Badge>
+                    : project.keywords.map(k => (
+                        <Badge borderRadius='full' px='2' colorScheme='teal' key={k} >{k}</Badge>
                         ))
                     }
                     </HStack>

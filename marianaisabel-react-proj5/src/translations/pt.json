@@ -46,6 +46,7 @@
     "edit_profile":"Editar Perfil",
     "delete": "Apagar",
     "deleted": "Eliminado",
+    "undelete":"Recuperar",
     "news_article": "Notícia",
     "project":"Projecto",
     "block":"Bloquear",
@@ -108,6 +109,8 @@
     "personal_details": "Destalhes pessoais",
     "my_deleted_news":"Noticias apagadas ",
     "my_deleted_projects":"Projectos apagados ",
+    "visibility":"Visibility",
+
 
     "our_team": "A nossa equipa", 
     "where_are_we": "Onde estamos?",
