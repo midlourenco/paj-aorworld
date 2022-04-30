@@ -38,8 +38,6 @@
     "login":"Entrar",
     "logout": "Terminar Sessão",
     "forgot_password":"Esqueceu-se da palavra-passe?",
-    "create_new_account":"Registar uma conta nova?",
-    "create_account":"Criar conta",
     "login_existent_account":"Entrar com conta existente",
     "reset_password":"Repor palavra-passe",
     "edit":"Editar",
@@ -56,6 +54,9 @@
     "actions":"Acções",
     "public": "Público",
     "private": "Privado",
+    "next": "Seguinte",
+    "prev": "Anterior",
+    "finish": "Terminar",
 
     "tooltip_block":"Bloquear pedido de registo",
     "tooltip_aprove_as_member":"Aprovar registo como MEMBRO",
@@ -69,8 +70,11 @@
 
     "go_to":"Go to content",
 
+    "create_new_account":"Registar uma conta nova?",
+    "create_account":"Criar conta",
     "create_project":"Criar projecto",
     "create_article":"Criar notícia",
+    "create_news": "Criar notícia",
 
     "last_notifications": "Notificações desde a sua última visita:",
     "all_notifications": "Todas as notificações:",
@@ -112,6 +116,7 @@
     "error_missing_email":"Email é obrigatório",
     "error_missing_first_name":"Nome é obrigatório",
     "error_missing_last_name":"Apelido é obrigatório",
+    "error_missing_description":"Deve colocar uma descrição",
     "error_wrong_credencials":"Email e/ou palavra-passe não está correcto ",
     "error_wrong_password":"As palavras-passe não coincidem ",
     "error_pageNotFound_404":"Esta página não exsite",
@@ -119,10 +124,12 @@
     "error_noResults_projects": "Não existem projectos associados a esta keyword",
     "error_noResults_news": "Não existem notícias associados a esta keyword",
     "error_on_updating":"Houve um problema ao guardar a informação ",
-    "sucess_on_updating":"Informação guardada com sucesso",
-
-    "error_fetch_generic":"Houve um problema, por favor tente mais tarde",
+    "error_rest_response" :"Houve um problema ao guardar a informação ",
+    "error_fetch_generic": "Houve um problema, por favor tente mais tarde",
     "error_fetch_login_401": "Ocorreu um problema ao tentar fazer login. Por favor, verifique as suas credênciais e tente novamente.",
+
+    "sucess_on_updating":"Informação guardada com sucesso",
+    "sucess_rest_response":"Informação guardada com sucesso",
 
 
     "intro_home": "A requalificação e renovação de competências profissionais na área das novas tecnologias e competências digitais é um grande desafio.",

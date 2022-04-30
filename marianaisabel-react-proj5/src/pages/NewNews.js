@@ -104,10 +104,10 @@ function NewNews() {
         data.keywords=keywords;
         if(data.projects==0)  data.projects=[];
         if(data.users==0)  data.users=[];
-        if(data.visibility=="1")  data.visibility=true;
-        if(data.visibility=="2")  data.visibility=false;
+        if(data.visibility=="public")  data.visibility=true;
+        if(data.visibility=="private")  data.visibility=false;
       
-        console.log(data, e);
+        console.log(data, e,data.visibility);
         const createdNews = await post('news', data)
         if (response.ok) {
             console.log("noticia criada com sucesso ", createdNews);
@@ -199,8 +199,8 @@ function NewNews() {
 
   const steps = [
     { label: intl.formatMessage({id: 'news_details'}) , content: content1 },
-    { label: intl.formatMessage({id: 'associate_users'}) , content: content2 },
-    { label: intl.formatMessage({id: 'associate_projects'}) , content: content3 }
+    { label: intl.formatMessage({id: 'associated_users'}) , content: content2 },
+    { label: intl.formatMessage({id: 'associated_projects'}) , content: content3 }
   ]
   //**********************************************RENDER RETURN FUNCÇAO PRINCIPAL*************************************************************************** */
  
@@ -237,9 +237,9 @@ function NewNews() {
           </form>
           </Flex>
         {restResponse=="OK"?
-        <Text my={5} color="green"> Informação guardada com sucesso </Text>
+        <Text my={5} color="green">{intl.formatMessage({id: 'sucess_rest_response'})} </Text>
         : restResponse=="NOK"?
-        <Text my={5} color="red"> Houve um problema ao guardar a informação </Text>
+        <Text my={5} color="red"> {intl.formatMessage({id: 'error_rest_response'})}: {error} </Text>
         :null
         }
           <Box>

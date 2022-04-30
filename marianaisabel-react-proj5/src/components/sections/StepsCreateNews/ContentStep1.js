@@ -27,7 +27,7 @@ import { set } from 'react-hook-form';
 function ContentStep1 ({errors, register,nextStep, trigger,saveInputKeyword, input,keywords, setShowStepperButtons, showStepperButtons, handleAddNewKeyword, handleDeleteTag,...props }){
     const intl = useIntl();
 
-    const [visibility, setVisibility] = useState("1")
+    const [visibility, setVisibility] = useState("public")
 
     return(    <Flex justifyContent={"center"} py={4} width={"100%"}>
       {/* <Text p={1} >step 1 texto </Text> */}
@@ -114,8 +114,8 @@ function ContentStep1 ({errors, register,nextStep, trigger,saveInputKeyword, inp
             name="visibility"
             >
                 <Stack direction='row'>
-                    <Radio  {...register("visibility")}  value="1">{intl.formatMessage({id: 'public'})}</Radio>
-                    <Radio  {...register("visibility")}  value="2">{intl.formatMessage({id: 'private'})}</Radio>
+                    <Radio  {...register("visibility")}  value="public">{intl.formatMessage({id: 'public'})}</Radio>
+                    <Radio  {...register("visibility")}  value="private">{intl.formatMessage({id: 'private'})}</Radio>
                 </Stack>
             </RadioGroup>
            

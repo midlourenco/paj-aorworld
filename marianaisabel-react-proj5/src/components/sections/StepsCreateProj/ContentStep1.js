@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {FormattedMessage ,useIntl} from "react-intl";
 import {
     Flex,
@@ -16,15 +16,20 @@ import {
     Tag,
     TagLabel,
     InputRightElement,
-    TagCloseButton
+    TagCloseButton,
+    Radio, 
+    RadioGroup ,
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
 import { set } from 'react-hook-form';
 
 
-function ContentStep1 ({errors,register,nextStep, trigger,saveInputKeyword, input,keywords, setShowStepperButtons, showStepperButtons, handleAddNewKeyword, handleDeleteTag,...props }){
+function ContentStep1 ({errors, register,nextStep, trigger,saveInputKeyword, input,keywords, setShowStepperButtons, showStepperButtons, handleAddNewKeyword, handleDeleteTag,...props }){
     const intl = useIntl();
-    return(<Flex justifyContent={"center"} py={4} width={"100%"}>
+
+    const [visibility, setVisibility] = useState("public")
+
+    return(    <Flex justifyContent={"center"} py={4} width={"100%"}>
       {/* <Text p={1} >step 1 texto </Text> */}
       {/* <form onSubmit={ handleSubmit (onSubmit, onError)}> */}
         <Stack
@@ -34,6 +39,7 @@ function ContentStep1 ({errors,register,nextStep, trigger,saveInputKeyword, inpu
             boxShadow="md"
             width={"100%"}
         >
+            
             <FormControl isInvalid = {errors.title}>
             <Input {...register("title", {required: true, setValueAs: (v)=> v.trim()})} type="text" placeholder={intl.formatMessage({id: 'form_field_title'})} />
             {(errors.title)? 
@@ -92,39 +98,49 @@ function ContentStep1 ({errors,register,nextStep, trigger,saveInputKeyword, inpu
                 alt='project_Image'
             /> */}
     
-            {(errors.password)? 
+            {(errors.image)? 
                 (<FormErrorMessage><FormattedMessage id={"error_wrong_image"}  ></FormattedMessage></FormErrorMessage>)
                 : null 
             }
             
             </FormControl>
+
+        
+                
+            <FormControl >  
+            <RadioGroup 
+            onChange={setVisibility} 
+            value={visibility}
+            name="visibility"
+            >
+                <Stack direction='row'>
+                    <Radio  {...register("visibility")}  value="public">{intl.formatMessage({id: 'public'})}</Radio>
+                    <Radio  {...register("visibility")}  value="private">{intl.formatMessage({id: 'private'})}</Radio>
+                </Stack>
+            </RadioGroup>
+           
+            
+            </FormControl>
+                
+
             <Flex width="100%" justify="flex-end">
             <Button
-                type="button"
+                type="submit" 
                 size="sm"
                 
                 onClick={async () => {
                     setShowStepperButtons(!showStepperButtons)
-                    const result = await trigger(["title", "description","image"]);
+                    const result = await trigger(["title", "description","image", "visibility"]);
                     // console.log(result)
                    
                     if(result){
                         nextStep();
                     }
                 }}
-            > {intl.formatMessage({id: 'next'})} 
+            > {intl.formatMessage({id: 'create_project'})} 
             </Button>
             </Flex>
-            {/* <Button
-                borderRadius={0}
-                type="submit"
-                variant="solid"
-                colorScheme="teal"
-                width="full"
-                // onClick={console.log("carreguei em login")}
-            >
-                {intl.formatMessage({id: 'create_project'})} 
-            </Button> */}
+        
     
         </Stack>
     {/* </form> */}

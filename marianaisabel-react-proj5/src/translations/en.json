@@ -37,8 +37,6 @@
     "login":"Login",
     "logout": "Logout",
     "forgot_password":"Forgot password?",
-    "create_new_account":"Create a new account?",
-    "create_account":"Create account",
     "login_existent_account":"Login with existent account",
     "reset_password":"Reset password",
     "edit":"Edit",
@@ -55,6 +53,9 @@
     "actions":"Actions",
     "public": "Public",
     "private": "Private",
+    "next": "Next",
+    "prev": "Prev",
+    "finish": "Finish",
 
     "tooltip_block":"Block register request",
     "tooltip_aprove_as_member":"Aprove register as MEMBER",
@@ -68,8 +69,12 @@
 
     "go_to":"Go to content",
 
+    "create_new_account":"Create a new account?",
+    "create_account":"Create account",
     "create_project":"Create project",
-    "create_article":"Create article",
+    "create_article":"Create news article",
+    "create_news": "Create news",
+
 
     "new_news":"New Article",
     "new_project": " New Project",
@@ -110,19 +115,22 @@
     "error_missing_email":"Email is required",
     "error_missing_first_name":"First name is required",
     "error_missing_last_name":"Last name is required",
+    "error_missing_description":"You must specify a description",
     "error_wrong_credencials":"Email and/or password are not correct",
     "error_wrong_password":"The passwords don't match ",
     "error_pageNotFound_404":"This page does not exist",
     "error_wrong_image": "This URL is not from an image",
     "error_noResults_projects": "There are not any project associated to this keyword",
     "error_noResults_news": "There are not any news associated to this keyword",
+    "error_rest_response" :"There was a problem saving information ",
     "error_on_updating":"There was a problem during updating information ",
-    "sucess_on_updating":"Information updated with success",
-
-
     "error_fetch_generic":"There was a problem, please try again later",
     "error_fetch_login_401": "There was one problem during login. Please check your email and password, and try again",
-   
+
+    "sucess_on_updating":"Information updated with success",
+    "sucess_rest_response":"Information updated with success",
+
+
     
     "intro_home": "The requalification and renewal of professional skills in the area of new technologies and digital skills is a major challenge.",
     "-":"-",

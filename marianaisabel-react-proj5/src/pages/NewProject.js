@@ -33,10 +33,17 @@ function NewProject() {
  //função para fazer o request ao servidor
  const { get, post, response, loading, error } = useFetch();
 
- //função para o stepper
- const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
-  initialStep: 0,
-});
+
+  //********************************************** UseStates*************************************************************************** */
+
+  const [data, setData]= useState("");
+  const [restResponse, setRestResponse]=useState("");
+  const [scrollDown, setScrollDown]=useState(false)
+  const [input, setInput] = useState([]); //input para as keywords
+  const [keywords, setKeywords] = useState([]);// lista com as keywords
+
+
+
   //**********************************************FORMULARIO*************************************************************************** */
 
   //função de gestão dos dados do formulário
@@ -46,14 +53,16 @@ function NewProject() {
   const onSubmit = async(data, e) => {
     console.log(data, e);
     data.keywords=keywords;
+    if(data.visibility=="public")  data.visibility=true;
+    if(data.visibility=="private")  data.visibility=false;
 
-    const createdNews = await post('news', data)
+    const createdNews = await post('projects', data)
     if (response.ok) {
-        console.log("noticia criada com sucesso ", createdNews);
+        console.log("projecto criada com sucesso ", createdNews);
         setRestResponse("OK");
         setScrollDown(true);
         setAppError("");
-        nextStep();
+     
        
       } else if(response.status==401) {
         console.log("credenciais erradas? " + error)
@@ -81,28 +90,18 @@ function NewProject() {
   const onError = (errors, e) => console.log(errors, e);
 
 
-  //**********************************************others UseStates*************************************************************************** */
+    //**********************************************FUNÇOES KEYWORDS*************************************************************************** */
+    
+    const saveInputKeyword = e => {
+      setInput(e.target.value);
+    };
 
-  const [data, setData]= useState("");
-  const [restResponse, setRestResponse]=useState("");
-  const [scrollDown, setScrollDown]=useState(false)
-
-
-  //**********************************************PESQUISA KEYWORDS*************************************************************************** */
-  const [input, setInput] = useState([]);
-  const saveInputKeyword = e => {
-    setInput(e.target.value);
-  };
-  const [keywords, setKeywords] = useState([]);
-  const handleAddNewKeyword = ()=>{
-    if(!keywords.includes(input)){
-      setKeywords(prevState=>[...prevState, input]);
-      setInput("")
+    const handleAddNewKeyword = ()=>{
+      if(!keywords.includes(input)){
+        setKeywords(prevState=>[...prevState, input]);
+        setInput("")
+      }
     }
-  }
-
-    //**********************************************FUNÇOES AUXIliares*************************************************************************** */
-
 
     const handleDeleteTag = (keywordToDelete)=>{
       console.log("carreguei na cruz da keyword... a eliminar "+keywordToDelete )
@@ -124,38 +123,7 @@ function NewProject() {
   },[scrollDown])
 
 
-   //**********************************************GESTAO DOS STEPPERS *************************************************************************** */
-
-  const content1 =(
-    <ContentStep1 
-    errors ={errors} 
-    register={register} 
-    input={input}
-    keywords={keywords}
-    saveInputKeyword={saveInputKeyword}
-    handleAddNewKeyword={handleAddNewKeyword}
-    handleDeleteTag={handleDeleteTag}
-    nextStep={nextStep}
-    ></ContentStep1>
-  )
   
-  // const content2 = (
-  //   <ContentStep2  
-  //   register={register}   
-  //   />
-  // );
-
-  // const content3 = (
-  //   <ContentStep3  
-  //   register={register}   
-  //   />
-  // );
-
-  const steps = [
-    { label: intl.formatMessage({id: 'project_details'}) , content: content1 },
-
-  ];
-
 
   //**********************************************RENDER RETURN FUNÇAO PRINCIPAL*************************************************************************** */
  
@@ -181,17 +149,87 @@ function NewProject() {
         <Box  minW={{ base: "90%", md: "468px" }} width={"xl"}
         maxWidth={"xl"}>
           <Flex flexDir="column" width="100%">
-          {errors && 'Error!'}
-            {loading && 'Loading...'}
+       
 
           <form onSubmit={ handleSubmit (onSubmit, onError)}>
-            <Steps activeStep={activeStep}>
+
+          {restResponse==""?
+          <ContentStep1 
+            errors ={errors} 
+            register={register} 
+            input={input}
+            keywords={keywords}
+            saveInputKeyword={saveInputKeyword}
+            handleAddNewKeyword={handleAddNewKeyword}
+            handleDeleteTag={handleDeleteTag}
+            
+            ></ContentStep1>
+            : restResponse=="OK"?
+              <Text my={5} color="green">{intl.formatMessage({id: 'sucess_rest_response'})}</Text>
+              : restResponse=="NOK"?
+                <Text my={5} color="red"> {intl.formatMessage({id: 'error_rest_response'})}: {error} </Text>
+                :null
+          }   
+
+           
+          </form>
+          </Flex>
+        {/* //   {restResponse=="OK"?
+        //   <Text my={5} color="green">{intl.formatMessage({id: 'sucess_rest_response'})} </Text>
+        //   : restResponse=="NOK"?
+        //   <Text my={5} color="red"> Houve um problema ao guardar a informação </Text>
+        //   :null
+        // } */}
+          <Box>
+            <RedirectButton path="/projects" description={intl.formatMessage({id: "_back_to_projects" })} />
+          </Box>
+        </Box>
+      </Stack>
+    
+    </Flex>
+  );
+}
+
+export default NewProject;
+
+
+
+
+ //**********************************************GESTAO DOS STEPPERS *************************************************************************** */
+ //função para o stepper
+//  const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
+//   initialStep: 0,
+// });
+
+
+  // const content1 =(
+  //   <ContentStep1 
+  //   errors ={errors} 
+  //   register={register} 
+  //   input={input}
+  //   keywords={keywords}
+  //   saveInputKeyword={saveInputKeyword}
+  //   handleAddNewKeyword={handleAddNewKeyword}
+  //   handleDeleteTag={handleDeleteTag}
+  //   nextStep={nextStep}
+  //   ></ContentStep1>
+  // )
+  
+
+
+  // const steps = [
+  //   { label: intl.formatMessage({id: 'project_details'}) , content: content1 },
+
+  // ];
+
+
+{/* <Steps activeStep={activeStep}>
               {steps.map(({ label, content }) => (
-                <Step label={label} key={label} >
+                <Step label={label} key={label} justifyContent={"center"} >
                   {content}
                 </Step>
               ))}
-            </Steps>
+            </Steps> */}
         
             {/* {activeStep === steps.length ? (
               <Flex p={4}>
@@ -215,22 +253,3 @@ function NewProject() {
                 </Button>
               </Flex>
             )} */}
-          </form>
-          </Flex>
-          {restResponse=="OK"?
-        <Text my={5} color="green"> Informação guardada com sucesso </Text>
-        : restResponse=="NOK"?
-        <Text my={5} color="red"> Houve um problema ao guardar a informação </Text>
-        :null
-        }
-          <Box>
-            <RedirectButton path="/projects" description={intl.formatMessage({id: "_back_to_projects" })} />
-          </Box>
-        </Box>
-      </Stack>
-    
-    </Flex>
-  );
-}
-
-export default NewProject;
