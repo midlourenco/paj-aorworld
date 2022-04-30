@@ -15,7 +15,7 @@ import { connect } from 'react-redux'
 
 
 
-function ContentStep3({register,nextStep,prevStep,trigger,...props}) {
+function ContentStep3({register,nextStep,prevStep,trigger,errors,...props}) {
     //função para fazer o request ao servidor
     const { get, post, response, loading, error } = useFetch();
     const intl = useIntl();
@@ -23,12 +23,12 @@ function ContentStep3({register,nextStep,prevStep,trigger,...props}) {
     function setAppError(error){
     console.log(error)
     }
-    const [news, setNews]=useState([]);
+    const [projects, setProjects]=useState([]);
     useEffect(async()=>{
-        const getNews = await get('/news')
+        const getprojects = await get('/projects')
         if (response.ok) {
-            console.log("dentro do ok do get news vindos do rest - setp3")
-            setNews(getNews);
+            console.log("dentro do ok do get projects vindos do rest - setp3")
+            setProjects(getprojects);
             setAppError("");
             //setLogin(true);
         } else if(response.status==401) {
@@ -46,8 +46,7 @@ function ContentStep3({register,nextStep,prevStep,trigger,...props}) {
     },[])
 
     return (<Flex justifyContent={"center"} py={4}>
-        {error && 'Error!'}
-        {loading && 'Loading...'}
+        
         <Stack
         spacing={4}
         p="1rem"
@@ -56,19 +55,21 @@ function ContentStep3({register,nextStep,prevStep,trigger,...props}) {
         minH={"300px"}
         width={"100%"}
         >
+            {error && 'Error!'}
+            {loading && 'Loading...'}
             <FormControl>
                 <Grid  templateColumns='repeat(2, 1fr)' >
-                    {news.map(n => (
+                    {projects.map(p => (
                     <Checkbox  
                     {...register("projects", {
                         valueAsNumber: true
                     }) }  
-                    value={n.id}  
+                    value={p.id}  
                     colorScheme='teal' 
                     m={3} 
-                    key={n.id} 
+                    key={p.id} 
                     >
-                        {n.title}
+                        {p.title}
                     </Checkbox>        
                     ))}          
                 </Grid>

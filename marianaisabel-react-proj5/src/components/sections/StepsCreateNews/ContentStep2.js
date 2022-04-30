@@ -21,7 +21,7 @@ import { connect } from 'react-redux'
 
 
 
-function ContentStep2({register,nextStep,prevStep,trigger,...props}) {
+function ContentStep2({register,nextStep,prevStep,trigger,errors,...props}) {
     //função para fazer o request ao servidor
     const { get, post, response, loading, error } = useFetch();
     const intl = useIntl();
@@ -52,8 +52,7 @@ function ContentStep2({register,nextStep,prevStep,trigger,...props}) {
     },[])
 
     return(<Flex justifyContent={"center"} py={4}  width={"100%"}>
-        {error && 'Error!'}
-        {loading && 'Loading...'}
+    
     <Stack
     spacing={4}
     p={4}
@@ -61,7 +60,8 @@ function ContentStep2({register,nextStep,prevStep,trigger,...props}) {
     boxShadow="md"
     width={"100%"}
     >
-        
+        {error && 'Error!'}
+        {loading && 'Loading...'}
         <FormControl >
             <Grid  templateColumns='repeat(2, 1fr)' >
             {users.map(u => (

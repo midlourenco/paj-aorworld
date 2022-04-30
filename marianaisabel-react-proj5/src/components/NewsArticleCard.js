@@ -118,8 +118,10 @@ function  NewsArticleCard ({news, ...props}){
                             mx='3'
                             alignSelf={"center"}
                             >
-                            <Badge borderRadius='full' px='2' color='yellow' > {news.visibility? intl.formatMessage({id: 'public'}) : intl.formatMessage({id: 'private'}) }   </Badge>
-
+                            {news.visibility?
+                            <Badge borderRadius='full' px='2' color='teal' > {intl.formatMessage({id: 'public'})  }   </Badge>
+                            : <Badge borderRadius='full' px='2' color='green' > {intl.formatMessage({id: 'private'})  }   </Badge>
+                            }
                             <Button size='xs' variant='link' onClick={() => {
                                 setOverlay("members") 
                                 onOpen()

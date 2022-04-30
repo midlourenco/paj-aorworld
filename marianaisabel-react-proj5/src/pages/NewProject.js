@@ -9,73 +9,20 @@ import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import {
     Flex,
     Heading,
-    Input,
-    Button,
-    InputGroup,
     Stack,
-    HStack,
-    InputLeftElement,
-    chakra,
     Image,
     Box,
     Link,
     Text,
-    Avatar,
-    FormControl,
-    FormHelperText,
-    FormErrorMessage,
-    Checkbox,
-    Textarea,
-    Badge,
-    Tag,
-    TagLabel,
-    Grid,
-    UnorderedList,
-    ListItem,
-    InputRightElement,
-    TagCloseButton
+
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
 import RedirectButton from "../components/RedirectButton";
-import ContentStep1 from "../components/sections/StepsCreateProjNews/ContentStep1"
-import ContentStep2 from "../components/sections/StepsCreateProjNews/ContentStep2"
-import ContentStep3 from "../components/sections/StepsCreateProjNews/ContentStep3"
+import ContentStep1 from "../components/sections/StepsCreateProj/ContentStep1"
+
 import useFetch from 'use-http';
 import { setAppError } from '../redux/actions'
 import { connect } from 'react-redux'
-
-// const users = [
-//   {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-//   {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-//   {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-//   {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-//   {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-//   {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-
-// ];
-
-// const newslist=[
-//   {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
-//   {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
-//   {id:"5555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
-//   {id:"6666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
-//   {id:"9999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
-//   {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"1331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
-// ];
-
-
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
@@ -96,7 +43,41 @@ function NewProject() {
   const {register, handleSubmit, formState: {errors}}= useForm();
   //const onSubmit = values => console.log(values); 
   //const handleSubmit(data){setData(data), console.log(data) )};
-  const onSubmit = (data, e) => console.log(data, e);
+  const onSubmit = async(data, e) => {
+    console.log(data, e);
+    data.keywords=keywords;
+
+    const createdNews = await post('news', data)
+    if (response.ok) {
+        console.log("noticia criada com sucesso ", createdNews);
+        setRestResponse("OK");
+        setScrollDown(true);
+        setAppError("");
+        nextStep();
+       
+      } else if(response.status==401) {
+        console.log("credenciais erradas? " + error)
+        setRestResponse("NOK");
+        setScrollDown(true);
+        setAppError('error_fetch_login_401');
+    }else{
+        console.log("houve um erro no fetch " + error)
+        if(error && error!=""){
+            setRestResponse("NOK");
+            setScrollDown(true);
+            setAppError(  error );
+        }else{
+            setRestResponse("NOK");
+            setScrollDown(true);
+            setAppError(  "error_fetch_generic" );
+        }
+    }
+
+    //response.ok
+    //nextStep
+    //<Flex p={4}>
+
+  }
   const onError = (errors, e) => console.log(errors, e);
 
 
@@ -122,12 +103,17 @@ function NewProject() {
 
     //**********************************************FUNÇOES AUXIliares*************************************************************************** */
 
-//TODO:
-  const handleDeleteTag = ()=>{
 
-
-  }
-
+    const handleDeleteTag = (keywordToDelete)=>{
+      console.log("carreguei na cruz da keyword... a eliminar "+keywordToDelete )
+      // keywords.pop(keywordToDelete);
+      setKeywords(keywords.filter((k)=>{
+        if(k==keywordToDelete){
+          return false;
+        }
+        return true;
+      }));
+    }
   //**********************************************USE FETCH*************************************************************************** */
 
  /**
@@ -149,25 +135,25 @@ function NewProject() {
     saveInputKeyword={saveInputKeyword}
     handleAddNewKeyword={handleAddNewKeyword}
     handleDeleteTag={handleDeleteTag}
+    nextStep={nextStep}
     ></ContentStep1>
   )
   
-  const content2 = (
-    <ContentStep2  
-    register={register}   
-    />
-  );
+  // const content2 = (
+  //   <ContentStep2  
+  //   register={register}   
+  //   />
+  // );
 
-  const content3 = (
-    <ContentStep3  
-    register={register}   
-    />
-  );
+  // const content3 = (
+  //   <ContentStep3  
+  //   register={register}   
+  //   />
+  // );
 
   const steps = [
-    { label: 'Project Details', content: content1 },
-    { label: 'Associate Users', content: content2 },
-    { label: 'Associate News', content: content3 },
+    { label: intl.formatMessage({id: 'project_details'}) , content: content1 },
+
   ];
 
 
@@ -188,14 +174,16 @@ function NewProject() {
           mb="2"
           justifyContent="center"
           alignItems="center"
-         
-         
       >
-    
+
         <Heading mt={20}  color="teal.400"> {intl.formatMessage({id: 'create_project'})}</Heading>
+        
         <Box  minW={{ base: "90%", md: "468px" }} width={"xl"}
         maxWidth={"xl"}>
           <Flex flexDir="column" width="100%">
+          {errors && 'Error!'}
+            {loading && 'Loading...'}
+
           <form onSubmit={ handleSubmit (onSubmit, onError)}>
             <Steps activeStep={activeStep}>
               {steps.map(({ label, content }) => (
@@ -205,7 +193,7 @@ function NewProject() {
               ))}
             </Steps>
         
-            {activeStep === steps.length ? (
+            {/* {activeStep === steps.length ? (
               <Flex p={4}>
                 <Button mx="auto" size="sm"  type="submit">
                   Criar projeto
@@ -226,7 +214,7 @@ function NewProject() {
                   {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
               </Flex>
-            )}
+            )} */}
           </form>
           </Flex>
           {restResponse=="OK"?

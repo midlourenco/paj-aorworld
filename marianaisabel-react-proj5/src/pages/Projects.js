@@ -342,20 +342,11 @@ function  Projects (){
 
             <Grid  templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={3}>
                 {console.log("antes do map")}
-            {projects.map(p =>(<ProjectCard project={p} key={p.id} ></ProjectCard>))}
+            {projects.slice().reverse().map(p =>(<ProjectCard project={p} key={p.id} ></ProjectCard>))}
                 {/* <ProjectCard project={p1}/>
                 <ProjectCard project={p2}/> */}
 
-                {/* <ProjectCard projectElem={p2}/>
-                <ProjectCard projectElem={p2}/>
-                <ProjectCard projectElem={p2}/>
-                <ProjectCard projectElem={p2}/>
-                <ProjectCard projectElem={p2}/>
 
-                <ProjectCard projectElem={p1}/>
-                <ProjectCard projectElem={p1}/>
-                <ProjectCard projectElem={p1}/>
-                <ProjectCard projectElem={p1}/> */}
             </Grid>
             : !loading?
                 (<Text><WarningTwoIcon w={8} h={8} /> <FormattedMessage id={"error_noResults_projects"} /> </Text> )
@@ -380,3 +371,15 @@ function  Projects (){
 
     }
     export default Projects;
+
+
+                    {/* <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+                <ProjectCard projectElem={p2}/>
+
+                <ProjectCard projectElem={p1}/>
+                <ProjectCard projectElem={p1}/>
+                <ProjectCard projectElem={p1}/>
+                <ProjectCard projectElem={p1}/> */}

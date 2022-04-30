@@ -109,8 +109,10 @@ function  ProjectCard ({project, ...props}){
                         mb='3'
                         alignSelf={"center"}
                         >
-                             <Badge borderRadius='full' px='2' color='yellow' > {project.visibility?intl.formatMessage({id: 'public'}) : intl.formatMessage({id: 'private'}) }   </Badge>
-
+                            {project.visibility?
+                            <Badge borderRadius='full' px='2' color='teal' > {intl.formatMessage({id: 'public'})  }   </Badge>
+                            : <Badge borderRadius='full' px='2' color='green' > {intl.formatMessage({id: 'private'})  }   </Badge>
+                            }
                         {/* {project.associatedUsers.length} <FormattedMessage id={"members"} />   &bull; {project.associatedNews.length} <FormattedMessage id={"associatedNews"} />   */}
                         <Button size='xs' variant='link' onClick={() => {
                             setOverlay("members") 

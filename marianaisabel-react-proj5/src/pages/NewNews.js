@@ -10,70 +10,20 @@ import { Step, Steps, useSteps } from 'chakra-ui-steps';
 import {
     Flex,
     Heading,
-    Input,
-    Button,
-    InputGroup,
     Stack,
-    HStack,
-    InputLeftElement,
-    chakra,
     Image,
     Box,
     Link,
     Text,
-    Avatar,
-    FormControl,
-    FormHelperText,
-    FormErrorMessage,
-    Checkbox,
-    Textarea,
-    Badge,
-    Tag,
-    TagLabel,
-    Grid,
-    UnorderedList,
-    ListItem,
-    InputRightElement
+  
 } from "@chakra-ui/react";
 import {  AddIcon } from '@chakra-ui/icons'
-import ContentStep1 from "../components/sections/StepsCreateProjNews/ContentStep1"
-import ContentStep2 from "../components/sections/StepsCreateProjNews/ContentStep2"
-import ContentStep3 from "../components/sections/StepsCreateProjNews/ContentStep3"
+import ContentStep1 from "../components/sections/StepsCreateNews/ContentStep1"
+import ContentStep2 from "../components/sections/StepsCreateNews/ContentStep2"
+import ContentStep3 from "../components/sections/StepsCreateNews/ContentStep3"
 
 import RedirectButton from "../components/RedirectButton";
 
-
-// const users = [
-//   {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-//   {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-//   {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-//   {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-//   {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
-//   {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
-
-// ];
-
-// const projectslist=[
-//   {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
-//   {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
-//   {id:"555555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
-//   {id:"66666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
-//   {id:"99999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
-//   {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"133331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
-//   {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
-
-// ];
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
   //TODO: 
@@ -87,7 +37,13 @@ function NewNews() {
 
 
   const { post, del, response, loading, error } = useFetch();
-  const {register, handleSubmit, trigger, watch, getValues,formState: {errors}}= useForm();
+  const {register, handleSubmit, trigger, watch, getValues,formState: {errors}}= useForm(
+    {defaultValues: {
+      users: [],
+      projects: [],
+    }});
+
+    
   const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
     initialStep: 0,
   });
@@ -144,15 +100,21 @@ function NewNews() {
  
     
       const onSubmit = async(data, e) => {
-        console.log(data, e);
+      
         data.keywords=keywords;
-
+        if(data.projects==0)  data.projects=[];
+        if(data.users==0)  data.users=[];
+        if(data.visibility=="1")  data.visibility=true;
+        if(data.visibility=="2")  data.visibility=false;
+      
+        console.log(data, e);
         const createdNews = await post('news', data)
         if (response.ok) {
             console.log("noticia criada com sucesso ", createdNews);
             setRestResponse("OK");
             setScrollDown(true);
             setAppError("");
+            nextStep();
            
           } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -218,6 +180,8 @@ function NewNews() {
     nextStep={nextStep}
     prevStep={prevStep}
     trigger={trigger}
+    errors ={errors} 
+
 
 
     />
@@ -229,13 +193,14 @@ function NewNews() {
     nextStep={nextStep}
     prevStep={prevStep}
     trigger={trigger}
+    errors ={errors} 
     />
   );
 
   const steps = [
-    { label: 'Project Details', content: content1 },
-    { label: 'Associate Users', content: content2 },
-    { label: 'Associate Projects', content: content3 }
+    { label: intl.formatMessage({id: 'news_details'}) , content: content1 },
+    { label: intl.formatMessage({id: 'associate_users'}) , content: content2 },
+    { label: intl.formatMessage({id: 'associate_projects'}) , content: content3 }
   ]
   //**********************************************RENDER RETURN FUNCÇAO PRINCIPAL*************************************************************************** */
  
@@ -254,16 +219,13 @@ function NewNews() {
           mb="2"
           justifyContent="center"
           alignItems="center"
-         
-         
       >
-            {errors && 'Error!'}
-            {loading && 'Loading...'}
 
         <Heading mt={20}  color="teal.400"> {intl.formatMessage({id: 'create_article'})}</Heading>
         <Box  minW={{ base: "90%", md: "468px" }} width={"xl"}
         maxWidth={"xl"}>
           <Flex flexDir="column" width="100%">
+          
           <form onSubmit={ handleSubmit (onSubmit, onError)}>
             <Steps activeStep={activeStep}>
               {steps.map(({ label, content }) => (
@@ -272,36 +234,6 @@ function NewNews() {
                 </Step>
               ))}
             </Steps>
-            <Flex p={4}>
-              
-              </Flex>
-
-
-
-
-            {/* { activeStep === steps.length ? (
-                <Flex p={4}>
-                  <Button mx="auto" size="sm"  type="submit">
-                    Criar Notícia
-                  </Button>
-                </Flex>
-              ) : (
-                <Flex width="100%" justify="flex-end">
-                  <Button
-                    isDisabled={activeStep === 0}
-                    mr={4}
-                    onClick={prevStep}
-                    size="sm"
-                    variant="ghost"
-                  >
-                    Prev
-                  </Button>
-                  <Button size="sm" onClick={handleNextStep}>
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
-                </Flex>
-              )
-            } */}
           </form>
           </Flex>
         {restResponse=="OK"?
@@ -336,3 +268,62 @@ export default NewNews;
 //   closeMenuOnSelect={false}
 // />
 // </FormControl>
+
+
+            {/* { activeStep === steps.length ? (
+                <Flex p={4}>
+                  <Button mx="auto" size="sm"  type="submit">
+                    Criar Notícia
+                  </Button>
+                </Flex>
+              ) : (
+                <Flex width="100%" justify="flex-end">
+                  <Button
+                    isDisabled={activeStep === 0}
+                    mr={4}
+                    onClick={prevStep}
+                    size="sm"
+                    variant="ghost"
+                  >
+                    Prev
+                  </Button>
+                  <Button size="sm" onClick={handleNextStep}>
+                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  </Button>
+                </Flex>
+              )
+            } */}
+
+
+
+// const users = [
+//   {id:"11111", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"222222",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"33333",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"44444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+//   {id:"55555", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"6666",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"77777",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"555558",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+//   {id:"96666", firstName: 'Mariana', image: "https://bit.ly/dan-abramov" },
+//   {id:"1340",firstName: 'Isabel', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"15551",firstName: 'José', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"124444",firstName: 'Ricardo', image: "https://bit.ly/dan-abramov"  },
+
+// ];
+
+// const projectslist=[
+//   {id:"11111", title: 'hgjk', image: "https://bit.ly/dan-abramov" },
+//   {id:"22222",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"33333",title: 'jk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"44444",title: '5r6tu', image: "https://bit.ly/dan-abramov"  },
+//   {id:"555555", title: '6tuhkl', image: "https://bit.ly/dan-abramov" },
+//   {id:"66666",title: 'hfgvb ', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"7777",title: ' nbm', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"8888",title: 'cnmjh', image: "https://bit.ly/dan-abramov"  },
+//   {id:"99999", title: 'htfjgkhl', image: "https://bit.ly/dan-abramov" },
+//   {id:"11222",title: 'chjgh', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"133331",title: 'chjk', image: "https://bit.ly/sage-adebayo"  },
+//   {id:"12444",title: 'fgjhk', image: "https://bit.ly/dan-abramov"  },
+
+// ];
