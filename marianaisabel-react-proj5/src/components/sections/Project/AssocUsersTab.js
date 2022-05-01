@@ -120,6 +120,7 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     <Tr key={u.id}>
                     <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
+                    <Td color="gray.500" fontWeight="400" >{u.userRoleInProject}</Td>
                     <Td>
                         <IconButton onClick={()=> navigate("/users/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
                     </Td>

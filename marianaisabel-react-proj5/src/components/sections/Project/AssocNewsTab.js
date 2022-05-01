@@ -49,7 +49,10 @@ import { ExternalLinkIcon, CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwo
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
-
+//TODO: 
+function setAppError(error){
+    console.log(error)
+}
 const AssocNewsTab=({isAdmin, currentProject,...props})=>{
     const navigate = useNavigate();
     const intl = useIntl();
