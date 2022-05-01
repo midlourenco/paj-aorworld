@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.dto.ProjectSharingDTO;
 import pt.uc.dei.proj5.dto.UserDTOResp;
+import pt.uc.dei.proj5.dto.UserDTORespSharingProject;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
@@ -210,11 +211,9 @@ public class ProjectController {
 					resultado = projectService.getOnlyPublicProjectsNonDeleted();
 				}
 				//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
-				if (resultado != null) {
+				
 					return Response.ok(resultado).build();
-				} else {
-					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-				}			
+						
 			}
 			
 			
@@ -225,11 +224,9 @@ public class ProjectController {
 
 			}
 			//ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsNonDeleted();
-			if (resultado != null) {
+		
 				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-			}
+			
 
 		} catch (NullPointerException e) {
 			e.printStackTrace();
@@ -240,11 +237,10 @@ public class ProjectController {
 			}
 	
 			//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
-			if (resultado != null) {
+			
 				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-			}
+			
+				
 		} catch (Exception e) {
 			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
 		}
@@ -273,23 +269,18 @@ public class ProjectController {
 				}else {
 					resultado = projectService.getOnlyPublicProjectsNonDeleted();
 				}
-				if (resultado != null) {
+				
 					return Response.ok(resultado).build();
-				} else {
-					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-				}			
+							
 			}
 			if(userId>0) {
 				resultado = projectService.getAllProjectsMarkedAsDeletedFromUser(user);
 			}else {
 				resultado = projectService.getAllProjectsMarkedAsDeleted();
 			}
-			if (resultado != null) {
+			
 				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-			}
-
+			
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			if(userId>0) {
@@ -297,11 +288,9 @@ public class ProjectController {
 			}else {
 				resultado = projectService.getOnlyPublicProjectsNonDeleted();
 			}
-			if (resultado != null) {
+			
 				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-			}
+			
 		} catch (Exception e) {
 			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
 		}
@@ -573,13 +562,11 @@ public class ProjectController {
 				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
 			}
 			
-			ArrayList<UserDTOResp> users= projectSharingService.getUserAssocToProject(projectId);
-			if (users!=null) {
+			ArrayList<UserDTORespSharingProject> users= projectSharingService.getUserAssocToProject(projectId);
+		
 
 				return Response.ok(users).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-			}
+			
 				
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -611,11 +598,9 @@ public class ProjectController {
 
 				}
 				//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
-				if (resultado != null) {
+				
 					return Response.ok(resultado).build();
-				} else {
-					return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-				}			
+						
 			}
 			
 			
@@ -626,11 +611,9 @@ public class ProjectController {
 
 			}
 			//ArrayList<ProjectDTOResp>  resultado = projectService.getAllProjectsNonDeleted();
-			if (resultado != null) {
+			
 				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-			}
+			
 
 		} catch (NullPointerException e) {
 			e.printStackTrace();
@@ -642,11 +625,9 @@ public class ProjectController {
 			}
 	
 			//ArrayList<ProjectDTOResp> resultado = projectService.getOnlyPublicProjectsNonDeleted();
-			if (resultado != null) {
+			
 				return Response.ok(resultado).build();
-			} else {
-				return Response.status(400).entity((GestaoErros.getMsg(17))).build();
-			}
+			
 		} catch (Exception e) {
 			return Response.status(400).entity(GestaoErros.getMsg(17)).build();
 		}

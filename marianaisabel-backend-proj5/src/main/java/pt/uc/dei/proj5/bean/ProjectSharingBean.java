@@ -1,11 +1,15 @@
 package pt.uc.dei.proj5.bean;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.Tuple;
+
+import org.json.JSONObject;
 
 import pt.uc.dei.proj5.dao.NotificationDao;
 import pt.uc.dei.proj5.dao.ProjectDao;
@@ -14,6 +18,7 @@ import pt.uc.dei.proj5.dao.UserDao;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.dto.ProjectSharingDTO;
 import pt.uc.dei.proj5.dto.UserDTOResp;
+import pt.uc.dei.proj5.dto.UserDTORespSharingProject;
 import pt.uc.dei.proj5.entity.Project;
 import pt.uc.dei.proj5.entity.ProjectSharing;
 import pt.uc.dei.proj5.entity.User;
@@ -108,18 +113,25 @@ public class ProjectSharingBean implements Serializable{
 	
 	//TODO !!! ideia:  Map<String,  ArrayList<UserDTOResp>> ===>>> Map<funçao do user no projecto, Lista de users>
 	
-	public ArrayList<UserDTOResp> getUserAssocToProject(int projectId){
+	public ArrayList<UserDTORespSharingProject> getUserAssocToProject(int projectId){
 		try {
 		Project project = projectDao.findEntityIfNonDelete(projectId);
-		ArrayList<UserDTOResp> usersDTOResp =new ArrayList<>();
+		ArrayList<UserDTORespSharingProject> userDTORespSharingProject =new ArrayList<>();
 		
-		List<User> users=projectSharingDao.getUserAssocToProject(project);
-		
-		for (User user : users) {
-			usersDTOResp.add(UserDao.convertEntitytoDTOResp(user));
+		//List<User> users=projectSharingDao.getUserAssocToProject(project);
+		List<Tuple>  users=projectSharingDao.getUserAssocToProjectWithRole(project);
+//		for (User user : users) {
+//			userDTORespSharingProject.add(UserDao.convertEntitytoDTOResp(user));
+//		}
+		for (Tuple tuple : users) {
+			JSONObject registerByDay = new JSONObject();
+			User user = tuple.get(0, User.class);
+			String role = tuple.get(1, String.class);
+			userDTORespSharingProject.add(UserDao.convertEntitytoDTORespSharingProject(user,role));
+			
 		}
 		
-		return usersDTOResp;
+		return userDTORespSharingProject;
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;
@@ -133,7 +145,7 @@ public class ProjectSharingBean implements Serializable{
 		
 		for (Project project : projects) {
 			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> users = getUserAssocToProject(project.getId());
 			projDTOResp.setAssociatedUsers(users);
 			projectsDTOResp.add(projDTOResp);
 		}
@@ -149,7 +161,7 @@ public class ProjectSharingBean implements Serializable{
 		
 		for (Project project : projects) {
 			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> users = getUserAssocToProject(project.getId());
 			projDTOResp.setAssociatedUsers(users);
 			projectsDTOResp.add(projDTOResp);
 		}	
@@ -166,7 +178,7 @@ public class ProjectSharingBean implements Serializable{
 		
 		for (Project project : projects) {
 			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> users = getUserAssocToProject(project.getId());
 			projDTOResp.setAssociatedUsers(users);
 			projectsDTOResp.add(projDTOResp);
 		}
@@ -182,7 +194,7 @@ public class ProjectSharingBean implements Serializable{
 		
 		for (Project project : projects) {
 			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> users = getUserAssocToProject(project.getId());
 			projDTOResp.setAssociatedUsers(users);
 			projectsDTOResp.add(projDTOResp);
 		}	
@@ -199,7 +211,7 @@ public class ProjectSharingBean implements Serializable{
 		
 		for (Project project : projects) {
 			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> users = getUserAssocToProject(project.getId());
 			projDTOResp.setAssociatedUsers(users);
 			projectsDTOResp.add(projDTOResp);
 		}
@@ -214,7 +226,7 @@ public class ProjectSharingBean implements Serializable{
 		
 		for (Project project : projects) {
 			ProjectDTOResp projDTOResp = ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> users = getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> users = getUserAssocToProject(project.getId());
 			projDTOResp.setAssociatedUsers(users);
 			projectsDTOResp.add(projDTOResp);
 		}

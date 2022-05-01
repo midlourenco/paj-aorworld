@@ -1,12 +1,15 @@
 package pt.uc.dei.proj5.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import pt.uc.dei.proj5.dto.NewsDTO;
@@ -193,6 +196,38 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 		}
 		
 	}
+	
+	
+	public List<Tuple> getUserAssocToProjectWithRole(Project project){
+	
+		try {
+			final CriteriaQuery<Tuple> criteriaQuery = em.getCriteriaBuilder().createTupleQuery();		
+			Root<ProjectSharing> c= criteriaQuery.from(ProjectSharing.class);
+//			Join<ProjectSharing, User> users = c.join("user");
+			
+			criteriaQuery.where(em.getCriteriaBuilder().and(
+					em.getCriteriaBuilder().equal(c.get("project"), project), //projecto que foi partilhada
+					em.getCriteriaBuilder().equal(c.get("accepted"), true)));
+			
+			  Path<String> user = c.get("user");
+			    Path<Long> userRole = c.get("userRole");
+			criteriaQuery.multiselect(user, userRole);
+			
+//			criteriaQuery.multiselect(em.getCriteriaBuilder().function("date", Date.class,c.get("createDate")), em.getCriteriaBuilder().count(c));
+//			//criteriaQuery.groupBy(c.get("createDate"));
+			
+//			criteriaQuery.groupBy(user);
+			return em.createQuery(criteriaQuery).getResultList();
+			
+		}catch(EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * lista de projectos em que um utilizador está associado (após partilha aceite)
 	 * @param user

@@ -17,7 +17,7 @@ public class ProjectDTOResp {
 	
 	
 	
-	private ArrayList<UserDTOResp> users= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
+	private ArrayList<UserDTORespSharingProject> users= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 	private ArrayList<NewsDTOResp> news = new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 	private ArrayList<String> keywords= new ArrayList<>(); //se esta categoria foi partilhada com alguem este array é >0 e tem o username com quem se partilhou a mesma
 	
@@ -93,11 +93,11 @@ public class ProjectDTOResp {
 	}
 
 	
-	public ArrayList<UserDTOResp> getAssociatedUsers() {
+	public ArrayList<UserDTORespSharingProject> getAssociatedUsers() {
 		return users;
 	}
 
-	public void setAssociatedUsers(ArrayList<UserDTOResp> associatedUsers) {
+	public void setAssociatedUsers(ArrayList<UserDTORespSharingProject> associatedUsers) {
 		this.users = associatedUsers;
 	}
 

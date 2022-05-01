@@ -22,6 +22,7 @@ import pt.uc.dei.proj5.dto.ProjectDTO;
 import pt.uc.dei.proj5.dto.ProjectDTOResp;
 import pt.uc.dei.proj5.dto.UserDTO;
 import pt.uc.dei.proj5.dto.UserDTOResp;
+import pt.uc.dei.proj5.dto.UserDTORespSharingProject;
 
 @RequestScoped
 public class ProjectBean implements Serializable {
@@ -356,7 +357,7 @@ public class ProjectBean implements Serializable {
 		for (Project project : projects) {
 			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
 			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
 			if(assocUsers!=null) {
 			projectDTOResp.setAssociatedUsers(assocUsers);
 			}
@@ -374,7 +375,7 @@ public class ProjectBean implements Serializable {
 		for (Project project : projects) {
 			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
 			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
 			if(assocUsers!=null) {
 			projectDTOResp.setAssociatedUsers(assocUsers);
 			}
@@ -392,7 +393,7 @@ public class ProjectBean implements Serializable {
 		for (Project project : projects) {
 			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
 			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
 			if(assocUsers!=null) {
 			projectDTOResp.setAssociatedUsers(assocUsers);
 			}
@@ -410,7 +411,7 @@ public class ProjectBean implements Serializable {
 		for (Project project : projects) {
 			//projectsDTOResp.add(ProjectDao.convertEntityToDTOResp(project));
 			ProjectDTOResp projectDTOResp= ProjectDao.convertEntityToDTOResp(project);
-			ArrayList<UserDTOResp> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
+			ArrayList<UserDTORespSharingProject> assocUsers =projectSharingService.getUserAssocToProject(project.getId());
 			if(assocUsers!=null) {
 			projectDTOResp.setAssociatedUsers(assocUsers);
 			}

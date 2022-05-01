@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import pt.uc.dei.proj5.dto.UserDTO;
 import pt.uc.dei.proj5.dto.UserDTORegister;
 import pt.uc.dei.proj5.dto.UserDTOResp;
+import pt.uc.dei.proj5.dto.UserDTORespSharingProject;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
 
@@ -116,6 +117,29 @@ public class UserDao extends AbstractDao<User> {
 		userDTOResp.setId(userEntity.getId());
 		userDTOResp.setDeleted(userEntity.isDeleted());
 		return userDTOResp;
+	}
+	
+	
+	
+	
+
+	/**
+	 *Função para converter uma Entidade para um DTOResp de utilizador
+	 * @return
+	 */
+	public static UserDTORespSharingProject convertEntitytoDTORespSharingProject(User userEntity,String userRoleInProject) {
+		
+		UserDTORespSharingProject userDTORespSharingProject = new UserDTORespSharingProject();
+		userDTORespSharingProject.setEmail(userEntity.getEmail());
+		userDTORespSharingProject.setFirstName(userEntity.getFirstName());
+		userDTORespSharingProject.setLastName(userEntity.getLastName());
+		userDTORespSharingProject.setImage(userEntity.getImage());
+		userDTORespSharingProject.setBiography(userEntity.getBiography());
+		userDTORespSharingProject.setPrivileges(userEntity.getPrivileges());
+		userDTORespSharingProject.setId(userEntity.getId());
+		userDTORespSharingProject.setDeleted(userEntity.isDeleted());
+		userDTORespSharingProject.setUserRoleInProject(userRoleInProject);
+		return userDTORespSharingProject;
 	}
 	
 	
