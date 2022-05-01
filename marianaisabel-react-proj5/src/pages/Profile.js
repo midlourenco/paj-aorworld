@@ -130,7 +130,6 @@ function Profile({userPriv,errorTopBar="",...props}) {
     const handleCancelClick = () => setEditClick(!editMode);
     //função que chamamos ao clicar em eliminar 
     const handleDeleteClick= async()=>  {
-        setEditClick(!editMode);
         const deletedUser = await del('users/'+currentUser.id)
         if (response.ok) {
             console.log("user eliminado/bloqueado com sucesso ", deletedUser);
