@@ -215,6 +215,8 @@ public class NewsController {
 
 		} catch (NullPointerException e) {
 			e.printStackTrace();
+			
+		
 			if(userId>0) {
 				resultado = newsService.getOnlyPublicNonDeletedNewssFromUser(user);	
 			}else {

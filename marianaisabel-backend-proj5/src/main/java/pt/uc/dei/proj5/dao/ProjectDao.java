@@ -127,14 +127,14 @@ public class ProjectDao extends AbstractDao<Project> {
 			projectDTOResp.setId(projectEntity.getId());
 			projectDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(projectEntity.getCreatedBy()));
 
-			if (projectEntity.getCreatedDate() != null || projectEntity.getCreatedDate().equals("") ) {
+			if (projectEntity.getCreatedDate() != null ) {
 				projectDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getCreatedDate()));
 
 			} else {
 				projectDTOResp.setCreatedDate("");
 			}
 			
-			if (projectEntity.getLastModifDate() != null || !projectEntity.getLastModifDate().equals("") ) {
+			if (projectEntity.getLastModifDate() != null ) {
 				projectDTOResp.setLastModifDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getLastModifDate()));
 				projectDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(projectEntity.getLastModifBy()));		
 
