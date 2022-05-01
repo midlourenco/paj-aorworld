@@ -203,9 +203,9 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
     /**
      * use effect À escuta da variável que obriga ao scroll down
      */
-    useEffect(() => {
-        window.scrollTo(0,document.body.scrollHeight);
-      },[])
+    // useEffect(() => {
+    //     window.scrollTo(0,document.body.scrollHeight);
+    //   },[])
        
 
 
@@ -220,7 +220,9 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
         minHeight="20vh"
         backgroundColor="teal.400"
         justifyContent={"center"}
-        ><Heading color ={"white"} ><FormattedMessage id={"news_details"} /> </Heading></Flex>
+        >
+            <Heading alignItems={"start"} color ={"white"} ><FormattedMessage id={"news_details"} /> </Heading>
+        </Flex>
            
         <Flex
         flexDirection="column"

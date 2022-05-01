@@ -207,7 +207,7 @@ function UsersToApprove({unblockedUser,setBlockedUser,...props}) {
         )
         } 
   return (
-    <Box minW={{ base: "90%", md: "468px" }} mb={0} >
+    <Box minW={{ base: "90%", md: "468px" }} mt={20} mb={0} >
     <Flex
     spacing={2}
     backgroundColor="whiteAlpha.900"
@@ -220,7 +220,7 @@ function UsersToApprove({unblockedUser,setBlockedUser,...props}) {
 
     
     > 
-    <Heading as='h3' size='lg' color="black" mt={3}><FormattedMessage id={"users_to_approve"}  /> </Heading>
+    <Heading as='h3' size='lg' mt={5}><FormattedMessage id={"users_to_approve"}  /> </Heading>
     {error && 'Error!'}
     {loading && 'Loading...'}
     <TableContainer maxW={["280px","450px","100%"]} scroll={scroll} fontSize={["sm","sm","md"]} mx={2} >

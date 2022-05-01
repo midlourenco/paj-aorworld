@@ -101,9 +101,9 @@ function  NewsArticleCard ({news, ...props}){
                 {/* </GridItem>
                 <GridItem colSpan={2}> */}
                 
-                <Box p='6' >
+                <Box textAlign={"center"} p='6' >
                 {news.deleted?
-                <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
+                <Badge textAlign={"center"} colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
                 :null
                 }
                     <Box display='flex' alignItems='baseline' flexDirection= {['column', 'column', 'column']} >
@@ -165,7 +165,7 @@ function  NewsArticleCard ({news, ...props}){
                         
                         
                         </Box>
-                        <HStack  mb='5' alignSelf={"center"}>
+                        <HStack  mb='5' alignSelf={"center"} >
                         {news.deleted?
                             news.keywords.map(n => (
                             <Badge borderRadius='full' px='2' color='grey' key={n} >{n}</Badge>

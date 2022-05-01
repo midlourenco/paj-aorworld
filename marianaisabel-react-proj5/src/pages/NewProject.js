@@ -118,10 +118,10 @@ function NewProject() {
 
  /**
      * use effect À escuta da variável que obriga ao scroll down
-     */
-  useEffect(() => {
-    window.scrollTo(0,document.body.scrollHeight);
-  },[])
+      */
+  // useEffect(() => {
+  //   window.scrollTo(0,document.body.scrollHeight);
+  // },[])
 
 
   

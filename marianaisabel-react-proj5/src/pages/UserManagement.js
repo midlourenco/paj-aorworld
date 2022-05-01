@@ -100,7 +100,7 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
         pb={20}
         
         >
-            <Heading><FormattedMessage id={"user_mangement"} /> </Heading>
+            {/* <Heading><FormattedMessage id={"user_mangement"} /> </Heading> */}
             {error && 'Error!'}
             {/* {loading && 'Loading...'} */}
             <Flex flexDirection={"column"}  >

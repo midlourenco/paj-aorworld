@@ -105,7 +105,7 @@ const AboutUs = ()=>{
             mt={5}
             mx={[0, null, null, 20]}
             >
-                    <Heading> <FormattedMessage id={"our_team"} /> </Heading>
+            <Heading> <FormattedMessage id={"our_team"} /> </Heading>
             {error && 'Error!'}
             {loading && 'Loading...'}
             <Grid  px={3} templateColumns={['1fr', null, 'repeat(2, 1fr)', null, 'repeat(3, 1fr)']} gap={4} mx={3} >

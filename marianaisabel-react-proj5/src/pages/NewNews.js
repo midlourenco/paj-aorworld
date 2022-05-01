@@ -147,9 +147,9 @@ function NewNews() {
   /**
      * use effect À escuta da variável keyword vai permitir que a lista seja actualizada visualmente dp de apagar
      */
-     useEffect(() => {
-    window.scrollTo(0,document.body.scrollHeight);
-  },[keywords])
+  //    useEffect(() => {
+  //   window.scrollTo(0,document.body.scrollHeight);
+  // },[keywords])
    
   /**
      * use effect À escuta da variável que obriga ao scroll down

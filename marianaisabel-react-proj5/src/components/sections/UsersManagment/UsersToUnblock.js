@@ -159,7 +159,7 @@ function UsersToUnblock({blockedUser,setUnblockedUser, ...props}) {
     mt={5}
         
     > 
-    <Heading as='h3' size='lg' mt={3} color={"black"} ><FormattedMessage id={"users_blocked"} /> </Heading>
+    <Heading as='h3' size='lg' mt={3}  ><FormattedMessage id={"users_blocked"} /> </Heading>
     {error && 'Error!'}
     {loading && 'Loading...'}
     <TableContainer  maxW={["280px","450px","100%"]} scroll={scroll} fontSize={["sm","sm","md"]} mx={2}>
