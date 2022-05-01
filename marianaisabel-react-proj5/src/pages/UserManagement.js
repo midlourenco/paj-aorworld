@@ -79,33 +79,33 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
     }
      /**** ******************************************USE EFFECT********************************************************* */
 
-    useEffect(async()=>{
-        console.log("dentro do userEffect");
-        setRestResponse("");
+    // useEffect(async()=>{
+    //     console.log("dentro do userEffect");
+    //     setRestResponse("");
 
-        const getUsersToAprove = await get("users/viwersList")
-        if (response.ok) {
-            console.log(getUsersToAprove)
-            setUsersToAprove(getUsersToAprove);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
-            setAppError("");
-        } else if(response.status==401) {
-            console.log("credenciais erradas? " + error)
-            setRestResponse("NOK");
-            setAppError('error_fetch_login_401');
-        }else{
-            console.log("houve um erro no fetch " + error)
-            if(error && error!=""){
-                setAppError(  error );
-                setRestResponse("NOK");
-            }else{
-                setAppError(  "error_fetch_generic" );
-                setRestResponse("NOK");
-            }
-        }
-    },[])
+    //     const getUsersToAprove = await get("users/viwersList")
+    //     if (response.ok) {
+    //         console.log(getUsersToAprove)
+    //         setUsersToAprove(getUsersToAprove);
+    //         if(userPriv =="ADMIN"){
+    //             setAdminPriv(true);
+    //         }
+    //         setAppError("");
+    //     } else if(response.status==401) {
+    //         console.log("credenciais erradas? " + error)
+    //         setRestResponse("NOK");
+    //         setAppError('error_fetch_login_401');
+    //     }else{
+    //         console.log("houve um erro no fetch " + error)
+    //         if(error && error!=""){
+    //             setAppError(  error );
+    //             setRestResponse("NOK");
+    //         }else{
+    //             setAppError(  "error_fetch_generic" );
+    //             setRestResponse("NOK");
+    //         }
+    //     }
+    // },[])
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
 
@@ -123,7 +123,7 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
         >
             <Heading><FormattedMessage id={"user_mangement"} /> </Heading>
             {error && 'Error!'}
-            {loading && 'Loading...'}
+            {/* {loading && 'Loading...'} */}
             <Flex flexDirection={"column"}  >
             <UsersToApprove />
             <UsersToUnblock />                

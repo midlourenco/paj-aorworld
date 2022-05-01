@@ -646,7 +646,7 @@ public class UserBean implements Serializable {
 			User user = userDao.find(userID);
 			User loggedUser =getNonDeletedEntityByToken(authString);
 			if (user.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
-				userDao.unblockUser(user,loggedUser);
+				userDao.unblockUser(userID,loggedUser);
 			//	userDao.markAsNonDeleted(userID);
 				return true;
 			} else { // se não estiver marcado como delete não faz nada;

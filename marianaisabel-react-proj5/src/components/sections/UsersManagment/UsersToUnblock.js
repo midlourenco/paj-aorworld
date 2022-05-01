@@ -32,6 +32,7 @@ import {
     IconButton,
     useEditableControls,
     InputRightElement,  
+    Spinner,
     Table,
     Thead,
     Tbody,
@@ -104,6 +105,49 @@ function UsersToUnblock({userPriv, ...props}) {
         }
     },[])
 
+ /**** ******************************************ACCOES DOS BOTOES********************************************************* */
+
+    const handleUnblock=async(userToAprov)=>{
+        const unblockUser = await post("users/"+userToAprov.id+"/undelete")
+        if (response.ok) {
+            console.log(unblockUser)
+            
+            setUsersToUnblock(usersToUnblock.filter((u)=>{
+                if(u==userToAprov){
+                  return false;
+                }
+                return true;
+              }));
+
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+                setRestResponse("NOK");
+            }else{
+                setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
+            }
+        }
+    }
+
+  /**** ******************************************RENDER!!!********************************************************* */
+
+
+  if(!usersToUnblock || loading ){
+        
+    return (<>
+        <Text>Loading...</Text>
+        <Spinner />
+        </>
+    )
+    } 
+
   return (
     <Box minW={{ base: "90%", md: "468px" }} mb={0} >
     <Flex
@@ -146,7 +190,15 @@ function UsersToUnblock({userPriv, ...props}) {
                 <Td>
                     <ButtonGroup>
                         <Tooltip label={intl.formatMessage({id: 'tooltip_unblock_user'})}>
-                        <Button maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserCheck />} > <FormattedMessage id={"unblock"}/></Button>
+                        <Button 
+                        onClick={()=>handleUnblock(u)}
+                        maxW="130px" 
+                        colorScheme={"teal"} 
+                        fontSize="sm" 
+                        leftIcon={<FaUserCheck />} 
+                        > 
+                        <FormattedMessage id={"unblock"}/>
+                        </Button>
                         </Tooltip>
                     
                     </ButtonGroup>
