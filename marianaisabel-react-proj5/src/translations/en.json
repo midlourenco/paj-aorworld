@@ -57,8 +57,8 @@
     "clear_search":"Clear search",
     "associate_users":"Associate users",
     "associate_news":"Associate news",
-    "associate_myself_to_news":"Associate myself to news",
-    "associate_myself_to_project":"Associate myself to project",
+    "associate_myself_to_news":"Associate myself to this news",
+    "associate_myself_to_project":"Associate myself to this project",
     "associate":"Associate",
     "users_to_associate": "Users to associate",
     

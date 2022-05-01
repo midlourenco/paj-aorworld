@@ -32,15 +32,57 @@ import {
     Td,
     TableCaption,
     TableContainer,
+    Button,
+    useToast,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
+import { ExternalLinkIcon,LinkIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
 
-const NewsViewMode=({isAdmin, loading,currentNews,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
+//TODO: 
+function setAppError(error){
+    console.log(error)
+}
+
+const NewsViewMode=({isAdmin, setUserInCurrentNews ,currentNews,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
+    const toast = useToast()
+    const { get, post, del, response, loading, error } = useFetch();
+    
+    const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
+    // const [userInCurrentNews, setUserInCurrentNews ]= useState(currentNews.users);
+  
+    const handleAssociateMeClick=async()=>{
+        const assocMeToNews = await post("news/"+currentNews.id+"/associateToMySelf")
+        if (response.ok) {
+            console.log(assocMeToNews)
+            toast({
+                title: 'User associated with success',
+                description: "You was  associated to the news " + currentNews.id,
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+                })
+                setUserInCurrentNews(currentNews.id) // eu nao tenho o objecto da minha pessoa por isso para se o ir buscar tem mesmo que se forçar refender À pagina que faz o get das news
+                setRestResponse("OK");
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+                setRestResponse("NOK");
+            }else{
+                setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
+            }
+        }
+    }
 
     if(!currentNews || loading ){
         
@@ -132,8 +174,9 @@ const NewsViewMode=({isAdmin, loading,currentNews,editMode,handleEditClick,handl
                         <Td color="gray.500" fontWeight="400"  >{p.title}</Td>
                         <Td color="gray.500" fontWeight="400" >{p.createdBy.firstName}</Td>
                         <Td color="gray.500" fontWeight="400"  textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
+                        <Tooltip label ={ "/projects/"+ p.id} >
                         <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
-
+                        </Tooltip>
                     </Tr>
                     ))}  
                     </Tbody>
@@ -156,14 +199,26 @@ const NewsViewMode=({isAdmin, loading,currentNews,editMode,handleEditClick,handl
                     <Tr key={u.id}>
                     <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
+                    <Tooltip label ={ "/profile/"+ u.id} >
                     <IconButton onClick={()=> navigate("/profile/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
-
+                    </Tooltip>
                 </Tr>
                 ))}  
                 </Tbody>
             </Table>
             </TableContainer>
 
+
+            <Button 
+            onClick={handleAssociateMeClick} 
+            mt={6} 
+            size='md' 
+            rightIcon={<LinkIcon />}  
+            colorScheme={"teal"} 
+            > 
+                <FormattedMessage id={"associate_myself_to_news"} defaultMessage={"-"}/>
+            </Button>
+        
             {!currentNews.deleted?
                     (<Box >
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}

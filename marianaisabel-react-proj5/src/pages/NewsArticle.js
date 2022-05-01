@@ -88,7 +88,8 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
     const [editMode, setEditClick] = useState(false);
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
     
-
+    const [userInCurrentNews, setUserInCurrentNews ]= useState("");
+  
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
     const {register, handleSubmit, formState: {errors}}= useForm();
@@ -189,7 +190,7 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
         }
         
         
-    },[])
+    },[userInCurrentNews])
     /**
      * use Effect à escuta de variaveis para fazer trigger do render
      */
@@ -212,6 +213,14 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
  
+if(!currentNews || loading ){
+        
+    return (<>
+       
+        <Spinner />
+        </>
+    )
+    }
 
     return (
     <Box>
@@ -251,6 +260,7 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
 
             <NewsViewMode  
             isAdmin={isAdmin}
+            setUserInCurrentNews={setUserInCurrentNews}
             currentNews= {currentNews} 
             editMode={editMode} 
             handleEditClick={handleEditClick} 
