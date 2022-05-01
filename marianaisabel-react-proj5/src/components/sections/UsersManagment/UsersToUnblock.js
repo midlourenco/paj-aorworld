@@ -58,8 +58,6 @@ function UsersToUnblock({userPriv, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
-    const { id } = useParams();
-    console.log(id)
     const scroll = { x: 1600, y: 300 };
 
     // const BlockedUserSymbol = chakra(FaUserTimes);

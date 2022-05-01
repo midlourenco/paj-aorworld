@@ -42,7 +42,8 @@ import {
     TableCaption,
     TableContainer,
     Button, 
-    ButtonGroup 
+    ButtonGroup,
+    Spinner,
 } from "@chakra-ui/react";
 import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
 import { MdBlock} from 'react-icons/md';
@@ -58,8 +59,7 @@ function UsersToApprove({userPriv, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
-    const { id } = useParams();
-    console.log(id)
+  
     const scroll = { x: 1600, y: 300 };
     // const BlockedUserSymbol = chakra(FaUserTimes);
     // const CheckedUserSymbol = chakra(FaUserCheck);
@@ -104,7 +104,109 @@ function UsersToApprove({userPriv, ...props}) {
             }
         }
     },[])
+  /**** ******************************************ACCOES DOS BOTOES********************************************************* */
 
+    const handleAproveToMember=async(userToAprov)=>{
+
+        const aproveToMember = await post("users/"+userToAprov.id+"/updateToMember")
+        if (response.ok) {
+            console.log(aproveToMember)
+            
+            setUsersToAprove(usersToAprove.filter((u)=>{
+                if(u==userToAprov){
+                  return false;
+                }
+                return true;
+              }));
+
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+                setRestResponse("NOK");
+            }else{
+                setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
+            }
+        }
+    }
+    const handleAproveToAdmin=async(userToAprov)=>{
+        const aproveToAdmin = await post("users/"+userToAprov.id+"/updateToAdmin")
+        if (response.ok) {
+            console.log(aproveToAdmin)
+            
+            setUsersToAprove(usersToAprove.filter((u)=>{
+                if(u==userToAprov){
+                  return false;
+                }
+                return true;
+              }));
+
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+                setRestResponse("NOK");
+            }else{
+                setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
+            }
+        }
+    }
+    const handleBlock=async(userToAprov)=>{
+        const userToBlock = await del("users/"+userToAprov.id)
+        if (response.ok) {
+            console.log(userToBlock)
+            
+            setUsersToAprove(usersToAprove.filter((u)=>{
+                if(u==userToAprov){
+                  return false;
+                }
+                return true;
+              }));
+
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+                setRestResponse("NOK");
+            }else{
+                setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
+            }
+        }
+    }
+
+
+
+
+
+  /**** ******************************************RENDER!!!********************************************************* */
+
+
+    if(!usersToAprove || loading ){
+        
+        return (<>
+            <Text>Loading...</Text>
+            <Spinner />
+            </>
+        )
+        } 
   return (
     <Box minW={{ base: "90%", md: "468px" }} mb={0} >
     <Flex
@@ -148,13 +250,37 @@ function UsersToApprove({userPriv, ...props}) {
                 <Td>
                     <ButtonGroup>
                         <Tooltip label={intl.formatMessage({id: 'tooltip_aprove_as_member'})}>
-                        <Button maxW="100px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserCheck />} > <FormattedMessage id={"MEMBER"}/></Button>
+                            <Button 
+                            onClick={()=>handleAproveToMember(u)}
+                            maxW="100px" 
+                            colorScheme={"teal"} 
+                            fontSize="sm" 
+                            leftIcon={<FaUserCheck />} 
+                            > 
+                                <FormattedMessage id={"MEMBER"}/>
+                            </Button>
                         </Tooltip>
                         <Tooltip label={intl.formatMessage({id: 'tooltip_aprove_as_admin'})}>
-                        <Button maxW="100px" colorScheme={"yellow"} fontSize="sm"  leftIcon={<FaUserCheck />}  > <FormattedMessage id={"ADMIN"}/></Button>
+                            <Button 
+                            onClick={()=>handleAproveToAdmin(u)}
+                            maxW="100px" 
+                            colorScheme={"yellow"} 
+                            fontSize="sm"  
+                            eftIcon={<FaUserCheck />}  
+                            >
+                                <FormattedMessage id={"ADMIN"}/>
+                            </Button>
                         </Tooltip>
                         <Tooltip label={intl.formatMessage({id: 'tooltip_block'})}>
-                        <Button maxW="100px" colorScheme={"red"} fontSize="sm"  leftIcon={<FaUserTimes />}  > <FormattedMessage id={"block"}/></Button>
+                        <Button 
+                        onClick={()=>handleBlock(u)}
+                        maxW="100px" 
+                        colorScheme={"red"} 
+                        fontSize="sm"  
+                        leftIcon={<FaUserTimes />} 
+                        > 
+                            <FormattedMessage id={"block"}/>
+                        </Button>
                         </Tooltip>
                     </ButtonGroup>
                 </Td>

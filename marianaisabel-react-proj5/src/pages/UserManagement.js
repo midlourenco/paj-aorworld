@@ -61,8 +61,7 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
-    const { id } = useParams();
-    console.log(id)
+
 
     // const BlockedUserSymbol = chakra(FaUserTimes);
     // const CheckedUserSymbol = chakra(FaUserCheck);

@@ -17,7 +17,7 @@
     "form_field_password":"Password",
     "form_field_repeat_password":"Repeat password",
     "form_field_image":"image URL",
-    "form_field_last_biography":"Biography",
+    "form_field_biography":"Biography",
 
     "form_field_title": "Title",
     "form_field_description": "Description",
@@ -84,6 +84,7 @@
     "new_news":"New Article",
     "new_project": " New Project",
      "MEMBERS":"MEMBERS",
+     "MEMBER":"MEMBRO",
     "ADMIN":"ADMIN",
     "VIEWER":"VIEWER",
     "members":"Members",
