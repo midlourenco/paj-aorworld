@@ -13,7 +13,7 @@ import {
 
 import {FormattedMessage ,useIntl} from "react-intl";
 
-function PieChartCustom ({data,header,...props}){
+function PieChartCustom ({data,...props}){
     
 console.log(data)
 const intl = useIntl();
@@ -22,9 +22,9 @@ const intl = useIntl();
 
 return ( 
     <Box >
-          <Heading>{intl.formatMessage({id: header})}</Heading>
+       
         <Box style={{ textAlign: 'center'}}>
-            <PieChart width={800} height={500} data={data} />
+            <PieChart  width={300} height={200}data={data} />
         </Box>
     </Box>
 

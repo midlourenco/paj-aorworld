@@ -520,7 +520,32 @@ public class NewsDao extends AbstractDao<News> {
 		}
 	}
 	
-	
+
+	/**
+	 * devolve as News que nao estejam marcados para apagar de visibilidade
+	 * publica (independentemente de terem sido ou nao partilhados)
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public News moreRecentNews() {
+		final CriteriaQuery<News> criteriaQuery = em.getCriteriaBuilder().createQuery(News.class);
+		Root<News> c = criteriaQuery.from(News.class);
+	//	criteriaQuery.select(c).where(em.getCriteriaBuilder().max(c.get("createdDate")));
+	//	return em.createQuery(criteriaQuery).getSingleResult();
+		
+//		predicateList.add(em.getCriteriaBuilder().greatest(c.get("createdDate")));
+//		
+		criteriaQuery.orderBy(em.getCriteriaBuilder().desc(c.get("createdDate")));
+		
+		try {
+			return em.createQuery(criteriaQuery).setMaxResults(1).getSingleResult();
+				//	getFirstResult();
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	
 	

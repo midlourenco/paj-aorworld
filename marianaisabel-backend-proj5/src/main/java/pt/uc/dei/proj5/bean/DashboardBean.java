@@ -11,7 +11,9 @@ import javax.inject.Inject;
 import org.json.JSONObject;
 
 import pt.uc.dei.proj5.dao.UserDao;
+import pt.uc.dei.proj5.dto.NewsDTOResp;
 import pt.uc.dei.proj5.dto.UserDTO;
+import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
 import pt.uc.dei.proj5.websocket.GeneralDashboardWS;
@@ -260,6 +262,25 @@ public class DashboardBean implements Serializable {
 	}
 	
 	
+	///////////////////////////////////////////////
+	//Devolve a notícias mais recente; 
+	///////////////////////////////////////////////
+	public NewsDTOResp moreRecentNews() {
+		try { 
+		System.out.println("ok total getTotalKeywords no serviço do dashboard" );
+		return NewsDao.convertEntityToDTOResp(newsDao.moreRecentNews());
+		
+		} catch (NullPointerException e) { // caso não tenha Authorization no header
+			System.out.println("erro null point o getTotalKeywordss controller " );
+			e.printStackTrace();
+			return null;
+		}catch (Exception e) {
+		e.printStackTrace();
+		System.out.println("ocorreu algum problema a procurar por user na BD -  getTotalKeywords no serviço");
+		return null;
+		}
+	}
+	
 	
 	
 	
@@ -318,7 +339,7 @@ public class DashboardBean implements Serializable {
 	
 	
 	//grafico com 2 linhas projectos e noticias por dia
-	
+	JSONObject recentNews = new JSONObject(moreRecentNews());
 	JSONObject stats = new JSONObject();
 	
 	stats.put("TotalUsers", getTotalUsers());
@@ -326,6 +347,8 @@ public class DashboardBean implements Serializable {
 	stats.put("TotalNews", getTotalNews());
 	stats.put("TotalKeywords", getTotalKeywords());
 	stats.put("newsPieChart", newsPieChart);
+	stats.put("moreRecentNews", recentNews);
+	
 	
 	System.out.println(stats.toString());
 	GeneralDashboardWS.send( stats.toString());

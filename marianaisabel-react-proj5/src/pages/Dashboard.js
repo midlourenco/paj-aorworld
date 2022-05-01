@@ -22,6 +22,8 @@ import ErrorMsgTopBar from '../components/ErrorMsgTopBar'
 import DashboardCard from "../components/Dashboard/DashboardCard"
 import PieChartCustom from "../components/Dashboard/PieChartCustom"
 import{connectWSGeneralDashboard} from "../api_websocket"
+import NewsArticleCard from "../components/NewsArticleCard"
+import ProjectCard from "../components/ProjectCard"
 
 //TODO: 
 function setAppError(error){
@@ -65,6 +67,7 @@ function Dashboard({errorTopBar,...props}) {
     const [totalProjects, setTotalProjects]=useState("--");
     const [totalKeywords, setTotalKeywords]=useState("--");
     const [newsPieChart, setNewsPieChart] = useState([]);
+    const [moreRecentNews, setMoreRecentNews] = useState(null);
     const [stats, setStats] = useState("--");
 
     console.log(errorTopBar);
@@ -79,6 +82,7 @@ function Dashboard({errorTopBar,...props}) {
             setTotalProjects( stats.TotalProjects);
             setTotalNews( stats.TotalNews);
             setNewsPieChart(stats.newsPieChart);
+            setMoreRecentNews(stats.moreRecentNews);
         // setAvgActiv ( parseFloat(stats.AvgActivPerUser).toFixed(2)); 
     
         return ()=>{
@@ -97,7 +101,7 @@ function Dashboard({errorTopBar,...props}) {
 
 
 
-   if(!newsPieChart ){
+   if(!newsPieChart ||!moreRecentNews ){
         
     return (<>
         <Text>Loading...</Text>
@@ -125,33 +129,45 @@ function Dashboard({errorTopBar,...props}) {
         ? <ErrorMsgTopBar />
         : null
         }
-        <Stack  >
+        <Flex justifyContent={"center"} alignItems={"center"} >
                 <Grid
                 // h='200px'
                 templateRows='repeat(2, 1fr)'
                 templateColumns='repeat(2, 1fr)'
                 gap={8}
+            
+                width={"80%"}
+                mx={20}
                 >
                 <GridItem  >
+                <Heading>{intl.formatMessage({id: "projects"})}</Heading>
+                
+                <DashboardCard title={intl.formatMessage({id: 'tt_projects'})} value={totalProjects}/> 
+                      {/*TODO:*/ }
+                     <PieChartCustom data={newsPieChart}  />
+                    <Text>{intl.formatMessage({id: 'more_recente_project'})}:</Text>
+                    {/*TODO:*/ }
+                    {/* <ProjectCard project ={moreRecentNews} ></ProjectCard> */}
+                </GridItem>
+                <GridItem >
+                    <Heading>{intl.formatMessage({id: "news"})}</Heading>
+                    <DashboardCard title={intl.formatMessage({id: 'tt_news'})} value={totalNews}/> 
+                    <PieChartCustom data={newsPieChart}  />
+                    <Text>{intl.formatMessage({id: 'more_recente_news'})}:</Text>
+                    <NewsArticleCard news ={moreRecentNews} ></NewsArticleCard>
+                </GridItem>
+                <GridItem  >
+                    <Heading>{intl.formatMessage({id: "users"})}</Heading>
                     <DashboardCard title={intl.formatMessage({id: 'tt_users'})} value={totalUsers}/> 
 
 
                 </GridItem>
-                <GridItem  >
-                    <DashboardCard title={intl.formatMessage({id: 'tt_news'})} value={totalNews}/> 
-
-
-                </GridItem>
-                <GridItem  >
-                    <DashboardCard title={intl.formatMessage({id: 'tt_projects'})} value={totalProjects}/> 
-
-
-                </GridItem>
                 <GridItem >
+                    <Heading>{intl.formatMessage({id: "keywords"})}</Heading>
                     <DashboardCard title={intl.formatMessage({id: 'tt_keywords'})} value={totalKeywords}/> 
                 </GridItem>
                 </Grid>
-</Stack>
+</Flex>
             {/* 
                 <Box >
                     <UserFilter />
@@ -161,7 +177,8 @@ function Dashboard({errorTopBar,...props}) {
                 </Box > 
             </Box> */}
             <Box >
-                <PieChartCustom data={newsPieChart} header="news" />
+                {/* <Heading>{intl.formatMessage({id: header})}</Heading> */}
+                {/* <PieChartCustom data={newsPieChart} header="news" /> */}
                 {/* <LineChart usersPerDay={usersPerDay}/> */}
             </Box>
         
