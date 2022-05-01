@@ -140,7 +140,7 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                     <Tr key={u.id}>
                     <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
-                    <IconButton onClick={()=> navigate("/users/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                    <IconButton onClick={()=> navigate("/profile/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
 
                 </Tr>
                 ))}  

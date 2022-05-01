@@ -130,8 +130,8 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     </ButtonGroup>
             
                     <Td>
-                        <Tooltip label={"/users/"+u.id}>
-                        <IconButton onClick={()=> navigate("/users/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                        <Tooltip label={"/profile/"+u.id}>
+                        <IconButton onClick={()=> navigate("/profile/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
                         </Tooltip>
                     </Td>
 

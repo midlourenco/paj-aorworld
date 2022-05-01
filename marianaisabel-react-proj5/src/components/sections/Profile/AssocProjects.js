@@ -49,7 +49,7 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
     const { id } = useParams();
     console.log(id)
 
-
+//*********************************************USE EFFECT  ********************************************************************* */
     useEffect( async() => {
         console.log("houve refresh vou buscar notif " );    
         setRestResponse("");
@@ -59,6 +59,7 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
         if (response.ok) {
             (console.log("proj assoc" +response))
             setProjectsAssocToMe(projectsAssocToMe);
+
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -89,15 +90,44 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                     setAppError(  "error_fetch_generic" );
                 }
             }
-    
-
-
 
         }
  
     },[])
 
 
+/*********************************************DESASSOCIATE  ********************************************************************* */
+
+
+    const handleDesassocClick =async(projectId)=>{
+        console.log("carreguei em desassociar do proj "+ projectId)
+        const data= {"userId" : id}
+
+        const desassocProj= await post('/projects/'+projectId+'/cancelUserAssoc',data);
+        if (response.ok) {
+            (console.log("proj assoc" +desassocProj))
+            
+            setProjectsAssocToMe(projectsAssocToMe.filter((projectId)=>{
+                if(projectId==projectsAssocToMe.id){
+                  return false;
+                }
+                return true;
+              }));
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_generic');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+            setAppError(  error);
+            }else{
+                setAppError(  "error_fetch_generic" );
+            }
+        }
+
+
+    }
 
 
 
@@ -117,24 +147,32 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                 </Thead>
                 <Tbody>
                 {projectsAssocToMe.map((p)=>(
-                <Tr key={p.id}>
-                    <Td>{p.title}</Td>
-                    <Td>{p.createdBy.firstName}</Td>
-                    {/* <Td>{p.createdBy.firstName}</Td> */}
-                    <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
-                    <Td>
-                    <ButtonGroup>
-                        <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
-                            <Button maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserTimes />} > <FormattedMessage id={"desassociate"}/></Button>
-                        </Tooltip>
-                    </ButtonGroup>
+                    <Tr key={p.id}>
+                        <Td>{p.title}</Td>
+                        <Td>{p.createdBy.firstName}</Td>
+                        {/* <Td>{p.createdBy.firstName}</Td> */}
+                        <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
+                        <Td>
+                        <ButtonGroup>
+                            <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
+                                <Button 
+                                onClick={()=>handleDesassocClick(p.id )}
+                                maxW="130px" 
+                                colorScheme={"teal"} 
+                                fontSize="sm" 
+                                leftIcon={<FaUserTimes />} 
+                                > 
+                                <FormattedMessage id={"desassociate"}/>
+                                </Button>
+                            </Tooltip>
+                        </ButtonGroup>
+                        </Td>
+                        <Td>
+                        <Tooltip label={"/projects/" + p.id}>
+                            <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                        </Tooltip >
                     </Td>
-                    <Td>
-                    <Tooltip label={"/projects/" + p.id}>
-                        <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
-                    </Tooltip >
-                   </Td>
-                </Tr>
+                    </Tr>
                 ))}  
                 </Tbody>
             </Table>

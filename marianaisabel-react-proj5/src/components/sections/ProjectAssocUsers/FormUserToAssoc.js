@@ -129,7 +129,7 @@ const FormUserToAssoc=({ user,projectId,removeUserAssociated,...props})=>{
             <Tr key={user.id}>
             <Td color="gray.500" fontWeight="400" >
                 {user.firstName + " " + user.lastName}  
-                <IconButton onClick={()=> navigate("/users/"+user.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} 
+                <IconButton onClick={()=> navigate("/profile/"+user.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} 
                 />
             </Td>
             <Td color="gray.500" fontWeight="400" >{user.email}</Td>
