@@ -104,6 +104,38 @@ const AssocUsersTab=({isAdmin,...props})=>{
         
     },[])
 
+   // *********************************************DESASSOCIATE  ********************************************************************* */
+
+
+    const handleDesassocClick =async(userId)=>{
+        console.log("carreguei em desassociar do proj "+id+ " o user "+ userId)
+        const data= {"userId" : userId}
+
+        const desassocProj= await post('/projects/'+id+'/cancelUserAssoc',data);
+        if (response.ok) {
+            (console.log("proj assoc" +desassocProj))
+            
+            setUsersOnProject(usersOnProject.filter((userId)=>{
+                if(userId==usersOnProject.id){
+                  return false;
+                }
+                return true;
+              }));
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setAppError('error_fetch_generic');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+            setAppError(  error);
+            }else{
+                setAppError(  "error_fetch_generic" );
+            }
+        }
+
+
+    }
 
     return (<>                
             <Heading as="h3" ><FormattedMessage id={"associated_users"} />:</Heading>
@@ -115,6 +147,8 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     <Th>{intl.formatMessage({id: 'user_name'})}</Th>
                     <Th>{intl.formatMessage({id: 'form_field_email'})}</Th>
                     <Th>{intl.formatMessage({id: 'job'})}</Th>
+                    <Th>{intl.formatMessage({id: 'desassociate'})}</Th>
+                    <Th>{intl.formatMessage({id: 'go_to'})}</Th>
                 </Tr>
                 </Thead>
                 <Tbody>
@@ -123,12 +157,23 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.userRoleInProject}</Td>
+                    <Td >
                     <ButtonGroup>
                     <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
-                            <Button variant="outline" maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserTimes />} > <FormattedMessage id={"desassociate"}/></Button>
+                            <Button 
+                            verticalAlign={"center"}
+                            onClick={()=>handleDesassocClick(u.id)}
+                            variant="outline" 
+                            maxW="130px" 
+                            colorScheme={"teal"} 
+                            fontSize="sm" 
+                            leftIcon={<FaUserTimes />} 
+                            > 
+                                <FormattedMessage id={"desassociate"}/>
+                            </Button>
                         </Tooltip>
                     </ButtonGroup>
-            
+                    </Td>
                     <Td>
                         <Tooltip label={"/profile/"+u.id}>
                         <IconButton onClick={()=> navigate("/profile/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
