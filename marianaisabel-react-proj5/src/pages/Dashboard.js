@@ -66,7 +66,7 @@ function Dashboard({errorTopBar,...props}) {
     
     console.log(errorTopBar);
     useEffect(()=>{
-        connectWSGeneralDashboard((evt)=>{
+        const socket = connectWSGeneralDashboard((evt)=>{
             console.log("info do ws do dashboard geral" + evt.data)
 
             console.log(JSON.parse(evt.data));
@@ -77,6 +77,9 @@ function Dashboard({errorTopBar,...props}) {
             setTotalNews( stats.TotalNews);
         // setAvgActiv ( parseFloat(stats.AvgActivPerUser).toFixed(2)); 
     
+        return ()=>{
+            socket.close();
+        }
 
             // updatetUsersList(stats.TotalUsers);
 
