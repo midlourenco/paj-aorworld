@@ -56,6 +56,8 @@ public abstract class AbstractDao<T extends Serializable> implements Serializabl
 		final CriteriaQuery<T> criteriaQuery = em.getCriteriaBuilder().createQuery(clazz);
 		criteriaQuery.select(criteriaQuery.from(clazz));
 		return em.createQuery(criteriaQuery).getResultList();
+		
+//		criteria.addOrder(Order.asc("id"));
 	}
 
 	public List<T> findAllNonDeleted() {

@@ -180,6 +180,88 @@ public class DashboardBean implements Serializable {
 		}
 	}
 	
+
+	
+	
+	///////////////////////////////////////////////
+	//Devolve o número total notícias Publicas; 
+	///////////////////////////////////////////////
+	public long countPublicNews() {
+		try { 
+		System.out.println("ok total getTotalKeywords no serviço do dashboard" );
+		return newsDao.countPublicNews();
+		
+		} catch (NullPointerException e) { // caso não tenha Authorization no header
+			System.out.println("erro null point o getTotalKeywordss controller " );
+			e.printStackTrace();
+			return 0;
+		}catch (Exception e) {
+		e.printStackTrace();
+		System.out.println("ocorreu algum problema a procurar por user na BD -  getTotalKeywords no serviço");
+		return 0;
+		}
+	}
+	
+	///////////////////////////////////////////////
+	//Devolve o número total notícias Privates; 
+	///////////////////////////////////////////////
+	public long countPrivateNews() {
+		try { 
+		System.out.println("ok total getTotalKeywords no serviço do dashboard" );
+		return newsDao.countPrivateNews();
+		
+		} catch (NullPointerException e) { // caso não tenha Authorization no header
+			System.out.println("erro null point o getTotalKeywordss controller " );
+			e.printStackTrace();
+			return 0;
+		}catch (Exception e) {
+		e.printStackTrace();
+		System.out.println("ocorreu algum problema a procurar por user na BD -  getTotalKeywords no serviço");
+		return 0;
+		}
+	}
+	
+	///////////////////////////////////////////////
+	//Devolve o número total notícias Privates apagdas; 
+	///////////////////////////////////////////////
+	public long countDeletedPrivateNews() {
+		try { 
+		System.out.println("ok total getTotalKeywords no serviço do dashboard" );
+		return newsDao.countDeletedPrivateNews();
+		
+		} catch (NullPointerException e) { // caso não tenha Authorization no header
+			System.out.println("erro null point o getTotalKeywordss controller " );
+			e.printStackTrace();
+			return 0;
+		}catch (Exception e) {
+		e.printStackTrace();
+		System.out.println("ocorreu algum problema a procurar por user na BD -  getTotalKeywords no serviço");
+		return 0;
+		}
+	}
+	
+	///////////////////////////////////////////////
+	//Devolve o número total notícias pub apagdas; 
+	///////////////////////////////////////////////
+	public long countDeletedPublicNews() {
+		try { 
+		System.out.println("ok total getTotalKeywords no serviço do dashboard" );
+		return newsDao.countDeletedPublicNews();
+		
+		} catch (NullPointerException e) { // caso não tenha Authorization no header
+			System.out.println("erro null point o getTotalKeywordss controller " );
+			e.printStackTrace();
+			return 0;
+		}catch (Exception e) {
+		e.printStackTrace();
+		System.out.println("ocorreu algum problema a procurar por user na BD -  getTotalKeywords no serviço");
+		return 0;
+		}
+	}
+	
+	
+	
+	
 	
 	//project in average x keywords
 	//news in average x keywords
@@ -213,22 +295,27 @@ public class DashboardBean implements Serializable {
 	
 	System.out.println("o update do dashboard geral foi chamado");
 	
-//	ArrayList<JSONObject>projectPieChart= new ArrayList<>();
-//	JSONObject obj1 = new JSONObject();
-//	obj1.put("key", "Public projects");
-//	obj1.put("data", getTTPublicProject());
-//	projectPieChart.add(obj1);
-//	
-//	JSONObject obj2 = new JSONObject();
-//	obj2.put("key", "FinalizedActivities");
-//	obj2.put("data", getTTPrivateProject());
-//	projectPieChart.add(obj2);
-//	
-//	JSONObject obj3 = new JSONObject();
-//	obj3.put("key", "DelayedActivities");
-//	obj3.put("data", getTTDeletedProject());
-//	
-//	projectPieChart.add(obj3);
+	ArrayList<JSONObject>newsPieChart= new ArrayList<>();
+	JSONObject obj1 = new JSONObject();
+	obj1.put("key", "PublicNews");
+	obj1.put("data", countPublicNews());
+	newsPieChart.add(obj1);
+	
+	JSONObject obj2 = new JSONObject();
+	obj2.put("key", "PublicDeletedNews");
+	obj2.put("data", countDeletedPublicNews());
+	newsPieChart.add(obj2);
+	
+	JSONObject obj3 = new JSONObject();
+	obj3.put("key", "PrivateNews");
+	obj3.put("data", countPrivateNews());
+	newsPieChart.add(obj3);
+	
+	JSONObject obj4= new JSONObject();
+	obj4.put("key", "PrivateDeteledNews");
+	obj4.put("data", countDeletedPrivateNews());
+	newsPieChart.add(obj4);
+	
 	
 	//grafico com 2 linhas projectos e noticias por dia
 	
@@ -238,7 +325,7 @@ public class DashboardBean implements Serializable {
 	stats.put("TotalProjects", getTotalProjects());
 	stats.put("TotalNews", getTotalNews());
 	stats.put("TotalKeywords", getTotalKeywords());
-	
+	stats.put("newsPieChart", newsPieChart);
 	
 	System.out.println(stats.toString());
 	GeneralDashboardWS.send( stats.toString());

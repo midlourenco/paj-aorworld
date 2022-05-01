@@ -13,12 +13,14 @@ import {
     Grid,
     GridItem,
     Stack,
+    Spinner,
 
 } from "@chakra-ui/react";
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import ErrorMsgTopBar from '../components/ErrorMsgTopBar'
-import DashboardCard from "../components/DashboardCard"
+import DashboardCard from "../components/Dashboard/DashboardCard"
+import PieChartCustom from "../components/Dashboard/PieChartCustom"
 import{connectWSGeneralDashboard} from "../api_websocket"
 
 //TODO: 
@@ -62,8 +64,9 @@ function Dashboard({errorTopBar,...props}) {
     const [totalNews, setTotalNews]=useState("--");
     const [totalProjects, setTotalProjects]=useState("--");
     const [totalKeywords, setTotalKeywords]=useState("--");
+    const [newsPieChart, setNewsPieChart] = useState([]);
+    const [stats, setStats] = useState("--");
 
-    
     console.log(errorTopBar);
     useEffect(()=>{
         const socket = connectWSGeneralDashboard((evt)=>{
@@ -75,6 +78,7 @@ function Dashboard({errorTopBar,...props}) {
             setTotalKeywords( stats.TotalKeywords);
             setTotalProjects( stats.TotalProjects);
             setTotalNews( stats.TotalNews);
+            setNewsPieChart(stats.newsPieChart);
         // setAvgActiv ( parseFloat(stats.AvgActivPerUser).toFixed(2)); 
     
         return ()=>{
@@ -91,6 +95,16 @@ function Dashboard({errorTopBar,...props}) {
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
 
+
+
+   if(!newsPieChart ){
+        
+    return (<>
+        <Text>Loading...</Text>
+        <Spinner />
+        </>
+    )
+    } 
     return (
     <Box background={"teal.400"} >
         <Heading  my={0} py={12} color={"white"} ><FormattedMessage id={"dashboard"} /> </Heading>
@@ -146,11 +160,11 @@ function Dashboard({errorTopBar,...props}) {
                     <UserCards /> 
                 </Box > 
             </Box> */}
-            {/* <Box >
-                <PieChart activitiesPieChart={activitiesPieChart} />
-                <LineChart usersPerDay={usersPerDay}/>
+            <Box >
+                <PieChartCustom data={newsPieChart} header="news" />
+                {/* <LineChart usersPerDay={usersPerDay}/> */}
             </Box>
-        </Box> */}
+        
 
         {restResponse=="OK"?
         <Text my={5} color="green"><FormattedMessage id={"sucess_on_updating"} /> </Text>

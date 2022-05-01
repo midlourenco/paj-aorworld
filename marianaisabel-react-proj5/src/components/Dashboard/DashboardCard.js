@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux'
-import { chageTargetUser } from '../redux/actions'
+import { chageTargetUser } from '../../redux/actions'
 import {
     Flex,
     Text,
@@ -19,10 +19,10 @@ import {
     useMediaQuery,Badge,
     IconButton
   } from "@chakra-ui/react";
-
+  import {FormattedMessage ,useIntl} from "react-intl";
 //vamos descontruir o props, e retirar o titulo e valor, e manter os restantes caracteristicas do props no props
 function Card ({title="Titulo Default", value=99999,...props}) {
-
+  const intl = useIntl();
 
     // return (
     //     <div className="card">
@@ -41,7 +41,7 @@ function Card ({title="Titulo Default", value=99999,...props}) {
               background={"whiteAlpha.900"}
               {...props}>
                 <Heading fontSize='xl'>{title}</Heading>
-                <Text mt={4}>{value}</Text>
+                <Text textAlign={"center"} mt={4}>{value}</Text>
               </Box>
     
     )

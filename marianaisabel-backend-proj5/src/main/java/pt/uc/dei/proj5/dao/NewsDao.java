@@ -445,7 +445,84 @@ public class NewsDao extends AbstractDao<News> {
 	}
 
 	/////////////////////////////////////////////////////////
-	// METODOS verificam condições
+	// METODOS dashboard
 	////////////////////////////////////////////////////////
 
+	
+	
+	public Long countPublicNews() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<News> c = criteriaQuery.from(News.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("visibility"), true),
+				em.getCriteriaBuilder().equal(c.get("deleted"), false)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+
+	
+	public Long countPrivateNews() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<News> c = criteriaQuery.from(News.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("visibility"), false),
+				em.getCriteriaBuilder().equal(c.get("deleted"), false)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+	public Long countDeletedPublicNews() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<News> c = criteriaQuery.from(News.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("visibility"), true),
+				em.getCriteriaBuilder().equal(c.get("deleted"), true)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+	public Long countDeletedPrivateNews() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<News> c = criteriaQuery.from(News.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("visibility"), false),
+				em.getCriteriaBuilder().equal(c.get("deleted"), true)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+	
+	
+	
+	
+	
 }
