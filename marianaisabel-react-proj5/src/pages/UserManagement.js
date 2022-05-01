@@ -69,8 +69,7 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
 
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    ;
-    const [usersToAprove, setUsersToAprove] = useState([]);
+   const [usersToAprove, setUsersToAprove] = useState([]);
 
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
@@ -79,33 +78,13 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
     }
      /**** ******************************************USE EFFECT********************************************************* */
 
-    // useEffect(async()=>{
-    //     console.log("dentro do userEffect");
-    //     setRestResponse("");
 
-    //     const getUsersToAprove = await get("users/viwersList")
-    //     if (response.ok) {
-    //         console.log(getUsersToAprove)
-    //         setUsersToAprove(getUsersToAprove);
-    //         if(userPriv =="ADMIN"){
-    //             setAdminPriv(true);
-    //         }
-    //         setAppError("");
-    //     } else if(response.status==401) {
-    //         console.log("credenciais erradas? " + error)
-    //         setRestResponse("NOK");
-    //         setAppError('error_fetch_login_401');
-    //     }else{
-    //         console.log("houve um erro no fetch " + error)
-    //         if(error && error!=""){
-    //             setAppError(  error );
-    //             setRestResponse("NOK");
-    //         }else{
-    //             setAppError(  "error_fetch_generic" );
-    //             setRestResponse("NOK");
-    //         }
-    //     }
-    // },[])
+     /**** ******************************************OUTRAS FUNÇOES ********************************************************* */
+
+ //em alternativa podia-se /devia-se usar redux para gerir esta situação. mas optou-se por esta implementação por uma questão de tempo
+   
+    const [blockedUser, setBlockedUser]=useState(null)
+    const [unblockedUser, setUnblockedUser]=useState(null)
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
 
@@ -125,10 +104,15 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
             {error && 'Error!'}
             {/* {loading && 'Loading...'} */}
             <Flex flexDirection={"column"}  >
-            <UsersToApprove />
-            <UsersToUnblock />                
+            <UsersToApprove 
+            setBlockedUser={setBlockedUser}
+            unblockedUser={unblockedUser} 
+            />
+            <UsersToUnblock 
+            setUnblockedUser={setUnblockedUser}
+            blockedUser={blockedUser} 
+            />                
             </Flex>
-           
         </Flex>
     </Box>
 

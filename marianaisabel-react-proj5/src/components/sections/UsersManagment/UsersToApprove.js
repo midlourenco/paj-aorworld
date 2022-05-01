@@ -3,7 +3,7 @@ import { useState, useEffect, } from "react";
 //Redirect replace by Naviagate
 import {Navigate, useParams, useNavigate} from 'react-router-dom'
 //https://react-hook-form.com/
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import {FormattedMessage ,useIntl} from "react-intl";
 
 import {
@@ -55,7 +55,7 @@ function setAppError(error){
     console.log(error)
 }
 
-function UsersToApprove({userPriv, ...props}) {
+function UsersToApprove({unblockedUser,setBlockedUser,...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
@@ -85,9 +85,6 @@ function UsersToApprove({userPriv, ...props}) {
         if (response.ok) {
             console.log(getUsersToAprove)
             setUsersToAprove(getUsersToAprove);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -118,7 +115,6 @@ function UsersToApprove({userPriv, ...props}) {
                 }
                 return true;
               }));
-
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -174,7 +170,8 @@ function UsersToApprove({userPriv, ...props}) {
                 }
                 return true;
               }));
-
+              setBlockedUser (userToAprov);
+   
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -194,7 +191,9 @@ function UsersToApprove({userPriv, ...props}) {
 
 
 
-
+    useEffect(()=>{
+        if(unblockedUser) setUsersToAprove([...usersToAprove,unblockedUser ])
+    },[unblockedUser])
 
   /**** ******************************************RENDER!!!********************************************************* */
 
@@ -266,7 +265,7 @@ function UsersToApprove({userPriv, ...props}) {
                             maxW="100px" 
                             colorScheme={"yellow"} 
                             fontSize="sm"  
-                            eftIcon={<FaUserCheck />}  
+                            leftIcon={<FaUserCheck />}  
                             >
                                 <FormattedMessage id={"ADMIN"}/>
                             </Button>

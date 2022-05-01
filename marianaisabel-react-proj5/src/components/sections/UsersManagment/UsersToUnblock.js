@@ -55,7 +55,7 @@ function setAppError(error){
     console.log(error)
 }
 
-function UsersToUnblock({userPriv, ...props}) {
+function UsersToUnblock({blockedUser,setUnblockedUser, ...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
@@ -70,10 +70,36 @@ function UsersToUnblock({userPriv, ...props}) {
     ;
     const [usersToUnblock, setUsersToUnblock] = useState([]);
 
-    /**** ****************************************FORM*********************************************************** */
-    //fuções que chamos ao submeter o formulário de edição
-    const {register, handleSubmit, formState: {errors}}= useForm();
-    async function onSubmit (data, e) {
+ 
+     /**** ******************************************ACCOES DOS BOTOES********************************************************* */
+
+     const handleUnblock=async(userToAprov)=>{
+        const unblockUser = await post("users/"+userToAprov.id+"/undelete")
+        if (response.ok) {
+            console.log(unblockUser)
+            
+            setUsersToUnblock(usersToUnblock.filter((u)=>{
+                if(u==userToAprov){
+                  return false;
+                }
+                return true;
+              }));
+              setUnblockedUser(userToAprov);
+            setAppError("");
+        } else if(response.status==401) {
+            console.log("credenciais erradas? " + error)
+            setRestResponse("NOK");
+            setAppError('error_fetch_login_401');
+        }else{
+            console.log("houve um erro no fetch " + error)
+            if(error && error!=""){
+                setAppError(  error );
+                setRestResponse("NOK");
+            }else{
+                setAppError(  "error_fetch_generic" );
+                setRestResponse("NOK");
+            }
+        }
     }
      /**** ******************************************USE EFFECT********************************************************* */
 
@@ -85,9 +111,6 @@ function UsersToUnblock({userPriv, ...props}) {
         if (response.ok) {
             console.log(getUsersToUnblock)
             setUsersToUnblock(getUsersToUnblock);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -105,36 +128,11 @@ function UsersToUnblock({userPriv, ...props}) {
         }
     },[])
 
- /**** ******************************************ACCOES DOS BOTOES********************************************************* */
+    useEffect(()=>{
+        if(blockedUser) setUsersToUnblock([...usersToUnblock,blockedUser ])
+    },[blockedUser])
 
-    const handleUnblock=async(userToAprov)=>{
-        const unblockUser = await post("users/"+userToAprov.id+"/undelete")
-        if (response.ok) {
-            console.log(unblockUser)
-            
-            setUsersToUnblock(usersToUnblock.filter((u)=>{
-                if(u==userToAprov){
-                  return false;
-                }
-                return true;
-              }));
 
-            setAppError("");
-        } else if(response.status==401) {
-            console.log("credenciais erradas? " + error)
-            setRestResponse("NOK");
-            setAppError('error_fetch_login_401');
-        }else{
-            console.log("houve um erro no fetch " + error)
-            if(error && error!=""){
-                setAppError(  error );
-                setRestResponse("NOK");
-            }else{
-                setAppError(  "error_fetch_generic" );
-                setRestResponse("NOK");
-            }
-        }
-    }
 
   /**** ******************************************RENDER!!!********************************************************* */
 
