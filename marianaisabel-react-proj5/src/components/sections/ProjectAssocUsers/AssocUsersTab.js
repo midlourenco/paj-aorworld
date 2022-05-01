@@ -50,6 +50,8 @@ import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
 import FormUserToAssoc from "./FormUserToAssoc"
+import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
+
 //TODO: 
 function setAppError(error){
     console.log(error)

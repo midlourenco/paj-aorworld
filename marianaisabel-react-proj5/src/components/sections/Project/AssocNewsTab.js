@@ -49,6 +49,8 @@ import { ExternalLinkIcon, CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwo
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
+import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
+
 //TODO: 
 function setAppError(error){
     console.log(error)
@@ -75,8 +77,15 @@ const AssocNewsTab=({isAdmin, currentProject,...props})=>{
                         <Td color="gray.500" fontWeight="400" >{n.title}</Td>
                         <Td color="gray.500" fontWeight="400" >{n.createdBy.firstName}</Td>
                         <Td color="gray.500" fontWeight="400"  textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
+                        <ButtonGroup>
+                        <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
+                            <Button maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserTimes />} > <FormattedMessage id={"desassociate"}/></Button>
+                        </Tooltip>
+                        </ButtonGroup>
                         <Td>
+                        <Tooltip label={"/news/"+n.id}>
                             <IconButton onClick={()=> navigate("/news/"+n.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                        </Tooltip>
                         </Td>
                     </Tr>
                     ))}  

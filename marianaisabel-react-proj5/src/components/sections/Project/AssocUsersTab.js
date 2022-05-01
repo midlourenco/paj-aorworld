@@ -49,6 +49,8 @@ import { ExternalLinkIcon, CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwo
 import useFetch from 'use-http';
 import { connect } from 'react-redux'
 import EditableControls from "../../EditableControls"
+import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
+
 //TODO: 
 function setAppError(error){
     console.log(error)
@@ -121,8 +123,16 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.userRoleInProject}</Td>
+                    <ButtonGroup>
+                    <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
+                            <Button variant="outline" maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserTimes />} > <FormattedMessage id={"desassociate"}/></Button>
+                        </Tooltip>
+                    </ButtonGroup>
+            
                     <Td>
+                        <Tooltip label={"/users/"+u.id}>
                         <IconButton onClick={()=> navigate("/users/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                        </Tooltip>
                     </Td>
 
                 </Tr>

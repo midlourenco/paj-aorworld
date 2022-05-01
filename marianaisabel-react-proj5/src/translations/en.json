@@ -67,7 +67,7 @@
     "tooltip_aprove_as_member":"Aprove register as MEMBER",
     "tooltip_aprove_as_admin":"Aprove register as ADMIN",
     "tooltip_unblock_user":"Unblock user (user will go to approval list)",
-    "tooltip_desassociate":"Desassociate myself from this publication",
+    "tooltip_desassociate":"Desassociate from this publication",
 
     "_back_to_projects": "< Back to Projects",
     "_back_to_news": "< Back to News",

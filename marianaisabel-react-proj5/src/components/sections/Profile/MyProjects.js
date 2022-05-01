@@ -15,6 +15,7 @@ import {
     Text,
     Tfoot,
     IconButton,
+    Tooltip,
     Tr,
     Th,
     Td,
@@ -93,7 +94,9 @@ const MyProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEd
                     <Td>{p.createdBy.firstName}</Td>
                     <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
                     <Td>
-                        <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                    <Tooltip label={"/projects/" + p.id}>
+                        <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label= {intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                    </Tooltip>
                     </Td>
                 </Tr>
                 ))}  

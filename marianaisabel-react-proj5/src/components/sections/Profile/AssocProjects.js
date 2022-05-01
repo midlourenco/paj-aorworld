@@ -46,9 +46,15 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
     // const [newsCreatedByMe,setNewsCreatedByMe]=useState([])
     // const [deletedNewsAssocToMe,setDeletedNewsAssocToMe]=useState([])
     //const [deletedProjectsAssocToMe,setDeletedProjectsAssocToMe]=useState([])
+    const { id } = useParams();
+    console.log(id)
+
+
     useEffect( async() => {
         console.log("houve refresh vou buscar notif " );    
         setRestResponse("");
+
+        if(!id || id==undefined || id==""){    
         const projectsAssocToMe= await get('/projects/projectAssocToUser?user=' + userId);
         if (response.ok) {
             (console.log("proj assoc" +response))
@@ -66,6 +72,28 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
             }
         }
 
+        } else{
+            const projectsAssocToMe= await get('/projects/projectAssocToUser?user=' + id);
+            if (response.ok) {
+                (console.log("proj assoc" +response))
+                setProjectsAssocToMe(projectsAssocToMe);
+                setAppError("");
+            } else if(response.status==401) {
+                console.log("credenciais erradas? " + error)
+                setAppError('error_fetch_generic');
+            }else{
+                console.log("houve um erro no fetch " + error)
+                if(error && error!=""){
+                setAppError(  error);
+                }else{
+                    setAppError(  "error_fetch_generic" );
+                }
+            }
+    
+
+
+
+        }
  
     },[])
 
@@ -82,6 +110,7 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                 <Tr>
                     <Th>{intl.formatMessage({id: 'form_field_title'})}</Th>
                     <Th>{intl.formatMessage({id: 'create_by'})}</Th>
+                    {/* <Th>{intl.formatMessage({id: 'job'})}</Th> */}
                     <Th><FormattedMessage id={"form_field_create_date"}/></Th>
                     <Th>{intl.formatMessage({id: 'desassociate'})}</Th>
                 </Tr>
@@ -91,6 +120,7 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                 <Tr key={p.id}>
                     <Td>{p.title}</Td>
                     <Td>{p.createdBy.firstName}</Td>
+                    {/* <Td>{p.createdBy.firstName}</Td> */}
                     <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
                     <Td>
                     <ButtonGroup>
@@ -100,8 +130,10 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                     </ButtonGroup>
                     </Td>
                     <Td>
+                    <Tooltip label={"/projects/" + p.id}>
                         <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
-                    </Td>
+                    </Tooltip >
+                   </Td>
                 </Tr>
                 ))}  
                 </Tbody>

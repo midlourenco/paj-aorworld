@@ -96,7 +96,9 @@ const MyNews=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditCl
     <Td>{n.createdBy.firstName}</Td>
     <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
     <Td>
+     <Tooltip label={"/news/" + n.id}>
         <IconButton onClick={()=> navigate("/news/"+n.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+    </Tooltip>
     </Td>
 </Tr>
 ))}  

@@ -102,7 +102,9 @@ function DeletedNews({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                 </ButtonGroup>
                 </Td>
                 <Td>
+                    <Tooltip label={"/news/" + n.id}>
                     <IconButton onClick={()=> navigate("/news/"+n.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                    </Tooltip>
                 </Td>
             </Tr>
             ))}  

@@ -101,7 +101,9 @@ const DeletedProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,han
                 </ButtonGroup>
                 </Td>
                 <Td>
+                <Tooltip label={"/projects/" + p.id}>
                     <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
+                </Tooltip>
                 </Td>
             </Tr>
             ))}  
