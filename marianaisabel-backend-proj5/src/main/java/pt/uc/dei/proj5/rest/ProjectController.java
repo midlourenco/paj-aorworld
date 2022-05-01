@@ -267,7 +267,7 @@ public class ProjectController {
 				if(userId>0) {
 					resultado = projectService.getOnlyPublicProjectsMarkedAsDeletedFromUser(user);
 				}else {
-					resultado = projectService.getOnlyPublicProjectsNonDeleted();
+					resultado = projectService.getOnlyPublicProjectsMarkedAsDeleted();
 				}
 				
 					return Response.ok(resultado).build();
@@ -286,7 +286,7 @@ public class ProjectController {
 			if(userId>0) {
 				resultado = projectService.getOnlyPublicProjectsMarkedAsDeletedFromUser(user);
 			}else {
-				resultado = projectService.getOnlyPublicProjectsNonDeleted();
+				resultado = projectService.getOnlyPublicProjectsMarkedAsDeleted();
 			}
 			
 				return Response.ok(resultado).build();

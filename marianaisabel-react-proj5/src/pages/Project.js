@@ -101,12 +101,11 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
     const handleCancelClick = () => setEditClick(!editMode);
     //função que chamamos ao clicar em eliminar 
     const handleDeleteClick= async()=>  {
-        setEditClick(!editMode);
-        const deletedUser = await del('users/'+currentProject.id)
+        const deletedProject = await del('projects/'+currentProject.id)
         if (response.ok) {
-            console.log("user eliminado/bloqueado com sucesso ", deletedUser);
+            console.log("project eliminado/bloqueado com sucesso ", deletedProject);
             setAppError("");
-            navigate("/about");
+            navigate("/projects");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setAppError('error_fetch_login_401');
@@ -137,9 +136,6 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
         if (response.ok) {
             console.log(getprojects)
             setCurrentProject(getprojects);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)

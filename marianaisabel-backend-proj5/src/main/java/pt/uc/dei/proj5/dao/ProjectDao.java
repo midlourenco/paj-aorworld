@@ -66,6 +66,7 @@ public class ProjectDao extends AbstractDao<Project> {
 	}
 
 	public static ProjectDTOResp convertEntityToDTOResp(Project projectEntity) {
+		if(projectEntity!=null) {
 		System.out.println("Entrei em convertEntityToDTOResp Project");
 		ProjectDTOResp projectDTOResp = new ProjectDTOResp();
 		projectDTOResp.setId(projectEntity.getId());
@@ -111,6 +112,7 @@ public class ProjectDao extends AbstractDao<Project> {
 		}
 		
 		return projectDTOResp;
+		}return null;
 	}
 	
 		public static ProjectDTOResp convertEntityToDTO_FORNEWSARRAY(Project projectEntity) {
@@ -125,14 +127,14 @@ public class ProjectDao extends AbstractDao<Project> {
 			projectDTOResp.setId(projectEntity.getId());
 			projectDTOResp.setCreatedBy(UserDao.convertEntitytoDTOResp(projectEntity.getCreatedBy()));
 
-			if (projectEntity.getCreatedDate() != null) {
+			if (projectEntity.getCreatedDate() != null || projectEntity.getCreatedDate().equals("") ) {
 				projectDTOResp.setCreatedDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getCreatedDate()));
 
 			} else {
 				projectDTOResp.setCreatedDate("");
 			}
 			
-			if (projectEntity.getLastModifDate() != null) {
+			if (projectEntity.getLastModifDate() != null || !projectEntity.getLastModifDate().equals("") ) {
 				projectDTOResp.setLastModifDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(projectEntity.getLastModifDate()));
 				projectDTOResp.setLastModifBy(UserDao.convertEntitytoDTOResp(projectEntity.getLastModifBy()));		
 

@@ -87,8 +87,8 @@ function  Projects (){
         * Get all existing projects
         */
     if(selectedKeyword==""){
-        await get('projects')
-        const getProjects = await response.json();
+        
+        const getProjects =await get('projects')
         if (response.ok) {
             console.log(getProjects)
             setProjects(getProjects)
@@ -106,8 +106,8 @@ function  Projects (){
             }
         }
     }else{
-        await get('keywords/'+selectedKeyword+'/projects')
-        const getFilterProjects = await response.json();
+       
+        const getFilterProjects = await get('keywords/'+selectedKeyword+'/projects')
         if (response.ok) {
             console.log(getFilterProjects)
             setProjects(getFilterProjects)
@@ -131,8 +131,8 @@ function  Projects (){
         /**
          * Get all existing keywords among projects and news
          */       
-        await get('keywords')
-        const getKeywords = await response.json();
+       
+        const getKeywords =  await get('keywords')
         if (response.ok) {
             console.log(getKeywords)
             setKeywordsList(getKeywords)
@@ -153,8 +153,8 @@ function  Projects (){
          * Get all existing deleted projects 
          */      
         if(selectedKeyword==""){ 
-        await get('projects/deletedList')
-        const deletedProjects = await response.json();
+        
+        const deletedProjects = await get('projects/deletedList');
         if (response.ok) {
             console.log(deletedProjects)
             setDeletedProjects(deletedProjects)
@@ -172,8 +172,8 @@ function  Projects (){
             }
         }
         }else{
-        await get('keywords/'+selectedKeyword+'/projects/deletedList')
-            const deletedProjects = await response.json();
+        
+            const deletedProjects = await  get('keywords/'+selectedKeyword+'/projects/deletedList');
             if (response.ok) {
                 console.log(deletedProjects)
                 setDeletedProjects(deletedProjects)

@@ -197,7 +197,7 @@ public class ProjectSharingDao extends AbstractDao<ProjectSharing> {
 		
 	}
 	
-	
+	//https://www.initgrep.com/posts/java/jpa/select-values-in-criteria-queries
 	public List<Tuple> getUserAssocToProjectWithRole(Project project){
 	
 		try {

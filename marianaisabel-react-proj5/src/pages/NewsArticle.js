@@ -134,12 +134,11 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
     const handleCancelClick = () => setEditClick(!editMode);
     //função que chamamos ao clicar em eliminar 
     const handleDeleteClick= async()=>  {
-        setEditClick(!editMode);
-        const deletedUser = await del('users/'+currentNews.id)
+        const deletedNews = await del('news/'+currentNews.id)
         if (response.ok) {
-            console.log("user eliminado/bloqueado com sucesso ", deletedUser);
+            console.log("user eliminado/bloqueado com sucesso ", deletedNews);
             setAppError("");
-            navigate("/about");
+            navigate("/news");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setAppError('error_fetch_login_401');

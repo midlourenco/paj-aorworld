@@ -106,7 +106,7 @@ public class UserDao extends AbstractDao<User> {
 	 * @return
 	 */
 	public static UserDTOResp convertEntitytoDTOResp(User userEntity) {
-		
+		if(userEntity!=null) {
 		UserDTOResp userDTOResp = new UserDTOResp();
 		userDTOResp.setEmail(userEntity.getEmail());
 		userDTOResp.setFirstName(userEntity.getFirstName());
@@ -117,6 +117,7 @@ public class UserDao extends AbstractDao<User> {
 		userDTOResp.setId(userEntity.getId());
 		userDTOResp.setDeleted(userEntity.isDeleted());
 		return userDTOResp;
+		}return null;
 	}
 	
 	
