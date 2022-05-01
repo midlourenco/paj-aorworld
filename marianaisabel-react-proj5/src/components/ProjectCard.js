@@ -176,13 +176,14 @@ function  ProjectCard ({project, ...props}){
                     as='h4'
                     lineHeight='tight'
                     mb='1'
+                    textAlign={"center"}
                     isTruncated
                     > 
                         {project.title} 
                     </Text>
                 </ChakraLink>
 
-                <Box  isTruncated>
+                <Box  textAlign={"center"}  isTruncated>
                     {project.description}
                 </Box>
 

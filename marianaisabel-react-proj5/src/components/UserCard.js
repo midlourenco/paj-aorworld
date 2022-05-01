@@ -13,6 +13,7 @@ import {
     Avatar
 } from "@chakra-ui/react";
 import { FormattedMessage ,useIntl} from "react-intl";
+import { RiFullscreenExitLine } from 'react-icons/ri';
 
 
 function UserCard({user, ...props}) {
@@ -28,15 +29,14 @@ function UserCard({user, ...props}) {
     let id = user.id;
 
     return (
-        <Flex  >
+        <Flex border={"1px"} borderColor={"gray.200"} p={2} borderRadius={"20px"}>
         <Avatar src={user.image} my={'auto'}/>
-        <Box  height={"80px"}  mx={3} minW={"200px"}>
+        <Flex  direction="column" w="100%" minHeight={"80px"} alignItems="flex-start" justifyContent="center" mx={3} >
             <ChakraLink as={Link} to ={`/profile/${id}`} >
                 <Text fontSize="md" 
                 fontWeight='bold'
                 my='0'
                 isTruncated
-            
                 > 
                     {user.firstName + " " +user.lastName }
                     <Badge ml='1' colorScheme={setColorBadgeRole()}>
@@ -52,8 +52,8 @@ function UserCard({user, ...props}) {
                 </Badge>
             </Text> */}
             <Text fontSize='sm'>{user.email}</Text>
-            <Text fontSize='sm' isTruncated>{user.biography}</Text>
-        </Box>
+            <Text fontSize='sm'>{user.biography}</Text>
+        </Flex>
     </Flex>
     )
     }

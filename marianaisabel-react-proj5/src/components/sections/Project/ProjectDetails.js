@@ -77,13 +77,13 @@ const ProjectDetails=({isAdmin, currentProject,...props})=>{
                     : <Image src={currentProject.image} alt="project_image" h='255px' fallbackSrc="/images/logo.png"  />
                     }
                 </Box>
-                <Box mb={7}>
+                <Box  textAlign={"center"} mb={7}>
                     <Text fontSize='2xl' my={"30px"} me="10px" fontWeight={"bold"}> {currentProject.title }</Text>
 
                    
                     <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentProject.description }</Text>
                     
-                    <HStack  mb='5' alignSelf={"center"} justifyContent={"center"}>
+                    <Box  mb='5' alignSelf={"center"} justifyContent={"center"}>
                     {currentProject.deleted?
                         currentProject.keywords.map(k => (
                         <Badge borderRadius='full' px='2' color='grey' key={k} >{k}</Badge>
@@ -92,7 +92,7 @@ const ProjectDetails=({isAdmin, currentProject,...props})=>{
                         <Badge borderRadius='full' px='2' colorScheme='teal' key={k} >{k}</Badge>
                         ))
                     }
-                    </HStack>
+                    </Box>
 
                     {currentProject.visibility?
                         <Badge borderRadius='full' px='2' color='teal' > {intl.formatMessage({id: 'public'})  }   </Badge>
@@ -100,9 +100,9 @@ const ProjectDetails=({isAdmin, currentProject,...props})=>{
                     }
 
 
-                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1} fontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentProject.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.createdDate)}} />  </Text> </Text>
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1}  color="gray.500" fontWeight="400" mb="30px"> {currentProject.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.createdDate)}} />  </Text> </Text>
                     {currentProject.lastModifDate!=="" && currentProject.lastModifDate!=null ?
-                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} fontSize="md" color="gray.500" fontWeight="400" mb="30px">  {currentProject.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.lastModifDate)}} />   </Text>     </Text>                      
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1}  color="gray.500" fontWeight="400" mb="30px">  {currentProject.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.lastModifDate)}} />   </Text>     </Text>                      
                     :null
                     }
                 </Box>

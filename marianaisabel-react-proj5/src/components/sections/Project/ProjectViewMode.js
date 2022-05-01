@@ -35,35 +35,40 @@ const ProjectViewMode=({isAdmin,userId, currentProject,editMode,handleEditClick,
         alignItems="center"
         >
             
-            <Box minW={{ base: "90%", md: "468px" }} mb={5}>
-                <Flex
-                spacing={2}
-                backgroundColor="whiteAlpha.900"
-                boxShadow="md"
-                minHeight={"300px"}
-                p={10}
-                flexDirection={"column"}
-                justifyContent={"space-between"}
-                mt={10}
-                >
+        <Box minW={{ base: "90%", md: "468px" }} mb={5}>
+            <Flex
+            spacing={2}
+            backgroundColor="whiteAlpha.900"
+            boxShadow="md"
+            minHeight={"300px"}
+            p={10}
+            flexDirection={"column"}
+            justifyContent={"space-between"}
+            mt={10}
+            >
                     <ProjectDetails currentProject={currentProject} isAdmin={isAdmin}  />
+
+
                     {!currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin)?
                     (<Box >
                         <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
-                    </Box>)
-                    :currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin ) ?
-                    <Flex justifyContent='center'>
-                        <Button colorScheme={"teal"} size="md" >{intl.formatMessage({id: 'undelete'})} </Button>
-                    </Flex >
-                        :null
+                    </Box>
+                    ) :currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin ) ?
+                        <Flex justifyContent='center'>
+                            <Button colorScheme={"teal"} size="md" >{intl.formatMessage({id: 'undelete'})} </Button>
+                        </Flex >
+                            :null
                     }
+
+
                     <AssocUsersTab  currentProject={currentProject} isAdmin={isAdmin} />
                     {!currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin)?
                     (<Box >
-                    <Button mt={5} colorScheme={"teal"} size="md"  onClick={()=>{navigate(`/projects/${currentProject.id}/associateusers`)}} >  {intl.formatMessage({id: 'associate_users'})}</Button>
-                    </Box>)    
-                    :null
+                        <Button mt={5} colorScheme={"teal"} size="md"  onClick={()=>{navigate(`/projects/${currentProject.id}/associateusers`)}} >  {intl.formatMessage({id: 'associate_users'})}</Button>
+                    </Box>
+                    ) :null
                     }
+
                     <AssocNewsTab currentProject={currentProject} isAdmin={isAdmin} />
 
 

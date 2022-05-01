@@ -22,6 +22,7 @@ import {
     Text,
     VStack,
     Divider,
+    Box,
     StackDivider,
 } from "@chakra-ui/react";
 
@@ -254,7 +255,7 @@ function  News (){
                     
                 </Flex>
 
-                <Stack  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={5}>
+                <Box  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={5}>
         
                     { keywordsList.filter((keyword)=>{
                             let filter = searchParams;
@@ -265,18 +266,18 @@ function  News (){
                     }).map((k)=>{
                         //colocamos a keyword seleccionada a verde:
                         return   selectedKeyword && selectedKeyword==k?
-                                    <Tag key={k} background="teal.400" color={"white"}>
+                                    <Tag m={1} key={k} background="teal.400" color={"white"}>
                                     <TagLeftIcon boxSize='12px' as={SearchIcon} />
                                     <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
                                     </Tag>
-                                    : <Tag key={k} >
+                                    : <Tag  m={1} key={k} >
                                     <TagLeftIcon boxSize='12px' as={SearchIcon} />
                                     <TagLabel > <Link  to="#" key={k} onClick={()=>handleSearchClick(k)} >{k} </Link></TagLabel>
                                     </Tag>
                                 
                         }
                     )}
-                </Stack >
+                </Box >
                 {selectedKeyword && selectedKeyword!=""?
                 <Button leftIcon={<ClearSearchSymbol color={"red"}/> } variant='outline' colorScheme='red' size='sm' ml={5} onClick={handleClearSearchClick}><FormattedMessage id={"clear_search"} /></Button>
                 : null

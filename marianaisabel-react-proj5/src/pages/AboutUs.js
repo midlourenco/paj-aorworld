@@ -101,14 +101,14 @@ const AboutUs = ()=>{
             p={[5,5,10]}
             flexDirection={"column"}
             justifyContent={"space-between"}
-            with={"80%"}
+            width={["100%", null, null, "80%"]}
             mt={5}
-            mx={20}
+            mx={[0, null, null, 20]}
             >
                     <Heading> <FormattedMessage id={"our_team"} /> </Heading>
             {error && 'Error!'}
             {loading && 'Loading...'}
-            <Grid  px={5} templateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={8} mx={5} >
+            <Grid  px={3} templateColumns={['1fr', null, 'repeat(2, 1fr)', null, 'repeat(3, 1fr)']} gap={4} mx={3} >
                 {users.map(u =>(<UserCard user ={u} key={u.id} ></UserCard>))}
             </Grid>
 
@@ -126,7 +126,7 @@ const AboutUs = ()=>{
             flexDirection={"column"}
             justifyContent={"center"}
             alignContent={"center"}
-            with={"80%"}
+            width={"80%"}
             mt={5}
             mx={20}
             > 

@@ -9,9 +9,6 @@ import {FormattedMessage ,useIntl} from "react-intl";
 import {
     Flex,
     Heading,
-    Input,
-    Button,
-    InputGroup,
     Stack,
     Spinner,
     Box,
@@ -19,26 +16,16 @@ import {
     Select,
     Avatar,
     Badge,
-    FormControl,
-    FormHelperText,
-    FormErrorMessage,
-    FormLabel,
     Image,
     Text,
     Spacer,
     Textarea,
     Tooltip,
-    Editable,
-    EditableInput,
-    EditableTextarea,
-    EditablePreview,
-    ButtonGroup,
     IconButton,
-    useEditableControls,
-    InputRightElement,
     Table,
     Thead,
     Tbody,
+    HStack,
     Tfoot,
     Tr,
     Th,
@@ -100,9 +87,25 @@ const NewsViewMode=({isAdmin, loading,currentNews,editMode,handleEditClick,handl
 
                     {/* <Badge mx={2} fontSize={"10px"} color={"teal.400"} ><FormattedMessage id={currentNews.privileges || "-"} defaultMessage={"-"} /></Badge> */}
                 </Box>
-                <Box mb={7}>
+                <Box   textAlign={"center"} mb={7}>
                     <Text fontSize='2xl' my="30px" me="10px" fontWeight={"bold"}> {currentNews.title }</Text>
                     <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px" > {currentNews.description }</Text>
+                   <Box>
+                    {currentNews.deleted?
+                        currentNews.keywords.map(k => (
+                        <Badge borderRadius='full' px='2' color='grey' key={k} >{k}</Badge>
+                        ))
+                    : currentNews.keywords.map(k => (
+                        <Badge borderRadius='full' px='2' colorScheme='teal' key={k} >{k}</Badge>
+                        ))
+                    }
+                </Box>
+
+                    {currentNews.visibility?
+                        <Badge borderRadius='full' px='2' color='teal' > {intl.formatMessage({id: 'public'})  }   </Badge>
+                        : <Badge borderRadius='full' px='2' color='green' > {intl.formatMessage({id: 'private'})  }   </Badge>
+                    }
+
                     <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1}  color="gray.500" fontWeight="400" mb="30px"> {currentNews.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.createdDate)}} />  </Text> </Text>
                     {currentNews.lastModifDate!=="" && currentNews.lastModifDate!=null ?
                     <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} color="gray.500" fontWeight="400" mb="30px">  {currentNews.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.lastModifDate)}} />   </Text>     </Text>                         

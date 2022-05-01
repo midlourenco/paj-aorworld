@@ -179,12 +179,12 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
 
     return (
     <Box>
-        <Flex 
+     <Flex 
         width="100wh"
         minHeight="20vh"
         backgroundColor="teal.400"
         justifyContent={"center"}
-        ><Heading color ={"white"} ><FormattedMessage id={"project_details"} /></Heading></Flex>
+        ><Heading as={"h1"} color ={"white"} ><FormattedMessage id={"project_details"} /> </Heading></Flex>
            
         <Flex
         flexDirection="column"
@@ -194,6 +194,7 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
         justifyContent="start"
         alignItems="center"
         >
+
 
         {/* { editMode==false?
         (<Box>

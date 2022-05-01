@@ -178,7 +178,7 @@ function  NewsArticleCard ({news, ...props}){
                     
                     </Box>
                 
-                    <Box color={textColor}>
+                    <Box textAlign={"center" } color={textColor}>
                         <ChakraLink as={Link} to ={`/news/${id}`}  >
                             <Text fontSize="md"  mt='1'
                             fontWeight='semibold'
@@ -192,7 +192,7 @@ function  NewsArticleCard ({news, ...props}){
                         </ChakraLink>
 
                         <Box  >
-                        <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px">
+                        <Text textAlign={"center" }  fontSize="md" color="gray.500" fontWeight="400" mb="30px">
                             {news.description}
                             </Text>
                         </Box>
