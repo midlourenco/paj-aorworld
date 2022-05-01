@@ -54,7 +54,7 @@ const ProjectEditMode=({isAdmin, currentProject,editMode,handleEditClick, handle
     const navigate = useNavigate();
     const intl = useIntl();
     const { get, post, del, response, loading, error } = useFetch();
-    const [scrollDown, setScrollDown]=useState(false)
+    
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
     const [input, setInput] = useState([]); //input para as keywords
     const [keywords, setKeywords] = useState(currentProject.keywords);// lista com as keywords
@@ -93,27 +93,27 @@ const ProjectEditMode=({isAdmin, currentProject,editMode,handleEditClick, handle
         if(data.visibility=="private")  data.visibility=false;
         console.log(data, e);
 
-        const updateUser = await post('projects/'+currentProject.id, data)
+        const updateProj = await post('projects/'+currentProject.id, data)
         if (response.ok) {
-            console.log("user atualizado com sucesso ", updateUser);
+            console.log("user atualizado com sucesso ", updateProj);
             setRestResponse("OK");
-            setScrollDown(true);
+           
             setAppError("");
            
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError('error_fetch_login_401');
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  error );
             }else{
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  "error_fetch_generic" );
             }
         }

@@ -14,6 +14,7 @@ import {
     InputGroup,
     Stack,
     Box,
+    Spinner,
     Link,
     Select,
     Avatar,
@@ -60,7 +61,7 @@ const defaultNews = {
     projects: [],
     users: [],
     createdBy: [],
-    createdDate: '',
+    createdDate: '1900-01-01',
     lastModifBy: [],
     lastModifDate: '',
     visibility: true,
@@ -86,7 +87,7 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false)
+    
 
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
@@ -100,23 +101,23 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
         if (response.ok) {
             console.log("user atualizado com sucesso ", updateUser);
             setRestResponse("OK");
-            setScrollDown(true);
+           
             setAppError("");
            
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError('error_fetch_login_401');
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  error );
             }else{
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  "error_fetch_generic" );
             }
         }
@@ -205,7 +206,7 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
      */
     useEffect(() => {
         window.scrollTo(0,document.body.scrollHeight);
-      },[scrollDown])
+      },[])
        
 
 
@@ -236,14 +237,16 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
         <Avatar size='2xl' bg="teal.500" mt={"-50%"} mb={10} name={currentNews.firstName + " " + currentNews.lastName} src={currentNews.image} />
         </Box>
         ):null} */}
-
         {error && 'Error!'}
         {loading && 'Loading...'}
 
-        {error?
+        {!currentNews?
+            <Spinner />
+        :error?
             <WarningTwoIcon />
     
         :(editMode==false?
+
 
             <NewsViewMode  
             isAdmin={isAdmin}
@@ -252,6 +255,7 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
             handleEditClick={handleEditClick} 
             handleDeleteClick={handleDeleteClick}
             handleCancelClick={handleCancelClick}
+            loading={loading}
             />
 
             : <NewsEditMode 
@@ -261,11 +265,8 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
             handleEditClick={handleEditClick}
             handleDeleteClick={handleDeleteClick}
             handleCancelClick={handleCancelClick} 
-            onError={onError} 
-            onSubmit={onSubmit} 
-            handleSubmit={handleSubmit} 
-            register={register}  
-            errors={errors}
+
+
             />
             )
         }

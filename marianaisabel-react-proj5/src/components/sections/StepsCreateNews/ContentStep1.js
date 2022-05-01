@@ -23,6 +23,8 @@ import {
 import {  AddIcon } from '@chakra-ui/icons'
 import { set } from 'react-hook-form';
 
+//https://jeanverster.github.io/chakra-ui-steps-site/
+ 
 
 function ContentStep1 ({errors, register,nextStep, trigger,saveInputKeyword, input,keywords, setShowStepperButtons, showStepperButtons, handleAddNewKeyword, handleDeleteTag,...props }){
     const intl = useIntl();

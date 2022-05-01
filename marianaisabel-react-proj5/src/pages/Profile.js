@@ -77,7 +77,7 @@ function Profile({userPriv,errorTopBar="",...props}) {
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false)
+    
 
     const [assocProj,setAssocProj]=useState([]);
     const [assocNews,setAssocNews]=useState([]);
@@ -97,23 +97,23 @@ function Profile({userPriv,errorTopBar="",...props}) {
         if (response.ok) {
             console.log("user atualizado com sucesso ", updateUser);
             setRestResponse("OK");
-            setScrollDown(true);
+           
             setAppError("");
            
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError('error_fetch_login_401');
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  error );
             }else{
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  "error_fetch_generic" );
             }
         }
@@ -254,7 +254,7 @@ function Profile({userPriv,errorTopBar="",...props}) {
      */
     // useEffect(() => {
     //     window.scrollTo(0,document.body.scrollHeight);
-    // },[scrollDown])
+    // },[])
 
 
 

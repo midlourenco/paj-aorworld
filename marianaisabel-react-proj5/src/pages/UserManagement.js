@@ -70,7 +70,7 @@ function UserManagement({userPriv,errorTopBar="", ...props}) {
 
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false);
+    ;
     const [usersToAprove, setUsersToAprove] = useState([]);
 
     /**** ****************************************FORM*********************************************************** */

@@ -38,7 +38,7 @@ function NewProject() {
 
   const [data, setData]= useState("");
   const [restResponse, setRestResponse]=useState("");
-  const [scrollDown, setScrollDown]=useState(false)
+  
   const [input, setInput] = useState([]); //input para as keywords
   const [keywords, setKeywords] = useState([]);// lista com as keywords
 
@@ -61,24 +61,24 @@ function NewProject() {
     if (response.ok) {
         console.log("projecto criada com sucesso ", createdNews);
         setRestResponse("OK");
-        setScrollDown(true);
+       
         setAppError("");
      
        
       } else if(response.status==401) {
         console.log("credenciais erradas? " + error)
         setRestResponse("NOK");
-        setScrollDown(true);
+       
         setAppError('error_fetch_login_401');
     }else{
         console.log("houve um erro no fetch " + error)
         if(error && error!=""){
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError(  error );
         }else{
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError(  "error_fetch_generic" );
         }
     }
@@ -121,7 +121,7 @@ function NewProject() {
      */
   useEffect(() => {
     window.scrollTo(0,document.body.scrollHeight);
-  },[scrollDown])
+  },[])
 
 
   

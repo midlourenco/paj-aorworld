@@ -51,20 +51,22 @@ function EditableControls({isAdmin,editMode,handleEditClick,handleCancelClick, h
                 <Tooltip label= {intl.formatMessage({id: 'update'})} aria-label='A tooltip' >
                     <IconButton  type="submit" icon={<CheckIcon />}  mx={3}/>
                 </Tooltip>
-                {isAdmin?
-                (<Tooltip label= {intl.formatMessage({id: 'delete'})} aria-label='A tooltip' >
-                    <IconButton  icon={<DeleteIcon />}  mx={3} onClick={handleDeleteClick}/>
-                </Tooltip>)
-                :null
-                }
+            
             {/* <CancelButton handleCancelClick={handleCancelClick} intl={intl}/>
                 <SubmitButton intl={intl} /> */}
                 
                 {/* background="whiteAlpha.900" */}
             </ButtonGroup>
          ): (
-        <Flex justifyContent='center'>
+        <Flex justifyContent='center' gap={5}>
             <Button mt={6} size='md' rightIcon={<EditIcon />}  colorScheme={"teal"} onClick={handleEditClick} > <FormattedMessage id={"edit"} defaultMessage={"-"}/></Button>
+            <Button mt={6} size='md' rightIcon={<DeleteIcon />}  colorScheme={"teal"} onClick={handleDeleteClick} > <FormattedMessage id={"delete"} defaultMessage={"-"}/></Button>
+        
+            {/* <Tooltip label= {intl.formatMessage({id: 'delete'})} aria-label='A tooltip' >
+                <IconButton  icon={<DeleteIcon />}  mx={3} onClick={handleDeleteClick}/>
+            </Tooltip> */}
+                
+                
         </Flex>
         )
     }

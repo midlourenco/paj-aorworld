@@ -66,7 +66,7 @@ function RecentNotifications({userPriv, ...props}) {
 
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false);
+    ;
     const [lastNotification, setLastNotification] = useState([]);
 
     /**** ****************************************FORM*********************************************************** */

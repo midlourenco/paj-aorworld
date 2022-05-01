@@ -88,7 +88,7 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false)
+    
 
 
 
@@ -173,7 +173,7 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
      */
     // useEffect(() => {
     //     window.scrollTo(0,document.body.scrollHeight);
-    //   },[scrollDown])
+    //   },[])
        
 
 

@@ -66,7 +66,7 @@ function AllNotifications({userPriv, ...props}) {
 
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false);
+    ;
     const [notifications, setNotifications] = useState([]);
 
     /**** ****************************************FORM*********************************************************** */

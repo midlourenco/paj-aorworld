@@ -47,7 +47,7 @@ function Dashboard({errorTopBar,...props}) {
 
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-    const [scrollDown, setScrollDown]=useState(false)
+    
 
     /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição

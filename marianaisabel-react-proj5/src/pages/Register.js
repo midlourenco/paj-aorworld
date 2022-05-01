@@ -41,7 +41,7 @@ const Register = ({errorTopBar,...props})=>{
   const EyeSymbol = chakra(FaEye);
   const EyeSlashSymbol = chakra(FaEyeSlash);
   const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
-  const [scrollDown, setScrollDown]=useState(false)
+  
 
   const { post, del, response, loading, error } = useFetch();
   const {register, handleSubmit, formState: {errors},  watch}= useForm({defaultValues: {
@@ -62,37 +62,28 @@ const Register = ({errorTopBar,...props})=>{
     if (response.ok) {
         console.log("user atualizado com sucesso ", updateUser);
         setRestResponse("OK");
-        setScrollDown(true);
+       
         setAppError("");
        
     } else if(response.status==401) {
         console.log("credenciais erradas? " + error)
         setRestResponse("NOK");
-        setScrollDown(true);
+       
         setAppError('error_fetch_login_401');
     }else{
         console.log("houve um erro no fetch " + error)
         if(error && error!=""){
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError(  error );
         }else{
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError(  "error_fetch_generic" );
         }
     }
 }
   const onError = (errors, e) => console.log(errors, e);
-
-
-
-
-
-
-
-
-
 
 
 

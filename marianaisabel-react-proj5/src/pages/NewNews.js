@@ -63,7 +63,7 @@ function NewNews() {
 
   const [data, setData]= useState("");
   const [restResponse, setRestResponse]=useState("");
-  const [scrollDown, setScrollDown]=useState(false)
+  
   const [showStepperButtons, setShowStepperButtons]=useState(false);
 
 
@@ -112,24 +112,24 @@ function NewNews() {
         if (response.ok) {
             console.log("noticia criada com sucesso ", createdNews);
             setRestResponse("OK");
-            setScrollDown(true);
+           
             setAppError("");
             nextStep();
            
           } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
             setRestResponse("NOK");
-            setScrollDown(true);
+           
             setAppError('error_fetch_login_401');
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  error );
             }else{
                 setRestResponse("NOK");
-                setScrollDown(true);
+               
                 setAppError(  "error_fetch_generic" );
             }
         }
@@ -156,8 +156,12 @@ function NewNews() {
      */
   //  useEffect(() => {
   //   window.scrollTo(0,document.body.scrollHeight);
-  // },[scrollDown])
+  // },[])
    
+  //*********************************************STEPPER *************************************************************************** */
+ 
+//https://jeanverster.github.io/chakra-ui-steps-site/
+
   const content1 =(
     <ContentStep1 
     errors ={errors} 
