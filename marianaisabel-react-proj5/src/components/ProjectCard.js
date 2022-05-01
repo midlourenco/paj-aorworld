@@ -156,7 +156,7 @@ function  ProjectCard ({project, ...props}){
                     
                     </Box>
                     
-                    <HStack  mb='5' alignSelf={"center"}>
+                    <Box  mb='5' alignSelf={"center"}>
                     {project.deleted?
                         project.keywords.map(k => (
                         <Badge borderRadius='full' px='2' color='grey' key={k} >{k}</Badge>
@@ -165,7 +165,7 @@ function  ProjectCard ({project, ...props}){
                         <Badge borderRadius='full' px='2' colorScheme='teal' key={k} >{k}</Badge>
                         ))
                     }
-                    </HStack>
+                    </Box>
                 {/* </Badge> */}
                 </Box>
 
