@@ -149,7 +149,7 @@ const ProjectEditMode=({isAdmin, currentProject,editMode,handleEditClick, handle
                 >
               <VStack spacing='24px'>
                 <FormControl variant='floating' id='title' isInvalid = {errors.title} >                        
-                    <Input  {...register("title", {required: true})} type="text" id={"title"} defaultValue =  {currentProject.title}  name="title" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
+                    <Input  {...register("title", {required: true,setValueAs: (v)=> v.trim()})} type="text" id={"title"} defaultValue =  {currentProject.title}  name="title" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
                     <FormLabel color={"teal.500"} >{intl.formatMessage({id: 'form_field_title'})}</FormLabel>
                 </FormControl>  
                 {(errors.title)? 

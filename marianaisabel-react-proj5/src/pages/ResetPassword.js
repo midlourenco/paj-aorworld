@@ -1,5 +1,5 @@
 import React from "react"
-import { useState } from "react";
+import { useState , useRef} from "react";
 //Redirect replace by Naviagate
 import {Navigate} from 'react-router-dom'
 //https://react-hook-form.com/
@@ -32,7 +32,7 @@ const ResetPassword = ()=>{
   const EyeSymbol = chakra(FaEye);
   const EyeSlashSymbol = chakra(FaEyeSlash);
 
-  const {register, handleSubmit, formState: {errors}}= useForm();
+  const {register, watch,handleSubmit, formState: {errors}}= useForm();
   //const onSubmit = values => console.log(values); 
   //const handleSubmit(data){setData(data), console.log(data) )};
 
@@ -40,7 +40,8 @@ const ResetPassword = ()=>{
   const onError = (errors, e) => console.log(errors, e);
 
 
-
+  const password = useRef({});
+  password.current = watch("password", "");
   const [data, setData]= useState("");
   //mostrar e esconder a password
   const [showPassword, setShowPassword] = useState(false);
@@ -78,7 +79,7 @@ const ResetPassword = ()=>{
 
 
               <FormControl isInvalid = {errors.email}>
-                <Input {...register("email", {required: true})} type="email" placeholder={intl.formatMessage({id: 'form_field_email'})} />
+                <Input {...register("email", {required: true,setValueAs: (v)=> v.trim()})} type="email" placeholder={intl.formatMessage({id: 'form_field_email'})} />
                 {(errors.email)? 
                   (<FormErrorMessage><FormattedMessage id={"error_missing_email"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
@@ -87,7 +88,11 @@ const ResetPassword = ()=>{
               <FormControl isInvalid = {errors.password}>
                   <InputGroup>
                       <Input
-                          {...register("password", {required: true})}
+                          {...register("password", {required: true
+                          // minLength: {
+                          //   value: 6,
+                          //   message: "Password must have at least 6 characters"}
+                          })}
                           type={showPassword ? "text" : "password"}
                           placeholder={intl.formatMessage({id: 'form_field_password'})}
                       />
@@ -104,19 +109,20 @@ const ResetPassword = ()=>{
                   }
               </FormControl>
               
-              <FormControl isInvalid = {errors.password}>
+              <FormControl isInvalid = {errors.password2}>
                 <Input
-                    {...register("password", {required: true})}
+                    {...register("passowrd2",{ validate: value =>
+                        value === password.current || intl.formatMessage({id: "error_wrong_password"})
+                    })}
                     type= "password"
                     placeholder={intl.formatMessage({id: 'form_field_repeat_password'})}
                 />
               
-                {(errors.password)? 
-                  (<FormErrorMessage><FormattedMessage id={"error_missing_password"}  ></FormattedMessage></FormErrorMessage>)
+                {(errors.password2)? 
+                  (<FormErrorMessage><FormattedMessage id={"error_wrong_password"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
                 }
               </FormControl>
-
               <Button
                 borderRadius={0}
                 type="submit"

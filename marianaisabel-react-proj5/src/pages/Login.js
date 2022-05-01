@@ -199,7 +199,7 @@ function Login ({setLoginOK,setAppError,setLoggedUser,setNotifNumber,errorTopBar
                                 pointerEvents="none"
                                 children={<UserSymbol color="gray.300" />}
                             />
-                            <Input {...register("email", {required: true})} type="email" placeholder={intl.formatMessage({id: 'form_field_email'})} />
+                            <Input {...register("email", {required: true,setValueAs: (v)=> v.trim()})} type="email" placeholder={intl.formatMessage({id: 'form_field_email'})} />
                         </InputGroup>
                         {(errors.email)? 
                         (<FormErrorMessage><FormattedMessage id={"error_missing_email"}  ></FormattedMessage></FormErrorMessage>)
@@ -214,7 +214,7 @@ function Login ({setLoginOK,setAppError,setLoggedUser,setNotifNumber,errorTopBar
                                 children={<LockSymbol color="gray.300" />}
                             />
                             <Input
-                                {...register("password", {required: true})}
+                                {...register("password", {required: true,setValueAs: (v)=> v.trim()})}
                                 type={showPassword ? "text" : "password"}
                                 placeholder={intl.formatMessage({id: 'form_field_password'})}
                             />

@@ -90,9 +90,9 @@ const NewsViewMode=({isAdmin, currentNews,editMode,handleEditClick,handleCancelC
                 <Box mb={7}>
                     <Text fontSize='2xl' my="30px" me="10px" fontWeight={"bold"}> {currentNews.title }</Text>
                     <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px" > {currentNews.description }</Text>
-                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentNews.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.createdDate)}} />  </Text> </Text>
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1} fontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentNews.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.createdDate)}} />  </Text> </Text>
                     {currentNews.lastModifDate!=="" && currentNews.lastModifDate!=null ?
-                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px">  {currentNews.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.lastModifDate)}} />   </Text>     </Text>                         
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} fontSize="md" color="gray.500" fontWeight="400" mb="30px">  {currentNews.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentNews.lastModifDate)}} />   </Text>     </Text>                         
                     :null
                     }
                 </Box>

@@ -69,7 +69,7 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
                 {/* <Heading color="teal.400"> {intl.formatMessage({id: 'welcome'})}</Heading> */}
 
                 <FormControl variant='floating' id='first-name' isInvalid = {errors.firstName} >                        
-                    <Input  {...register("firstName", {required: true})} type="text" id={"firstname"} defaultValue =  {currentUser.firstName}  name="firstName" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
+                    <Input  {...register("firstName", {required: true, setValueAs: (v)=> v.trim()})} type="text" id={"firstname"} defaultValue =  {currentUser.firstName}  name="firstName" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
                     {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.firstName}  /> */}
                     <FormLabel color={"teal.500"} >{intl.formatMessage({id: 'form_field_first_name'})}</FormLabel>
                 </FormControl>  
@@ -78,7 +78,7 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
                 : null 
                 }
                 <FormControl mt={6} variant='floating' id='last-name' isInvalid = {errors.lastName} >                        
-                    <Input {...register("lastName", {required: true})}type="text" defaultValue =  {currentUser.lastName}  name="lastName" placeholder={intl.formatMessage({id: 'form_field_last_name'})}  />
+                    <Input {...register("lastName", {required: true, setValueAs: (v)=> v.trim()})}type="text" defaultValue =  {currentUser.lastName}  name="lastName" placeholder={intl.formatMessage({id: 'form_field_last_name'})}  />
                     {/* <Input type="text" fontSize='2xl' fontWeight={"bold"}  palceHolder  = {currentUser.lastName} />
                  */}
                 <FormLabel color={"teal.500"} >{intl.formatMessage({id: 'form_field_last_name'})}</FormLabel>
@@ -88,7 +88,7 @@ const ProfileEditMode=({isAdmin, currentUser,editMode,handleEditClick, handleCan
                 }
                 </FormControl>  
                 <FormControl  mt={6} variant='floating' id='email' isInvalid = {errors.email}>     
-                    <Input {...register("email", {required: true})}  type="email"  defaultValue =  {currentUser.email}  name="email"  placeholder={intl.formatMessage({id: 'form_field_email'})}/>
+                    <Input {...register("email", {required: true,setValueAs: (v)=> v.trim()})}  type="email"  defaultValue =  {currentUser.email}  name="email"  placeholder={intl.formatMessage({id: 'form_field_email'})}/>
                     {/* value  = {currentUser.email }  onChange={handleInputChange} name="email"
                     <Input type="email" as="i" fontSize='md'mt={1} palceHolder  = {currentUser.email }  /> */}
                 <FormLabel color={"teal.500"} > {intl.formatMessage({id: 'form_field_email'})}</FormLabel>

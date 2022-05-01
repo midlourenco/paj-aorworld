@@ -48,6 +48,7 @@ import Profile from "./pages/Profile";
 import Notification from "./pages/Notification";
 import Dashboard from "./pages/Dashboard";
 import UserManagement from "./pages/UserManagement";
+import ProjectAssocUsers from "./pages/ProjectAssocUsers"
 
 import config from "./config";
 import useFetch, {Provider} from 'use-http';
@@ -121,6 +122,7 @@ function App({language = "en",error="",...props}) {
                 <Route path= "/news/new" element ={<NewNews />} />
                 <Route path= "/news/:id" element ={<NewsArticle />} />
                 <Route path= "/projects/new" element ={<NewProject />} /> 
+                <Route path= "/projects/:id/associateusers" element ={<ProjectAssocUsers />} /> 
                 <Route path= "/projects/:id" element ={<Project />} /> 
                 <Route path= "/projects" element ={<Projects />} > </Route>
                 <Route path= "/about" element ={<AboutUs />} />

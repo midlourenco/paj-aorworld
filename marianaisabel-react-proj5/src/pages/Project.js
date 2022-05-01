@@ -23,6 +23,7 @@ import {
     FormErrorMessage,
     FormLabel,
     Text,
+    Spinner,
     Spacer,
     Textarea,
     Tooltip,
@@ -61,7 +62,7 @@ const defaultProject = {
     associatedUsers: [],
     associatedNews:[], 
     createdBy: [],
-    createdDate: '',
+    createdDate: '1000-01-01',
     lastModifBy: [],
     lastModifDate: '',
     visibility: false,
@@ -83,7 +84,7 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
     /**** *******************************************STATE******************************************************** */
 
     const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
-    const [currentProject, setCurrentProject]=useState(defaultProject);
+    const [currentProject, setCurrentProject]=useState(null);
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
     const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
@@ -207,7 +208,9 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
         {error && 'Error!'}
         {loading && 'Loading...'}
 
-        {error?
+        {!currentProject?
+            <Spinner />
+        :error?
             <WarningTwoIcon />
     
         :(editMode==false?

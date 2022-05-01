@@ -11,39 +11,8 @@ import {
     Heading,
     Input,
     Button,
-    InputGroup,
     Stack,
     Box,
-    Link,
-    Select,
-    Avatar,
-    Badge,
-    FormControl,
-    FormHelperText,
-    FormErrorMessage,
-    FormLabel,
-    Image,
-    Text,
-    Spacer,
-    Textarea,
-    Tooltip,
-    Editable,
-    EditableInput,
-    EditableTextarea,
-    EditablePreview,
-    ButtonGroup,
-    IconButton,
-    useEditableControls,
-    InputRightElement,
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableCaption,
-    TableContainer,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon, CheckIcon, CloseIcon, EditIcon, DeleteIcon,WarningTwoIcon} from '@chakra-ui/icons';
 import useFetch from 'use-http';
@@ -88,11 +57,16 @@ const ProjectViewMode=({isAdmin,userId, currentProject,editMode,handleEditClick,
                     </Flex >
                         :null
                     }
-                    <AssocNewsTab currentProject={currentProject} isAdmin={isAdmin} />
                     <AssocUsersTab  currentProject={currentProject} isAdmin={isAdmin} />
+                    {!currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin)?
+                    (<Box >
+                    <Button mt={5} colorScheme={"teal"} size="md"  onClick={()=>{navigate(`/projects/${currentProject.id}/associateusers`)}} >  {intl.formatMessage({id: 'associate_users'})}</Button>
+                    </Box>)    
+                    :null
+                    }
+                    <AssocNewsTab currentProject={currentProject} isAdmin={isAdmin} />
 
 
-                   
                 </Flex>
                     
             </Box>

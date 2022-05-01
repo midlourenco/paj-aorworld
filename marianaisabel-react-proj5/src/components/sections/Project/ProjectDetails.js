@@ -100,9 +100,9 @@ const ProjectDetails=({isAdmin, currentProject,...props})=>{
                     }
 
 
-                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentProject.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.createdDate)}} />  </Text> </Text>
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"create_by"} /> <Text  as='i' fontSize='sm' ml={1} fontSize="md" color="gray.500" fontWeight="400" mb="30px"> {currentProject.createdBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.createdDate)}} />  </Text> </Text>
                     {currentProject.lastModifDate!=="" && currentProject.lastModifDate!=null ?
-                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} ontSize="md" color="gray.500" fontWeight="400" mb="30px">  {currentProject.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.lastModifDate)}} />   </Text>     </Text>                      
+                    <Text fontSize="md" fontWeight="bold" me="10px"> <FormattedMessage id={"update_by"} /> <Text  as='i' fontSize='sm' ml={1} fontSize="md" color="gray.500" fontWeight="400" mb="30px">  {currentProject.lastModifBy.firstName}, <FormattedMessage id={"date"} values={{d:  new Date(currentProject.lastModifDate)}} />   </Text>     </Text>                      
                     :null
                     }
                 </Box>

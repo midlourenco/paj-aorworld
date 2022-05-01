@@ -132,7 +132,7 @@ const Register = ({errorTopBar,...props})=>{
                 boxShadow="md"
             >
               <FormControl isInvalid = {errors.firstName}>
-                <Input {...register("firstName", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_first_name'})} />
+                <Input {...register("firstName", {required: true,setValueAs: (v)=> v.trim()})} type="text" placeholder={intl.formatMessage({id: 'form_field_first_name'})} />
                 {(errors.firstName)? 
                   (<FormErrorMessage><FormattedMessage id={"error_missing_first_name"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
@@ -140,7 +140,7 @@ const Register = ({errorTopBar,...props})=>{
               </FormControl>
 
               <FormControl isInvalid = {errors.lastName}>
-                <Input {...register("lastName", {required: true})} type="text" placeholder={intl.formatMessage({id: 'form_field_last_name'})} />
+                <Input {...register("lastName", {required: true,setValueAs: (v)=> v.trim()})} type="text" placeholder={intl.formatMessage({id: 'form_field_last_name'})} />
                 {(errors.lastName)? 
                   (<FormErrorMessage><FormattedMessage id={"error_missing_last_name"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
@@ -149,7 +149,7 @@ const Register = ({errorTopBar,...props})=>{
 
 
               <FormControl isInvalid = {errors.email}>
-                <Input {...register("email", {required: true})} type="email" placeholder={intl.formatMessage({id: 'form_field_email'})} />
+                <Input {...register("email", {required: true,setValueAs: (v)=> v.trim()})} type="email" placeholder={intl.formatMessage({id: 'form_field_email'})} />
                 {(errors.email)? 
                   (<FormErrorMessage><FormattedMessage id={"error_missing_email"}  ></FormattedMessage></FormErrorMessage>)
                   : null 
@@ -179,7 +179,7 @@ const Register = ({errorTopBar,...props})=>{
                   }
               </FormControl>
               
-               {/* TODO validar se as 2 passwords sao iguais */}
+             
               <FormControl isInvalid = {errors.password2}>
                 <Input
                     {...register("passowrd2",{ validate: value =>
