@@ -63,8 +63,8 @@ const ProjectViewMode=({isAdmin,userId, currentProject,editMode,handleEditClick,
 
                     <AssocUsersTab  currentProject={currentProject} isAdmin={isAdmin} />
                     {!currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin)?
-                    (<Box >
-                        <Button mt={5} colorScheme={"teal"} size="md"  onClick={()=>{navigate(`/projects/${currentProject.id}/associateusers`)}} >  {intl.formatMessage({id: 'associate_users'})}</Button>
+                    (<Box  textAlign={"center"}>
+                        <Button  mt={5} colorScheme={"teal"} size="md"  onClick={()=>{navigate(`/projects/${currentProject.id}/associateusers`)}} >  {intl.formatMessage({id: 'associate_users'})}</Button>
                     </Box>
                     ) :null
                     }

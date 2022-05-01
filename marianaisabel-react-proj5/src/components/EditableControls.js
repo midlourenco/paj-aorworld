@@ -44,6 +44,7 @@ function EditableControls({isAdmin,editMode,handleEditClick,handleCancelClick, h
     
 
     return editMode ? (
+        <Box  textAlign={"center"}>
             <ButtonGroup justifyContent='center' size='sm' >
                 <Tooltip label= {intl.formatMessage({id: 'cancel'})} aria-label='A tooltip'>
                     <IconButton icon={<CloseIcon />}  onClick={handleCancelClick} mx={3} />
@@ -57,6 +58,7 @@ function EditableControls({isAdmin,editMode,handleEditClick,handleCancelClick, h
                 
                 {/* background="whiteAlpha.900" */}
             </ButtonGroup>
+            </Box>
          ): (
         <Flex justifyContent='center' gap={5}>
             <Button mt={6} size='md' rightIcon={<EditIcon />}  colorScheme={"teal"} onClick={handleEditClick} > <FormattedMessage id={"edit"} defaultMessage={"-"}/></Button>

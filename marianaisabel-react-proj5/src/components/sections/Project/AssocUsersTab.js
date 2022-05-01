@@ -158,7 +158,7 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.userRoleInProject}</Td>
                     <Td >
-                    <ButtonGroup>
+                    <ButtonGroup >
                     <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
                             <Button 
                             verticalAlign={"center"}

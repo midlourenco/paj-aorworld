@@ -222,8 +222,9 @@ useEffect(async()=>{
                 p={10}
                 flexDirection={"column"}
                 justifyContent={"space-between"}
-                mb={5} 
+                width={["100%", null, null, "80%"]}
                 mt={5}
+                mx={[0, null, null, 20]}
                 
                 >
               <VStack spacing='24px'>
