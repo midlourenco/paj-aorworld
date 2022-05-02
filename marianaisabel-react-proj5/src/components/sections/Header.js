@@ -67,7 +67,12 @@ function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,tok
           setAppError("");
       } else if(response.status==401) {
           console.log("credenciais erradas? " + error)
+          
           setAppError('error_fetch_generic');
+          sessionStorage.clear();
+          localStorage.clear();
+          setLogout("","VIEWER","")
+          navigate("/")
       }else{
           console.log("houve um erro no fetch " + error)
           if(error && error!=""){
