@@ -103,7 +103,6 @@ const AssocUsersTab=({isAdmin,...props})=>{
 
         
     },[])
-
    // *********************************************DESASSOCIATE  ********************************************************************* */
 
 
@@ -115,8 +114,8 @@ const AssocUsersTab=({isAdmin,...props})=>{
         if (response.ok) {
             (console.log("proj assoc" +desassocProj))
             
-            setUsersOnProject(usersOnProject.filter((userId)=>{
-                if(userId==usersOnProject.id){
+            setUsersOnProject(usersOnProject.filter((user)=>{
+                if(userId==user.id){
                   return false;
                 }
                 return true;

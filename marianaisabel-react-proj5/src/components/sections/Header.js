@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link,useNavigate } from "react-router-dom"
 import {FormattedMessage ,useIntl} from "react-intl";
 import {
   Flex,
@@ -33,7 +33,7 @@ function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,tok
   const [restResponse, setRestResponse]=useState(""); //OK or NOK or ""
   const { get, post, del, response, loading, error } = useFetch();
   const intl = useIntl();
-
+  const navigate = useNavigate();
     useEffect( async() => {
       if(token && (token!="" ||token.length)){
       console.log("houve refresh vou buscar notif " );    
@@ -71,7 +71,6 @@ function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,tok
           setAppError('error_fetch_generic');
           sessionStorage.clear();
           localStorage.clear();
-          setLogout("","VIEWER","")
           navigate("/")
       }else{
           console.log("houve um erro no fetch " + error)
@@ -99,6 +98,7 @@ function Header ({errorTopBar="",setSelectedLanguage,setNotifNumber,language,tok
      
     }else{
       setLogin(false);
+   
     }
     
   }, [token])
