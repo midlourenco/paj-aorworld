@@ -90,7 +90,7 @@ function ContentStep1 ({errors, register,nextStep, trigger,saveInputKeyword, inp
     
             <FormControl isInvalid = {errors.image}>
     
-            <Input {...register("image")} type= "url" placeholder={intl.formatMessage({id: 'form_field_image'})} />
+            <Input {...register("image")} type="url" placeholder={intl.formatMessage({id: 'form_field_image'})} name="image" />
             
             {/* TODO previsualizar imagem
             <Image

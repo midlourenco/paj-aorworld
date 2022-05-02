@@ -44,7 +44,9 @@ const Register = ({errorTopBar,...props})=>{
   
 
   const { post, del, response, loading, error } = useFetch();
-  const {register, handleSubmit, formState: {errors},  watch}= useForm({defaultValues: {
+  const {register, handleSubmit, formState: {errors},  watch}= useForm({
+    shouldUseNativeValidation: true ,
+    defaultValues: {
     autoAcceptInvites: true,
   }});
   const password = useRef({});

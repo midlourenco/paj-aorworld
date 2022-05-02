@@ -77,10 +77,17 @@ function App({language = "en",error="",...props}) {
 		interceptors: {
       request: ({ options }) => {
         options.headers = {
-					Authorization: localStorage.getItem("Authorization"),
           Accept: "application/json",
           "Content-Type": "application/json"
 				}
+        
+        const token = localStorage.getItem("Authorization")
+
+        if(token){
+          options.headers.Authorization = token;
+        }
+
+
         return options
       },
       response: ({ response }) => {

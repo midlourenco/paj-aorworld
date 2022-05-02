@@ -38,7 +38,8 @@ function NewNews() {
 
   const { post, del, response, loading, error } = useFetch();
   const {register, handleSubmit, trigger, watch, getValues,formState: {errors}}= useForm(
-    {defaultValues: {
+    { shouldUseNativeValidation: true ,
+    defaultValues: {
       users: [],
       projects: [],
     }});

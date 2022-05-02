@@ -337,14 +337,14 @@ public class UserController {
 			UserDTOResp userDTOResp = userService.getNonDeletedUserDTORespById(userId);
 			System.out.println("userDTO : " + userDTOResp);
 
-			if (authString.equals("") || authString.isEmpty() || authString == null
-					|| !userService.isValidToken(authString)) {// está logado mas o token não é válido
+			if (authString != null && !authString.equals("") && !authString.isEmpty() 
+					&& !userService.isValidToken(authString)) {// está logado mas o token não é válido
 				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 			} 
-			if (!userService.isUserAuthenticated(authString, userId)
-					&& !userService.hasLoggedUserAdminPriv(authString)) {//quem está a aceder ao perfil não é o mesmo  user que está logado nem tem privilégios de admin
-				return Response.status(403).entity(GestaoErros.getMsg(5)).build();
-			}
+//			if (!userService.isUserAuthenticated(authString, userId)
+//					&& !userService.hasLoggedUserAdminPriv(authString)) {//quem está a aceder ao perfil não é o mesmo  user que está logado nem tem privilégios de admin
+//				return Response.status(403).entity(GestaoErros.getMsg(5)).build();
+//			}
 			if (userDTOResp != null) {
 				return Response.ok(userDTOResp).build(); //[solved 13-4-2022] este user tem a pass. Um admin consegue ver a pass do user seleccionado. RESOLVER!!!!!!!! IDEIA - alterar pass num sitio difrente/metodo diferente
 			} else {
