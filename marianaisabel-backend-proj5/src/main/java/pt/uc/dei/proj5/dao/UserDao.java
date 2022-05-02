@@ -15,6 +15,7 @@ import pt.uc.dei.proj5.dto.UserDTO;
 import pt.uc.dei.proj5.dto.UserDTORegister;
 import pt.uc.dei.proj5.dto.UserDTOResp;
 import pt.uc.dei.proj5.dto.UserDTORespSharingProject;
+import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.User;
 import pt.uc.dei.proj5.entity.User.UserPriv;
 
@@ -446,16 +447,17 @@ public class UserDao extends AbstractDao<User> {
 			}
 
 		}
-	
-	///////////////////////////
-	//DASHBOARD
-	///////////////////////
-	
+		/////////////////////////////////////////////////////////
+		// METODOS dashboard
+		////////////////////////////////////////////////////////
+
+		
 	
 	
 	
 	/**
 	 * D1 número total de users;
+	 * @deprecated ver abstractdao
 	 * @return
 	 */
 	public int getTotalUsers() {
@@ -480,10 +482,10 @@ public class UserDao extends AbstractDao<User> {
 			//Expression<String> dateByDay = em.getCriteriaBuilder().function("ToDate",
 			//        String.class,c.get("createDate"), em.getCriteriaBuilder().literal("yyyy-MM-dd");
 		
-			criteriaQuery.multiselect(em.getCriteriaBuilder().function("date", Date.class,c.get("createDate")), em.getCriteriaBuilder().count(c));
+			criteriaQuery.multiselect(em.getCriteriaBuilder().function("date", Date.class,c.get("createdDate")), em.getCriteriaBuilder().count(c));
 			//criteriaQuery.groupBy(c.get("createDate"));
 			
-			criteriaQuery.groupBy(em.getCriteriaBuilder().function("date", Date.class,c.get("createDate")));
+			criteriaQuery.groupBy(em.getCriteriaBuilder().function("date", Date.class,c.get("createdDate")));
 			return em.createQuery(criteriaQuery).getResultList();
 			
 		}catch(EJBException e) {
@@ -497,6 +499,103 @@ public class UserDao extends AbstractDao<User> {
 //		return "email";
 //	}
 
+
+	
+	public Long countMembers() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<User> c = criteriaQuery.from(User.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("privileges"), UserPriv.MEMBER),
+				em.getCriteriaBuilder().equal(c.get("deleted"), false)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+
+	
+	public Long countAdmins() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<User> c = criteriaQuery.from(User.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("privileges"), UserPriv.ADMIN),
+				em.getCriteriaBuilder().equal(c.get("deleted"), false)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+	public Long countViewers() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<User> c = criteriaQuery.from(User.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().and(
+				em.getCriteriaBuilder().equal(c.get("privileges"), UserPriv.VIEWER),
+				em.getCriteriaBuilder().equal(c.get("deleted"), true)));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+	public Long countBlocks() {
+		final CriteriaQuery<Long> criteriaQuery = em.getCriteriaBuilder().createQuery(Long.class);
+		Root<User> c = criteriaQuery.from(User.class);
+		criteriaQuery.select(em.getCriteriaBuilder().count(c));
+		criteriaQuery.where(em.getCriteriaBuilder().equal(c.get("deleted"), true));
+		try {
+//			return em.createQuery(criteriaQuery).getResultList().size();
+			return em.createQuery(criteriaQuery).getSingleResult();
+
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+
+	/**
+	 * devolve as News que nao estejam marcados para apagar de visibilidade
+	 * publica (independentemente de terem sido ou nao partilhados)
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public List<User> moreRecentUsers() {
+		final CriteriaQuery<User> criteriaQuery = em.getCriteriaBuilder().createQuery(User.class);
+		Root<User> c = criteriaQuery.from(User.class);
+	//	criteriaQuery.select(c).where(em.getCriteriaBuilder().max(c.get("createdDate")));
+	//	return em.createQuery(criteriaQuery).getSingleResult();
+		
+//		predicateList.add(em.getCriteriaBuilder().greatest(c.get("createdDate")));
+//		
+		criteriaQuery.orderBy(em.getCriteriaBuilder().desc(c.get("createdDate")));
+		
+		try {
+			return em.createQuery(criteriaQuery).setMaxResults(5).getResultList();
+				//	getFirstResult();
+		} catch (EJBException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 	
 }

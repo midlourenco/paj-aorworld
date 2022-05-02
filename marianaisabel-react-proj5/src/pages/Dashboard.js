@@ -14,6 +14,11 @@ import {
     GridItem,
     Stack,
     Spinner,
+    List,
+  ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
 
 } from "@chakra-ui/react";
 import useFetch from 'use-http';
@@ -24,6 +29,7 @@ import PieChartCustom from "../components/Dashboard/PieChartCustom"
 import{connectWSGeneralDashboard} from "../api_websocket"
 import NewsArticleCard from "../components/NewsArticleCard"
 import ProjectCard from "../components/ProjectCard"
+import LineChartCustom from "../components/Dashboard/LineChartCustom"
 
 //TODO: 
 function setAppError(error){
@@ -68,7 +74,12 @@ function Dashboard({errorTopBar,...props}) {
     const [totalKeywords, setTotalKeywords]=useState("--");
     const [newsPieChart, setNewsPieChart] = useState([]);
     const [moreRecentNews, setMoreRecentNews] = useState(null);
-    const [stats, setStats] = useState("--");
+    const [stats, setStats] = useState(null); // mas se fizer isto fico sem estado inicial para cada um... TODO: ver se houver tempo.
+    const [moreRecentProject, setMoreRecentProject] = useState(null);
+    const [moreRecentUsers, setMoreRecentUsers] = useState([]);
+    const [projectsPieChart, setProjectsPieChart] = useState([]);
+    const [usersPieChart, setUsersPieChart] = useState([]);
+    const [usersPerDay, setUsersPerDay] = useState([]);
 
     console.log(errorTopBar);
     useEffect(()=>{
@@ -77,12 +88,20 @@ function Dashboard({errorTopBar,...props}) {
 
             console.log(JSON.parse(evt.data));
             let stats =JSON.parse(evt.data);
+            setStats(stats);
             setTotalUsers( stats.TotalUsers);
             setTotalKeywords( stats.TotalKeywords);
             setTotalProjects( stats.TotalProjects);
             setTotalNews( stats.TotalNews);
             setNewsPieChart(stats.newsPieChart);
+            setProjectsPieChart(stats.projectPieChart);
+            setUsersPieChart(stats.userPieChart);
             setMoreRecentNews(stats.moreRecentNews);
+            setMoreRecentProject(stats.moreRecentProject);
+            setMoreRecentUsers(stats.moreRecentUsers);
+            setUsersPerDay(stats.UsersPerDay);
+
+
         // setAvgActiv ( parseFloat(stats.AvgActivPerUser).toFixed(2)); 
     
         return ()=>{
@@ -101,7 +120,7 @@ function Dashboard({errorTopBar,...props}) {
 
 
 
-   if(!newsPieChart ||!moreRecentNews ){
+   if(!newsPieChart ||!moreRecentNews || !moreRecentProject){
         
     return (<>
         <Text>Loading...</Text>
@@ -143,31 +162,48 @@ function Dashboard({errorTopBar,...props}) {
                 <Heading>{intl.formatMessage({id: "projects"})}</Heading>
                 
                 <DashboardCard title={intl.formatMessage({id: 'tt_projects'})} value={totalProjects}/> 
-                      {/*TODO:*/ }
-                     <PieChartCustom data={newsPieChart}  />
+                    {projectsPieChart && <PieChartCustom key ="project piechart"  data={projectsPieChart}  />}
                     <Text>{intl.formatMessage({id: 'more_recente_project'})}:</Text>
-                    {/*TODO:*/ }
-                    {/* <ProjectCard project ={moreRecentNews} ></ProjectCard> */}
+                   
+                    {moreRecentProject?
+                    <ProjectCard project ={moreRecentProject} ></ProjectCard>
+                    :null
+                    }
+
                 </GridItem>
                 <GridItem >
                     <Heading>{intl.formatMessage({id: "news"})}</Heading>
                     <DashboardCard title={intl.formatMessage({id: 'tt_news'})} value={totalNews}/> 
-                    <PieChartCustom data={newsPieChart}  />
+                    {newsPieChart && <PieChartCustom key ="newspiechart"  data={newsPieChart}  />}
                     <Text>{intl.formatMessage({id: 'more_recente_news'})}:</Text>
+                    {moreRecentNews?
                     <NewsArticleCard news ={moreRecentNews} ></NewsArticleCard>
+                    :null
+                    }
+
                 </GridItem>
                 <GridItem  >
                     <Heading>{intl.formatMessage({id: "users"})}</Heading>
                     <DashboardCard title={intl.formatMessage({id: 'tt_users'})} value={totalUsers}/> 
-
-
+                    {usersPieChart && <PieChartCustom key ="userpiechart" data={usersPieChart}  />}
+                    <Text>{intl.formatMessage({id: 'more_recente_users'})}:</Text>
+                    <UnorderedList>
+                    
+                    {moreRecentUsers.map(u=>{
+                        return <ListItem color={"black"} key={u.id}>{u.firstName + " " +u.lastName  }</ListItem>
+                    })}
+                    </UnorderedList >
                 </GridItem>
                 <GridItem >
                     <Heading>{intl.formatMessage({id: "keywords"})}</Heading>
                     <DashboardCard title={intl.formatMessage({id: 'tt_keywords'})} value={totalKeywords}/> 
+                    {usersPerDay &&<LineChartCustom key ="userperday"  usersPerDay={usersPerDay}/>    }   
                 </GridItem>
+               
                 </Grid>
-</Flex>
+
+            
+            </Flex>
             {/* 
                 <Box >
                     <UserFilter />

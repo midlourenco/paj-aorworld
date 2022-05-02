@@ -24,7 +24,7 @@ return (
     <Box >
        
         <Box style={{ textAlign: 'center'}}>
-            <PieChart  width={300} height={200}data={data} />
+            <PieChart  width={300} height={200} data={data} />
         </Box>
     </Box>
 

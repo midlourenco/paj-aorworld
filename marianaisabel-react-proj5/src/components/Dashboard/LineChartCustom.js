@@ -13,7 +13,7 @@ function formatDateXAxis(tickItem){
     }
 }
 
-function LineGraphic ({usersPerDay=[],...props}){
+function LineChartCustom ({usersPerDay=[],...props}){
         let dataSet=usersPerDay;
         console.log(dataSet);
         let dataChartFormat=[];
@@ -50,7 +50,7 @@ function LineGraphic ({usersPerDay=[],...props}){
     return (
         <div className="charts">
             <h4>Número de registos de utilizadores por dia </h4>
-            <LineChart width={1000} height={400} data={dataChartFormat} title="Número de registos de utilizadores por dia" 
+            <LineChart width={400} height={200} data={dataChartFormat} title="Número de registos de utilizadores por dia" 
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                 <XAxis dataKey="date"    tickFormatter={formatDateXAxis} tick={{fontSize: 14,  fill: 'rgb(81, 80, 150)'}}  >    </XAxis>
                 <YAxis tick={{fontSize: 14, fill: 'rgb(81, 80, 150)'}} >
@@ -72,4 +72,4 @@ function LineGraphic ({usersPerDay=[],...props}){
     );
    
 }
-export default  LineGraphic;
+export default  LineChartCustom;
