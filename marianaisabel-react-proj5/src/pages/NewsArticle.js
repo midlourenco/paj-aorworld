@@ -207,7 +207,7 @@ function SingleNews( {isAdmin,isLoggedIn,userId,userPriv,errorTopBar="",...props
        
 
 const canEdit=currentNews!=null && !currentNews.deleted && (userId==currentNews.createdBy.id || isAdmin)
-const canAssocMyself=currentNews!=null && !currentNews.deleted && !currentNews.users.map((u)=>u.id).includes(userId)
+const canAssocMyself=currentNews!=null && !currentNews.deleted && !currentNews.users.map((u)=>u.id).includes(userId) && isLoggedIn
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
  
