@@ -71,7 +71,7 @@ const defaultNews = {
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function SingleNews( {userPriv,errorTopBar="",...props}){
+function SingleNews( {isAdmin,isLoggedIn,userId,userPriv,errorTopBar="",...props}){
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
@@ -82,7 +82,7 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
 
     /**** *******************************************STATE******************************************************** */
 
-    const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
+  
     const [currentNews, setCurrentNews]=useState(defaultNews);
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
@@ -170,9 +170,6 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
         if (response.ok) {
             console.log(getnews)
             setCurrentNews(getnews);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -209,7 +206,8 @@ function SingleNews( {userPriv,errorTopBar="",...props}){
     //   },[])
        
 
-
+const canEdit=currentNews!=null && !currentNews.deleted && (userId==currentNews.createdBy.id || isAdmin)
+const canAssocMyself=currentNews!=null && !currentNews.deleted && !currentNews.users.map((u)=>u.id).includes(userId)
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
  
@@ -266,6 +264,8 @@ if(!currentNews || loading ){
 
 
             <NewsViewMode  
+            canEdit={canEdit}
+            canAssocMyself={canAssocMyself}
             isAdmin={isAdmin}
             setUserInCurrentNews={setUserInCurrentNews}
             currentNews= {currentNews} 
@@ -277,6 +277,7 @@ if(!currentNews || loading ){
             />
 
             : <NewsEditMode 
+            canEdit={canEdit}
             isAdmin={isAdmin} 
             currentNews= {currentNews}  
             editMode={editMode}
@@ -307,7 +308,10 @@ if(!currentNews || loading ){
 
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
-            errorTopBar: state.errorMsg.errorTopBar
+            userId:state.loginOK.userId,
+            errorTopBar: state.errorMsg.errorTopBar,
+            isAdmin:state.loginOK.userPriv==="ADMIN",
+            isLoggedIn:state.loginOK.token!=""
     };
   };
 export default connect(mapStateToProps,{})(SingleNews)

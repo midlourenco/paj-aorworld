@@ -45,7 +45,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const NewsViewMode=({isAdmin, setUserInCurrentNews ,currentNews,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
+const NewsViewMode=({canEdit,isAdmin, canAssocMyself,setUserInCurrentNews ,currentNews,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const toast = useToast()
@@ -213,7 +213,7 @@ const NewsViewMode=({isAdmin, setUserInCurrentNews ,currentNews,editMode,handleE
             </TableContainer>
 
 
-            <Button 
+            {canAssocMyself && <Button 
             onClick={handleAssociateMeClick} 
             mt={6} 
             size='md' 
@@ -222,8 +222,8 @@ const NewsViewMode=({isAdmin, setUserInCurrentNews ,currentNews,editMode,handleE
             > 
                 <FormattedMessage id={"associate_myself_to_news"} defaultMessage={"-"}/>
             </Button>
-        
-            {!currentNews.deleted?
+        }
+            {canEdit?
                     (<Box >
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
                     <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useFetch from 'use-http';
 import { FormattedMessage,useIntl} from "react-intl";
-
+import { connect } from 'react-redux';
 import {
     Flex,
     Heading,
@@ -42,7 +42,7 @@ import {MdOutlineManageSearch , MdOutlineClose} from "react-icons/md";
 
 
 
-function  News (){
+function  News ({isLoggedIn, isAdmin, userId,...props}){
     const intl = useIntl();
     const { get, post, response, loading, error } = useFetch();
     //const [searchParams, setSearchParams] = useSearchParams({ replace: true });
@@ -243,7 +243,7 @@ function  News (){
                         />
                     </InputGroup>
 
-                    <Button 
+                    {isLoggedIn && <Button 
                         leftIcon={<AddIcon />} 
                         colorScheme='teal' 
                         variant='outline' 
@@ -251,7 +251,7 @@ function  News (){
                         mr={5}
                     >
                         <Link to="/news/new"><FormattedMessage id="new_news"></FormattedMessage></Link>
-                    </Button>
+                    </Button>}
                     
                 </Flex>
 
@@ -326,7 +326,16 @@ function  News (){
  
 
     }
-    export default News;
+
+    const mapStateToProps = state => {
+        return { userPriv: state.loginOK.userPriv,
+                userId:state.loginOK.userId,
+                errorTopBar: state.errorMsg.errorTopBar,
+                isAdmin:state.loginOK.userPriv==="ADMIN",
+                isLoggedIn:state.loginOK.token!=""
+        };
+      };
+    export default connect(mapStateToProps,{})(News);
 
 
 // const n1 = {
