@@ -115,12 +115,12 @@ const ProfileViewMode=({errorTopBar="",idToResquest,canEdit,isAdmin, userId, cur
                         <TabPanels>
                             <TabPanel>
                                 <VStack spacing={10}>
-                                    <MyProjects idToResquest={idToResquest} />
-                                    <AssocProjects idToResquest={idToResquest}/>
-                                    <DeletedProjects idToResquest={idToResquest}/>
-                                    <MyNews idToResquest={idToResquest} />
-                                    <AssocNews  idToResquest={idToResquest}/>
-                                    <DeletedNews idToResquest={idToResquest} />
+                                    <MyProjects idToResquest={idToResquest}  canEdit={canEdit}/>
+                                    <AssocProjects idToResquest={idToResquest}canEdit={canEdit}/>
+                                    <DeletedProjects idToResquest={idToResquest}canEdit={canEdit}/>
+                                    <MyNews idToResquest={idToResquest} canEdit={canEdit}/>
+                                    <AssocNews  idToResquest={idToResquest} canEdit={canEdit}/>
+                                    <DeletedNews idToResquest={idToResquest} canEdit={canEdit}/>
                                 </VStack>
                             </TabPanel>
                             <TabPanel>

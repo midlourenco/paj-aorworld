@@ -35,7 +35,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const AssocProjects=({errorTopBar="",isAdmin, idToResquest,userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
+const AssocProjects=({errorTopBar="",canEdit,isAdmin, idToResquest,userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -142,7 +142,7 @@ const AssocProjects=({errorTopBar="",isAdmin, idToResquest,userId, currentUser,e
                     <Th>{intl.formatMessage({id: 'create_by'})}</Th>
                     {/* <Th>{intl.formatMessage({id: 'job'})}</Th> */}
                     <Th><FormattedMessage id={"form_field_create_date"}/></Th>
-                    <Th>{intl.formatMessage({id: 'desassociate'})}</Th>
+                   {canEdit&& <Th>{intl.formatMessage({id: 'desassociate'})}</Th>}
                 </Tr>
                 </Thead>
                 <Tbody>
@@ -152,7 +152,7 @@ const AssocProjects=({errorTopBar="",isAdmin, idToResquest,userId, currentUser,e
                         <Td>{p.createdBy.firstName}</Td>
                         {/* <Td>{p.createdBy.firstName}</Td> */}
                         <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
-                        <Td>
+                        {canEdit&&<Td>
                         <ButtonGroup>
                             <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
                                 <Button 
@@ -166,7 +166,7 @@ const AssocProjects=({errorTopBar="",isAdmin, idToResquest,userId, currentUser,e
                                 </Button>
                             </Tooltip>
                         </ButtonGroup>
-                        </Td>
+                        </Td>}
                         <Td>
                         <Tooltip label={"/projects/" + p.id}>
                             <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />

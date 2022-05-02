@@ -35,7 +35,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const AssocNews=({errorTopBar="",isAdmin, userId, idToResquest,currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
+const AssocNews=({errorTopBar="",isAdmin, userId, canEdit, idToResquest,currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -85,7 +85,7 @@ const AssocNews=({errorTopBar="",isAdmin, userId, idToResquest,currentUser,editM
         <Th>{intl.formatMessage({id: 'form_field_title'})}</Th>
         <Th>{intl.formatMessage({id: 'create_by'})}</Th>
         <Th><FormattedMessage id={"form_field_create_date"}/></Th>
-        <Th>{intl.formatMessage({id: 'desassociate'})}</Th>
+        {canEdit&& <Th>{intl.formatMessage({id: 'desassociate'})}</Th>}
 </Tr>
 </Thead>
 <Tbody>
@@ -94,13 +94,13 @@ const AssocNews=({errorTopBar="",isAdmin, userId, idToResquest,currentUser,editM
     <Td>{n.title}</Td>
     <Td>{n.createdBy.firstName}</Td>
     <Td textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
-    <Td>
+   { canEdit && <Td>
     <ButtonGroup>
         <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
             <Button maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserTimes />} > <FormattedMessage id={"desassociate"}/></Button>
         </Tooltip>
     </ButtonGroup>
-    </Td>
+    </Td>}
     <Td>
         <IconButton onClick={()=> navigate("/news/"+n.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
     </Td>
