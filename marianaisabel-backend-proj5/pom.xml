@@ -204,6 +204,16 @@
 			<artifactId>mysql-connector-java</artifactId> 
 			<version>8.0.28</version>
 		</dependency>
+        <!-- projeto5 -->
+            <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+        </dependency>
+     
+		
+        
         
     </dependencies>
 	
@@ -230,6 +240,20 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>${version.wildfly.maven.plugin}</version>
             </plugin>
+             <!-- projeto5 -->
+            <!-- Pluguin para evitar o erro de acesso aos objectos -->
+            <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>3.0.0-M5</version>
+			    <configuration>
+			        <argLine>
+				    --add-opens=java.base/java.lang=ALL-UNNAMED
+					</argLine>
+			    </configuration>
+			</plugin>
+            
+            
         </plugins>
     </build>
 
