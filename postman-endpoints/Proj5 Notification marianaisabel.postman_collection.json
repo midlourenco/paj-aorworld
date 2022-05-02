@@ -1,0 +1,128 @@
+{
+	"info": {
+		"_postman_id": "b68e2794-5bf4-47e6-a9c4-bf0edcb048eb",
+		"name": "Proj5 Notification marianaisabel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "F32 - Get all notification",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/notifications",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"notifications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F33 - Get last notifications",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/notifications/lastNotifications",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"notifications",
+						"lastNotifications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F34 - Get Number unread notification",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/notifications/unreadNumber",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"notifications",
+						"unreadNumber"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F35 - mark notification as read",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/notifications/2",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"notifications",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F36 - mark All notification as read",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/notifications/",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"notifications",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

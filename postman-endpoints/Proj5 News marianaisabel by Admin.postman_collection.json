@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\" : \"noticia novo\",\n\t\"description\" : \"há cada vez mais projectos nas univ portuguesas\",\n\t\"image\" : \"https://mundodainvestigacao.pt\",\n\t\"keywords\": [\"coimbra\",\"lisboa\",\"porto\"],\n    \"projects\":[],\n    \"visibility\": true\n}",
+					"raw": "{\n    \"title\" : \"{{$randomLoremSentence}}\",\n\t\"description\" : \"{{$randomPhrase}}\",\n\t\"image\" : \"{{$randomBusinessImage}}{{$randomInt}}\",\n\t\"keywords\": [\"{{$randomAbbreviation}}\",\"{{$randomAbbreviation}}\",\"{{$randomAbbreviation}}\",\"{{$randomAbbreviation}}\",\"{{$randomAbbreviation}}\"],\n    \"projects\":[1,{{$randomInt}},\"{{$randomInt}}\",\"{{$randomInt}}\",\"{{$randomInt}}\"],\n    \"users\": [1, {{$randomInt}},\"{{$randomInt}}\"],\n    \"visibility\": {{$randomBoolean}}\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -114,6 +114,36 @@
 			"response": []
 		},
 		{
+			"name": "F24c - Get all news Assoc to user",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news/associatedToUser?user=1",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"associatedToUser"
+					],
+					"query": [
+						{
+							"key": "user",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "F24d - Get all deleted news from user",
 			"request": {
 				"method": "GET",
@@ -155,13 +185,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/news/2",
+					"raw": "{{postman_api_url}}/news/4",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
 						"news",
-						"2"
+						"4"
 					]
 				}
 			},
@@ -185,7 +215,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\" : \"projecto piloto\",\r\n\t\"description\" : \" investigação profunda \",\r\n\t\"image\" : \"https://umaimagem2.pt\",\r\n\t\"keywords\": [\"piloto\",\"fogo\",\"dormir\"],\r\n    \"news\":[],\r\n    \"visibility\": false\r\n}",
+					"raw": "{\r\n    \"title\" : \"noticia piloto\",\r\n\t\"description\" : \" investigação profunda \",\r\n\t\"image\" : \"https://umaimagem2.pt\",\r\n\t\"keywords\": [\"piloto\",\"fogo\",\"dormir\"],\r\n    \"projects\":[],\r\n    \"users\":[9999],\r\n    \"visibility\": false\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -193,13 +223,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{postman_api_url}}/news/2",
+					"raw": "{{postman_api_url}}/news/19",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
 						"news",
-						"2"
+						"19"
 					]
 				}
 			},
@@ -231,14 +261,14 @@
 					}
 				},
 				"url": {
-					"raw": "{{postman_api_url}}/news/associatedproject/1",
+					"raw": "{{postman_api_url}}/news/associatedproject/16",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
 						"news",
 						"associatedproject",
-						"1"
+						"16"
 					]
 				}
 			},
@@ -261,13 +291,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/news/2",
+					"raw": "{{postman_api_url}}/news/3",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
 						"news",
-						"2"
+						"3"
 					]
 				}
 			},
@@ -290,14 +320,44 @@
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/news/2/undelete",
+					"raw": "{{postman_api_url}}/news/3/undelete",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
 						"news",
-						"2",
+						"3",
 						"undelete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F29 - associateMySelf to News",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/news/12/associateToMySelf",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"news",
+						"12",
+						"associateToMySelf"
 					]
 				}
 			},

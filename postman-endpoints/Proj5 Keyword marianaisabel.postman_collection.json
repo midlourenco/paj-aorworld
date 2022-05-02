@@ -17,13 +17,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/keywords/coimbra/projects",
+					"raw": "{{postman_api_url}}/keywords/css/projects",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
 						"keywords",
-						"coimbra",
+						"css",
 						"projects"
 					]
 				}
@@ -56,13 +56,13 @@
 			"response": []
 		},
 		{
-			"name": "F20 - Get Project Details",
+			"name": "F20 - Get Keywords List",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{postman_api_key2}}",
+						"value": "{{postman_api_key}}",
 						"type": "text"
 					}
 				],

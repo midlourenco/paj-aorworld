@@ -1,12 +1,73 @@
 {
 	"info": {
-		"_postman_id": "b8e577b4-d5c0-4cbf-a8e8-501beaf1980c",
-		"name": "Proj5 Project marianaisabel by Admin",
+		"_postman_id": "36035f72-fa8e-42ac-a4ae-9dfb60ea8b47",
+		"name": "Proj5 User marianaisabel by Admin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "F13 - create project",
+			"name": "F1 -  Register User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "33a8d0a0-63c1-4cc0-a5c8-21383e40f87f",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"firstName\":\"{{$randomFirstName}}\",\n\"lastName\":\"{{$randomLastName}}\",\n\"image\":\"https://generated.photos/face-generator/new\",\n\"password\":\"test\",\n\"email\":\"{{$randomEmail}}\",\n\"biography\":\"{{$randomLoremText}}\",\n\"autoAcceptInvites\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/users/register",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F2 -  Login user Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"admin@aor.pt\",\"password\":\"admin\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/users/login",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F3 - Logout",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -16,29 +77,21 @@
 						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"title\" : \"{{$randomBs}}\",\n\t\"description\" : \"{{$randomLoremParagraph}}\",\n\t\"image\" : \"{{$randomBusinessImage}}{{$randomInt}}\",\n\t\"keywords\": [\"{{$randomAbbreviation}}\",\"{{$randomAbbreviation}}\",\"{{$randomAbbreviation}}\",\"{{$randomAbbreviation}}\"],\n    \"visibility\": \"{{$randomBoolean}}\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{postman_api_url}}/projects",
+					"raw": "{{postman_api_url}}/users/logout",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects"
+						"users",
+						"logout"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "F14a - Get all projects",
+			"name": "F4a - Get all Users",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -49,19 +102,19 @@
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/projects",
+					"raw": "{{postman_api_url}}/users",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects"
+						"users"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "F14b - Get all deleted  projects",
+			"name": "F4b - Get all Users admin",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -72,12 +125,84 @@
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/projects/deletedList",
+					"raw": "{{postman_api_url}}/users/adminsList",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects",
+						"users",
+						"adminsList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F4c - Get all users members",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/users/membersList",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"membersList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F4d - Get all users viewers to approve (Admin)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/users/viwersList",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"viwersList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "14e - Users marked as DELETED (Admin)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/users/deletedList",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
 						"deletedList"
 					]
 				}
@@ -85,7 +210,7 @@
 			"response": []
 		},
 		{
-			"name": "F14c - Get all projects from user",
+			"name": "F5 - Get User Profile",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -96,109 +221,12 @@
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/projects?user=1",
+					"raw": "{{postman_api_url}}/users/2",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects"
-					],
-					"query": [
-						{
-							"key": "user",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "F14d - Get all deleted projects from user",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{postman_api_key}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{postman_api_url}}/projects/deletedList?user=1",
-					"host": [
-						"{{postman_api_url}}"
-					],
-					"path": [
-						"projects",
-						"deletedList"
-					],
-					"query": [
-						{
-							"key": "user",
-							"value": "1"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "F15 - Get Project Details",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{postman_api_key}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{postman_api_url}}/projects/11",
-					"host": [
-						"{{postman_api_url}}"
-					],
-					"path": [
-						"projects",
-						"11"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "F16 - Edit Project Detail",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{postman_api_key}}",
-						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"title\" : \"projecto piloto\",\r\n\t\"description\" : \" investigação profunda \",\r\n\t\"image\" : \"https://umaimagem2.pt\",\r\n\t\"keywords\": [\"piloto\",\"fogo\",\"dormir\"],\r\n    \"visibility\": false\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{postman_api_url}}/projects/2",
-					"host": [
-						"{{postman_api_url}}"
-					],
-					"path": [
-						"projects",
+						"users",
 						"2"
 					]
 				}
@@ -206,7 +234,31 @@
 			"response": []
 		},
 		{
-			"name": "F17 - Associated News to Project",
+			"name": "F5 - Get my Profile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/users/myProfile",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"myProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F6 - Edit User Profile",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -221,22 +273,69 @@
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"privileges\": \"MEMBER\",\r\n    \"email\": \"qq_mtodif@dei.pt\",\r\n    \"firstName\": \"Ola\",\r\n    \"lastName\": \"sobrenome\",\r\n    \"image\": \"https://randomuser.me/api/portraits/men/15.jpg\",\r\n    \"biography\": \"esta é a bio\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{postman_api_url}}/projects/associatednews/1",
+					"raw": "{{postman_api_url}}/users/13",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects",
-						"associatednews",
-						"1"
+						"users",
+						"13"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "F21 - Delete Project",
+			"name": "F7 - Edit User Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"password\": \"hello\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{postman_api_url}}/users/2/updatePassword",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"users",
+						"2",
+						"updatePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "F8 -  F9(suspensa) - (1x)Mark (suspensa)(2x)Delete User",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -244,28 +343,23 @@
 						"key": "Authorization",
 						"value": "{{postman_api_key}}",
 						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/projects/2",
+					"raw": "{{postman_api_url}}/users/3",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects",
-						"2"
+						"users",
+						"3"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "F22 - Undelete Project",
+			"name": "F10 - Undelete User (Admin)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -273,21 +367,16 @@
 						"key": "Authorization",
 						"value": "{{postman_api_key}}",
 						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/projects/4/undelete",
+					"raw": "{{postman_api_url}}/users/3/undelete",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects",
-						"4",
+						"users",
+						"3",
 						"undelete"
 					]
 				}
@@ -295,7 +384,7 @@
 			"response": []
 		},
 		{
-			"name": "F37 - assoc Users to Project",
+			"name": "F30 - (Des)promote user to Admin (Admin)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -303,38 +392,24 @@
 						"key": "Authorization",
 						"value": "{{postman_api_key}}",
 						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userId\" : 13,\r\n    \"userRoleInProject\" : \"{{$randomJobTitle}}\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "{{postman_api_url}}/projects/11/associateUser",
+					"raw": "{{postman_api_url}}/users/15/updateToAdmin",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects",
-						"11",
-						"associateUser"
+						"users",
+						"15",
+						"updateToAdmin"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "F38 - assoc Users to Project",
+			"name": "F31 - (Des)promote user to Member (Admin)",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -342,155 +417,17 @@
 						"key": "Authorization",
 						"value": "{{postman_api_key}}",
 						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "{{postman_api_url}}/projects/12/accpetInvite",
+					"raw": "{{postman_api_url}}/users/14/updateToMember",
 					"host": [
 						"{{postman_api_url}}"
 					],
 					"path": [
-						"projects",
-						"12",
-						"accpetInvite"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "F39 - cancel User assoc to Project",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{postman_api_key}}",
-						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userId\" : \"15\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{postman_api_url}}/projects/11/cancelUserAssoc",
-					"host": [
-						"{{postman_api_url}}"
-					],
-					"path": [
-						"projects",
-						"11",
-						"cancelUserAssoc"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "F39 - Get User assoc to Project",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{postman_api_key}}",
-						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{postman_api_url}}/projects/11/assocUsersList",
-					"host": [
-						"{{postman_api_url}}"
-					],
-					"path": [
-						"projects",
-						"11",
-						"assocUsersList"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "F39a - Get Project Assoc to User",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{postman_api_key}}",
-						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{postman_api_url}}/projects/projectAssocToUser?user=15",
-					"host": [
-						"{{postman_api_url}}"
-					],
-					"path": [
-						"projects",
-						"projectAssocToUser"
-					],
-					"query": [
-						{
-							"key": "user",
-							"value": "15"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "F39b - Get Project Assoc to me",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{postman_api_key}}",
-						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{postman_api_url}}/projects/projectAssocToUser",
-					"host": [
-						"{{postman_api_url}}"
-					],
-					"path": [
-						"projects",
-						"projectAssocToUser"
+						"users",
+						"14",
+						"updateToMember"
 					]
 				}
 			},

@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "99bb36fe-bee7-488f-8de6-11563c1846e1",
+		"name": "Proj5 Dashboard -marianaisabel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET ALL General stats",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{postman_api_key}}",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "c78c02b8-deed-4c74-9c49-8dbe590604ab",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{postman_api_url}}/dashboard/allStats",
+					"host": [
+						"{{postman_api_url}}"
+					],
+					"path": [
+						"dashboard",
+						"allStats"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
