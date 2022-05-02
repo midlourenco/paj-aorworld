@@ -23,7 +23,7 @@ public class UserBean implements Serializable {
 
 	@Inject
 	private UserDao userDao;
-	//@Inject
+	@Inject
 	private DashboardBean dashboardService;
 
 	
@@ -649,7 +649,9 @@ public class UserBean implements Serializable {
 			User loggedUser =getNonDeletedEntityByToken(authString);
 			if (user.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
 				userDao.unblockUser(userID,loggedUser);
+				System.out.println("vou chamar o update do dashboard geral ");
 				dashboardService.updateGeneralDashboard();
+				System.out.println("o update do dashboard geral foi chamado");
 			//	userDao.markAsNonDeleted(userID);
 				return true;
 			} else { // se não estiver marcado como delete não faz nada;
