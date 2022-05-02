@@ -55,7 +55,7 @@ import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
 function setAppError(error){
     console.log(error)
 }
-const AssocNewsTab=({isAdmin, currentProject,...props})=>{
+const AssocNewsTab=({canEdit, isAdmin, currentProject,...props})=>{
     const navigate = useNavigate();
     const intl = useIntl();
     return (<>                
@@ -68,6 +68,8 @@ const AssocNewsTab=({isAdmin, currentProject,...props})=>{
                         <Th>{intl.formatMessage({id: 'form_field_title'})}</Th>
                         <Th>{intl.formatMessage({id: 'create_by'})}</Th>
                         <Th><FormattedMessage id={"form_field_create_date"}/></Th>
+                        {canEdit && <Th>{intl.formatMessage({id: 'desassociate'})}</Th>}
+                        <Th>{intl.formatMessage({id: 'go_to'})}</Th>
 
                     </Tr>
                     </Thead>
@@ -77,11 +79,17 @@ const AssocNewsTab=({isAdmin, currentProject,...props})=>{
                         <Td color="gray.500" fontWeight="400" >{n.title}</Td>
                         <Td color="gray.500" fontWeight="400" >{n.createdBy.firstName}</Td>
                         <Td color="gray.500" fontWeight="400"  textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(n.createdDate)}} /> </Td>
-                        <ButtonGroup>
+                       
+                        {canEdit &&
+                         <Td>
+                              <ButtonGroup>
                         <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
                             <Button maxW="130px" colorScheme={"teal"} fontSize="sm" leftIcon={<FaUserTimes />} > <FormattedMessage id={"desassociate"}/></Button>
                         </Tooltip>
+                        
                         </ButtonGroup>
+                        </Td>}
+                        
                         <Td>
                         <Tooltip label={"/news/"+n.id}>
                             <IconButton onClick={()=> navigate("/news/"+n.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />

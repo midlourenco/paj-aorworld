@@ -55,7 +55,7 @@ import { FaUserTimes,  FaUserCheck} from 'react-icons/fa';
 function setAppError(error){
     console.log(error)
 }
-const AssocUsersTab=({isAdmin,...props})=>{
+const AssocUsersTab=({isAdmin,canEdit,...props})=>{
     const navigate = useNavigate();
     const intl = useIntl();
 
@@ -146,7 +146,7 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     <Th>{intl.formatMessage({id: 'user_name'})}</Th>
                     <Th>{intl.formatMessage({id: 'form_field_email'})}</Th>
                     <Th>{intl.formatMessage({id: 'job'})}</Th>
-                    <Th>{intl.formatMessage({id: 'desassociate'})}</Th>
+                    {canEdit && <Th>{intl.formatMessage({id: 'desassociate'})}</Th>}
                     <Th>{intl.formatMessage({id: 'go_to'})}</Th>
                 </Tr>
                 </Thead>
@@ -156,8 +156,8 @@ const AssocUsersTab=({isAdmin,...props})=>{
                     <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.userRoleInProject}</Td>
-                    <Td >
-                    <ButtonGroup >
+                  
+                 {  canEdit &&   <Td ><ButtonGroup >
                     <Tooltip label={intl.formatMessage({id: 'tooltip_desassociate'})}>
                             <Button 
                             verticalAlign={"center"}
@@ -171,8 +171,8 @@ const AssocUsersTab=({isAdmin,...props})=>{
                                 <FormattedMessage id={"desassociate"}/>
                             </Button>
                         </Tooltip>
-                    </ButtonGroup>
-                    </Td>
+                    </ButtonGroup></Td>}
+                    
                     <Td>
                         <Tooltip label={"/profile/"+u.id}>
                         <IconButton onClick={()=> navigate("/profile/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />

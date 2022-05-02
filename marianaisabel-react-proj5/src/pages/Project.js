@@ -72,7 +72,7 @@ const defaultProject = {
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function Project( {userPriv,errorTopBar="",userId,...props}){
+function Project( {isAdmin,userPriv,errorTopBar="",userId,...props}){
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
@@ -83,7 +83,7 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
 
     /**** *******************************************STATE******************************************************** */
 
-    const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
+    // const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [currentProject, setCurrentProject]=useState(null);
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
@@ -172,6 +172,7 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
     //   },[])
        
 
+const canEdit=(currentProject != null && !currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin));
 
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
@@ -213,6 +214,7 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
         :(editMode==false?
 
             <ProjectViewMode  
+            canEdit={canEdit}
             isAdmin={isAdmin}
             userId={userId}
             currentProject= {currentProject} 
@@ -222,7 +224,8 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
             handleCancelClick={handleCancelClick}
             />
 
-            : <ProjectEditMode 
+            : <ProjectEditMode
+            canEdit={canEdit} 
             isAdmin={isAdmin} 
             currentProject= {currentProject}  
             editMode={editMode}
@@ -252,7 +255,9 @@ function Project( {userPriv,errorTopBar="",userId,...props}){
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
             userId:state.loginOK.userId,
-            errorTopBar: state.errorMsg.errorTopBar
+            errorTopBar: state.errorMsg.errorTopBar,
+            isAdmin:state.loginOK.userPriv==="ADMIN",
+            isLoggedIn:state.loginOK.token!=""
     };
   };
 export default connect(mapStateToProps,{})( Project);

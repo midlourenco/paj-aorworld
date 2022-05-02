@@ -23,7 +23,7 @@ import AssocUsersTab from "./AssocUsersTab"
 import ProjectDetails from './ProjectDetails';
 
 
-const ProjectViewMode=({isAdmin,userId, currentProject,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
+const ProjectViewMode=({canEdit,isAdmin,userId, currentProject,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
     const navigate = useNavigate();
     const intl = useIntl();
     return (<Box>
@@ -49,7 +49,7 @@ const ProjectViewMode=({isAdmin,userId, currentProject,editMode,handleEditClick,
                     <ProjectDetails currentProject={currentProject} isAdmin={isAdmin}  />
 
 
-                    {!currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin)?
+                    {canEdit?
                     (<Box >
                         <EditableControls  isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
                     </Box>
@@ -61,15 +61,15 @@ const ProjectViewMode=({isAdmin,userId, currentProject,editMode,handleEditClick,
                     }
 
 
-                    <AssocUsersTab  currentProject={currentProject} isAdmin={isAdmin} />
-                    {!currentProject.deleted && (userId==currentProject.createdBy.id || isAdmin)?
+                    <AssocUsersTab  canEdit={canEdit} currentProject={currentProject} isAdmin={isAdmin} />
+                    {canEdit?
                     (<Box  textAlign={"center"}>
                         <Button  mt={5} colorScheme={"teal"} size="md"  onClick={()=>{navigate(`/projects/${currentProject.id}/associateusers`)}} >  {intl.formatMessage({id: 'associate_users'})}</Button>
                     </Box>
                     ) :null
                     }
 
-                    <AssocNewsTab currentProject={currentProject} isAdmin={isAdmin} />
+                    <AssocNewsTab canEdit={canEdit}  currentProject={currentProject} isAdmin={isAdmin} />
 
 
                 </Flex>

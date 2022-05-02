@@ -542,25 +542,26 @@ public class ProjectController {
 	public Response getUserAssocToProject(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
 		System.out.println("Entrei em updateProject no controller com token " + authString);
 		try {
-			Project project =projectService.getNonDeletedProjectEntityById(projectId); //não se vai fazer update de um projecto apagado
-			User userOwner = project.getCreatedBy(); // o criador do projecto
-			User userAuthenticated  = userService.getNonDeletedEntityByToken(authString); //vai ser o lastModifBy
-	
-			boolean isloggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(userAuthenticated);// verifica se quem está logado é um admin
-			boolean isOwnerSameAsAuthenticated = userService.isUserAuthenticated(userAuthenticated, userOwner);// verifica se utilizador ao qual se está adicionar projecto é o user logado
-			//boolean isloggedAuthorizedToGetProject = projectService.isProjectAssocToUser(projectId, userOwner.getId());// verifica se utilizador do qual se está a fazer get projecto é o user criador ou um dos associados ao projecto - neste caso este tabém não pode editar
-			System.out.println("o utilizador logado tem privilégios de admin: " + isloggedUserPrivAdmin);
-			System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + isOwnerSameAsAuthenticated);
-			//System.out.println("o utilizador logado tem autorização para fazer get do Projecto: " + isloggedAuthorizedToGetProject);
+//			Project project =projectService.getNonDeletedProjectEntityById(projectId); //não se vai fazer update de um projecto apagado
+//			User userOwner = project.getCreatedBy(); // o criador do projecto
+//			User userAuthenticated  = userService.getNonDeletedEntityByToken(authString); //vai ser o lastModifBy
+//	
+//			boolean isloggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(userAuthenticated);// verifica se quem está logado é um admin
+//			boolean isOwnerSameAsAuthenticated = userService.isUserAuthenticated(userAuthenticated, userOwner);// verifica se utilizador ao qual se está adicionar projecto é o user logado
+//			//boolean isloggedAuthorizedToGetProject = projectService.isProjectAssocToUser(projectId, userOwner.getId());// verifica se utilizador do qual se está a fazer get projecto é o user criador ou um dos associados ao projecto - neste caso este tabém não pode editar
+//			System.out.println("o utilizador logado tem privilégios de admin: " + isloggedUserPrivAdmin);
+//			System.out.println("o utilizador logado é o utilizador onde queremos aceder: " + isOwnerSameAsAuthenticated);
+//			//System.out.println("o utilizador logado tem autorização para fazer get do Projecto: " + isloggedAuthorizedToGetProject);
 		
-			if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não é publico e o utilizador não está logado ou não tem token válido																				
+			if (authString != null && !authString.equals("") && !authString.isEmpty() 
+					&& !userService.isValidToken(authString)) {// está logado mas o token não é válido
 				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-			}
+			} 
 			
-			if (!isOwnerSameAsAuthenticated && !isloggedUserPrivAdmin){// quem está logado não é o utilizador do userid nem é admin - não pode criar projectos noutro utilizador
-				System.out.println("não tem permissões para ver projectos deste utilizador");
-				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
-			}
+//			if (!isOwnerSameAsAuthenticated && !isloggedUserPrivAdmin){// quem está logado não é o utilizador do userid nem é admin - não pode criar projectos noutro utilizador
+//				System.out.println("não tem permissões para ver projectos deste utilizador");
+//				return Response.status(403).entity(GestaoErros.getMsg(13)).build();
+//			}
 			
 			ArrayList<UserDTORespSharingProject> users= projectSharingService.getUserAssocToProject(projectId);
 		

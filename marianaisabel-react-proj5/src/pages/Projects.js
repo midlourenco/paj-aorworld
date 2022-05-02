@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { Link } from "react-router-dom";
-
+import { connect } from 'react-redux'
 //https://react-hook-form.com/
 import { useForm } from "react-hook-form";
 import useFetch from 'use-http';
@@ -43,7 +43,7 @@ import {MdOutlineManageSearch , MdOutlineClose} from "react-icons/md";
 
 
 
-function  Projects (){
+function  Projects ({isLoggedIn,...props }){
     const intl = useIntl();
     const { get, post, response, loading, error } = useFetch();
     //const [searchParams, setSearchParams] = useSearchParams({ replace: true });
@@ -234,7 +234,8 @@ function  Projects (){
                             }}
                         />
                     </InputGroup>
-                    <Button 
+                    
+                    {isLoggedIn && <Button 
                         leftIcon={<AddIcon />} 
                         colorScheme='teal' 
                         variant='outline' 
@@ -242,7 +243,7 @@ function  Projects (){
                         mr={5}
                     >
                         <Link to="/projects/new"><FormattedMessage id="new_project"></FormattedMessage></Link>
-                    </Button>
+                    </Button>}
                 </Flex>
 
                 <Box  color="teal" textDecor={"teal"}  direction={['column', 'row']} spacing='24px' mx={5} my={5}>
@@ -309,7 +310,15 @@ function  Projects (){
  
 
     }
-    export default Projects;
+    const mapStateToProps = state => {
+        return { userPriv: state.loginOK.userPriv,
+                userId:state.loginOK.userId,
+                errorTopBar: state.errorMsg.errorTopBar,
+                isAdmin:state.loginOK.userPriv==="ADMIN",
+                isLoggedIn:state.loginOK.token!=""
+        };
+      };
+    export default connect(mapStateToProps,{})(Projects);
 
 
                     {/* <ProjectCard projectElem={p2}/>
