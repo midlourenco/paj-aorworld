@@ -34,7 +34,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const MyProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
+const MyProjects=({errorTopBar="",isAdmin, userId, idToResquest,currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -50,7 +50,7 @@ const MyProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEd
         console.log("houve refresh vou buscar notif " );    
         setRestResponse("");
 
-        const projectsCreatedByMe = await get('/projects?user=' + userId);
+        const projectsCreatedByMe = await get('/projects?user=' + idToResquest);
         if (response.ok) {
             (console.log("proj criados" +response))
             setProjectsCreatedByMe(projectsCreatedByMe);;

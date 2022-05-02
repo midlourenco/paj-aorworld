@@ -64,7 +64,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const ProfileViewMode=({errorTopBar="",canEdit,isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick, ...props})=>{
+const ProfileViewMode=({errorTopBar="",idToResquest,canEdit,isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick, ...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -115,12 +115,12 @@ const ProfileViewMode=({errorTopBar="",canEdit,isAdmin, userId, currentUser,edit
                         <TabPanels>
                             <TabPanel>
                                 <VStack spacing={10}>
-                                    <MyProjects />
-                                    <AssocProjects />
-                                    <DeletedProjects />
-                                    <MyNews />
-                                    <AssocNews />
-                                    <DeletedNews />
+                                    <MyProjects idToResquest={idToResquest} />
+                                    <AssocProjects idToResquest={idToResquest}/>
+                                    <DeletedProjects idToResquest={idToResquest}/>
+                                    <MyNews idToResquest={idToResquest} />
+                                    <AssocNews  idToResquest={idToResquest}/>
+                                    <DeletedNews idToResquest={idToResquest} />
                                 </VStack>
                             </TabPanel>
                             <TabPanel>

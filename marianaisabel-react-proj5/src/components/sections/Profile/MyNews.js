@@ -35,7 +35,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const MyNews=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
+const MyNews=({errorTopBar="",isAdmin, userId, currentUser,idToResquest,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -51,7 +51,7 @@ const MyNews=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditCl
         console.log("houve refresh vou buscar notif " );    
         setRestResponse("");
 
-        const newsCreatedByMe = await get('/news?user=' + userId);
+        const newsCreatedByMe = await get('/news?user=' + idToResquest);
         if (response.ok) {
             (console.log("noticias assoc" + response))
             setNewsCreatedByMe(newsCreatedByMe);

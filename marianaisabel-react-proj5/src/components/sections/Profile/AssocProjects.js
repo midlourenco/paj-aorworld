@@ -35,7 +35,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
+const AssocProjects=({errorTopBar="",isAdmin, idToResquest,userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick,...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -55,7 +55,7 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
         setRestResponse("");
 
         if(!id || id==undefined || id==""){    
-        const projectsAssocToMe= await get('/projects/projectAssocToUser?user=' + userId);
+        const projectsAssocToMe= await get('/projects/projectAssocToUser?user=' + idToResquest);
         if (response.ok) {
             (console.log("proj assoc" +response))
             setProjectsAssocToMe(projectsAssocToMe);

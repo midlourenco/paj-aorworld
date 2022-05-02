@@ -70,6 +70,14 @@ function Profile({userPriv,isLoggedIn,isAdmin,userId, errorTopBar="",...props}) 
     console.log("id no url: ", id)
    // setCurrentId(id)
 
+   let idToResquest;
+   if(id>0){
+    idToResquest =id;
+   }else{
+    idToResquest=userId;
+   }
+
+
     /**** *******************************************STATE******************************************************** */
 
     const [currentUser, setCurrentUser]=useState(defaultUser);
@@ -283,6 +291,7 @@ const canEdit=currentUser!=null && !currentUser.deleted && (userId==currentUser.
         :(editMode==false?
 
             <ProfileViewMode  
+            idToResquest={idToResquest}
             canEdit={canEdit}
             isAdmin={isAdmin}
             currentUser= {currentUser} 

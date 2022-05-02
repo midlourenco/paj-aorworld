@@ -35,7 +35,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const AssocNews=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
+const AssocNews=({errorTopBar="",isAdmin, userId, idToResquest,currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -51,7 +51,7 @@ const AssocNews=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEdi
         console.log("houve refresh vou buscar notif " );    
         setRestResponse("");
 
-        const newsAssocToMe = await get('/news/associatedToUser?user=' + userId);
+        const newsAssocToMe = await get('/news/associatedToUser?user=' + idToResquest);
         if (response.ok) {
             (console.log("noticias assoc" + response))
             setNewsAssocToMe(newsAssocToMe);
