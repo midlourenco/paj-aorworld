@@ -200,6 +200,11 @@ public class UserBean implements Serializable {
 		}
 	}
 	
+	
+	public UserDTOResp getUserUserDTORespbyEmail(String email) {
+		return UserDao.convertEntitytoDTOResp(getUserEntitybyEmail(email));
+	}
+	
 	/**
 	 * Devolve um utilizador a partir do seu email quer  esteja marcado para eliminar ou não
 	 * @param email
