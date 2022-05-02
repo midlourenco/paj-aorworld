@@ -228,7 +228,7 @@ const ProjectEditMode=({isAdmin, currentProject,editMode,handleEditClick, handle
                 </FormControl>
                
                 
-                <Image mt={10} name="image2" size={"xs"} src={watch("image") || currentProject.image} fallbackSrc="/images/logo.png"  alt="project_image"/>
+                <Image mt={10} name="image2" size={"xs"} src={watch("image") || currentProject.image} fallbackSrc="../images/logo.png"  alt="project_image"/>
        
                 </VStack>
 

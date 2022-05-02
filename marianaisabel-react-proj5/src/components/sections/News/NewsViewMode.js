@@ -120,10 +120,10 @@ const NewsViewMode=({isAdmin, setUserInCurrentNews ,currentNews,editMode,handleE
                 (<Box>
                 <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
                 
-                <Image style={{opacity: 0.2}} mt={10} name="image2" size={"xs"} src={ currentNews.image} fallbackSrc="/images/logo.png"  alt="project_image"/>
+                <Image style={{opacity: 0.2}} mt={10} name="image2" size={"xs"} src={ currentNews.image} fallbackSrc="../images/logo.png"  alt="project_image"/>
        
                 </Box>)
-                :      <Image mt={10} name="image2" size={"xs"} src={ currentNews.image} fallbackSrc="/images/logo.png"  alt="project_image"/>
+                :      <Image mt={10} name="image2" size={"xs"} src={ currentNews.image} fallbackSrc="../images/logo.png"  alt="project_image"/>
        
                 }
 

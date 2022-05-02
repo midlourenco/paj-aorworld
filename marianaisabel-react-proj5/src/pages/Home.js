@@ -25,7 +25,7 @@ const Home = ()=>{
     
 return (
     <Box >
-    <Image width="100%" objectFit='cover' src="/images/bannerLogo.png" alt="Logo" />
+    <Image width="100%" objectFit='cover' src="images/bannerLogo.png" alt="Logo" />
         <Flex
             flexDirection="column"
             width="100wh"

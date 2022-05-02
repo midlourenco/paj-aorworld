@@ -307,7 +307,7 @@ useEffect(async()=>{
                 </FormControl>
                
                 
-                <Image mt={10} name="image2" size={"xs"} src={watch("image") || currentNews.image} fallbackSrc="/images/logo.png"  alt="project_image"/>
+                <Image mt={10} name="image2" size={"xs"} src={watch("image") || currentNews.image} fallbackSrc="../images/logo.png"  alt="project_image"/>
        
                 </VStack>
 

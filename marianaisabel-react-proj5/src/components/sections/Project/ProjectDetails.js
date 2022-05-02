@@ -68,13 +68,13 @@ const ProjectDetails=({isAdmin, currentProject,...props})=>{
                     <Badge colorScheme='red'><FormattedMessage id={"deleted"} /> </Badge>
                     <Image 
                     src={currentProject.image} 
-                    fallbackSrc="/images/logo.png"
+                    fallbackSrc="../images/logo.png"
                     alt="project_image" 
                     h='255px' 
                     style={{opacity: 0.2}} 
                     />
                     </Box>)
-                    : <Image src={currentProject.image} alt="project_image" h='255px' fallbackSrc="/images/logo.png"  />
+                    : <Image src={currentProject.image} alt="project_image" h='255px' fallbackSrc="../images/logo.png"  />
                     }
                 </Box>
                 <Box  textAlign={"center"} mb={7}>
