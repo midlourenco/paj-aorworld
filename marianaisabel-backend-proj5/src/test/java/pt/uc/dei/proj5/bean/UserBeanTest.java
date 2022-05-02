@@ -167,6 +167,7 @@ public class UserBeanTest {
 	}
 	
 	//(expected = ConstraintViolationException.class)
+	//https://stackoverflow.com/questions/24386771/javax-validation-validationexception-hv000183-unable-to-load-javax-el-express
 	
 	//5
 	/**
@@ -188,7 +189,70 @@ public class UserBeanTest {
 //		verify(dashboardService, never()).updateGeneralDashboard();	
 		 Set<ConstraintViolation<UserDTORegister>> violations = validator.validate(user);
 	     assertFalse(violations.isEmpty());
+	     
+	     
+
+	     
 	
+	     //sem o campo do email
+
+	 	UserDTORegister user5 = new UserDTORegister();
+		user5.setFirstName("Mario");
+		user5.setLastName("Silva");
+
+		user5.setBiography("Esta é a minha bio");
+		user5.setImage("http://urlrandom.pt");
+		user5.setPassword("teste123");
+		user5.setAutoAcceptInvites(true);
+
+		userServTester.createUser(user5);
+//				verify(userDao, never()).persist(userCaptor.capture());
+//				verify(dashboardService, never()).updateGeneralDashboard();	
+		 Set<ConstraintViolation<UserDTORegister>> violations5 = validator.validate(user5);
+	     assertFalse(violations5.isEmpty());
+ 
+	}
+	
+	//6
+	/**
+	 * Verificamos se conseguimos fazer um registo com password a null
+	 */	
+	@Test
+	public void testRegisterWithBlankPassword() {
+		UserDTORegister user = new UserDTORegister();
+		user.setFirstName("Mario");
+		user.setLastName("Silva");
+		user.setEmail("mariosilva2@aor.pt");
+		user.setBiography("Esta é a minha bio");
+		user.setImage("http://urlrandom.pt");
+		user.setPassword(" ");
+		user.setAutoAcceptInvites(true);
+		
+		 Set<ConstraintViolation<UserDTORegister>> violations = validator.validate(user);
+	     assertFalse(violations.isEmpty());
+	}
+	
+	//7
+	/**
+	 * Verificamos se conseguimos fazer um registo com apenas uma string normal no email (sem @ nem pontos) 
+	 */	
+	@Test
+	public void testRegisterWithNotEmail() {
+	     //email mal formatado
+	 	UserDTORegister user = new UserDTORegister();
+		user.setFirstName("Mario");
+		user.setLastName("Silva");
+		user.setEmail("mariosilva");
+		user.setBiography("Esta é a minha bio");
+		user.setImage("http://urlrandom.pt");
+		user.setPassword("teste123");
+		user.setAutoAcceptInvites(true);
+		
+		userServTester.createUser(user);
+//		verify(userDao, never()).persist(userCaptor.capture());
+//		verify(dashboardService, never()).updateGeneralDashboard();	
+		 Set<ConstraintViolation<UserDTORegister>> violations = validator.validate(user);
+	     assertFalse(violations.isEmpty());
 	}
 	
 }
