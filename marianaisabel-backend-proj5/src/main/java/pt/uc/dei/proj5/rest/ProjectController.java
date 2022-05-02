@@ -346,12 +346,12 @@ public class ProjectController {
 	@Path("{projectId: [0-9]+}/undelete")
 //	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response undeletedPrject(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
+	public Response undeletedProject(@PathParam("projectId") int projectId, @HeaderParam("Authorization") String authString) {
 		System.out.println("entrei em undeletedPrject ");
 		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// está logado mas token não é valido																					// válido
 			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 		}
-		Project project =projectService.getNonDeletedProjectEntityById(projectId);
+		Project project =projectService.getProjectEntityById(projectId);
 		boolean isLoggedUserPrivAdmin = userService.hasLoggedUserAdminPriv(authString);
 		boolean isAuthenticatedUserCreaterOfProject = userService.isUserAuthenticated(authString, project.getCreatedBy().getId());// utilizador ao qual se está modificar/apagar rpojecto vs detentor do token
 		System.out.println("o projecto é do user autenticado: " + isAuthenticatedUserCreaterOfProject);

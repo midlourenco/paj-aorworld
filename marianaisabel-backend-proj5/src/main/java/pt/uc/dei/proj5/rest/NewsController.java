@@ -411,7 +411,7 @@ public class NewsController {
 		if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// está logado mas token não é valido																					// válido
 			return Response.status(401).entity(GestaoErros.getMsg(1)).build();
 		}
-		News news =newsService.getNonDeletedNewsEntityById(newsId);
+		News news =newsService.getNewsEntityById(newsId);
 		System.out.println("vou vero  user autenticado autor da noticia: ");
 		User newsOwener =news.getCreatedBy();
 		System.out.println("o user autenticado autor da noticia: " + newsOwener);
