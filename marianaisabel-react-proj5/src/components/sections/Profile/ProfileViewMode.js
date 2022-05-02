@@ -64,7 +64,7 @@ function setAppError(error){
     console.log(error)
 }
 
-const ProfileViewMode=({errorTopBar="",isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick, ...props})=>{
+const ProfileViewMode=({errorTopBar="",canEdit,isAdmin, userId, currentUser,editMode,handleEditClick,handleCancelClick, handleDeleteClick, ...props})=>{
     const intl = useIntl();
     const navigate = useNavigate();
     const { get, post, del, response, loading, error } = useFetch();
@@ -95,10 +95,10 @@ const ProfileViewMode=({errorTopBar="",isAdmin, userId, currentUser,editMode,han
             justifyContent={"space-between"}
             >
                 <UserDetails currentUser={currentUser} />
-                <Box>
+               {canEdit&& <Box>
                     {/* <IconButton size='sm' icon={<EditIcon />} background="whiteAlpha.900" pt={5} >Editar</IconButton> */}
                     <EditableControls isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
-                </Box>
+                </Box>}
 
                 <Box>
                 <Tabs variant='soft-rounded' colorScheme='green' mt={20}>

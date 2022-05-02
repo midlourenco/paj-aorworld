@@ -61,7 +61,7 @@ const defaultUser=  {"id": "",
 
   //**********************************************MAIN FUNCTION !!!!!*************************************************************************** */
 
-function Profile({userPriv,errorTopBar="",...props}) {
+function Profile({userPriv,isLoggedIn,isAdmin,userId, errorTopBar="",...props}) {
     const { get, post, del, response, loading, error } = useFetch();
     const intl = useIntl();
     const navigate = useNavigate();
@@ -72,7 +72,6 @@ function Profile({userPriv,errorTopBar="",...props}) {
 
     /**** *******************************************STATE******************************************************** */
 
-    const [isAdmin, setAdminPriv]=useState(false); // is logged user an admin?
     const [currentUser, setCurrentUser]=useState(defaultUser);
     //modo ediçao / visualizaçao
     const [editMode, setEditClick] = useState(false);
@@ -165,9 +164,6 @@ function Profile({userPriv,errorTopBar="",...props}) {
             if (response.ok) {
                 console.log(getUserProfile)
                 setCurrentUser(getUserProfile);
-                if(userPriv =="ADMIN"){
-                    setAdminPriv(true);
-                }
                 setAppError("");
             } else if(response.status==401) {
                 console.log("credenciais erradas? " + error)
@@ -189,9 +185,6 @@ function Profile({userPriv,errorTopBar="",...props}) {
         if (response.ok) {
             console.log(getUserProfile)
             setCurrentUser(getUserProfile);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -211,9 +204,6 @@ function Profile({userPriv,errorTopBar="",...props}) {
         if (response.ok) {
             console.log(getAssocProj)
             setAssocProj(getAssocProj);
-            if(userPriv =="ADMIN"){
-                setAdminPriv(true);
-            }
             setAppError("");
         } else if(response.status==401) {
             console.log("credenciais erradas? " + error)
@@ -259,7 +249,8 @@ function Profile({userPriv,errorTopBar="",...props}) {
 
 
 /**** ******************************************RENDER / RETURN PRINCIPAL ********************************************************* */
- 
+const canEdit=currentUser!=null && !currentUser.deleted && (userId==currentUser.id || isAdmin)
+
 
     return (
     <Box>
@@ -292,6 +283,7 @@ function Profile({userPriv,errorTopBar="",...props}) {
         :(editMode==false?
 
             <ProfileViewMode  
+            canEdit={canEdit}
             isAdmin={isAdmin}
             currentUser= {currentUser} 
             editMode={editMode} 
@@ -332,9 +324,14 @@ function Profile({userPriv,errorTopBar="",...props}) {
 
 const mapStateToProps = state => {
     return { userPriv: state.loginOK.userPriv,
-            errorTopBar: state.errorMsg.errorTopBar
-    };
+            userId:state.loginOK.userId,
+            errorTopBar: state.errorMsg.errorTopBar,
+            isAdmin:state.loginOK.userPriv==="ADMIN",
+            isLoggedIn:state.loginOK.token!="",
+    }
   };
+
+
 export default connect(mapStateToProps,{})(Profile);
 
 
