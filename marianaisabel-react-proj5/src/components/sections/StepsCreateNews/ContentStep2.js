@@ -67,10 +67,7 @@ function ContentStep2({register,nextStep,prevStep,trigger,errors,...props}) {
             {users.map(u => (
                 // {...register("checkbox")}
                 <Checkbox  
-                {...register("users", {
-                        valueAsNumber: true
-                        //setValueAs: (v)=> parseInt(v)
-                    }) }  
+                {...register("users") }  
                     value={parseInt(u.id)}
                     key={u.id} 
                     colorScheme='teal' 

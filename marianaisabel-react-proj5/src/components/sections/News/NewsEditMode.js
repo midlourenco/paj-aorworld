@@ -90,6 +90,13 @@ const NewsEditMode=({isAdmin, currentNews,editMode,handleEditClick, handleCancel
  /**** ****************************************FORM*********************************************************** */
     //fuções que chamos ao submeter o formulário de edição
     const {register,control, handleSubmit, watch, formState: {errors}}= useForm();
+      // {
+      //   defaultValues: {
+      //     users: currentNews.users,
+      //     projects: currentNews.projects ,
+      //     keywords: currentNews.keywords,
+      //   }}
+  
     
     async function onSubmit (data, e) {
         data.keywords=keywords;
@@ -97,6 +104,8 @@ const NewsEditMode=({isAdmin, currentNews,editMode,handleEditClick, handleCancel
         if(data.visibility=="private")  data.visibility=false;
         if(data.projects==0)  data.projects=[];
         if(data.users==0)  data.users=[];
+        if(data.projects==NaN)  data.projects = currentNews.projects;
+        if(data.users==NaN)  data.users=currentNews.users;
 
         console.log(data, e);
 
@@ -111,17 +120,17 @@ const NewsEditMode=({isAdmin, currentNews,editMode,handleEditClick, handleCancel
             console.log("credenciais erradas? " + error)
             setRestResponse("NOK");
            
-            setAppError('error_fetch_login_401');
+            // setAppError('error_fetch_login_401');
         }else{
             console.log("houve um erro no fetch " + error)
             if(error && error!=""){
                 setRestResponse("NOK");
                
-                setAppError(  error );
+                // setAppError(  error );
             }else{
                 setRestResponse("NOK");
                
-                setAppError(  "error_fetch_generic" );
+                // setAppError(  "error_fetch_generic" );
             }
         }
     }
@@ -189,7 +198,7 @@ useEffect(async()=>{
       )
       }
 
-    if(!currentNews || error ){
+    if(error ){
         
       return (<>
           <Text>Erro...</Text>
@@ -237,6 +246,9 @@ useEffect(async()=>{
                 mx={[0, null, null, 20]}
                 
                 >
+          {error && 'Error!'}
+         {loading && 'Loading...'}
+
               <VStack spacing='24px'>
                 <FormControl variant='floating' id='title' isInvalid = {errors.title} >                        
                     <Input  {...register("title", {required: true,setValueAs: (v)=> v.trim()})} type="text" id={"title"} defaultValue =  {currentNews.title}  name="title" placeholder={intl.formatMessage({id: 'form_field_first_name'})}/>
@@ -328,19 +340,16 @@ useEffect(async()=>{
              <FormLabel mt={10} color={"teal.500"}  size={"xs"}>{intl.formatMessage({id: 'associated_users'})}:</FormLabel>
            
                 <Box  direction='row'  border={"solid"} borderColor={"gray.200"} p={2} borderRadius={"10px"} fontSize={"sm"}>
-               
-              <Checkbox value="first">first</Checkbox>
+              
               {users.map(u => (
                usersIdOnNews.includes(u.id)?
                 <Checkbox   
-                {...register("users", {
-                  valueAsNumber: true
-                  //setValueAs: (v)=> parseInt(v)
-              }) }   
+                {...register("users")}   
                 key={u.id}
                 value={u.id} 
                 colorScheme='teal' 
                 m={3} 
+                defaultValue={u.id}
                 defaultChecked
                 >
                     {u.firstName}
@@ -357,12 +366,10 @@ useEffect(async()=>{
                 </Checkbox>
                 :
                 <    Checkbox
-                {...register("users", {
-                  valueAsNumber: true
-                  //setValueAs: (v)=> parseInt(v)
-              }) }  
+                {...register("users") }  
                 key={u.id}
                 value={u.id} 
+                defaultValue={u.id}
                 colorScheme='teal' 
                 m={3} 
                
@@ -403,12 +410,10 @@ useEffect(async()=>{
                 projectsIdOnNews.includes(p.id)?
               
                 <Checkbox  
-                {...register("projects", {
-                        valueAsNumber: true
-                        //setValueAs: (v)=> parseInt(v)
-                    }) }  
+                {...register("projects") }  
                     // isChecked={()=>handleCheckedUsers(u.id)}
                     key={p.id}
+                    defaultValue={p.id}
                     defaultChecked
                     value={p.id} 
                     colorScheme='teal' 
@@ -426,13 +431,11 @@ useEffect(async()=>{
                 </Tag>
               </Checkbox>
             :    <Checkbox  
-              {...register("projects", {
-                      valueAsNumber: true
-                      //setValueAs: (v)=> parseInt(v)
-                  }) }  
+              {...register("projects") }  
                   // isChecked={()=>handleCheckedUsers(u.id)}
                   key={p.id}
                   value={p.id} 
+                  defaultValue={p.id}
                   colorScheme='teal' 
                   m={3} 
                   >

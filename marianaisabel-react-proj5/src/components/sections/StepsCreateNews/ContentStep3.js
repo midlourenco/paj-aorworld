@@ -61,9 +61,7 @@ function ContentStep3({register,nextStep,prevStep,trigger,errors,...props}) {
                 <Grid  templateColumns='repeat(2, 1fr)' >
                     {projects.map(p => (
                     <Checkbox  
-                    {...register("projects", {
-                        valueAsNumber: true
-                    }) }  
+                    {...register("projects") }  
                     value={p.id}  
                     colorScheme='teal' 
                     m={3} 
