@@ -91,9 +91,9 @@ const AssocUsersTab=({ users,projectId,removeUserAssociated,...props})=>{
                 </Thead>
                 <Tbody>
                 {users.map((user)=>(
-                
-                         <FormUserToAssoc key={user.id} user={user} projectId={projectId} removeUserAssociated={removeUserAssociated} />
-                
+                    <Td>
+                        <FormUserToAssoc key={user.id} user={user} projectId={projectId} removeUserAssociated={removeUserAssociated} />
+                    </Td>
                 ))}  
             
                 </Tbody>

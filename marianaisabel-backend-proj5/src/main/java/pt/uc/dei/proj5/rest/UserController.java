@@ -562,18 +562,26 @@ public class UserController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response changeUserPrivToMember(@PathParam("userId") int  userId,
 			@HeaderParam("Authorization") String authString) {
+		System.out.println("dentro do changeUserPrivToMember");
 		try {
 			User userToUpdate = userService.getNonDeletedUserEntityById(userId);
 			if (userToUpdate == null) { // o id do url não existir nao avança
+				System.out.println("o user to update nao existe");
 				return Response.status(400).entity(GestaoErros.getMsg(2)).build();
 			}
 
+			if (authString != null && !authString.equals("") && !authString.isEmpty() 
+					&& !userService.isValidToken(authString)) {// está logado mas o token não é válido
+				return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+			} 
+			
 			//if (userId!=1) {// não permitimos que se atualize o user admin automatico a não ser  que seja o proprio
 			if(!userToUpdate.isAutoAdmin() || (userService.isUserAuthenticated(authString, userId))) {
-				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
-					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
-				}
-	
+//				if (authString == null || authString.isEmpty() || !userService.isValidToken(authString)) {// não está logado ou está logado mas o token não é válido
+//					return Response.status(401).entity(GestaoErros.getMsg(1)).build();
+//				}
+			
+				
 				if (!userService.hasLoggedUserAdminPriv(authString)) {// está logado não tem priv admin nao pode apagar ninguem
 					System.out.println("não tem permissões para desmarcar para apagar este utilizador");
 					return Response.status(403).entity(GestaoErros.getMsg(9)).build();

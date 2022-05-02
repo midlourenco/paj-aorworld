@@ -24,7 +24,7 @@ public class UserBean implements Serializable {
 	@Inject
 	private UserDao userDao;
 	//@Inject
-	//private DashboardBean dashboardService;
+	private DashboardBean dashboardService;
 
 	
 	/////////////////////////////////////////////////////////////////////////////
@@ -553,7 +553,7 @@ public class UserBean implements Serializable {
 		if (getUserEntitybyEmail(newUser.getEmail()) == null) { //se não houver mais ninguém com este email registado continua o registo
 			User userToPersist = UserDao.convertDTORegisterToEntity(newUser);
 			userDao.persist(userToPersist);
-			//dashboardService.updateGeneralDashboard();
+			dashboardService.updateGeneralDashboard();
 			return true;
 		} else {
 			System.out.println("O email ja existe na BD");
@@ -577,6 +577,7 @@ public class UserBean implements Serializable {
 
 			System.out.println("changedUser info: " + user);
 			userDao.merge(user); // guarda na BD
+			dashboardService.updateGeneralDashboard();
 			return true;
 		
 		} catch (Exception e) {
@@ -625,6 +626,7 @@ public class UserBean implements Serializable {
 			} else {
 				userDao.blockUser(userID,loggedUser); //passa viwer, fica sem token e fica marcado como deleted na BD
 			//	userDao.markAsDeleted(userID); // fica marcado como deleted na BD
+				dashboardService.updateGeneralDashboard();
 				return true;
 			}
 		
@@ -647,6 +649,7 @@ public class UserBean implements Serializable {
 			User loggedUser =getNonDeletedEntityByToken(authString);
 			if (user.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
 				userDao.unblockUser(userID,loggedUser);
+				dashboardService.updateGeneralDashboard();
 			//	userDao.markAsNonDeleted(userID);
 				return true;
 			} else { // se não estiver marcado como delete não faz nada;
@@ -674,6 +677,7 @@ public class UserBean implements Serializable {
 			System.out.println("o user logado" + loggedUser);
 			if (!user.isDeleted()) {
 				userDao.changeUserPrivToMember(userID,loggedUser);
+				dashboardService.updateGeneralDashboard();
 				return true;
 			}
 			return false;
@@ -694,6 +698,7 @@ public class UserBean implements Serializable {
 			User loggedUser =getNonDeletedEntityByToken(authString);
 			if (!user.isDeleted()) {
 			userDao.changeUserPrivToAdmin(userID,loggedUser);
+			dashboardService.updateGeneralDashboard();
 			return true;
 			}
 			return false;

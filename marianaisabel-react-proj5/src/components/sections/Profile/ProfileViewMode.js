@@ -100,6 +100,7 @@ const ProfileViewMode=({errorTopBar="",isAdmin, userId, currentUser,editMode,han
                     <EditableControls isAdmin={isAdmin} editMode={editMode}  handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} handleCancelClick={handleCancelClick} />
                 </Box>
 
+                <Box>
                 <Tabs variant='soft-rounded' colorScheme='green' mt={20}>
                     <TabList>
                         <Tab>All</Tab>
@@ -154,7 +155,7 @@ const ProfileViewMode=({errorTopBar="",isAdmin, userId, currentUser,editMode,han
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
-
+                    </Box>
 
 
                     {/* <VStack spacing={10}>

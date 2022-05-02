@@ -221,7 +221,14 @@ if(!currentNews || loading ){
         </>
     )
     }
-
+    if(!currentNews || error ){
+        
+        return (<>
+           
+            <Spinner />
+            </>
+        )
+        }
     return (
     <Box>
         <Flex 

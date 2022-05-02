@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
@@ -14,6 +15,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.SetJoin;
 import javax.persistence.criteria.Subquery;
 
+import pt.uc.dei.proj5.bean.DashboardBean;
 import pt.uc.dei.proj5.entity.Keyword;
 import pt.uc.dei.proj5.entity.News;
 import pt.uc.dei.proj5.entity.Project;
@@ -299,12 +301,35 @@ public class KeywordDao extends AbstractDao<Keyword> {
 		}
 	}
 	
+	public boolean existtKeywordEntityFromString(String keywordStr) {
+		System.out.println("Entrei em existtKeywordEntityFromString Keyword");
+		System.out.println("keyword que vou procurar é " + keywordStr);
+		Keyword keyword;
+		try {
+			keyword= find(keywordStr);
+			if(keyword==null) {
+				System.out.println("esta keyword nao  existe");
+				return false;
+			}
+			//caso exista retornaa a keyword existente:
+				return true;
+		
+		} catch (NullPointerException e) {
+			//e.printStackTrace();
+			System.out.println("esta keyword nao  existe");
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}	
+	}
+	
 	
 	public Keyword getKeywordEntityFromString(String keywordStr) {
 		System.out.println("Entrei em associateKeywordToProjectOrNews Keyword");
 		System.out.println("keyword que vou gravar é " + keywordStr);
 		Keyword keyword;
-		//TODO complete here
+	
 		try {
 			keyword= find(keywordStr);
 		
@@ -326,6 +351,7 @@ public class KeywordDao extends AbstractDao<Keyword> {
 				keyword = new Keyword();
 				System.out.println("inicializei keyword");
 				keyword.setKeyword(keywordStr);
+		
 //				System.out.println("atribui string keyword");
 //				if(news!=null) {
 //					System.out.println("as noticiass nao sao null");
@@ -341,6 +367,8 @@ public class KeywordDao extends AbstractDao<Keyword> {
 				persist(keyword);
 				System.out.println("criei keyword nova com 1 news ou proj ");
 			}
+			
+			//caso exista retornaa a keyword existente:
 				return keyword;
 		//	}
 		} catch (NullPointerException e) {

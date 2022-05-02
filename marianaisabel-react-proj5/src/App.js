@@ -108,8 +108,8 @@ function App({language = "en",error="",...props}) {
     <IntlProvider locale={locale} messages ={messages[locale]}   >
       <Provider url={config.API_URL} options={globalOptions}>
       <Box>
-      
-        <Router basename="/marianaisabel-frontend-proj5" >
+      {/* basename="/marianaisabel-frontend-proj5"*/ }
+        <Router  >
           <div className="App">
             <Header />
             <ErrorMsg />

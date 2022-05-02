@@ -41,7 +41,8 @@ public class NewsBean implements Serializable {
 	private NotificationDao notificationDao;
 	@Inject
 	private ProjectSharingDao projectSharingDao;
-	
+	@Inject
+	private DashboardBean dashboardService;
 	
 	///////////////////////////////
 	//GET DE NOTICIAS
@@ -234,7 +235,7 @@ public class NewsBean implements Serializable {
 		//	}
 		
 			newsDao.merge(news);
-	
+			dashboardService.updateGeneralDashboard();
 			NewsDTOResp newsDTOResp=NewsDao.convertEntityToDTOResp(news);
 //		}else {
 //			System.out.println("Já existe um newso com este título criado por este utilizador");
@@ -287,7 +288,7 @@ public class NewsBean implements Serializable {
 	
 
 		newsDao.merge(news);
-		
+		dashboardService.updateGeneralDashboard();
 		NewsDTOResp newsDTOResp=NewsDao.convertEntityToDTOResp(news);
 		
 		return newsDTOResp;
@@ -306,6 +307,7 @@ public class NewsBean implements Serializable {
 				return false;		
 			} else {
 				newsDao.markAsDeleted(newsID,user); // fica marcado como deleted na BD
+				dashboardService.updateGeneralDashboard();
 				return true;
 			}
 		
@@ -330,6 +332,7 @@ public class NewsBean implements Serializable {
 			System.out.println("a noticia e user sao  " +news + user);
 			if (news.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
 				newsDao.markAsNonDeleted(newsID,user);
+				dashboardService.updateGeneralDashboard();
 //				news.setLastModifByAndDate(user);
 //				newsDao.merge(news);
 				return true;

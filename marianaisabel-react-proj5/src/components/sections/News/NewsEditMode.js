@@ -188,6 +188,16 @@ useEffect(async()=>{
           </>
       )
       }
+
+    if(!currentNews || error ){
+        
+      return (<>
+          <Text>Erro...</Text>
+          {error}
+          <Spinner />
+          </>
+      )
+      }
   
       //faz um mapa/ uam lista só com os users Id que estão associados aos projecto
       const usersIdOnNews =currentNews.users.map((u)=>u.id);
@@ -384,13 +394,13 @@ useEffect(async()=>{
 
           
             <FormControl mt={6}>
-                <FormLabel color={"teal.500"}  size={"xs"}>{intl.formatMessage({id: 'associated_users'})}:</FormLabel>
+                <FormLabel color={"teal.500"}  size={"xs"}>{intl.formatMessage({id: 'associated_projects'})}:</FormLabel>
                 <Box  direction='row'  border={"solid"} borderColor={"gray.200"} p={2} borderRadius={"10px"} fontSize={"sm"}>
                
                 {/* <CheckboxGroup colorScheme='teal' defaultValue={projectsIdOnNews}> */}
                 {projects.map(p => (
                 // {...register("checkbox")}
-
+                projectsIdOnNews.includes(p.id)?
               
                 <Checkbox  
                 {...register("projects", {
@@ -398,7 +408,8 @@ useEffect(async()=>{
                         //setValueAs: (v)=> parseInt(v)
                     }) }  
                     // isChecked={()=>handleCheckedUsers(u.id)}
-                    
+                    key={p.id}
+                    defaultChecked
                     value={p.id} 
                     colorScheme='teal' 
                     m={3} 
@@ -413,7 +424,32 @@ useEffect(async()=>{
                     />
                     <TagLabel>{p.title}</TagLabel>
                 </Tag>
-                </Checkbox>
+              </Checkbox>
+            :    <Checkbox  
+              {...register("projects", {
+                      valueAsNumber: true
+                      //setValueAs: (v)=> parseInt(v)
+                  }) }  
+                  // isChecked={()=>handleCheckedUsers(u.id)}
+                  key={p.id}
+                  value={p.id} 
+                  colorScheme='teal' 
+                  m={3} 
+                  >
+              <Tag size='lg' colorScheme='teal' borderRadius='full' variant="outline">
+                  <Avatar
+                  src={p.image}
+                  size='xs'
+                  name={p.title}
+                  ml={-1}
+                  mr={2}
+                  />
+                  <TagLabel>{p.title}</TagLabel>
+              </Tag>
+            </Checkbox>
+
+
+
             ))}  
             {/* </CheckboxGroup> */}
             </Box>

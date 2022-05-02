@@ -40,6 +40,8 @@ public class ProjectBean implements Serializable {
 	private ProjectSharingDao projectSharingDao;
 	@Inject
 	private ProjectSharingBean projectSharingService;
+	@Inject
+	private DashboardBean dashboardService;
 	
 	///////////////////////////////
 	//GET DE PROJECTOS
@@ -167,6 +169,7 @@ public class ProjectBean implements Serializable {
 			project.setCreatedBy(createdBy); //adiciono o titular do projecto À entidade
 			projectDao.persist(project);
 			
+			
 			Set<Keyword> keywords = new HashSet<>();
 			ArrayList<String> keywordsSTR = projectDTO.getKeywords();
 			for (String keyword : keywordsSTR) {
@@ -181,6 +184,7 @@ public class ProjectBean implements Serializable {
 			}
 			project.setKeywords(keywords);
 			projectDao.merge(project);
+			dashboardService.updateGeneralDashboard();
 //			As noticias é que adicionam projectos
 //		Set<News> news = new HashSet<>();
 //			ArrayList<Integer> newsIdList = projectDTO.getNews();
@@ -226,6 +230,7 @@ public class ProjectBean implements Serializable {
 		project.setKeywords(keywords);
 
 		projectDao.merge(project);
+		dashboardService.updateGeneralDashboard();
 		
 		ProjectDTOResp projectDTOResp=ProjectDao.convertEntityToDTOResp(project);
 		
@@ -248,7 +253,8 @@ public class ProjectBean implements Serializable {
 //				dashboardService.updateGeneralDashboard();
 				return false;		
 			} else {
-				projectDao.markAsDeleted(projectID,lastModifBy); // fica marcado como deleted na BD
+				projectDao.markAsDeleted(projectID,lastModifBy); 
+				dashboardService.updateGeneralDashboard();// fica marcado como deleted na BD
 				//project.setLastModifByAndDate(lastModifBy);
 				return true;
 			}
@@ -272,6 +278,7 @@ public class ProjectBean implements Serializable {
 			Project project = projectDao.find(projectID);
 			if (project.isDeleted()) { // se estiver marcado como deleted coloca o delete a false	
 				projectDao.markAsNonDeleted(projectID,lastModifBy);
+				dashboardService.updateGeneralDashboard();
 				//project.setLastModifByAndDate(lastModifBy);
 				return true;
 			} else { // se não estiver marcado como delete não faz nada;

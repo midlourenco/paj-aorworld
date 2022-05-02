@@ -174,9 +174,11 @@ const NewsViewMode=({isAdmin, setUserInCurrentNews ,currentNews,editMode,handleE
                         <Td color="gray.500" fontWeight="400"  >{p.title}</Td>
                         <Td color="gray.500" fontWeight="400" >{p.createdBy.firstName}</Td>
                         <Td color="gray.500" fontWeight="400"  textAlign={"center"}><FormattedMessage id={"only_date"} values={{d:  new Date(p.createdDate)}} /> </Td>
+                        <Td>
                         <Tooltip label ={ "/projects/"+ p.id} >
                         <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
                         </Tooltip>
+                        </Td>
                     </Tr>
                     ))}  
                     </Tbody>
@@ -199,9 +201,11 @@ const NewsViewMode=({isAdmin, setUserInCurrentNews ,currentNews,editMode,handleE
                     <Tr key={u.id}>
                     <Td color="gray.500" fontWeight="400" >{u.firstName + " " + u.lastName}</Td>
                     <Td color="gray.500" fontWeight="400" >{u.email}</Td>
+                    <Td>
                     <Tooltip label ={ "/profile/"+ u.id} >
                     <IconButton onClick={()=> navigate("/profile/"+u.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
                     </Tooltip>
+                    </Td>
                 </Tr>
                 ))}  
                 </Tbody>

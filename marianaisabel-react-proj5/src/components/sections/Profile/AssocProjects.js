@@ -171,7 +171,7 @@ const AssocProjects=({errorTopBar="",isAdmin, userId, currentUser,editMode,handl
                         <Tooltip label={"/projects/" + p.id}>
                             <IconButton onClick={()=> navigate("/projects/"+p.id)} aria-label={intl.formatMessage({id: 'go_to'})} icon={<ExternalLinkIcon />} />
                         </Tooltip >
-                    </Td>
+                        </Td>
                     </Tr>
                 ))}  
                 </Tbody>
