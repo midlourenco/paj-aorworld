@@ -150,7 +150,7 @@ public class UserBeanTest {
 	 * neste método verificamos se após fazer o registo se o user existe na base de dados e se conseguimos fazer login/validar credenciais (sem que o perfil tenha sido aprovado por ninguem)
 	 */
 	@Test
-	public void testLoginAfterRegister() {
+	public void testLoginFailAfterRegister() {
 		UserDTORegister user = new UserDTORegister();
 		user.setFirstName("Mario");
 		user.setLastName("Silva");
@@ -254,5 +254,46 @@ public class UserBeanTest {
 		 Set<ConstraintViolation<UserDTORegister>> violations = validator.validate(user);
 	     assertFalse(violations.isEmpty());
 	}
+	
+//	//8
+//	/**
+//	 * neste método verificamos se após fazer o registo se o user existe na base de dados e se conseguimos fazer login/validar credenciais (sem que o perfil tenha sido aprovado por ninguem)
+//	 */
+//	@Test
+//	public void testLoginOKAfterRegister() {
+//		UserDTORegister user = new UserDTORegister();
+//		user.setFirstName("Mario");
+//		user.setLastName("Silva");
+//		user.setEmail("mariosilva@aor.pt");
+//		user.setBiography("Esta é a minha bio");
+//		user.setImage("http://urlrandom.pt");
+//		user.setPassword("teste123");
+//		user.setAutoAcceptInvites(true);
+//		
+//		
+//	
+//		
+//		User admin = new User();
+//		admin.setPassword("novaPass");
+//		admin.setPrivileges(UserPriv.ADMIN);
+//		admin.setEmail("adminemail@aor.pt");
+//		admin.setFirstName("nomeadmin");
+//		admin.setLastName("sobrenomeadmin");
+//		admin.setToken("token");
+////		when(userDao.findNonDeletedUserByEmail(admin.getEmail())).thenReturn(admin);
+////		
+////		when(userServTester.validAutentication(admin.getEmail(), admin.getPassword())).thenReturn(true);
+//		String token = admin.getToken();
+//		
+//		userServTester.createUser(user);
+//		verify(userDao).persist(userCaptor.capture());
+//		userCaptor.capture().setId(100);
+//		when(userServTester.changeUserPrivToMember(userCaptor.capture().getId(), token)).thenReturn(true);
+//		
+//		
+//		assertTrue("o user criado passou a ter privilegios de membro", userCaptor.capture().getPrivileges()==UserPriv.MEMBER);
+//		}
+//	
+	
 	
 }
