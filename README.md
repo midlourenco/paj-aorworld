@@ -6,7 +6,7 @@
 ## Objectivo:
 Este projeto visa a implementação em ReactJS de uma plataforma de gestão de projetos e notícias da organização AoR World com um servidor REST e com persistência de dados guardados em base de dados MySQL, usando Java Peristence API (JPA) com hibernate. Introduzindo também componentes que utilizam Websocket, testes unitários e internacionalização.
 <br />
-A aplicação web deve permitir a utilizadores criar projectos e notícias que possam estar associados entre si, com utilizadores e ou palavras-chaves. Deve existir 3 níveis de privilégios de utilizadores (utilizador sem sessão iniciada, utilizador com privilégios de admin de sistema e utilizador com privilégios de membro). Consoante os privilégios do utilizador atual a informação exibida pode variar.
+A aplicação web deve permitir a utilizadores criar projectos e notícias que possam estar associados entre si, com utilizadores e/ou palavras-chaves. Devem existir 3 níveis de privilégios de utilizadores (utilizador sem sessão iniciada, utilizador com privilégios de admin de sistema e utilizador com privilégios de membro). Consoante os privilégios do utilizador atual a informação exibida pode variar. Utilizou-se encriptação da password e token UUID associado a cada sessão.
 
 
 ## Estrutura da aplicação:
@@ -29,7 +29,7 @@ A aplicação web deve permitir a utilizadores criar projectos e notícias que p
 - EXTRA: notificações de associações com possibilidade de serem marcadas como lidas
 
 
-## Frameworks utilizadas:
+## Tecnologias e Frameworks utilizadas:
 ### Backend:
 - Java EE
 - REST
@@ -47,6 +47,7 @@ A aplicação web deve permitir a utilizadores criar projectos e notícias que p
 - React-router
 - use-http
 - intl (i18n)
+- localStorage (apenas para guardar token de sessão atual)
 
 ## Detalhes principais:
 
@@ -54,7 +55,7 @@ A aplicação web deve permitir a utilizadores criar projectos e notícias que p
 
 
 ### Login:
-Do lado do servidor usou-se encriptação da password e token UUID associado a cada sessão.
+
 <p float="left">
   <img src="https://user-images.githubusercontent.com/84135100/182206998-120c1a25-7c6a-4245-b24b-2abd7b2f9f73.png" alt="login-pt" width="300"/>
 
