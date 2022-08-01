@@ -5,7 +5,8 @@
 
 ## Objectivo:
 Este projeto visa a implementação em ReactJS de uma plataforma de gestão de projetos e notícias da organização AoR World com um servidor REST e com persistência de dados guardados em base de dados MySQL, usando Java Peristence API (JPA) com hibernate. Introduzindo também componentes que utilizam Websocket, testes unitários e internacionalização.
-O aplicação web deve permitir a utilizadores criar projectos e notícias que possam estar associados entre si, com utilizadores e ou palavras-chaves. Deve existir 3 níveis de privilégios de utilizadores (utilizador sem sessão iniciada, utilizador com privilégios de admin de sistema e utilizador com privilégios de membro). Consoante os privilégios do utilizador atual a informação exibida pode variar.
+<br />
+A aplicação web deve permitir a utilizadores criar projectos e notícias que possam estar associados entre si, com utilizadores e ou palavras-chaves. Deve existir 3 níveis de privilégios de utilizadores (utilizador sem sessão iniciada, utilizador com privilégios de admin de sistema e utilizador com privilégios de membro). Consoante os privilégios do utilizador atual a informação exibida pode variar.
 
 
 ## Estrutura da aplicação:
